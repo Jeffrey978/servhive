@@ -967,37 +967,43 @@ function renderProviders() {
   }
 
   // Active Geolocation Proximity Banner
+  // Active Geolocation Proximity Banner
   const bannerHtml = state.userCoords ? `
     <div class="ed-geo-active-banner" style="grid-column: 1 / -1;">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 1.4rem; line-height: 1;">📍</span>
+        <div style="color: var(--primary); display: flex; align-items: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </div>
         <div>
-          <div style="font-weight: 800; font-size: 0.95rem; color: var(--canvas);">
+          <div style="font-weight: 700; font-size: 0.9375rem; color: var(--foreground);">
             Proximity Auto-Suggest Active: Near <strong>${state.userCoords.label}</strong>
           </div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+          <div style="font-size: 0.8125rem; color: var(--muted-foreground); margin-top: 2px;">
             ${state.userCoords.isSimulated ? 'Simulated around PH central landmark. ' : 'GPS auto-detected. '}
             Displaying verified businesses sorted by closest travel distance in Port Harcourt.
           </div>
         </div>
       </div>
-      <button class="ed-button ed-button-black ed-btn-compact" onclick="clearLocationFilter()" style="padding: 8px 14px; font-size: 0.82rem;">
-        <span>✕ Reset Proximity</span>
+      <button class="ed-button ed-button-black ed-btn-compact" onclick="clearLocationFilter()" style="padding: 6px 12px; font-size: 0.8125rem;">
+        <span>Reset Proximity</span>
       </button>
     </div>
   ` : '';
 
   if (filtered.length === 0) {
     grid.innerHTML = bannerHtml + `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: var(--surface-dark); border-radius: var(--radius-lg); border: 1px solid var(--hairline);">
-        <div style="margin-bottom: 16px; color: var(--text-muted);">
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border);">
+        <div style="margin-bottom: 16px; color: var(--muted-foreground);">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </div>
-        <h3 style="font-size: 1.4rem; font-weight: 800;">No verified artisans found for this landmark or trade</h3>
-        <p style="color: var(--text-muted); margin-top: 6px; font-size: 0.95rem;">Try selecting a different Port Harcourt landmark or resetting filters.</p>
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--foreground);">No verified artisans found for this landmark or trade</h3>
+        <p style="color: var(--muted-foreground); margin-top: 6px; font-size: 0.9375rem;">Try selecting a different Port Harcourt landmark or resetting filters.</p>
         <button class="ed-button ed-button-amber" style="margin-top: 20px;" onclick="resetFilters()">
           <span>Reset All Filters</span>
         </button>
@@ -1011,26 +1017,34 @@ function renderProviders() {
       <div class="ed-pro-header-row">
         <img class="ed-pro-avatar" src="${pro.image}" alt="${pro.name}" loading="lazy" />
         <div class="ed-pro-title-wrap">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
-            <span style="font-size: 0.76rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">${pro.categoryName}</span>
-            <span class="ed-badge-rating">
-              <span style="color: var(--amber-dark);">★</span> ${pro.rating.toFixed(1)} <small style="color: var(--text-muted); font-weight: 500;">(${pro.reviewCount})</small>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.4px;">${pro.categoryName}</span>
+            <span class="badge badge-outline" style="font-size: 0.75rem; gap: 4px;">
+              <span style="color: var(--primary);">★</span> ${pro.rating.toFixed(1)} <span style="color: var(--muted-foreground); font-weight: 500;">(${pro.reviewCount})</span>
             </span>
           </div>
           <h3 class="ed-pro-name">${pro.businessName}</h3>
           <div class="ed-pro-subtitle">${pro.name} · ${pro.subSpecialty}</div>
           <div class="ed-pro-meta-chips">
             ${pro.verified ? `
-              <span class="ed-badge-verified">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span class="badge ed-badge-verified">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 Rivers Verified Pro
               </span>
             ` : ''}
-            <span class="ed-badge-area">📍 ${pro.area}</span>
+            <span class="badge badge-secondary">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              ${pro.area}
+            </span>
             ${pro.distanceKm !== undefined ? `
-              <span class="ed-badge-distance">📍 ${pro.distanceKm} km away</span>
+              <span class="badge badge-secondary">
+                ${pro.distanceKm} km away
+              </span>
             ` : ''}
-            <span style="font-size: 0.74rem; color: var(--text-muted); font-weight: 600;">⚡ ${pro.responseTime}</span>
+            <span style="font-size: 0.72rem; color: var(--muted-foreground); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              ${pro.responseTime}
+            </span>
           </div>
         </div>
       </div>
@@ -1056,8 +1070,10 @@ function renderProviders() {
           <button class="ed-button ed-button-amber ed-btn-compact" onclick="openEscrowBookingModal('${pro.id}', '${pro.services[0].name.replace(/'/g, "\\'")}', ${pro.services[0].price})">
             <span>Book with Escrow</span>
           </button>
-          <button class="ed-button ed-button-black ed-btn-compact" style="padding: 8px 10px;" title="In-App Masked Chat" onclick="openChatDrawer('${pro.id}')">
-            <span>💬</span>
+          <button class="ed-button ed-button-black ed-btn-compact" style="width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;" title="In-App Masked Chat" onclick="openChatDrawer('${pro.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
           </button>
         </div>
       </div>
