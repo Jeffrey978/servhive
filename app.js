@@ -1962,12 +1962,15 @@ window.quickFillDemo = function(role) {
 window.togglePasswordVisibility = function(inputId, btnEl) {
   const input = document.getElementById(inputId);
   if (!input) return;
+  const eyeOpen = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+  const eyeOff = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
   if (input.type === 'password') {
     input.type = 'text';
-    if (btnEl) btnEl.textContent = '🙈';
+    if (btnEl) btnEl.innerHTML = eyeOff;
   } else {
     input.type = 'password';
-    if (btnEl) btnEl.textContent = '👁️';
+    if (btnEl) btnEl.innerHTML = eyeOpen;
   }
 };
 
@@ -2027,7 +2030,9 @@ window.renderAuthForm = function() {
         <div class="auth-input-group">
           <label class="auth-label">Password</label>
           <input type="password" id="loginPassword" required class="auth-input" placeholder="••••••••" />
-          <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
+          <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 0.84rem;">
@@ -2085,7 +2090,9 @@ window.renderAuthForm = function() {
           <div class="auth-input-group">
             <label class="auth-label">Password</label>
             <input type="password" id="hirerPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
-            <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('hirerPassword', this)">👁️</button>
+            <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('hirerPassword', this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
           </div>
           <div class="auth-input-group">
             <label class="auth-label">Confirm Password</label>
@@ -2176,7 +2183,9 @@ window.renderAuthForm = function() {
           <div class="auth-input-group">
             <label class="auth-label">Password</label>
             <input type="password" id="artisanPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
-            <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">👁️</button>
+            <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
           </div>
           <div class="auth-input-group">
             <label class="auth-label">Confirm Password</label>

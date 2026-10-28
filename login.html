@@ -106,28 +106,25 @@
         </p>
       </div>
 
-      <!-- Quick 1-Click Demo Shortcut -->
-      <div class="auth-demo-banner">
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <span style="font-size: 0.85rem;">⚡</span>
-          <span style="font-size: 0.8rem; font-weight: 800; color: var(--amber-dark);">Test Fast with Demo Profiles:</span>
-        </div>
-        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-          <button type="button" class="auth-demo-pill" onclick="quickFillDemo('hirer')">
-            <span>👤 Demo Client</span>
-          </button>
-          <button type="button" class="auth-demo-pill" onclick="quickFillDemo('artisan')">
-            <span>🔨 Demo Artisan Pro</span>
-          </button>
-        </div>
-      </div>
-
       <!-- Inline Alert / Notice Container -->
       <div id="authNotice" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.88rem; font-weight: 700; line-height: 1.45;"></div>
 
       <!-- Dynamic Form Container -->
       <div id="authFormContainer">
         <!-- Rendered by renderAuthForm() -->
+      </div>
+
+      <!-- Quick 1-Click Demo Shortcut (Subtle & Non-Intrusive) -->
+      <div class="auth-demo-bar">
+        <span class="auth-demo-label">Demo Quick-Fill:</span>
+        <button type="button" class="auth-demo-chip" onclick="quickFillDemo('hirer')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>Client</span>
+        </button>
+        <button type="button" class="auth-demo-chip" onclick="quickFillDemo('artisan')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+          <span>Artisan Pro</span>
+        </button>
       </div>
 
     </div>
@@ -357,21 +354,15 @@
 
       if (titleEl && subtitleEl) {
         if (isLogin) {
-          if (isHirer) {
-            titleEl.textContent = 'Log In to Client Portal';
-            subtitleEl.textContent = 'Access vetted Port Harcourt artisans with 100% Escrow payment security and live tracking.';
-          } else {
-            titleEl.textContent = 'Artisan Pro Portal';
-            subtitleEl.textContent = 'Log in to manage bookings, transparent rate cards, and instant bank payouts across Port Harcourt.';
-          }
+          titleEl.textContent = 'Welcome Back';
+          subtitleEl.textContent = isHirer
+            ? 'Sign in to your Client Portal to hire vetted Port Harcourt artisans.'
+            : 'Sign in to manage bookings, transparent rate cards, and instant payouts.';
         } else {
-          if (isHirer) {
-            titleEl.textContent = 'Register for Client Portal';
-            subtitleEl.textContent = 'Hire vetted electricians, mechanics, tilers, and stylists in Port Harcourt with zero price gouging.';
-          } else {
-            titleEl.textContent = 'Register as Verified Pro';
-            subtitleEl.textContent = 'Join Port Harcourt’s premier trades network. Enjoy 3 Months Free on Verified Pro (₦0 platform commission).';
-          }
+          titleEl.textContent = isHirer ? 'Create Client Account' : 'Register as Verified Pro';
+          subtitleEl.textContent = isHirer
+            ? 'Hire vetted Port Harcourt artisans with 100% Escrow payment security.'
+            : 'Join Port Harcourt’s premier trades network with 3 Months Free (₦0 fees).';
         }
       }
 
@@ -402,7 +393,9 @@
                 </a>
               </div>
               <input type="password" id="loginPassword" required class="auth-input" placeholder="Enter your password" />
-              <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
+              <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -410,11 +403,14 @@
                 <input type="checkbox" checked style="accent-color: var(--amber-dark);">
                 <span>Remember this device</span>
               </label>
-              <span style="font-size: 0.78rem; color: var(--teal); font-weight: 700;">🔒 256-bit Secure</span>
+              <span style="font-size: 0.76rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                256-bit Encrypted
+              </span>
             </div>
 
-            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
-              <span>${isHirer ? 'Log In to Client Portal &rarr;' : 'Access Artisan Pro Portal &rarr;'}</span>
+            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 13px; font-size: 0.95rem;">
+              <span>${isHirer ? 'Sign In to Client Portal &rarr;' : 'Access Artisan Pro Portal &rarr;'}</span>
             </button>
 
             <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
@@ -465,7 +461,9 @@
               <div class="auth-input-group">
                 <label class="auth-label">Password</label>
                 <input type="password" id="hirerPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
-                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('hirerPassword', this)">👁️</button>
+                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('hirerPassword', this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
               </div>
               <div class="auth-input-group">
                 <label class="auth-label">Confirm Password</label>
@@ -509,12 +507,12 @@
               <div class="auth-input-group">
                 <label class="auth-label">Trade Sector</label>
                 <select id="artisanCategory" class="auth-input">
-                  <option value="home-repairs:Power & Generators">⚡ Power, Generator & ATS Works</option>
-                  <option value="interior:Interior Finishing & POP">🎨 Interior Finishing & POP Ceilings</option>
-                  <option value="solar-tech:Renewable Solar & Inverters">☀️ Solar Inverter & CCTV Security</option>
-                  <option value="beauty:Beauty & Luxury Braids">💇 Beauty, Braids & Salon Grooming</option>
-                  <option value="auto:Mobile Vehicle Diagnostics">🚗 Mobile Auto Scanner & Diagnostics</option>
-                  <option value="home-repairs:Plumbing & Boreholes">🚰 Plumbing, Pumps & Boreholes</option>
+                  <option value="home-repairs:Power & Generators">Power, Generator &amp; ATS Works</option>
+                  <option value="interior:Interior Finishing & POP">Interior Finishing &amp; POP Ceilings</option>
+                  <option value="solar-tech:Renewable Solar & Inverters">Solar Inverter &amp; CCTV Security</option>
+                  <option value="beauty:Beauty & Luxury Braids">Beauty, Braids &amp; Salon Grooming</option>
+                  <option value="auto:Mobile Vehicle Diagnostics">Mobile Auto Scanner &amp; Diagnostics</option>
+                  <option value="home-repairs:Plumbing & Boreholes">Plumbing, Pumps &amp; Boreholes</option>
                 </select>
               </div>
 
@@ -564,7 +562,9 @@
               <div class="auth-input-group">
                 <label class="auth-label">Password</label>
                 <input type="password" id="artisanPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
-                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">👁️</button>
+                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
               </div>
               <div class="auth-input-group">
                 <label class="auth-label">Confirm Password</label>
@@ -803,12 +803,15 @@
     function togglePasswordVisibility(inputId, btnEl) {
       const input = document.getElementById(inputId);
       if (!input) return;
+      const eyeOpen = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+      const eyeOff = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
       if (input.type === 'password') {
         input.type = 'text';
-        if (btnEl) btnEl.textContent = '🙈';
+        if (btnEl) btnEl.innerHTML = eyeOff;
       } else {
         input.type = 'password';
-        if (btnEl) btnEl.textContent = '👁️';
+        if (btnEl) btnEl.innerHTML = eyeOpen;
       }
     }
 

@@ -342,7 +342,7 @@
           </button>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;" class="spotlight-grid-wrap">
+        <div class="spotlight-grid-wrap">
           <!-- Pro 1 -->
           <div class="spotlight-card">
             <div class="spotlight-img-wrap">
@@ -615,26 +615,15 @@
 
           <!-- Col 3: PH Landmarks & Coverage -->
           <div>
-            <h4 class="footer-col-title">PH Landmarks & Zones</h4>
-            <ul class="footer-links" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 0.82rem;">
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Pleasure Park / Bori Camp')">Pleasure Park</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Garrison Junction & D-Line')">Garrison Junction</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Waterlines / Aba Road')">Waterlines</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Hotel Presidential & Rumuola')">Hotel Presidential</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Peter Odili Road & Trans-Amadi Gardens')">Peter Odili Road</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Old GRA & Government House')">Old GRA</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('New GRA (Tombia / Birabi)')">New GRA</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Trans-Amadi & Slaughter Bridge')">Trans-Amadi</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Woji & Golf Estate Gate')">Woji & Golf Estate</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Choba & Uniport Delta Park')">Choba & Uniport</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('UPTH Gate & Alakahia')">UPTH & Alakahia</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Rumuokoro Flyover & Roundabout')">Rumuokoro</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Air Force Base & Eliozu Flyover')">Air Force / Eliozu</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Artillery Junction & Okporo')">Artillery Junction</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Oil Mill Junction & Elelenwo')">Oil Mill / Elelenwo</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Ada George & Wimpey Junction')">Ada George / Wimpey</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Mile 1-3 Diobu & RSU / UST')">Diobu & RSU</a></li>
-              <li><a href="javascript:void(0)" onclick="filterByLandmark('Port Harcourt Mall / Spar')">Spar / PH Mall</a></li>
+            <h4 class="footer-col-title">Top PH Coverage Zones</h4>
+            <ul class="footer-links">
+              <li><a href="javascript:void(0)" onclick="filterByLandmark('Peter Odili Road & Trans-Amadi Gardens')">Peter Odili &amp; Trans-Amadi</a></li>
+              <li><a href="javascript:void(0)" onclick="filterByLandmark('Old GRA & Government House')">Old &amp; New GRA</a></li>
+              <li><a href="javascript:void(0)" onclick="filterByLandmark('Woji & Golf Estate Gate')">Woji &amp; Golf Estate</a></li>
+              <li><a href="javascript:void(0)" onclick="filterByLandmark('Choba & Uniport Delta Park')">Choba &amp; Uniport (UPTH)</a></li>
+              <li><a href="javascript:void(0)" onclick="filterByLandmark('Garrison Junction & D-Line')">Garrison &amp; D-Line</a></li>
+              <li><a href="javascript:void(0)" onclick="filterByLandmark('Ada George & Wimpey Junction')">Ada George &amp; Wimpey</a></li>
+              <li><a href="#directory" onclick="document.getElementById('heroAreaSelect').focus()" style="color: var(--amber-dark); font-weight: 700;">+ All 18 Coverage Zones &rarr;</a></li>
             </ul>
           </div>
 
@@ -693,7 +682,7 @@
 
     <div style="max-width: 1380px; margin: 36px auto; padding: 0 32px;">
       <!-- KPI Cards -->
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 36px;" class="admin-kpi-grid">
+      <div class="admin-kpi-grid">
         <div style="background: var(--bg-surface); border: 1px solid var(--hairline); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-xs);">
           <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Total Registered Pros</div>
           <div id="kpiTotalPros" style="font-size: 2.4rem; font-weight: 900; margin: 6px 0; color: var(--canvas);">0</div>
