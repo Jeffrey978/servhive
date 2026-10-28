@@ -1017,37 +1017,36 @@ function renderProviders() {
       <div class="ed-pro-header-row">
         <img class="ed-pro-avatar" src="${pro.image}" alt="${pro.name}" loading="lazy" />
         <div class="ed-pro-title-wrap">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px;">
-            <span style="font-size: 0.75rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.4px;">${pro.categoryName}</span>
-            <span class="badge badge-outline" style="font-size: 0.75rem; gap: 4px;">
-              <span style="color: var(--primary);">★</span> ${pro.rating.toFixed(1)} <span style="color: var(--muted-foreground); font-weight: 500;">(${pro.reviewCount})</span>
-            </span>
-          </div>
+          <div style="font-size: 0.72rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">${pro.categoryName}</div>
           <h3 class="ed-pro-name">${pro.businessName}</h3>
           <div class="ed-pro-subtitle">${pro.name}</div>
-          <div class="ed-pro-meta-chips">
-            ${pro.verified ? `
-              <span class="badge ed-badge-verified">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                Rivers Verified Pro
-              </span>
-            ` : ''}
-            <span class="badge badge-secondary">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              ${pro.area}
-            </span>
-            ${pro.distanceKm !== undefined ? `
-              <span class="badge badge-secondary">
-                ${pro.distanceKm} km away
-              </span>
-            ` : ''}
-          </div>
         </div>
+        <div class="badge badge-outline" style="font-size: 0.75rem; gap: 4px; align-self: flex-start; flex-shrink: 0;">
+          <span style="color: var(--primary);">★</span> ${pro.rating.toFixed(1)} <span style="color: var(--muted-foreground); font-weight: 500;">(${pro.reviewCount})</span>
+        </div>
+      </div>
+
+      <div class="ed-pro-meta-chips">
+        ${pro.verified ? `
+          <span class="badge ed-badge-verified">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Rivers Verified Pro
+          </span>
+        ` : ''}
+        <span class="badge badge-secondary">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          ${pro.area}
+        </span>
+        ${pro.distanceKm !== undefined ? `
+          <span class="badge badge-secondary">
+            ${pro.distanceKm} km away
+          </span>
+        ` : ''}
       </div>
 
       <div class="ed-card-footer">
         <div class="ed-pro-price-value" style="font-size: 1.05rem; font-weight: 800;">
-          <span style="font-size: 0.8rem; font-weight: 500; color: var(--muted-foreground);">From </span>${formatNaira(pro.startingPrice)}
+          <span style="font-size: 0.72rem; font-weight: 600; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 1px;">From</span>${formatNaira(pro.startingPrice)}
         </div>
 
         <div class="ed-pro-actions">

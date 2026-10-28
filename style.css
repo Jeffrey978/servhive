@@ -52,7 +52,7 @@
   --bg-card: #ffffff;
   --bg-card-hover: #fafafa;
   --bg-input: #ffffff;
-  --bg-header: rgba(255, 255, 255, 0.95);
+  --bg-header: #ffffff;
 
   --amber: #f59e0b;
   --amber-dark: #d97706;
@@ -132,7 +132,7 @@
   --bg-card: #09090b;
   --bg-card-hover: #18181b;
   --bg-input: #09090b;
-  --bg-header: rgba(9, 9, 11, 0.92);
+  --bg-header: #09090b;
 
   --amber: #f59e0b;
   --amber-dark: #d97706;
@@ -443,15 +443,14 @@ button, input, select, textarea {
   padding-top: 0;
 }
 
-/* ==================== HEADER (Sleek, Animated & Non-Wrapping) ==================== */
+/* ==================== HEADER (Sleek, Clean & Uncluttered) ==================== */
 .ed-header {
   position: sticky;
   top: 0;
   z-index: 1000;
   background-color: var(--bg-header);
-  border-bottom: 1px solid var(--hairline);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
   transition: var(--theme-transition);
 }
 
@@ -459,11 +458,11 @@ button, input, select, textarea {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
-  height: 72px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
 }
 
 .ed-header-left {
@@ -1109,7 +1108,7 @@ button, input, select, textarea {
 .ed-directory-section {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 48px 24px 64px;
+  padding: 64px 24px 80px;
 }
 
 .ed-filter-row {
@@ -1117,7 +1116,7 @@ button, input, select, textarea {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   flex-wrap: wrap;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
@@ -1161,7 +1160,7 @@ button, input, select, textarea {
 .ed-providers-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 
 .ed-pro-card {
@@ -1174,6 +1173,7 @@ button, input, select, textarea {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 16px;
   position: relative;
 }
 .ed-pro-card:hover {
@@ -1185,13 +1185,13 @@ button, input, select, textarea {
 .ed-pro-header-row {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 14px;
   margin-bottom: 0;
 }
 
 .ed-pro-avatar {
-  width: 68px;
-  height: 68px;
+  width: 52px;
+  height: 52px;
   border-radius: var(--radius-md);
   object-fit: cover;
   border: 1px solid var(--border);
@@ -1205,7 +1205,7 @@ button, input, select, textarea {
 }
 
 .ed-pro-name {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--foreground);
   margin-bottom: 2px;
@@ -1217,13 +1217,13 @@ button, input, select, textarea {
   font-size: 0.8125rem;
   color: var(--muted-foreground);
   font-weight: 500;
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 .ed-pro-meta-chips {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
