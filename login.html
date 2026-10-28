@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In & Sign Up — Servhive Port Harcourt | Verified Marketplace</title>
+  <meta name="description" content="Access verified Port Harcourt artisans with 100% Escrow payment security, phone number privacy, and standardized rate cards.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('servhive_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-primary);">
+
+  <!-- ==================== DEDICATED AUTH HEADER (DIFFERENT FROM MARKETPLACE) ==================== -->
+  <header class="auth-landing-header">
+    <div class="auth-header-container">
+      <!-- Left: Brand Logo -->
+      <a href="/index.html" class="ed-logo" aria-label="Servhive Home">
+        <span>servhive<strong>PH</strong></span>
+      </a>
+
+      <!-- Center: Security Assurance Pill (Responsive in CSS) -->
+      <div class="auth-security-pill" id="headerSecurityPill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>100% Escrow Protection · Rivers State Verified Gateway</span>
+      </div>
+
+      <!-- Right: Action Controls -->
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="ed-theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark Mode" aria-label="Toggle Theme">
+          <span id="themeToggleIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== AUTH HERO BANNER ==================== -->
+  <section class="auth-hero-banner">
+    <div class="hero-eyebrow" style="margin-bottom: 8px;">PORT HARCOURT ACCESS &amp; ONBOARDING</div>
+    <h1 style="font-size: 2.15rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; color: var(--canvas);">
+      One Account. 100% Escrow Security.
+    </h1>
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.55; max-width: 620px; margin: 0 auto;">
+      Connect directly with vetted Port Harcourt artisans, protect your funds in safe Escrow, and experience zero roadside price gouging.
+    </p>
+  </section>
+
+  <!-- ==================== MAIN AUTH CARD & TRUST CONTAINER ==================== -->
+  <main class="auth-container" style="margin-top: 10px; margin-bottom: 40px;">
+    
+    <!-- Left Column: Interactive Auth Suite Card -->
+    <div class="auth-card">
+      
+      <!-- Top Card Breadcrumb -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+        <a href="/index.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.84rem; color: var(--text-muted); font-weight: 700; text-decoration: none;">
+          <span>&larr; Explore Marketplace as Guest</span>
+        </a>
+        <span class="hero-eyebrow" id="authNavEyebrow" style="margin: 0; font-size: 0.72rem;">PORT HARCOURT ACCESS</span>
+      </div>
+
+      <!-- Dual Role Selection Control -->
+      <div class="auth-role-tabs">
+        <button type="button" id="roleBtnHirer" class="auth-role-btn active" onclick="setAuthRole('hirer')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Client Portal</span>
+        </button>
+        <button type="button" id="roleBtnArtisan" class="auth-role-btn" onclick="setAuthRole('artisan')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+          <span>Artisan Pro Portal</span>
+        </button>
+      </div>
+
+      <!-- Mode Selection Tabs: Log In vs Sign Up -->
+      <div class="auth-mode-tabs">
+        <button type="button" id="authModeTabLogin" class="auth-mode-tab active" onclick="setAuthMode('login')">
+          Log In
+        </button>
+        <button type="button" id="authModeTabSignup" class="auth-mode-tab" onclick="setAuthMode('signup')">
+          Create Account
+        </button>
+      </div>
+
+      <!-- Dynamic Header info -->
+      <div style="margin-bottom: 20px;">
+        <h2 id="authTitle" style="font-size: 1.65rem; font-weight: 800; color: var(--canvas); margin-bottom: 6px;">
+          Log In to Client Portal
+        </h2>
+        <p id="authSubtitle" style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+          Access vetted Port Harcourt artisans with 100% Escrow payment security and live tracking.
+        </p>
+      </div>
+
+      <!-- Quick 1-Click Demo Shortcut -->
+      <div class="auth-demo-banner">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 0.85rem;">⚡</span>
+          <span style="font-size: 0.8rem; font-weight: 800; color: var(--amber-dark);">Test Fast with Demo Profiles:</span>
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="auth-demo-pill" onclick="quickFillDemo('hirer')">
+            <span>👤 Demo Client</span>
+          </button>
+          <button type="button" class="auth-demo-pill" onclick="quickFillDemo('artisan')">
+            <span>🔨 Demo Artisan Pro</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Inline Alert / Notice Container -->
+      <div id="authNotice" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.88rem; font-weight: 700; line-height: 1.45;"></div>
+
+      <!-- Dynamic Form Container -->
+      <div id="authFormContainer">
+        <!-- Rendered by renderAuthForm() -->
+      </div>
+
+    </div>
+
+    <!-- Right Column: Contextual Trust & Social Proof Showcase -->
+    <div class="auth-trust-column" id="authTrustColumn">
+      <!-- Rendered by renderAuthTrust() -->
+    </div>
+
+  </main>
+
+  <!-- ==================== TRUST & PROTECTION HIGHLIGHT STRIP ==================== -->
+  <section class="auth-trust-strip" id="trustStrip">
+    <div class="auth-trust-box">
+      <div class="auth-trust-box-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">100% Escrow Protection</h3>
+      <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
+        Your deposit remains frozen in our secure vault. The artisan only receives payout once you inspect and personally confirm the finished job.
+      </p>
+    </div>
+
+    <div class="auth-trust-box">
+      <div class="auth-trust-box-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Masked Number Privacy</h3>
+      <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
+        Never worry about roadside harassment or spam. Calls and direct messaging are routed through encrypted masked relays to keep phone numbers confidential.
+      </p>
+    </div>
+
+    <div class="auth-trust-box">
+      <div class="auth-trust-box-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="21" x2="21" y2="21"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+          <polygon points="12 3 2 10 22 10 12 3"></polygon>
+          <line x1="6" y1="10" x2="6" y2="21"></line>
+          <line x1="10" y1="10" x2="10" y2="21"></line>
+          <line x1="14" y1="10" x2="14" y2="21"></line>
+          <line x1="18" y1="10" x2="18" y2="21"></line>
+        </svg>
+      </div>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Statutory Rivers KYC</h3>
+      <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
+        Every pro undergoes identity validation, workshop verification, and trade competence auditing in alignment with Rivers State commercial standards.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== FREQUENTLY ASKED QUESTIONS ==================== -->
+  <section class="auth-faq-wrap" id="faqSection">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div class="hero-eyebrow" style="margin-bottom: 6px;">PORT HARCOURT HELP &amp; FAQS</div>
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--canvas);">Frequently Asked Questions</h3>
+    </div>
+
+    <div class="auth-faq-item open">
+      <button type="button" class="auth-faq-question" onclick="toggleFaq(this)">
+        <span>How does the 100% Escrow Guarantee protect my money?</span>
+        <span class="auth-faq-icon">▾</span>
+      </button>
+      <div class="auth-faq-answer">
+        When you book a service, your payment is held safely in Servhive Escrow. The technician can see the confirmed funded commitment, but cannot withdraw funds until you physically inspect their completed handiwork and authorize release. If quality standards aren't met, funds remain protected while Godfrey &amp; the dispute desk mediate.
+      </div>
+    </div>
+
+    <div class="auth-faq-item">
+      <button type="button" class="auth-faq-question" onclick="toggleFaq(this)">
+        <span>Can I switch between Client Portal and Artisan with one account?</span>
+        <span class="auth-faq-icon">▾</span>
+      </button>
+      <div class="auth-faq-answer">
+        Yes! While accounts have a primary mode, you can easily toggle between Client Portal and Artisan directly from your user menu in the top navigation bar at any time without needing separate logins.
+      </div>
+    </div>
+
+    <div class="auth-faq-item">
+      <button type="button" class="auth-faq-question" onclick="toggleFaq(this)">
+        <span>How does the 3-Month Free Trial work for Artisan Pros?</span>
+        <span class="auth-faq-icon">▾</span>
+      </button>
+      <div class="auth-faq-answer">
+        Verified artisans joining Servhive enjoy zero platform commission fees (₦0) and complimentary listing in the Port Harcourt directory for their first 90 days. You keep 100% of your earnings deposited directly to your Nigerian bank account.
+      </div>
+    </div>
+
+    <div class="auth-faq-item">
+      <button type="button" class="auth-faq-question" onclick="toggleFaq(this)">
+        <span>What areas of Port Harcourt are covered?</span>
+        <span class="auth-faq-icon">▾</span>
+      </button>
+      <div class="auth-faq-answer">
+        Servhive covers all major Port Harcourt zones including Trans-Amadi, Peter Odili Road, Woji, Old GRA, New GRA, Choba / Uniport, D-Line, Ada George, Rumuola, Artillery, and Elelenwo.
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MINIMAL AUTH FOOTER ==================== -->
+  <footer class="auth-landing-footer">
+    <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+      <a href="/index.html" class="ed-logo" style="text-decoration: none;">
+        <span>servhive<strong>PH</strong></span>
+      </a>
+      <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 520px; line-height: 1.5;">
+        Port Harcourt's premier verified trade &amp; talent infrastructure. Enforcing statutory verification, masked contact privacy, and Escrow payment protection.
+      </p>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; font-size: 0.84rem; font-weight: 600;">
+        <a href="/index.html" style="color: var(--canvas); text-decoration: none;">Explore Marketplace</a>
+        <a href="#trustStrip" style="color: var(--text-muted); text-decoration: none;">Escrow &amp; Privacy Protocol</a>
+        <a href="#faqSection" style="color: var(--text-muted); text-decoration: none;">Help &amp; FAQs</a>
+      </div>
+      <div style="font-size: 0.76rem; color: var(--text-faint); margin-top: 6px;">
+        &copy; 2026 Servhive Technologies Limited. All rights reserved. Port Harcourt, Nigeria.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== AUTH SCRIPT ENGINE ==================== -->
+  <script>
+    // Local State for Auth Landing Page
+    const authState = {
+      role: 'hirer', // 'hirer' | 'artisan'
+      mode: 'login', // 'login' | 'signup'
+      users: JSON.parse(localStorage.getItem('servhive_users')) || [
+        {
+          id: 'usr-1',
+          name: 'Tonye Briggs',
+          email: 'tonye@example.com',
+          phone: '08034567890',
+          role: 'hirer',
+          area: 'Peter Odili Road',
+          password: 'password123',
+          createdAt: '2026-09-15'
+        },
+        {
+          id: 'usr-2',
+          name: 'Engr. Emeka Obi',
+          businessName: 'PowerVolt Generator & Electrical Works',
+          email: 'emeka@powervolt.ng',
+          phone: '08023456789',
+          role: 'artisan',
+          trade: 'Generator & Inverter Specialist',
+          category: 'home-repairs',
+          area: 'Trans-Amadi',
+          password: 'password123',
+          createdAt: '2026-08-10'
+        }
+      ]
+    };
+
+    // Initialize from URL Hash or Params
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync Theme icon
+      const theme = localStorage.getItem('servhive_theme') || 'light';
+      updateThemeIcon(theme);
+
+      // Check media query for security pill
+      if (window.innerWidth > 768) {
+        const pill = document.getElementById('headerSecurityPill');
+        if (pill) pill.style.display = 'inline-flex';
+      }
+
+      // Check hash or URL params
+      const hash = window.location.hash.toLowerCase();
+      const urlParams = new URLSearchParams(window.location.search);
+      const roleParam = urlParams.get('role');
+      const modeParam = urlParams.get('mode');
+
+      if (hash.includes('signup-artisan') || hash.includes('artisan') || roleParam === 'artisan') {
+        authState.role = 'artisan';
+        authState.mode = hash.includes('signup') || modeParam === 'signup' ? 'signup' : 'login';
+      } else if (hash.includes('signup') || modeParam === 'signup') {
+        authState.mode = 'signup';
+      }
+
+      syncTabs();
+      renderAuthPage();
+    });
+
+    function setAuthRole(role) {
+      authState.role = role;
+      const notice = document.getElementById('authNotice');
+      if (notice) notice.style.display = 'none';
+      syncTabs();
+      renderAuthPage();
+    }
+
+    function setAuthMode(mode) {
+      authState.mode = mode;
+      const notice = document.getElementById('authNotice');
+      if (notice) notice.style.display = 'none';
+      syncTabs();
+      renderAuthPage();
+    }
+
+    function syncTabs() {
+      const hirerBtn = document.getElementById('roleBtnHirer');
+      const artisanBtn = document.getElementById('roleBtnArtisan');
+      if (hirerBtn) hirerBtn.classList.toggle('active', authState.role === 'hirer');
+      if (artisanBtn) artisanBtn.classList.toggle('active', authState.role === 'artisan');
+
+      const loginTab = document.getElementById('authModeTabLogin');
+      const signupTab = document.getElementById('authModeTabSignup');
+      if (loginTab) loginTab.classList.toggle('active', authState.mode === 'login');
+      if (signupTab) signupTab.classList.toggle('active', authState.mode === 'signup');
+    }
+
+    function renderAuthPage() {
+      const isHirer = authState.role === 'hirer';
+      const isLogin = authState.mode === 'login';
+
+      const titleEl = document.getElementById('authTitle');
+      const subtitleEl = document.getElementById('authSubtitle');
+      const eyebrowEl = document.getElementById('authNavEyebrow');
+
+      if (eyebrowEl) {
+        eyebrowEl.textContent = isHirer ? 'PORT HARCOURT CLIENT PORTAL' : 'PORT HARCOURT ARTISAN PRO NETWORK';
+      }
+
+      if (titleEl && subtitleEl) {
+        if (isLogin) {
+          if (isHirer) {
+            titleEl.textContent = 'Log In to Client Portal';
+            subtitleEl.textContent = 'Access vetted Port Harcourt artisans with 100% Escrow payment security and live tracking.';
+          } else {
+            titleEl.textContent = 'Artisan Pro Portal';
+            subtitleEl.textContent = 'Log in to manage bookings, transparent rate cards, and instant bank payouts across Port Harcourt.';
+          }
+        } else {
+          if (isHirer) {
+            titleEl.textContent = 'Register for Client Portal';
+            subtitleEl.textContent = 'Hire vetted electricians, mechanics, tilers, and stylists in Port Harcourt with zero price gouging.';
+          } else {
+            titleEl.textContent = 'Register as Verified Pro';
+            subtitleEl.textContent = 'Join Port Harcourt’s premier trades network. Enjoy 3 Months Free on Verified Pro (₦0 platform commission).';
+          }
+        }
+      }
+
+      renderAuthForm();
+      renderAuthTrust();
+    }
+
+    function renderAuthForm() {
+      const container = document.getElementById('authFormContainer');
+      if (!container) return;
+
+      const isHirer = authState.role === 'hirer';
+      const isLogin = authState.mode === 'login';
+
+      if (isLogin) {
+        container.innerHTML = `
+          <form onsubmit="handleLoginSubmit(event)">
+            <div class="auth-input-group">
+              <label class="auth-label">Email or Phone Number</label>
+              <input type="text" id="loginContact" required class="auth-input" placeholder="e.g. 0803 123 4567 or email@domain.com" />
+            </div>
+
+            <div class="auth-input-group">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="auth-label" style="margin: 0;">Password</label>
+                <a href="javascript:void(0)" onclick="handleForgotPasswordClick()" style="font-size: 0.78rem; color: var(--amber-dark); font-weight: 700; text-decoration: none;">
+                  Forgot password?
+                </a>
+              </div>
+              <input type="password" id="loginPassword" required class="auth-input" placeholder="Enter your password" />
+              <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-muted); cursor: pointer;">
+                <input type="checkbox" checked style="accent-color: var(--amber-dark);">
+                <span>Remember this device</span>
+              </label>
+              <span style="font-size: 0.78rem; color: var(--teal); font-weight: 700;">🔒 256-bit Secure</span>
+            </div>
+
+            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
+              <span>${isHirer ? 'Log In to Client Portal &rarr;' : 'Access Artisan Pro Portal &rarr;'}</span>
+            </button>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
+              ${isHirer ? "Don't have a Client account?" : "New to Servhive PH Artisan Pro?"}
+              <a href="javascript:void(0)" onclick="setAuthMode('signup')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
+                Create an Account &rarr;
+              </a>
+            </div>
+          </form>
+        `;
+      } else if (isHirer) {
+        // Hirer Signup Form
+        container.innerHTML = `
+          <form onsubmit="handleHirerSignupSubmit(event)">
+            <div class="auth-input-group">
+              <label class="auth-label">Full Name</label>
+              <input type="text" id="hirerFullName" required class="auth-input" placeholder="e.g. Tonye Briggs" />
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Email Address</label>
+                <input type="email" id="hirerEmail" required class="auth-input" placeholder="tonye@example.com" />
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">Phone Number (WhatsApp)</label>
+                <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" />
+              </div>
+            </div>
+
+            <div class="auth-input-group">
+              <label class="auth-label">Primary Port Harcourt Location / Estate</label>
+              <select id="hirerArea" class="auth-input">
+                <option value="Peter Odili Road">Peter Odili Road (Trans-Amadi Gardens)</option>
+                <option value="Old GRA">Old GRA / Government House</option>
+                <option value="New GRA / Phase 2">New GRA (Tombia / Birabi)</option>
+                <option value="Trans-Amadi">Trans-Amadi Industrial Layout</option>
+                <option value="Woji">Woji / Golf Estate Gate</option>
+                <option value="D-Line">D-Line / Garrison / Waterlines</option>
+                <option value="Ada George">Ada George / Wimpey / Agip</option>
+                <option value="Choba / Uniport">Choba / Uniport / Alakahia</option>
+                <option value="Rumuodara">Rumuodara / Artillery / Okporo</option>
+                <option value="Rumuola">Rumuola / Pleasure Park / Hotel Presidential</option>
+              </select>
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Password</label>
+                <input type="password" id="hirerPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
+                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('hirerPassword', this)">👁️</button>
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">Confirm Password</label>
+                <input type="password" id="hirerConfirmPassword" required minlength="6" class="auth-input" placeholder="Repeat password" />
+              </div>
+            </div>
+
+            <label class="auth-checkbox-label">
+              <input type="checkbox" id="hirerTerms" required checked />
+              <span>I agree to Servhive's <a href="#trustStrip" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Escrow &amp; Privacy Protocol</a> and standard Rivers State commercial guidelines.</span>
+            </label>
+
+            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
+              <span>Register for Client Portal &rarr;</span>
+            </button>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
+              Already have an account? 
+              <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
+                Log in here &rarr;
+              </a>
+            </div>
+          </form>
+        `;
+      } else {
+        // Artisan Signup Form
+        container.innerHTML = `
+          <form onsubmit="handleArtisanSignupSubmit(event)">
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Master Artisan Full Name</label>
+                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Engr. Emeka Obi" />
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">Workshop / Business Name</label>
+                <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. PowerVolt Generator Works" />
+              </div>
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Trade Sector</label>
+                <select id="artisanCategory" class="auth-input">
+                  <option value="home-repairs:Power & Generators">⚡ Power, Generator & ATS Works</option>
+                  <option value="interior:Interior Finishing & POP">🎨 Interior Finishing & POP Ceilings</option>
+                  <option value="solar-tech:Renewable Solar & Inverters">☀️ Solar Inverter & CCTV Security</option>
+                  <option value="beauty:Beauty & Luxury Braids">💇 Beauty, Braids & Salon Grooming</option>
+                  <option value="auto:Mobile Vehicle Diagnostics">🚗 Mobile Auto Scanner & Diagnostics</option>
+                  <option value="home-repairs:Plumbing & Boreholes">🚰 Plumbing, Pumps & Boreholes</option>
+                </select>
+              </div>
+
+              <div class="auth-input-group">
+                <label class="auth-label">Workshop Base Area (PH)</label>
+                <select id="artisanArea" class="auth-input">
+                  <option value="Trans-Amadi">Trans-Amadi / Slaughter</option>
+                  <option value="Peter Odili Road">Peter Odili Road</option>
+                  <option value="Woji">Woji / Golf Estate</option>
+                  <option value="New GRA / Phase 2">New GRA (Tombia / Birabi)</option>
+                  <option value="Old GRA">Old GRA / Forces Ave</option>
+                  <option value="D-Line">D-Line / Garrison</option>
+                  <option value="Choba / Uniport">Choba / Uniport</option>
+                  <option value="Ada George">Ada George / Wimpey</option>
+                  <option value="Rumuodara">Rumuodara / Artillery</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Phone Number (WhatsApp Active)</label>
+                <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" />
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">Years in Trade</label>
+                <select id="artisanExp" class="auth-input">
+                  <option value="3-5 Years">3 - 5 Years Experience</option>
+                  <option value="5-8 Years" selected>5 - 8 Years Experience</option>
+                  <option value="8+ Years (Master Pro)">8+ Years (Master Pro)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Workshop Email (Optional)</label>
+                <input type="email" id="artisanEmail" class="auth-input" placeholder="emeka@powervolt.ng" />
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">Starting Base Rate (₦)</label>
+                <input type="number" id="artisanStartingPrice" required min="3000" step="500" class="auth-input" value="10000" />
+              </div>
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Password</label>
+                <input type="password" id="artisanPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
+                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">👁️</button>
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">Confirm Password</label>
+                <input type="password" id="artisanConfirmPassword" required minlength="6" class="auth-input" placeholder="Repeat password" />
+              </div>
+            </div>
+
+            <!-- 3-Month Free Promo callout box -->
+            <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
+              <div style="font-weight: 800; font-size: 0.88rem; color: var(--amber-dark); margin-bottom: 4px;">
+                🎁 3-Month Free Verified Pro Trial Activated
+              </div>
+              <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
+                Zero platform fees for your first 90 days. Keep 100% of your earnings. Standard renewal at ₦3,000/mo after trial period.
+              </div>
+            </div>
+
+            <label class="auth-checkbox-label">
+              <input type="checkbox" id="artisanTerms" required checked />
+              <span>I confirm our workshop adheres to Port Harcourt trade quality standards, fixed transparent rates, and safe Escrow delivery.</span>
+            </label>
+
+            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
+              <span>Register as Verified Artisan &rarr;</span>
+            </button>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
+              Already registered as an Artisan? 
+              <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
+                Log in here &rarr;
+              </a>
+            </div>
+          </form>
+        `;
+      }
+    }
+
+    function renderAuthTrust() {
+      const container = document.getElementById('authTrustColumn');
+      if (!container) return;
+
+      const isHirer = authState.role === 'hirer';
+
+      if (isHirer) {
+        container.innerHTML = `
+          <div class="auth-trust-card">
+            <div class="hero-eyebrow" style="margin-bottom: 8px;">CLIENT PROTECTION GUARANTEE</div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 18px; color: var(--canvas);">
+              Why Use Servhive Client Portal?
+            </h3>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="auth-feature-title">100% Escrow Protection</div>
+                <div class="auth-feature-desc">Your payment is frozen in trust. The artisan is NOT paid until you personally inspect the completed job.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+              <div>
+                <div class="auth-feature-title">Real PH Proximity</div>
+                <div class="auth-feature-desc">Artisans located in your neighborhood — Trans-Amadi, Peter Odili, Woji, Old GRA, and Choba.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="auth-feature-title">Masked Number Privacy</div>
+                <div class="auth-feature-desc">Your real phone number remains shielded from unsolicited marketing, off-platform harassment, or scams.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <span style="font-weight: 800; font-size: 1.05rem; font-family: var(--font-main); color: var(--canvas);">₦</span>
+              </div>
+              <div>
+                <div class="auth-feature-title">Standardized Rate Cards</div>
+                <div class="auth-feature-desc">Clear fixed rate cards in Naira so you never deal with unexpected roadside price inflation on arrival.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Metrics Strip -->
+          <div class="auth-stats-grid">
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">100%</div>
+              <div class="auth-stat-label">Escrow Protected</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">420+</div>
+              <div class="auth-stat-label">Verified Pros</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">~15m</div>
+              <div class="auth-stat-label">Avg. Dispatch</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">4.9★</div>
+              <div class="auth-stat-label">PH Satisfaction</div>
+            </div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="auth-trust-card">
+            <div class="hero-eyebrow" style="margin-bottom: 8px;">ARTISAN PRO ADVANTAGE</div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 18px; color: var(--canvas);">
+              Grow Your Trade in Port Harcourt
+            </h3>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+              </div>
+              <div>
+                <div class="auth-feature-title">Guaranteed Escrow Payouts</div>
+                <div class="auth-feature-desc">Client funds are deposited in Escrow before you start work. No more clients disappearing without paying.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                  <rect x="2" y="7" width="20" height="5"></rect>
+                  <line x1="12" y1="22" x2="12" y2="7"></line>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="auth-feature-title">3-Month Free Trial (₦0 Platform Fees)</div>
+                <div class="auth-feature-desc">Join early and enjoy 90 days of unlimited leads with zero subscription costs. Keep 100% of your earnings.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 15l-2 5l9-13h-6l2-5l-9 13h6v0z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="auth-feature-title">Verified Trust Badge</div>
+                <div class="auth-feature-desc">Stand out directly to high-ticket estate clients and commercial facilities in Old GRA, Woji, and Trans-Amadi.</div>
+              </div>
+            </div>
+
+            <div class="auth-feature-row">
+              <div class="auth-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="auth-feature-title">Concierge Admin Mediation</div>
+                <div class="auth-feature-desc">Dedicated Port Harcourt administrative support to mediate disputes fairly and protect artisans.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Metrics Strip -->
+          <div class="auth-stats-grid">
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">₦0</div>
+              <div class="auth-stat-label">90-Day Fees</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">100%</div>
+              <div class="auth-stat-label">Payout Delivery</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">Direct</div>
+              <div class="auth-stat-label">Bank Deposit</div>
+            </div>
+            <div class="auth-stat-card">
+              <div class="auth-stat-value">Verified</div>
+              <div class="auth-stat-label">Teal Pro Trust</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // 1-Click Fast Demo Profiling
+    function quickFillDemo(role) {
+      authState.role = role;
+      authState.mode = 'login';
+      syncTabs();
+      renderAuthPage();
+
+      const contactInput = document.getElementById('loginContact');
+      const passwordInput = document.getElementById('loginPassword');
+
+      if (role === 'hirer') {
+        if (contactInput) contactInput.value = 'tonye@example.com';
+        if (passwordInput) passwordInput.value = 'password123';
+      } else {
+        if (contactInput) contactInput.value = 'emeka@powervolt.ng';
+        if (passwordInput) passwordInput.value = 'password123';
+      }
+
+      if (contactInput) {
+        contactInput.style.borderColor = 'var(--amber)';
+        setTimeout(() => {
+          contactInput.style.borderColor = 'var(--hairline)';
+        }, 1200);
+      }
+    }
+
+    // Toggle Password Visibility
+    function togglePasswordVisibility(inputId, btnEl) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (btnEl) btnEl.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        if (btnEl) btnEl.textContent = '👁️';
+      }
+    }
+
+    // Form Submissions
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const contact = document.getElementById('loginContact').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const role = authState.role;
+      let matchedUser = authState.users.find(u => 
+        (u.email.toLowerCase() === contact.toLowerCase() || u.phone.includes(contact) || contact.includes(u.phone)) &&
+        u.role === role
+      );
+
+      if (!matchedUser) {
+        matchedUser = {
+          id: 'usr-' + Date.now(),
+          name: role === 'hirer' ? 'Tonye Briggs' : 'Engr. Emeka Obi',
+          businessName: role === 'artisan' ? 'PowerVolt Generator & Electrical Works' : null,
+          email: contact.includes('@') ? contact : `${role}@servhive.ng`,
+          phone: contact.includes('@') ? '08034567890' : contact,
+          role: role,
+          area: role === 'hirer' ? 'Peter Odili Road' : 'Trans-Amadi',
+          verified: true
+        };
+        authState.users.push(matchedUser);
+        localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+      }
+
+      localStorage.setItem('servhive_current_user', JSON.stringify(matchedUser));
+
+      showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Redirecting you to the verified marketplace...`, 'success');
+
+      // Auto redirect after 0.9 seconds
+      setTimeout(() => {
+        window.location.href = '/index.html';
+      }, 900);
+    }
+
+    function handleHirerSignupSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('hirerFullName').value.trim();
+      const email = document.getElementById('hirerEmail').value.trim();
+      const phone = document.getElementById('hirerPhone').value.trim();
+      const area = document.getElementById('hirerArea').value;
+      const password = document.getElementById('hirerPassword').value;
+      const confirmPassword = document.getElementById('hirerConfirmPassword').value;
+
+      if (password !== confirmPassword) {
+        showInlineNotice('⚠️ <strong>Passwords do not match</strong>. Please make sure both fields are identical.', 'error');
+        return;
+      }
+
+      const newUser = {
+        id: 'usr-' + Date.now(),
+        name: name,
+        email: email,
+        phone: phone,
+        role: 'hirer',
+        area: area,
+        password: password,
+        createdAt: new Date().toISOString()
+      };
+
+      authState.users.push(newUser);
+      localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+      localStorage.setItem('servhive_current_user', JSON.stringify(newUser));
+
+      showInlineNotice(`✓ Welcome to Servhive, <strong>${name}</strong>! Your Client Portal account is active. Redirecting to the verified marketplace...`, 'success');
+
+      setTimeout(() => {
+        window.location.href = '/index.html';
+      }, 900);
+    }
+
+    function handleArtisanSignupSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('artisanName').value.trim();
+      const bizName = document.getElementById('artisanBizName').value.trim();
+      const catVal = document.getElementById('artisanCategory').value;
+      const area = document.getElementById('artisanArea').value;
+      const phone = document.getElementById('artisanPhone').value.trim();
+      const exp = document.getElementById('artisanExp').value;
+      const email = document.getElementById('artisanEmail').value.trim() || `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
+      const startingPrice = Number(document.getElementById('artisanStartingPrice').value) || 10000;
+      const password = document.getElementById('artisanPassword').value;
+      const confirmPassword = document.getElementById('artisanConfirmPassword').value;
+
+      if (password !== confirmPassword) {
+        showInlineNotice('⚠️ <strong>Passwords do not match</strong>. Please make sure both fields are identical.', 'error');
+        return;
+      }
+
+      const [catId, catName] = catVal.split(':');
+
+      const newUser = {
+        id: 'usr-' + Date.now(),
+        name: name,
+        businessName: bizName,
+        email: email,
+        phone: phone,
+        role: 'artisan',
+        trade: catName,
+        category: catId,
+        area: area,
+        experience: exp,
+        startingPrice: startingPrice,
+        password: password,
+        createdAt: new Date().toISOString()
+      };
+
+      authState.users.push(newUser);
+      localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+      localStorage.setItem('servhive_current_user', JSON.stringify(newUser));
+
+      // Append to providers list in localStorage if exists
+      try {
+        const storedProviders = JSON.parse(localStorage.getItem('servhive_providers')) || [];
+        const newPro = {
+          id: 'pro-' + Date.now(),
+          name: name,
+          businessName: bizName,
+          category: catId,
+          categoryName: catName,
+          subSpecialty: `${catName} Specialist`,
+          area: area,
+          rating: 5.0,
+          reviewCount: 1,
+          verified: true,
+          status: 'approved',
+          image: '/assets/hero_tradesman.jpg',
+          startingPrice: startingPrice,
+          responseTime: '~15 mins',
+          bio: `${bizName} is a verified service enterprise based in ${area}, Port Harcourt with ${exp} experience. 3-Month Free Pro Member.`
+        };
+        storedProviders.unshift(newPro);
+        localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
+      } catch (err) {}
+
+      showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your Artisan Pro profile is activated with 3-Month Free Trial. Redirecting...`, 'success');
+
+      setTimeout(() => {
+        window.location.href = '/index.html';
+      }, 1000);
+    }
+
+    // Inline Alert Helper
+    function showInlineNotice(message, type = 'info') {
+      const el = document.getElementById('authNotice');
+      if (!el) return;
+      el.style.display = 'block';
+      if (type === 'success') {
+        el.style.background = 'var(--teal-light)';
+        el.style.color = 'var(--teal)';
+        el.style.border = '1px solid var(--hairline-teal)';
+      } else if (type === 'error') {
+        el.style.background = '#fef2f2';
+        el.style.color = '#b91c1c';
+        el.style.border = '1px solid #fecaca';
+      } else {
+        el.style.background = 'var(--amber-light)';
+        el.style.color = 'var(--amber-dark)';
+        el.style.border = '1px solid var(--hairline-amber)';
+      }
+      el.innerHTML = message;
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function handleForgotPasswordClick() {
+      showInlineNotice('For instant password assistance or account recovery, please contact Servhive Port Harcourt support at <strong>+234 800-SERVHIVE</strong> or <strong>support@servhive.ng</strong>.', 'info');
+    }
+
+    // FAQ Accordion Toggle
+    function toggleFaq(btn) {
+      const item = btn.closest('.auth-faq-item');
+      if (item) {
+        item.classList.toggle('open');
+      }
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('servhive_theme', next);
+      updateThemeIcon(next);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById('themeToggleIcon');
+      const btn = document.getElementById('themeToggleBtn');
+      if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+      if (btn) btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+    }
+  </script>
+</body>
+</html>
