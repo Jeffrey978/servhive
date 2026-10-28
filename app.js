@@ -1024,7 +1024,7 @@ function renderProviders() {
             </span>
           </div>
           <h3 class="ed-pro-name">${pro.businessName}</h3>
-          <div class="ed-pro-subtitle">${pro.name} · ${pro.subSpecialty}</div>
+          <div class="ed-pro-subtitle">${pro.name}</div>
           <div class="ed-pro-meta-chips">
             ${pro.verified ? `
               <span class="badge ed-badge-verified">
@@ -1041,34 +1041,21 @@ function renderProviders() {
                 ${pro.distanceKm} km away
               </span>
             ` : ''}
-            <span style="font-size: 0.72rem; color: var(--muted-foreground); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              ${pro.responseTime}
-            </span>
           </div>
         </div>
       </div>
 
-      <p class="ed-pro-bio">${pro.bio}</p>
-
-      <div class="ed-services-preview">
-        ${pro.services.slice(0, 3).map(s => `
-          <span class="ed-service-chip">${s.name} (<strong>${formatNaira(s.price)}</strong>)</span>
-        `).join('')}
-      </div>
-
       <div class="ed-card-footer">
-        <div class="ed-pro-price-summary">
-          <span class="ed-pro-price-label">Starting Rate</span>
-          <span class="ed-pro-price-value">${formatNaira(pro.startingPrice)}</span>
+        <div class="ed-pro-price-value" style="font-size: 1.05rem; font-weight: 800;">
+          <span style="font-size: 0.8rem; font-weight: 500; color: var(--muted-foreground);">From </span>${formatNaira(pro.startingPrice)}
         </div>
 
         <div class="ed-pro-actions">
           <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('${pro.id}')">
-            <span>View Rate Card</span>
+            <span>Rate Card</span>
           </button>
           <button class="ed-button ed-button-amber ed-btn-compact" onclick="openEscrowBookingModal('${pro.id}', '${pro.services[0].name.replace(/'/g, "\\'")}', ${pro.services[0].price})">
-            <span>Book with Escrow</span>
+            <span>Book Escrow</span>
           </button>
           <button class="ed-button ed-button-black ed-btn-compact" style="width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;" title="In-App Masked Chat" onclick="openChatDrawer('${pro.id}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
