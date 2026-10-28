@@ -1042,7 +1042,13 @@ function renderProviders() {
             ${pro.distanceKm} km away
           </span>
         ` : ''}
+        <span class="badge badge-secondary" style="font-size: 0.72rem; gap: 4px;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          ${pro.responseTime}
+        </span>
       </div>
+
+      <p class="ed-pro-bio">${pro.bio}</p>
 
       <div class="ed-card-footer">
         <div class="ed-pro-price-value" style="font-size: 1.05rem; font-weight: 800;">

@@ -1264,10 +1264,10 @@ button, input, select, textarea {
 
 .ed-pro-bio {
   font-family: var(--font-body);
-  font-size: 0.84rem;
+  font-size: 0.8125rem;
   color: var(--muted-foreground);
-  line-height: 1.5;
-  margin-bottom: 16px;
+  line-height: 1.45;
+  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
