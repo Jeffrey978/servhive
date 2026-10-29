@@ -805,22 +805,31 @@
       e.preventDefault();
       const contact = document.getElementById('loginContact').value.trim();
       const password = document.getElementById('loginPassword').value;
-
       const role = authState.role;
-      let matchedUser = authState.users.find(u => 
-        (u.email.toLowerCase() === contact.toLowerCase() || u.phone.includes(contact) || contact.includes(u.phone)) &&
-        u.role === role
-      );
 
-      if (!matchedUser) {
+      // Smart User Detection: Check if user exists in the registered users list by contact
+      const cleanContact = contact.replace(/\s+/g, '').toLowerCase();
+      let matchedUser = authState.users.find(u => {
+        const uEmail = (u.email || '').toLowerCase();
+        const uPhone = (u.phone || '').replace(/\s+/g, '');
+        return uEmail === cleanContact || (uPhone && (uPhone.includes(cleanContact) || cleanContact.includes(uPhone)));
+      });
+
+      let isArtisan = false;
+      if (matchedUser) {
+        // User exists: respect their registered role
+        isArtisan = matchedUser.role === 'artisan';
+      } else {
+        // New account on the fly
+        isArtisan = (role === 'artisan');
         matchedUser = {
           id: 'usr-' + Date.now(),
-          name: role === 'hirer' ? 'Tonye Briggs' : 'Engr. Emeka Obi',
-          businessName: role === 'artisan' ? 'PowerVolt Generator & Electrical Works' : null,
-          email: contact.includes('@') ? contact : `${role}@servhive.ng`,
+          name: isArtisan ? 'Engr. Emeka Obi' : 'Tonye Briggs',
+          businessName: isArtisan ? 'PowerVolt Generator & Electrical Works' : null,
+          email: contact.includes('@') ? contact : `${isArtisan ? 'artisan' : 'client'}@servhive.ng`,
           phone: contact.includes('@') ? '08034567890' : contact,
-          role: role,
-          area: role === 'hirer' ? 'Peter Odili Road' : 'Trans-Amadi',
+          role: isArtisan ? 'artisan' : 'hirer',
+          area: isArtisan ? 'Trans-Amadi' : 'Peter Odili Road',
           verified: true
         };
         authState.users.push(matchedUser);
@@ -829,13 +838,12 @@
 
       localStorage.setItem('servhive_current_user', JSON.stringify(matchedUser));
 
-      const isArtisan = matchedUser.role === 'artisan';
-      showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Redirecting you to ${isArtisan ? 'your Artisan Portal Dashboard' : 'the client marketplace'}...`, 'success');
+      showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Redirecting you to ${isArtisan ? 'your Artisan Pro Dashboard' : 'the client marketplace'}...`, 'success');
 
-      // Auto redirect after 0.9 seconds
+      // Auto redirect: Artisans ALWAYS land on Artisan Dashboard; Clients land on marketplace
       setTimeout(() => {
         window.location.href = isArtisan ? '/artisan.html' : '/index.html';
-      }, 900);
+      }, 700);
     }
 
     function handleHirerSignupSubmit(e) {

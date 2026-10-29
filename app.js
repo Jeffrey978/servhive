@@ -3037,8 +3037,8 @@ window.switchUserRole = function() {
   if (newRole === 'artisan') {
     state.currentUser = {
       id: 'usr-artisan-' + Date.now(),
-      name: state.currentUser.name + ' (Pro)',
-      businessName: `${state.currentUser.name.split(' ')[0]} Master Services`,
+      name: state.currentUser.name.replace(/\s*\(Pro\)/gi, '').trim(),
+      businessName: `${state.currentUser.name.replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`,
       email: state.currentUser.email,
       phone: state.currentUser.phone,
       role: 'artisan',
@@ -3052,7 +3052,7 @@ window.switchUserRole = function() {
   } else {
     state.currentUser = {
       id: 'usr-hirer-' + Date.now(),
-      name: state.currentUser.name.replace(' (Pro)', ''),
+      name: state.currentUser.name.replace(/\s*\(Pro\)/gi, '').trim(),
       email: state.currentUser.email,
       phone: state.currentUser.phone,
       role: 'hirer',
@@ -4056,6 +4056,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const currentTheme = localStorage.getItem('servhive_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', currentTheme);
   updateThemeIcon(currentTheme);
+
+  // Automatic Role-Based Landing: Artisans land directly on their Artisan Dashboard
+  const user = state.currentUser;
+  if (user && user.role === 'artisan') {
+    if (!window.location.search.includes('view=client')) {
+      window.location.replace('/artisan.html');
+      return;
+    } else {
+      const banner = document.getElementById('artisanClientPreviewBanner');
+      if (banner) banner.style.display = 'flex';
+    }
+  }
 
   renderFilterPills();
   renderProviders();

@@ -11,12 +11,32 @@
   <link rel="stylesheet" href="/style.css">
   <script>
     (function() {
-      const savedTheme = localStorage.getItem('servhive_theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
+      try {
+        const savedTheme = localStorage.getItem('servhive_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Automatic Role-Based Landing:
+        // If an artisan visits the client marketplace, automatically redirect them to their dedicated Artisan Dashboard
+        const user = JSON.parse(localStorage.getItem('servhive_current_user'));
+        if (user && user.role === 'artisan' && !window.location.search.includes('view=client')) {
+          window.location.replace('/artisan.html');
+        }
+      } catch (e) {}
     })();
   </script>
 </head>
 <body>
+
+  <!-- Artisan Preview Banner (Only visible when viewing marketplace as an artisan) -->
+  <div id="artisanClientPreviewBanner" style="display: none; background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 8px 24px; font-size: 0.82rem; font-weight: 700; color: var(--foreground); justify-content: space-between; align-items: center; z-index: 100; position: relative;">
+    <span style="display: inline-flex; align-items: center; gap: 8px;">
+      <span>👁️</span>
+      <span><strong>Marketplace Client Preview Mode:</strong> You are currently previewing how clients discover and hire artisans.</span>
+    </span>
+    <a href="/artisan.html" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; padding: 4px 12px; font-size: 0.76rem;">
+      <span>Return to Artisan Dashboard &rarr;</span>
+    </a>
+  </div>
 
   <!-- ==================== HEADER (Sleek, Animated, Non-Wrapping) ==================== -->
   <header class="ed-header">

@@ -245,10 +245,14 @@ function setupIdentityHeader() {
     bizEl.textContent = artisanState.provider.businessName || 'Master Workshop Services';
   }
   if (nameEl && artisanState.provider) {
-    nameEl.textContent = artisanState.provider.name || 'Verified Craftsman';
+    const rawName = artisanState.provider.name || 'Verified Craftsman';
+    const cleanName = rawName.replace(/\s*\(Pro\)/gi, '').replace(/\s+/g, ' ').trim();
+    nameEl.textContent = cleanName;
   }
   if (welcomeTitle && artisanState.provider) {
-    welcomeTitle.textContent = `Welcome Back, ${artisanState.provider.name}`;
+    const rawName = artisanState.provider.name || 'Craftsman';
+    const cleanName = rawName.replace(/\s*\(Pro\)/gi, '').replace(/\s+/g, ' ').trim();
+    welcomeTitle.textContent = `Welcome Back, ${cleanName}`;
   }
   if (avatarEl && artisanState.provider && artisanState.provider.image) {
     avatarEl.src = artisanState.provider.image;
@@ -1251,3 +1255,4 @@ window.artisanLogout = artisanLogout;
 
 // Run on load
 document.addEventListener('DOMContentLoaded', initArtisanPortal);
+
