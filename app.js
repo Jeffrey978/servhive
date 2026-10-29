@@ -4,12 +4,17 @@
    =================================================================== */
 
 const INITIAL_CATEGORIES = [
-  { id: 'all', name: 'All Trades' },
-  { id: 'home-repairs', name: 'Home Repairs' },
-  { id: 'interior', name: 'Interior & Tiling' },
-  { id: 'beauty', name: 'Beauty & Grooming' },
-  { id: 'solar-tech', name: 'Tech & Solar' },
-  { id: 'auto', name: 'Vehicle Upkeep' }
+  { id: 'all', name: 'All Trades', icon: 'grid', proCount: '240+' },
+  { id: 'power-gen', name: 'Power & Generators', icon: 'zap', proCount: '46+ Verified Pros', rateFrom: '₦8,000', desc: 'Generators, ATS changeover switches & industrial load balancing.' },
+  { id: 'solar-tech', name: 'Solar & Inverters', icon: 'sun', proCount: '34+ Verified Pros', rateFrom: '₦12,000', desc: 'Hybrid solar inverters, lithium batteries & CCTV networks.' },
+  { id: 'interior-pop', name: 'POP & Interior', icon: 'home', proCount: '38+ Verified Pros', rateFrom: '₦15,000', desc: 'Suspended POP ceilings, Italian tiling & luxury screeding.' },
+  { id: 'plumbing', name: 'Plumbing & Pumps', icon: 'droplet', proCount: '29+ Verified Pros', rateFrom: '₦10,000', desc: 'Submersible borehole pumps, piping repairs & water storage.' },
+  { id: 'electrical', name: 'Electrical & Wiring', icon: 'cpu', proCount: '41+ Verified Pros', rateFrom: '₦7,000', desc: 'Conduit piping, distribution boards & emergency fault finding.' },
+  { id: 'ac-chillers', name: 'AC & Refrigeration', icon: 'wind', proCount: '32+ Verified Pros', rateFrom: '₦8,000', desc: 'Split AC servicing, compressor replacements & cold rooms.' },
+  { id: 'auto-mechanic', name: 'Auto Diagnostics', icon: 'tool', proCount: '31+ Verified Pros', rateFrom: '₦6,000', desc: 'OBD-2 computerized scanning, brake overhauls & mobile mechanics.' },
+  { id: 'beauty-hair', name: 'Beauty & Grooming', icon: 'scissors', proCount: '52+ Verified Pros', rateFrom: '₦7,000', desc: 'Knotless box braids, wig customization & scalp therapy.' },
+  { id: 'carpentry', name: 'Carpentry & Furniture', icon: 'box', proCount: '27+ Verified Pros', rateFrom: '₦10,000', desc: 'Kitchen cabinetry, custom wardrobes & wooden furniture restoration.' },
+  { id: 'painting', name: 'Painting & Screeding', icon: 'brush', proCount: '35+ Verified Pros', rateFrom: '₦12,000', desc: 'Exterior weather-shield painting & luxury interior wall textures.' }
 ];
 
 const APPROVAL_REQUIRED_CATEGORIES = [
@@ -256,8 +261,8 @@ const INITIAL_PROVIDERS = [
     id: 'pro-1',
     name: 'Engr. Emeka Obi',
     businessName: 'PowerVolt Generator & Electrical Works',
-    category: 'home-repairs',
-    categoryName: 'Home Repairs',
+    category: 'power-gen',
+    categoryName: 'Power & Generators',
     subSpecialty: 'Generator & Inverter Specialist',
     area: 'Trans-Amadi',
     lat: 4.8190,
@@ -266,11 +271,19 @@ const INITIAL_PROVIDERS = [
     rating: 4.9,
     reviewCount: 46,
     verified: true,
+    boosted: true,
+    boostDays: 7,
+    boostExpires: 'Nov 5, 2026',
     status: 'approved',
     image: '/assets/hero_tradesman.jpg',
     startingPrice: 8000,
     responseTime: '~15 mins',
     bio: 'Over 9 years solving electrical faults and power fluctuations in Port Harcourt. Specialized in Mikano, Perkins, and Firman generator servicing, automatic changeover switches, and industrial load balancing.',
+    workPhotos: [
+      { url: '/assets/hero_tradesman.jpg', caption: 'Mikano 30kVA ATS installation & engine overhaul in Trans-Amadi' },
+      { url: '/assets/solar_tech.jpg', caption: 'Automatic changeover load balancing panel for corporate facility' },
+      { url: '/assets/interior_pop.jpg', caption: 'Emergency generator re-wiring & control unit setup' }
+    ],
     services: [
       { name: 'Generator Diagnostic & Servicing', price: 15000, type: 'Starting from' },
       { name: 'Emergency Fault Finding & Rewiring', price: 8000, type: 'Fixed' },
@@ -286,7 +299,7 @@ const INITIAL_PROVIDERS = [
     id: 'pro-2',
     name: 'Blessing Amadi',
     businessName: 'Crown & Braids Beauty Lounge',
-    category: 'beauty',
+    category: 'beauty-hair',
     categoryName: 'Beauty & Grooming',
     subSpecialty: 'Luxury Braids & Hair Treatments',
     area: 'New GRA / Phase 2',
@@ -296,11 +309,17 @@ const INITIAL_PROVIDERS = [
     rating: 5.0,
     reviewCount: 62,
     verified: true,
+    boosted: false,
     status: 'approved',
     image: '/assets/hairstylist.jpg',
     startingPrice: 7000,
     responseTime: '~10 mins',
     bio: 'Professional cosmetologist and hair architect in New GRA. We deliver neat knotless braids, frontal installations, and restorative scalping in a serene environment or home service.',
+    workPhotos: [
+      { url: '/assets/hairstylist.jpg', caption: 'Signature knotless box braids with seamless parting in New GRA' },
+      { url: '/assets/interior_pop.jpg', caption: 'Custom HD lace frontal wig customization & melting' },
+      { url: '/assets/hero_tradesman.jpg', caption: 'Scalp therapy treatment & deep steam conditioning' }
+    ],
     services: [
       { name: 'Signature Knotless Box Braids', price: 18000, type: 'Starting from' },
       { name: 'Lace Frontal Wig Customization & Install', price: 22000, type: 'Fixed' },
@@ -316,8 +335,8 @@ const INITIAL_PROVIDERS = [
     id: 'pro-3',
     name: 'Tari Davies',
     businessName: 'Prime POP & Architectural Ceilings',
-    category: 'interior',
-    categoryName: 'Interior & Tiling',
+    category: 'interior-pop',
+    categoryName: 'POP & Interior',
     subSpecialty: 'POP Ceiling & Italian Tiling',
     area: 'Woji',
     lat: 4.8250,
@@ -326,11 +345,17 @@ const INITIAL_PROVIDERS = [
     rating: 4.8,
     reviewCount: 34,
     verified: true,
+    boosted: false,
     status: 'approved',
     image: '/assets/interior_pop.jpg',
     startingPrice: 15000,
     responseTime: '~30 mins',
     bio: 'Master of modern ceiling acoustics and Italian porcelain tiling. Serving high-end homes and developments in Woji, Peter Odili, and Golf Estate.',
+    workPhotos: [
+      { url: '/assets/interior_pop.jpg', caption: 'Suspended POP ceiling with warm hidden LED cove in Golf Estate' },
+      { url: '/assets/hero_tradesman.jpg', caption: 'Italian porcelain tile floor alignment (60x120cm) in Woji' },
+      { url: '/assets/solar_tech.jpg', caption: 'Drywall partitioning & smooth wall screeding' }
+    ],
     services: [
       { name: 'Modern Suspended POP Design (Per Room)', price: 45000, type: 'Starting from' },
       { name: 'Porcelain Tile Laying (Per Sqm)', price: 3500, type: 'Fixed' },
@@ -345,7 +370,7 @@ const INITIAL_PROVIDERS = [
     name: 'Chinedu Eze',
     businessName: 'SunWave Solar & Clean Energy',
     category: 'solar-tech',
-    categoryName: 'Tech & Solar',
+    categoryName: 'Solar & Inverters',
     subSpecialty: 'Solar Hybrid Systems & CCTV',
     area: 'Peter Odili Road',
     lat: 4.8080,
@@ -354,11 +379,19 @@ const INITIAL_PROVIDERS = [
     rating: 4.9,
     reviewCount: 51,
     verified: true,
+    boosted: true,
+    boostDays: 7,
+    boostExpires: 'Nov 5, 2026',
     status: 'approved',
     image: '/assets/solar_tech.jpg',
     startingPrice: 12000,
     responseTime: '~20 mins',
     bio: 'Certified renewable energy specialist. Helping PH households beat unpredictable grid blackouts with reliable lithium and tubular battery solar setups.',
+    workPhotos: [
+      { url: '/assets/solar_tech.jpg', caption: '5kVA Hybrid Inverter installation with 48V 200Ah Lithium Bank' },
+      { url: '/assets/hero_tradesman.jpg', caption: 'High efficiency monocrystalline solar array on Peter Odili duplex' },
+      { url: '/assets/interior_pop.jpg', caption: '8-Channel HD Night Vision CCTV surveillance network' }
+    ],
     services: [
       { name: 'Solar Inverter System Health Audit', price: 12000, type: 'Fixed' },
       { name: '5KVA Hybrid Solar Installation', price: 65000, type: 'Starting from' },
@@ -372,8 +405,8 @@ const INITIAL_PROVIDERS = [
     id: 'pro-5',
     name: 'Ibrahim Aliyu',
     businessName: 'Precision Mobile Auto Diagnostics',
-    category: 'auto',
-    categoryName: 'Vehicle Upkeep',
+    category: 'auto-mechanic',
+    categoryName: 'Auto Diagnostics',
     subSpecialty: 'Mobile Mechanic & Scanner',
     area: 'D-Line',
     lat: 4.8055,
@@ -382,11 +415,17 @@ const INITIAL_PROVIDERS = [
     rating: 4.7,
     reviewCount: 29,
     verified: true,
+    boosted: false,
     status: 'approved',
     image: '/assets/hero_tradesman.jpg',
     startingPrice: 6000,
     responseTime: '~25 mins',
     bio: 'Mobile computerized OBD-2 engine scanning, brake bleeding, suspension troubleshooting, and roadside mechanical assistance across Port Harcourt.',
+    workPhotos: [
+      { url: '/assets/hero_tradesman.jpg', caption: 'OBD-2 scan & live sensor graph reading in D-Line' },
+      { url: '/assets/solar_tech.jpg', caption: 'Brembo brake pad replacement & hydraulic bleeding' },
+      { url: '/assets/interior_pop.jpg', caption: 'Roadside alternator diagnostics & battery health test' }
+    ],
     services: [
       { name: 'Full OBD-2 Computerized Diagnostics', price: 7000, type: 'Fixed' },
       { name: 'On-Site Brake Pad Replacement', price: 6000, type: 'Fixed' },
@@ -410,12 +449,16 @@ const INITIAL_PROVIDERS = [
     rating: 5.0,
     reviewCount: 0,
     verified: false,
+    boosted: false,
     status: 'pending',
     licenseDoc: 'Rivers State Nursing Council Reg #RN-2024-8842.pdf',
     image: '/assets/hairstylist.jpg',
     startingPrice: 20000,
     responseTime: '~1 hr',
     bio: 'Registered nurse providing licensed in-home elderly companionship, vitals monitoring, and rehabilitation support in Port Harcourt.',
+    workPhotos: [
+      { url: '/assets/hairstylist.jpg', caption: 'Licensed post-operative dressing care in Old GRA' }
+    ],
     services: [
       { name: 'Daily In-Home Nursing Visit', price: 20000, type: 'Starting from' },
       { name: 'Post-Surgery Vitals & Dressing Care', price: 25000, type: 'Fixed' }
@@ -426,8 +469,8 @@ const INITIAL_PROVIDERS = [
     id: 'pro-7',
     name: 'Kelechi Nwosu',
     businessName: 'Apex Refrigeration & AC Chiller Repairs',
-    category: 'home-repairs',
-    categoryName: 'Home Repairs',
+    category: 'ac-chillers',
+    categoryName: 'AC & Refrigeration',
     subSpecialty: 'Air Conditioning & Cold Room Engineer',
     area: 'Choba / Uniport',
     lat: 4.8980,
@@ -436,11 +479,17 @@ const INITIAL_PROVIDERS = [
     rating: 4.9,
     reviewCount: 38,
     verified: true,
+    boosted: false,
     status: 'approved',
     image: '/assets/hero_tradesman.jpg',
     startingPrice: 10000,
     responseTime: '~20 mins',
     bio: 'Specialist AC installation, gas top-ups, inverter compressor diagnostics, and commercial cold-room servicing in Choba, Uniport, Alakahia, and Ada George.',
+    workPhotos: [
+      { url: '/assets/hero_tradesman.jpg', caption: 'Inverter split AC compressor repair in Uniport Quarters' },
+      { url: '/assets/solar_tech.jpg', caption: 'Commercial cold room temperature calibration in Choba' },
+      { url: '/assets/interior_pop.jpg', caption: 'Chemical coil flush & R410A gas vacuum charging' }
+    ],
     services: [
       { name: 'Split AC Deep Chemical Wash & Service', price: 10000, type: 'Fixed' },
       { name: 'AC Refrigerant R410A / R22 Re-gas', price: 18000, type: 'Fixed' },
@@ -452,10 +501,10 @@ const INITIAL_PROVIDERS = [
   },
   {
     id: 'pro-8',
-    name: 'Osaro Idehen',
-    businessName: 'Reliable Borehole & Submersible Pump Services',
-    category: 'home-repairs',
-    categoryName: 'Home Repairs',
+    name: 'Tamuno George',
+    businessName: 'FlowMaster Borehole & Plumbing Works',
+    category: 'plumbing',
+    categoryName: 'Plumbing & Pumps',
     subSpecialty: 'Plumbing & Deep Well Submersible Pumps',
     area: 'Ada George',
     lat: 4.8420,
@@ -464,17 +513,126 @@ const INITIAL_PROVIDERS = [
     rating: 4.8,
     reviewCount: 42,
     verified: true,
+    boosted: false,
     status: 'approved',
     image: '/assets/solar_tech.jpg',
-    startingPrice: 12000,
+    startingPrice: 10000,
     responseTime: '~25 mins',
     bio: 'Expert borehole drilling maintenance, Italian submersible pump rewinding, automatic float switches, and domestic plumbing piping in Ada George and Rumueme.',
+    workPhotos: [
+      { url: '/assets/solar_tech.jpg', caption: 'Submersible 2HP borehole pump replacement & electrical wiring' },
+      { url: '/assets/hero_tradesman.jpg', caption: 'Automatic water level control switch for 5000L tank' },
+      { url: '/assets/interior_pop.jpg', caption: 'PPR pipe manifold installation for residential apartment block' }
+    ],
     services: [
       { name: 'Borehole Submersible Pump Extraction & Repair', price: 25000, type: 'Starting from' },
-      { name: 'Automated Water Level Controller Installation', price: 14000, type: 'Fixed' }
+      { name: 'Automated Water Level Controller Installation', price: 14000, type: 'Fixed' },
+      { name: 'Whole-Home Pressure Piping Inspection', price: 10000, type: 'Fixed' }
     ],
     reviews: [
       { author: 'Pastor George', area: 'Ada George', rating: 5, date: '1 week ago', text: 'Restored water in our estate within 2 hours. Very honest craftsman.' }
+    ]
+  },
+  {
+    id: 'pro-9',
+    name: 'Osas Ighodaro',
+    businessName: 'VoltGuard Industrial Electrical Systems',
+    category: 'electrical',
+    categoryName: 'Electrical & Wiring',
+    subSpecialty: 'Conduit Piping & Distribution Panels',
+    area: 'Old GRA',
+    lat: 4.7760,
+    lng: 7.0100,
+    landmarks: ['Old GRA & Government House', 'Port Harcourt Mall / Spar', 'Garrison Junction & D-Line'],
+    rating: 4.9,
+    reviewCount: 35,
+    verified: true,
+    boosted: false,
+    status: 'approved',
+    image: '/assets/hero_tradesman.jpg',
+    startingPrice: 7000,
+    responseTime: '~15 mins',
+    bio: 'Certified electrical technician specializing in modern conduit wiring, main distribution board overhauls, earth-pit resistance testing, and architectural lighting in Old GRA.',
+    workPhotos: [
+      { url: '/assets/hero_tradesman.jpg', caption: 'Main distribution breaker panel overhaul with surge suppressor' },
+      { url: '/assets/solar_tech.jpg', caption: 'Earth leakage circuit breaker testing and earthing pit renewal' },
+      { url: '/assets/interior_pop.jpg', caption: 'Architectural recessed ceiling spotlight wiring in Old GRA' }
+    ],
+    services: [
+      { name: 'Distribution Board (DB) Troubleshooting', price: 12000, type: 'Fixed' },
+      { name: 'Complete Room Conduit Re-wiring', price: 25000, type: 'Starting from' },
+      { name: 'Earthing & Lightning Protection Audit', price: 18000, type: 'Fixed' }
+    ],
+    reviews: [
+      { author: 'Sir Jude M.', area: 'Old GRA', rating: 5, date: '5 days ago', text: 'Resolved a tripping breaker issue that 2 previous electricians failed to diagnose. Outstanding skill.' }
+    ]
+  },
+  {
+    id: 'pro-10',
+    name: 'Bassey Edet',
+    businessName: 'Heritage Woodcraft & Kitchen Studio',
+    category: 'carpentry',
+    categoryName: 'Carpentry & Furniture',
+    subSpecialty: 'Custom Cabinetry & Wardrobe Joinery',
+    area: 'Rumuodara',
+    lat: 4.8510,
+    lng: 7.0420,
+    landmarks: ['Rumuodara Junction', 'Artillery Junction & Okporo', 'Oil Mill Junction & Elelenwo'],
+    rating: 4.8,
+    reviewCount: 27,
+    verified: true,
+    boosted: false,
+    status: 'approved',
+    image: '/assets/interior_pop.jpg',
+    startingPrice: 10000,
+    responseTime: '~30 mins',
+    bio: 'Crafting bespoke modular kitchen cabinets, high-gloss TV consoles, and walk-in wardrobes with imported soft-close hydraulic hardware across Port Harcourt.',
+    workPhotos: [
+      { url: '/assets/interior_pop.jpg', caption: 'Modular acrylic kitchen cabinets with quartz countertop' },
+      { url: '/assets/hero_tradesman.jpg', caption: 'Custom sliding wardrobe with tinted glass doors' },
+      { url: '/assets/solar_tech.jpg', caption: 'Floating TV wall console with integrated acoustic wood slats' }
+    ],
+    services: [
+      { name: 'Cabinet Door Hinge & Hydraulic Repair', price: 10000, type: 'Fixed' },
+      { name: 'Custom Modular Kitchen Cabinetry (Per Metre)', price: 40000, type: 'Starting from' },
+      { name: 'Walk-In Wardrobe Design & Fitting', price: 55000, type: 'Starting from' }
+    ],
+    reviews: [
+      { author: 'Efe O.', area: 'Rumuodara', rating: 5, date: '2 weeks ago', text: 'Solid wood finishing and precision fitting for our kitchen renovation.' }
+    ]
+  },
+  {
+    id: 'pro-11',
+    name: 'Somto Okon',
+    businessName: 'Royal Finish Painting & Luxury Screeding',
+    category: 'painting',
+    categoryName: 'Painting & Screeding',
+    subSpecialty: 'Texture Coating & Interior Velvet Finishes',
+    area: 'Peter Odili Road',
+    lat: 4.8080,
+    lng: 7.0450,
+    landmarks: ['Peter Odili Road & Trans-Amadi Gardens', 'Trans-Amadi & Slaughter Bridge', 'Woji & Golf Estate Gate'],
+    rating: 4.9,
+    reviewCount: 31,
+    verified: true,
+    boosted: false,
+    status: 'approved',
+    image: '/assets/hairstylist.jpg',
+    startingPrice: 12000,
+    responseTime: '~20 mins',
+    bio: 'Specialist in Venetian plaster, luxury screeding, and weather-shield exterior paint finishes that withstand Port Harcourt humidity and heavy rain.',
+    workPhotos: [
+      { url: '/assets/hairstylist.jpg', caption: 'Luxury satin velvet wall finish in Peter Odili duplex' },
+      { url: '/assets/interior_pop.jpg', caption: 'Venetian marble plaster accent wall in living lounge' },
+      { url: '/assets/solar_tech.jpg', caption: 'Weather-shield exterior coating with anti-fungal seal' }
+    ],
+    services: [
+      { name: 'Room Wall Screeding & Premium Emulsion', price: 25000, type: 'Starting from' },
+      { name: 'Italian Stucco / Venetian Plaster Accent Wall', price: 35000, type: 'Fixed' },
+      { name: 'Exterior Weather-Proof Painting', price: 45000, type: 'Starting from' }
+    ],
+    reviews: [
+      { author: 'Ifeoma A.', area: 'Peter Odili', rating: 5, date: '4 days ago', text: 'Clean painters! They covered our furniture with plastic dropsheets and finished in record time.' }
     ]
   }
 ];
@@ -498,6 +656,12 @@ function hydrateProvidersWithCoordinates(providers) {
       return {
         ...defaultMatch,
         ...p,
+        category: defaultMatch.category,
+        categoryName: defaultMatch.categoryName,
+        workPhotos: (p.workPhotos && p.workPhotos.length) ? p.workPhotos : defaultMatch.workPhotos,
+        boosted: p.boosted !== undefined ? p.boosted : defaultMatch.boosted,
+        boostDays: p.boostDays || defaultMatch.boostDays,
+        boostExpires: p.boostExpires || defaultMatch.boostExpires,
         lat: p.lat || defaultMatch.lat,
         lng: p.lng || defaultMatch.lng,
         landmarks: (p.landmarks && p.landmarks.length) ? p.landmarks : defaultMatch.landmarks
@@ -506,6 +670,14 @@ function hydrateProvidersWithCoordinates(providers) {
     const landmarkMatch = PH_LANDMARKS.find(l => l.zone.toLowerCase() === (p.area || '').toLowerCase()) || PH_LANDMARKS[0];
     return {
       ...p,
+      category: p.category || 'power-gen',
+      categoryName: p.categoryName || 'Power & Generators',
+      workPhotos: p.workPhotos || [
+        { url: '/assets/hero_tradesman.jpg', caption: 'On-site technical service in Port Harcourt' },
+        { url: '/assets/solar_tech.jpg', caption: 'Equipment installation & testing' },
+        { url: '/assets/interior_pop.jpg', caption: 'Finishing and handover inspection' }
+      ],
+      boosted: p.boosted || false,
       lat: p.lat || landmarkMatch.lat,
       lng: p.lng || landmarkMatch.lng,
       landmarks: (p.landmarks && p.landmarks.length) ? p.landmarks : [landmarkMatch.name]
@@ -567,14 +739,20 @@ const state = {
       dateTime: 'Today, 2:00 PM',
       status: 'awaiting_release', // 'in_progress' | 'awaiting_release' | 'completed' | 'disputed'
       createdAt: 'Today',
-      commissionPct: 10,
-      commissionAmount: 1500,
-      payoutAmount: 13500
+      commissionPct: 5,
+      commissionAmount: 750,
+      payoutAmount: 14250
     }
   ],
   selectedCategory: 'all',
   selectedArea: 'All Port Harcourt',
   selectedLandmark: null,
+  ratingFilter: 'all', // 'all' | '4.8' | '4.5' | '4.0'
+  priceFilter: 'all', // 'all' | 'under-10k' | '10k-25k' | 'above-25k'
+  commissionPct: 5,
+  monthlySubscriptionRate: 2000,
+  boostDailyRate: 500,
+  selectedBoostDays: 3,
   userCoords: null, // { lat: number, lng: number, label: string, distanceToLandmark?: number, isSimulated?: boolean }
   searchQuery: '',
   verifiedOnly: false,
@@ -582,6 +760,40 @@ const state = {
   activeChatProvider: null,
   activeProfileModalProvider: null,
   chatMessages: {},
+  savedProviderIds: JSON.parse(localStorage.getItem('servhive_saved_providers')) || ['pro-1', 'pro-4'],
+  quoteRequests: JSON.parse(localStorage.getItem('servhive_quote_requests')) || [
+    {
+      id: 'req-201',
+      proId: 'pro-1',
+      proName: 'PowerVolt Generator & Electrical Works',
+      customerName: 'Tonye Briggs',
+      customerPhone: '0803 123 4567',
+      area: 'Peter Odili Road',
+      address: 'Plot 14, Off Peter Odili Rd, Trans-Amadi Gardens',
+      title: 'ATS Changeover Switch Malfunction & Generator Servicing',
+      details: 'Mikano 27kVA changeover switch fails to switch when grid drops. Needs urgent on-site diagnostics.',
+      preferredDate: 'Tomorrow, 10:00 AM',
+      status: 'pending', // 'pending' | 'quoted' | 'accepted' | 'declined'
+      quoteAmount: null,
+      createdAt: 'Today, 9:30 AM'
+    },
+    {
+      id: 'req-202',
+      proId: 'pro-4',
+      proName: 'SunWave Solar & Clean Energy',
+      customerName: 'Arch. Belema D.',
+      customerPhone: '0802 987 6543',
+      area: 'Woji',
+      address: 'Golf Estate Phase 2, Woji',
+      title: '5kVA Solar Inverter Setup with Lithium Battery Balancing',
+      details: 'Need certified installation for 5kVA Felicity hybrid inverter with 48V 200Ah lithium battery bank.',
+      preferredDate: 'Friday, 11:00 AM',
+      status: 'quoted',
+      quoteAmount: 45000,
+      quoteNotes: 'Includes complete DC surge protection, battery cable lugs, and 3-month installation warranty.',
+      createdAt: 'Yesterday'
+    }
+  ],
   // Authentication & Role State
   authMode: 'login', // 'login' | 'signup'
   authRole: 'hirer', // 'hirer' | 'artisan'
@@ -605,7 +817,7 @@ const state = {
       phone: '08023456789',
       role: 'artisan',
       trade: 'Generator & Inverter Specialist',
-      category: 'home-repairs',
+      category: 'power-gen',
       area: 'Trans-Amadi',
       password: 'password123',
       createdAt: '2026-08-10'
@@ -618,6 +830,8 @@ function persistState() {
   localStorage.setItem('servhive_reports', JSON.stringify(state.reports));
   localStorage.setItem('servhive_escrow_jobs', JSON.stringify(state.escrowJobs));
   localStorage.setItem('servhive_users', JSON.stringify(state.users));
+  localStorage.setItem('servhive_saved_providers', JSON.stringify(state.savedProviderIds));
+  localStorage.setItem('servhive_quote_requests', JSON.stringify(state.quoteRequests));
   if (state.currentUser) {
     localStorage.setItem('servhive_current_user', JSON.stringify(state.currentUser));
   } else {
@@ -857,7 +1071,7 @@ window.selectCategory = function(catId) {
   renderProviders();
 };
 
-// Render Providers with Proximity Auto-Suggest & Landmark Matching
+// Render Providers with Proximity Auto-Suggest, Boost Prioritization & Filters
 function renderProviders() {
   const grid = document.getElementById('providersGrid');
   const countEl = document.getElementById('resultsCount');
@@ -865,12 +1079,29 @@ function renderProviders() {
 
   let filtered = state.providers.filter(p => p.status === 'approved');
 
-  // Category filter
+  // 1. Category filter (10 core sectors or 'all')
   if (state.selectedCategory !== 'all') {
     filtered = filtered.filter(p => p.category === state.selectedCategory);
   }
 
-  // Selected Landmark filter
+  // 2. Rating filter (e.g. 4.8+, 4.5+, 4.0+)
+  if (state.ratingFilter && state.ratingFilter !== 'all') {
+    const minRating = parseFloat(state.ratingFilter);
+    filtered = filtered.filter(p => p.rating >= minRating);
+  }
+
+  // 3. Price filter (under-10k, 10k-25k, above-25k)
+  if (state.priceFilter && state.priceFilter !== 'all') {
+    if (state.priceFilter === 'under-10k') {
+      filtered = filtered.filter(p => p.startingPrice < 10000);
+    } else if (state.priceFilter === '10k-25k') {
+      filtered = filtered.filter(p => p.startingPrice >= 10000 && p.startingPrice <= 25000);
+    } else if (state.priceFilter === 'above-25k') {
+      filtered = filtered.filter(p => p.startingPrice > 25000);
+    }
+  }
+
+  // 4. Selected Landmark filter
   if (state.selectedLandmark) {
     const targetLm = state.selectedLandmark.toLowerCase();
     const targetObj = PH_LANDMARKS.find(l => l.name.toLowerCase() === targetLm || l.shortName.toLowerCase() === targetLm);
@@ -885,7 +1116,6 @@ function renderProviders() {
     if (exactMatches.length > 0) {
       filtered = exactMatches;
     }
-    // If exact landmark is too strict, keep all approved and let proximity sorting order them
   } else if (state.selectedArea !== 'All Port Harcourt') {
     // Area filter from dropdown
     const selArea = state.selectedArea.toLowerCase();
@@ -895,7 +1125,7 @@ function renderProviders() {
     );
   }
 
-  // Search query filter (matches trade, name, service, keywords, and landmarks)
+  // 5. Search query filter
   if (state.searchQuery.trim()) {
     const q = state.searchQuery.toLowerCase();
     const matchedLandmarks = PH_LANDMARKS.filter(l => 
@@ -923,12 +1153,12 @@ function renderProviders() {
     });
   }
 
-  // Verified only filter
+  // 6. Verified only filter
   if (state.verifiedOnly) {
     filtered = filtered.filter(p => p.verified);
   }
 
-  // Calculate distance to each provider if userCoords is active
+  // 7. Calculate distance to each provider if userCoords is active
   if (state.userCoords) {
     filtered.forEach(p => {
       p.distanceKm = getDistanceKm(state.userCoords.lat, state.userCoords.lng, p.lat, p.lng);
@@ -939,8 +1169,18 @@ function renderProviders() {
     });
   }
 
-  // Sorting
-  if (state.sortBy === 'distance' && state.userCoords) {
+  // 8. Sorting: In 'featured' mode, BOOSTED PROVIDERS ARE PLACED NEAR THE TOP!
+  if (state.sortBy === 'featured') {
+    filtered.sort((a, b) => {
+      const boostA = a.boosted ? 1 : 0;
+      const boostB = b.boosted ? 1 : 0;
+      if (boostA !== boostB) return boostB - boostA; // Boosted pros first!
+      if (state.userCoords && a.distanceKm !== undefined && b.distanceKm !== undefined) {
+        return a.distanceKm - b.distanceKm;
+      }
+      return (b.rating * b.reviewCount) - (a.rating * a.reviewCount);
+    });
+  } else if (state.sortBy === 'distance' && state.userCoords) {
     filtered.sort((a, b) => (a.distanceKm || 0) - (b.distanceKm || 0));
   } else if (state.sortBy === 'rating') {
     filtered.sort((a, b) => b.rating - a.rating);
@@ -948,9 +1188,44 @@ function renderProviders() {
     filtered.sort((a, b) => a.startingPrice - b.startingPrice);
   } else if (state.sortBy === 'reviews') {
     filtered.sort((a, b) => b.reviewCount - a.reviewCount);
-  } else if (state.userCoords) {
-    // When location is active and user is on 'featured', sort by closest travel distance!
-    filtered.sort((a, b) => (a.distanceKm || 0) - (b.distanceKm || 0));
+  }
+
+  // 9. Render Boosted Top Ribbon Showcase
+  const ribbonEl = document.getElementById('boostedTopRibbon');
+  const boostedPros = state.providers.filter(p => p.status === 'approved' && p.boosted);
+  if (ribbonEl) {
+    if (boostedPros.length > 0 && state.selectedCategory === 'all' && !state.searchQuery) {
+      ribbonEl.style.display = 'block';
+      ribbonEl.innerHTML = `
+        <div class="boosted-ribbon-wrap">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+              <span class="badge ed-badge-boosted">⚡ Boosted Spotlight</span>
+              <span style="font-size: 0.76rem; color: var(--muted-foreground);">Verified Port Harcourt Pros</span>
+            </div>
+            <div style="font-weight: 800; font-size: 0.94rem; color: var(--foreground);">
+              Boosted Providers Near the Top
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; overflow-x: auto; max-width: 100%; padding-bottom: 4px;">
+            ${boostedPros.map(bp => `
+              <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface-subtle); border: 1px solid var(--hairline-amber); border-radius: var(--radius-sm); padding: 8px 12px; cursor: pointer; white-space: nowrap;" onclick="openProfileModal('${bp.id}')">
+                <img src="${bp.image}" alt="${bp.name}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                <div>
+                  <div style="font-weight: 800; font-size: 0.84rem; color: var(--foreground);">${bp.businessName}</div>
+                  <div style="font-size: 0.72rem; color: var(--muted-foreground);">${bp.area} · ★ ${bp.rating}</div>
+                </div>
+                <button class="ed-button ed-button-amber ed-btn-compact" style="font-size: 0.72rem; padding: 3px 8px; height: 26px;">
+                  Profile
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    } else {
+      ribbonEl.style.display = 'none';
+    }
   }
 
   // Count indicator
@@ -966,7 +1241,6 @@ function renderProviders() {
     countEl.textContent = `Showing ${filtered.length} verified artisans in ${contextStr}`;
   }
 
-  // Active Geolocation Proximity Banner
   // Active Geolocation Proximity Banner
   const bannerHtml = state.userCoords ? `
     <div class="ed-geo-active-banner" style="grid-column: 1 / -1;">
@@ -1002,8 +1276,8 @@ function renderProviders() {
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </div>
-        <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--foreground);">No verified artisans found for this landmark or trade</h3>
-        <p style="color: var(--muted-foreground); margin-top: 6px; font-size: 0.9375rem;">Try selecting a different Port Harcourt landmark or resetting filters.</p>
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--foreground);">No verified artisans found for these filters</h3>
+        <p style="color: var(--muted-foreground); margin-top: 6px; font-size: 0.9375rem;">Try adjusting your rating, price range, or Port Harcourt area selection.</p>
         <button class="ed-button ed-button-amber" style="margin-top: 20px;" onclick="resetFilters()">
           <span>Reset All Filters</span>
         </button>
@@ -1012,65 +1286,77 @@ function renderProviders() {
     return;
   }
 
-  grid.innerHTML = bannerHtml + filtered.map(pro => `
-    <article class="ed-pro-card">
-      <div class="ed-pro-header-row">
-        <img class="ed-pro-avatar" src="${pro.image}" alt="${pro.name}" loading="lazy" />
-        <div class="ed-pro-title-wrap">
-          <div style="font-size: 0.72rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">${pro.categoryName}</div>
-          <h3 class="ed-pro-name">${pro.businessName}</h3>
-          <div class="ed-pro-subtitle">${pro.name}</div>
+  // Render provider cards
+  grid.innerHTML = bannerHtml + filtered.map(pro => {
+    const isSaved = state.savedProviderIds && state.savedProviderIds.includes(pro.id);
+    const primaryService = pro.services && pro.services[0] ? pro.services[0] : { name: 'General Trade Service', price: pro.startingPrice };
+    
+    return `
+      <article class="ed-pro-card">
+        <div class="ed-pro-header-row">
+          <img class="ed-pro-avatar" src="${pro.image}" alt="${pro.name}" loading="lazy" />
+          <div class="ed-pro-title-wrap">
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">${pro.categoryName}</div>
+            <h3 class="ed-pro-name">${pro.businessName}</h3>
+            <div class="ed-pro-subtitle">${pro.name}</div>
+          </div>
+          <button class="ed-heart-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleSaveProvider('${pro.id}')" title="${isSaved ? 'Remove from Saved' : 'Save Provider'}" aria-label="Save Provider">
+            ${isSaved ? '♥' : '♡'}
+          </button>
         </div>
-        <div class="badge badge-outline" style="font-size: 0.75rem; gap: 4px; align-self: flex-start; flex-shrink: 0;">
-          <span style="color: var(--primary);">★</span> ${pro.rating.toFixed(1)} <span style="color: var(--muted-foreground); font-weight: 500;">(${pro.reviewCount})</span>
-        </div>
-      </div>
 
-      <div class="ed-pro-meta-chips">
-        ${pro.verified ? `
-          <span class="badge ed-badge-verified">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            Rivers Verified Pro
-          </span>
-        ` : ''}
-        <span class="badge badge-secondary">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-          ${pro.area}
-        </span>
-        ${pro.distanceKm !== undefined ? `
+        <div class="ed-pro-meta-chips">
+          ${pro.boosted ? `
+            <span class="badge ed-badge-boosted">
+              ⚡ Boosted Pro
+            </span>
+          ` : ''}
+          ${pro.verified ? `
+            <span class="badge ed-badge-verified">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Rivers Verified Pro
+            </span>
+          ` : ''}
+          <div class="badge badge-outline" style="font-size: 0.75rem; gap: 4px;">
+            <span style="color: var(--primary);">★</span> ${pro.rating.toFixed(1)} <span style="color: var(--muted-foreground); font-weight: 500;">(${pro.reviewCount})</span>
+          </div>
           <span class="badge badge-secondary">
-            ${pro.distanceKm} km away
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            ${pro.area}
           </span>
-        ` : ''}
-        <span class="badge badge-secondary" style="font-size: 0.72rem; gap: 4px;">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          ${pro.responseTime}
-        </span>
-      </div>
-
-      <p class="ed-pro-bio">${pro.bio}</p>
-
-      <div class="ed-card-footer">
-        <div class="ed-pro-price-value" style="font-size: 1.05rem; font-weight: 800;">
-          <span style="font-size: 0.72rem; font-weight: 600; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 1px;">From</span>${formatNaira(pro.startingPrice)}
+          <span class="badge badge-secondary" style="font-weight: 700; color: var(--teal);">
+            📍 ${pro.distanceKm !== undefined ? pro.distanceKm + ' km away' : '~1.2 km away'}
+          </span>
+          <span class="badge badge-secondary" style="font-size: 0.72rem; gap: 4px;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            ${pro.responseTime}
+          </span>
         </div>
 
-        <div class="ed-pro-actions">
-          <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('${pro.id}')">
-            <span>Rate Card</span>
-          </button>
-          <button class="ed-button ed-button-amber ed-btn-compact" onclick="openEscrowBookingModal('${pro.id}', '${pro.services[0].name.replace(/'/g, "\\'")}', ${pro.services[0].price})">
-            <span>Book Escrow</span>
-          </button>
-          <button class="ed-button ed-button-black ed-btn-compact" style="width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;" title="In-App Masked Chat" onclick="openChatDrawer('${pro.id}')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </button>
+        <p class="ed-pro-bio">${pro.bio}</p>
+
+        <div class="ed-card-footer">
+          <div class="ed-pro-price-value" style="font-size: 1.05rem; font-weight: 800;">
+            <span style="font-size: 0.72rem; font-weight: 600; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 1px;">From</span>${formatNaira(pro.startingPrice)}
+          </div>
+
+          <div class="ed-pro-actions">
+            <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('${pro.id}')">
+              <span>Profile &amp; Photos</span>
+            </button>
+            <button class="ed-button ed-button-amber ed-btn-compact" onclick="openEscrowBookingModal('${pro.id}', '${primaryService.name.replace(/'/g, "\\'")}', ${primaryService.price})">
+              <span>Request / Book</span>
+            </button>
+            <button class="ed-button ed-button-black ed-btn-compact" style="width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;" title="In-App Masked Chat &amp; Quote" onclick="openChatDrawer('${pro.id}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-    </article>
-  `).join('');
+      </article>
+    `;
+  }).join('');
 }
 
 window.resetFilters = function() {
@@ -1080,9 +1366,14 @@ window.resetFilters = function() {
   state.userCoords = null;
   state.searchQuery = '';
   state.verifiedOnly = false;
+  state.ratingFilter = 'all';
+  state.priceFilter = 'all';
   state.sortBy = 'featured';
 
   const areaSelect = document.getElementById('heroAreaSelect');
+  const filterAreaSelect = document.getElementById('filterAreaSelect');
+  const ratingSelect = document.getElementById('ratingFilterSelect');
+  const priceSelect = document.getElementById('priceFilterSelect');
   const searchInput = document.getElementById('heroSearchInput');
   const verifiedCheckbox = document.getElementById('verifiedOnlyCheckbox');
   const sortSelect = document.getElementById('sortSelect');
@@ -1090,6 +1381,9 @@ window.resetFilters = function() {
   const btnText = geoBtn ? geoBtn.querySelector('.geo-btn-text') : null;
 
   if (areaSelect) areaSelect.value = 'All Port Harcourt';
+  if (filterAreaSelect) filterAreaSelect.value = 'All Port Harcourt';
+  if (ratingSelect) ratingSelect.value = 'all';
+  if (priceSelect) priceSelect.value = 'all';
   if (searchInput) searchInput.value = '';
   if (verifiedCheckbox) verifiedCheckbox.checked = false;
   if (sortSelect) sortSelect.value = 'featured';
@@ -1100,7 +1394,49 @@ window.resetFilters = function() {
   renderProviders();
 };
 
-// Profile Modal
+// Toggle Save / Bookmark Provider
+window.toggleSaveProvider = function(proId) {
+  if (!state.savedProviderIds) state.savedProviderIds = [];
+  const idx = state.savedProviderIds.indexOf(proId);
+  const pro = state.providers.find(p => p.id === proId);
+
+  if (idx > -1) {
+    state.savedProviderIds.splice(idx, 1);
+  } else {
+    state.savedProviderIds.push(proId);
+  }
+
+  persistState();
+  renderProviders();
+  updateAuthUI();
+
+  // If My Account modal is open, re-render it
+  const myAccModal = document.getElementById('myAccountModal');
+  if (myAccModal && myAccModal.classList.contains('open')) {
+    renderMyAccountView();
+  }
+
+  // If Profile modal is open, update save button
+  const saveBtn = document.getElementById('profileSaveBtn');
+  if (saveBtn) {
+    const isNowSaved = state.savedProviderIds.includes(proId);
+    saveBtn.innerHTML = isNowSaved ? '<span>♥ Saved Provider</span>' : '<span>♡ Save Provider</span>';
+  }
+};
+
+// Work Photo Zoom Lightbox
+window.openPhotoZoom = function(url, caption) {
+  const modal = document.getElementById('photoZoomModal');
+  const img = document.getElementById('photoZoomImg');
+  const cap = document.getElementById('photoZoomCaption');
+  if (!modal || !img) return;
+
+  img.src = url;
+  if (cap) cap.textContent = caption || 'Verified on-site work sample in Port Harcourt';
+  modal.classList.add('open');
+};
+
+// Profile Modal with Photos of Past Work, Rate Cards, Reviews, Chat or Book
 window.openProfileModal = function(proId) {
   const pro = state.providers.find(p => p.id === proId);
   if (!pro) return;
@@ -1108,54 +1444,84 @@ window.openProfileModal = function(proId) {
   state.activeProfileModalProvider = pro;
   const modal = document.getElementById('profileModal');
   const modalBody = document.getElementById('profileModalBody');
+  const isSaved = state.savedProviderIds && state.savedProviderIds.includes(pro.id);
+  const primaryService = pro.services && pro.services[0] ? pro.services[0] : { name: 'Standard Service', price: pro.startingPrice };
 
   modalBody.innerHTML = `
-    <div style="height: 200px; position: relative; overflow: hidden; background: #0F141C;">
-      <img src="${pro.image}" alt="${pro.name}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.88;" />
-      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);"></div>
+    <div style="height: 220px; position: relative; overflow: hidden; background: #0F141C;">
+      <img src="${pro.image}" alt="${pro.name}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;" />
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%);"></div>
       <div style="position: absolute; bottom: 16px; left: 24px; display: flex; gap: 8px; flex-wrap: wrap;">
+        ${pro.boosted ? `<span class="badge ed-badge-boosted">⚡ Boosted Pro</span>` : ''}
         <span class="ed-badge-verified" style="background: var(--teal); color: #FFFFFF;">✓ Rivers Verified Pro</span>
         <span style="background: rgba(0,0,0,0.65); color: #FFFFFF; padding: 3px 10px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700;">📍 ${pro.area}, Port Harcourt</span>
       </div>
     </div>
 
     <div style="padding: 28px;">
+      <!-- Title & Rating -->
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
         <div>
-          <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; color: var(--canvas);">${pro.businessName}</h2>
-          <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Lead Pro: ${pro.name} • ${pro.subSpecialty}</div>
+          <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; color: var(--foreground);">${pro.businessName}</h2>
+          <div style="font-size: 0.9rem; color: var(--muted-foreground); font-weight: 600;">Lead Pro: ${pro.name} • ${pro.subSpecialty}</div>
         </div>
-        <div style="text-align: right;">
-          <div style="font-size: 1.3rem; font-weight: 800; color: var(--amber-dark);">★ ${pro.rating.toFixed(1)}</div>
-          <div style="font-size: 0.78rem; color: var(--text-muted);">${pro.reviewCount} client ratings</div>
+        <div style="text-align: right; display: flex; align-items: center; gap: 10px;">
+          <button id="profileSaveBtn" class="ed-button ed-button-black ed-btn-compact" onclick="toggleSaveProvider('${pro.id}')">
+            <span>${isSaved ? '♥ Saved Provider' : '♡ Save Provider'}</span>
+          </button>
+          <div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--amber-dark);">★ ${pro.rating.toFixed(1)}</div>
+            <div style="font-size: 0.76rem; color: var(--muted-foreground);">${pro.reviewCount} client reviews</div>
+          </div>
         </div>
       </div>
 
+      <!-- About the Service -->
       <div style="margin-bottom: 24px;">
-        <h4 style="font-size: 0.88rem; font-weight: 800; margin-bottom: 6px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">About the Service</h4>
-        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">${pro.bio}</p>
+        <h4 style="font-size: 0.86rem; font-weight: 800; margin-bottom: 6px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">About the Service</h4>
+        <p style="color: var(--muted-foreground); font-size: 0.92rem; line-height: 1.6;">${pro.bio}</p>
       </div>
 
-      <!-- Rate Card -->
+      <!-- Photos of Past Work (Specification Requirement) -->
+      <div style="margin-bottom: 26px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h4 style="font-size: 0.86rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">
+            Photos of Past Work (${(pro.workPhotos || []).length})
+          </h4>
+          <span style="font-size: 0.76rem; color: var(--muted-foreground);">Verified Port Harcourt Projects</span>
+        </div>
+        <div class="pro-work-gallery">
+          ${(pro.workPhotos || []).map(wp => `
+            <div class="pro-work-photo-card" onclick="openPhotoZoom('${wp.url}', '${wp.caption.replace(/'/g, "\\'")}')">
+              <img src="${wp.url}" alt="${wp.caption}" loading="lazy" />
+              <div class="pro-work-photo-caption">
+                ${wp.caption}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Services and Prices (Transparent Rate Card) -->
       <div style="margin-bottom: 28px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h4 style="font-size: 0.88rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">Transparent Rate Card</h4>
-          <span style="font-size: 0.78rem; color: var(--teal); font-weight: 700;">Zero Hidden Fees</span>
+          <h4 style="font-size: 0.86rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">Services and Transparent Prices</h4>
+          <span style="font-size: 0.76rem; color: var(--teal); font-weight: 700;">100% Escrow Protected</span>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 10px;">
           ${pro.services.map(s => `
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: var(--bg-surface-subtle); border: 1px solid var(--hairline); border-radius: var(--radius-sm); gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); gap: 12px; flex-wrap: wrap;">
               <div>
-                <div style="font-weight: 800; font-size: 0.92rem; color: var(--canvas);">${s.name}</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">${s.type}</div>
+                <div style="font-weight: 800; font-size: 0.92rem; color: var(--foreground);">${s.name}</div>
+                <div style="font-size: 0.75rem; color: var(--muted-foreground);">${s.type}</div>
               </div>
               <div style="display: flex; align-items: center; gap: 12px;">
                 <div style="font-weight: 800; color: var(--amber-dark); font-size: 1.05rem;">
                   ${formatNaira(s.price)}
                 </div>
                 <button class="ed-button ed-button-amber ed-btn-compact" onclick="openEscrowBookingModal('${pro.id}', '${s.name.replace(/'/g, "\\'")}', ${s.price}); closeModal('profileModal');">
-                  <span>Book with Escrow</span>
+                  <span>Book / Request</span>
                 </button>
               </div>
             </div>
@@ -1163,40 +1529,42 @@ window.openProfileModal = function(proId) {
         </div>
       </div>
 
-      <!-- Actions -->
+      <!-- Action Buttons: Chat or Request / Book -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px;">
-        <button class="ed-button ed-button-amber" onclick="openChatDrawer('${pro.id}'); closeModal('profileModal');">
-          <span>Message Provider</span>
+        <button class="ed-button ed-button-black" style="padding: 13px;" onclick="openChatDrawer('${pro.id}', true); closeModal('profileModal');">
+          <span>💬 Chat &amp; Describe Job (Get Quote)</span>
         </button>
-        <button class="ed-button ed-button-black" onclick="showCallMaskModal('${pro.name}')">
-          <span>Call Protected Number</span>
+        <button class="ed-button ed-button-amber" style="padding: 13px;" onclick="openEscrowBookingModal('${pro.id}', '${primaryService.name.replace(/'/g, "\\'")}', ${primaryService.price}); closeModal('profileModal');">
+          <span>🛡️ Request / Book with Escrow</span>
         </button>
       </div>
 
       <!-- Reviews -->
-      <div style="border-top: 1px solid var(--hairline); padding-top: 24px;">
+      <div style="border-top: 1px solid var(--border); padding-top: 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--canvas);">Client Reviews (${pro.reviews.length})</h4>
-          <button class="ed-button ed-button-black ed-btn-compact" onclick="showAddReviewPrompt('${pro.id}')"><span>+ Add Review</span></button>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground);">Client Reviews (${pro.reviews.length})</h4>
+          <button class="ed-button ed-button-black ed-btn-compact" onclick="showAddReviewPrompt('${pro.id}')">
+            <span>+ Add Review</span>
+          </button>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 12px;">
           ${pro.reviews.map(r => `
-            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 14px 18px;">
+            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span style="font-weight: 800; font-size: 0.9rem; color: var(--canvas);">${r.author} <small style="color: var(--text-muted); font-weight: 500;">(${r.area})</small></span>
+                <span style="font-weight: 800; font-size: 0.9rem; color: var(--foreground);">${r.author} <small style="color: var(--muted-foreground); font-weight: 500;">(${r.area})</small></span>
                 <span style="color: var(--amber-dark); font-size: 0.85rem; font-weight: 800;">★ ${r.rating}</span>
               </div>
-              <p style="font-size: 0.86rem; color: var(--text-muted);">${r.text}</p>
+              <p style="font-size: 0.86rem; color: var(--muted-foreground); line-height: 1.45;">${r.text}</p>
             </div>
           `).join('')}
         </div>
       </div>
 
-      <!-- Report link -->
+      <!-- Report problem link -->
       <div style="margin-top: 24px; text-align: center;">
         <button style="background: none; border: none; color: #DC2626; font-size: 0.8rem; font-weight: 700; cursor: pointer;" onclick="openReportModal('${pro.id}', '${pro.businessName}')">
-          ⚠️ Report problem with this provider
+          ⚠️ Report a problem with this provider
         </button>
       </div>
     </div>
@@ -1318,20 +1686,31 @@ window.handleReviewSubmit = function(e) {
   });
 };
 
-// Chat Drawer
-window.openChatDrawer = function(proId) {
+// Chat Drawer & Job Quote Engine
+window.openChatDrawer = function(proId, quoteMode = false) {
   const pro = state.providers.find(p => p.id === proId);
   if (!pro) return;
 
   state.activeChatProvider = pro;
   const drawer = document.getElementById('chatDrawer');
-  document.getElementById('chatProName').textContent = pro.businessName;
-  document.getElementById('chatProAvatar').src = pro.image;
+  const proNameEl = document.getElementById('chatProName');
+  const proAvatarEl = document.getElementById('chatProAvatar');
+  const quoteProNameEl = document.getElementById('chatQuoteProName');
+
+  if (proNameEl) proNameEl.textContent = pro.businessName;
+  if (proAvatarEl) proAvatarEl.src = pro.image;
+  if (quoteProNameEl) quoteProNameEl.textContent = pro.businessName;
 
   if (!state.chatMessages[pro.id]) {
     state.chatMessages[pro.id] = [
       { sender: 'provider', text: `Hello! Thanks for reaching out to ${pro.businessName}. How can I assist with your service in Port Harcourt today?` }
     ];
+  }
+
+  if (quoteMode) {
+    switchChatTab('quote');
+  } else {
+    switchChatTab('chat');
   }
 
   renderChatMessages();
@@ -1342,16 +1721,60 @@ window.closeChatDrawer = function() {
   document.getElementById('chatDrawer').classList.remove('open');
 };
 
+window.switchChatTab = function(tab) {
+  const chatLive = document.getElementById('chatLiveArea');
+  const quoteForm = document.getElementById('chatQuoteFormArea');
+  const tabChat = document.getElementById('chatTabMessages');
+  const tabQuote = document.getElementById('chatTabQuote');
+
+  if (tab === 'quote') {
+    if (chatLive) chatLive.style.display = 'none';
+    if (quoteForm) quoteForm.style.display = 'flex';
+    if (tabChat) tabChat.classList.remove('active');
+    if (tabQuote) tabQuote.classList.add('active');
+  } else {
+    if (chatLive) chatLive.style.display = 'flex';
+    if (quoteForm) quoteForm.style.display = 'none';
+    if (tabChat) tabChat.classList.add('active');
+    if (tabQuote) tabQuote.classList.remove('active');
+  }
+};
+
 function renderChatMessages() {
   const container = document.getElementById('chatMessages');
   if (!container || !state.activeChatProvider) return;
 
   const msgs = state.chatMessages[state.activeChatProvider.id] || [];
-  container.innerHTML = msgs.map(m => `
-    <div style="max-width: 82%; padding: 12px 16px; border-radius: 14px; font-size: 0.88rem; line-height: 1.45; ${m.sender === 'provider' ? 'align-self: flex-start; background: var(--chat-bubble-peer); border: 1px solid var(--hairline); color: var(--canvas);' : 'align-self: flex-end; background: var(--amber); color: var(--ink); font-weight: 700;'}">
-      ${m.text}
-    </div>
-  `).join('');
+  container.innerHTML = msgs.map(m => {
+    if (m.isQuote) {
+      return `
+        <div class="quote-proposal-card" style="align-self: flex-start; max-width: 90%;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span class="hero-eyebrow" style="margin: 0; color: var(--amber-dark);">OFFICIAL QUOTE PROPOSAL</span>
+            <span class="badge ed-badge-verified" style="font-size: 0.7rem;">5% Escrow Protected</span>
+          </div>
+          <div style="font-weight: 800; font-size: 1.05rem; color: var(--canvas);">${m.serviceName || 'Requested Trade Service'}</div>
+          <div style="font-size: 1.45rem; font-weight: 900; color: var(--amber-dark); margin: 6px 0;">${formatNaira(m.amount)}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; line-height: 1.45;">
+            <strong>Turnaround:</strong> ${m.duration || 'Same day'}<br>
+            <strong>Scope &amp; Notes:</strong> ${m.notes || 'Full diagnostic inspection, specialized tools & guaranteed workmanship.'}
+          </div>
+          <div style="font-size: 0.74rem; color: var(--teal); margin-bottom: 12px; font-weight: 700;">
+            🔒 100% Escrow Protection: Funds held safely until you confirm completion.
+          </div>
+          <button class="ed-button ed-button-amber" style="width: 100%; padding: 10px; font-size: 0.86rem;" onclick="acceptQuoteAndPayEscrow('${m.quoteId}', '${state.activeChatProvider.id}', '${m.serviceName || 'Requested Trade Service'}', ${m.amount})">
+            <span>Accept Quote &amp; Pay into Escrow &rarr;</span>
+          </button>
+        </div>
+      `;
+    }
+
+    return `
+      <div style="max-width: 82%; padding: 12px 16px; border-radius: 14px; font-size: 0.88rem; line-height: 1.45; ${m.sender === 'provider' ? 'align-self: flex-start; background: var(--chat-bubble-peer); border: 1px solid var(--hairline); color: var(--canvas);' : 'align-self: flex-end; background: var(--amber); color: var(--ink); font-weight: 700;'}">
+        ${m.text}
+      </div>
+    `;
+  }).join('');
   container.scrollTop = container.scrollHeight;
 }
 
@@ -1378,6 +1801,72 @@ window.sendChatMessage = function(customText) {
   }, 1000);
 };
 
+window.submitJobQuoteRequest = function(e) {
+  e.preventDefault();
+  if (!state.activeChatProvider) return;
+  const pro = state.activeChatProvider;
+  const service = document.getElementById('chatQuoteService').value.trim();
+  const area = document.getElementById('chatQuoteArea').value;
+  const details = document.getElementById('chatQuoteDetails').value.trim();
+
+  // Add customer request message into chat
+  const newMsg = {
+    sender: 'customer',
+    text: `📋 Requested Official Quote for "${service}" in ${area}.\n\nJob Details: ${details}`
+  };
+  state.chatMessages[pro.id].push(newMsg);
+
+  // Add into quoteRequests
+  const newReq = {
+    id: 'req-' + Date.now().toString().slice(-4),
+    proId: pro.id,
+    proName: pro.businessName,
+    customerName: state.currentUser ? state.currentUser.name : 'Tonye Briggs (Client)',
+    customerPhone: state.currentUser ? state.currentUser.phone : '0803 123 4567',
+    area: area,
+    address: `${area}, Port Harcourt`,
+    title: service,
+    details: details,
+    preferredDate: 'Next available dispatch',
+    status: 'pending',
+    quoteAmount: null,
+    createdAt: 'Just now'
+  };
+  state.quoteRequests.unshift(newReq);
+  persistState();
+
+  // Clear inputs and switch back to live chat
+  document.getElementById('chatQuoteService').value = '';
+  document.getElementById('chatQuoteDetails').value = '';
+  switchChatTab('chat');
+  renderChatMessages();
+
+  // Simulate automated artisan quote proposal
+  setTimeout(() => {
+    const defaultQuoteAmount = pro.startingPrice || 15000;
+    const quoteMsg = {
+      sender: 'provider',
+      isQuote: true,
+      quoteId: 'quot-' + Date.now().toString().slice(-4),
+      serviceName: service,
+      amount: defaultQuoteAmount,
+      duration: 'Within 3 hours (Same Day)',
+      notes: `Diagnostics and professional workmanship for ${service}. 5% platform escrow protection included.`
+    };
+    newReq.status = 'quoted';
+    newReq.quoteAmount = defaultQuoteAmount;
+    newReq.quoteNotes = quoteMsg.notes;
+    state.chatMessages[pro.id].push(quoteMsg);
+    persistState();
+    renderChatMessages();
+  }, 2000);
+};
+
+window.acceptQuoteAndPayEscrow = function(quoteId, proId, serviceName, amount) {
+  closeChatDrawer();
+  openEscrowBookingModal(proId, serviceName, amount);
+};
+
 // Provider Onboarding Wizard
 let regState = { step: 1, phone: '', bizName: '', categoryId: '', categoryName: '', isApproval: false };
 
@@ -1397,7 +1886,7 @@ window.renderRegisterStep = function() {
         <div class="hero-eyebrow" style="margin-bottom: 8px;">ARTISAN REGISTRATION</div>
         <h2 style="font-size: 1.7rem; font-weight: 800; margin-bottom: 8px; color: var(--canvas);">Grow Your Service in Port Harcourt</h2>
         <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 24px;">
-          Early providers get <strong class="text-amber">3 Months Free on Verified Pro</strong> (₦3,000–₦6,000/mo value).
+          Early providers get <strong class="text-amber">1 Month Free on Verified Pro</strong> (₦2,000/mo value).
         </p>
 
         <form onsubmit="handleRegStep1(event)">
@@ -1528,8 +2017,8 @@ window.renderRegisterStep = function() {
         </p>
 
         <div style="background: var(--bg-surface-subtle); border: 1px solid var(--hairline-amber); padding: 18px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
-          <div style="font-weight: 800; color: var(--amber-dark); font-size: 0.95rem; margin-bottom: 4px;">🎁 3-Month Free Verified Pro Activated</div>
-          <div style="font-size: 0.85rem; color: var(--text-muted);">As an early Port Harcourt provider, you enjoy 90 days with zero platform fees. Future renewal: ₦3,000/month.</div>
+          <div style="font-weight: 800; color: var(--amber-dark); font-size: 0.95rem; margin-bottom: 4px;">🎁 First 1 Month Free Verified Pro Activated</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">As an early Port Harcourt provider, you enjoy 30 days with zero platform fees. Future renewal: ₦2,000/month (5% escrow commission).</div>
         </div>
 
         <button class="ed-button ed-button-amber" onclick="closeModal('providerRegisterModal');">
@@ -1666,7 +2155,7 @@ window.handleEscrowBookingSubmit = function(e) {
   const address = document.getElementById('escrowStreetAddress').value;
   const dateTime = document.getElementById('escrowDateTime').value;
 
-  const commissionAmount = Math.round(rawPrice * 0.10); // 10% Servhive platform cut
+  const commissionAmount = Math.round(rawPrice * 0.05); // 5% Servhive platform commission
   const payoutAmount = rawPrice - commissionAmount;
 
   const newJob = {
@@ -1680,7 +2169,7 @@ window.handleEscrowBookingSubmit = function(e) {
     dateTime: dateTime,
     status: 'in_progress',
     createdAt: 'Just now',
-    commissionPct: 10,
+    commissionPct: 5,
     commissionAmount: commissionAmount,
     payoutAmount: payoutAmount
   };
@@ -1694,7 +2183,7 @@ window.handleEscrowBookingSubmit = function(e) {
     icon: '🛡️',
     eyebrow: 'PORT HARCOURT ESCROW VAULT',
     title: `Escrow Deposit of ${formatNaira(rawPrice)} Active!`,
-    message: `Artisan (<strong>${newJob.proName}</strong>) has been scheduled to arrive at <strong>${address}</strong> on <strong>${dateTime}</strong>.\n\nYour funds will remain securely protected in Escrow until you inspect the work and click "Approve & Release".`,
+    message: `Artisan (<strong>${newJob.proName}</strong>) has been scheduled to arrive at <strong>${address}</strong> on <strong>${dateTime}</strong>.\n\nYour funds will remain securely protected in Escrow (5% safety commission: ${formatNaira(commissionAmount)}) until you inspect the work and click "Approve & Release".`,
     confirmText: 'View Escrow Vault →',
     cancelText: 'Keep Browsing',
     onConfirm: () => {
@@ -1850,25 +2339,34 @@ window.releaseEscrowPayment = function(jobId) {
   const job = state.escrowJobs.find(j => j.id === jobId);
   if (!job) return;
 
+  const commission = job.commissionAmount || Math.round(job.amount * 0.05);
+  const payout = job.payoutAmount || (job.amount - commission);
+
   showAppNotice({
     icon: '🔒',
     eyebrow: 'PAYMENT DISBURSEMENT CONFIRMATION',
     title: `Release ${formatNaira(job.amount)} to Artisan?`,
-    message: `Are you satisfied with the work done by <strong>${job.proName}</strong>?\n\nThis will instantly release <strong>${formatNaira(job.payoutAmount)}</strong> directly to the artisan's Nigerian bank account (Servhive platform commission: 10% / ${formatNaira(job.commissionAmount)}).`,
-    confirmText: `Approve & Release ${formatNaira(job.payoutAmount)}`,
+    message: `Are you satisfied with the work done by <strong>${job.proName}</strong>?\n\nThis will instantly release <strong>${formatNaira(payout)}</strong> directly to the artisan's Nigerian bank account (Servhive platform commission: 5% / ${formatNaira(commission)}).`,
+    confirmText: `Approve & Release ${formatNaira(payout)}`,
     cancelText: 'Cancel',
     onConfirm: () => {
       job.status = 'completed';
       persistState();
       updateEscrowBadge();
       renderEscrowJobs();
+      if (document.getElementById('myAccountModal')?.classList.contains('open')) {
+        renderMyAccountView();
+      }
 
       showAppNotice({
         icon: '🎉',
         eyebrow: 'PAYMENT COMPLETED',
         title: 'Payment Disbursed Successfully!',
-        message: `<strong>${formatNaira(job.payoutAmount)}</strong> has been credited to <strong>${job.proName}</strong>.\nServhive commission collected: ${formatNaira(job.commissionAmount)} (10%).\n\nThank you for choosing verified trades on Servhive!`,
-        confirmText: 'Done'
+        message: `<strong>${formatNaira(payout)}</strong> has been credited to <strong>${job.proName}</strong>.\nServhive commission collected: ${formatNaira(commission)} (5%).\n\nPlease leave a quick review to help fellow Port Harcourt clients!`,
+        confirmText: 'Rate & Review Provider ★',
+        onConfirm: () => {
+          showAddReviewPrompt(job.proId);
+        }
       });
     }
   });
@@ -2011,7 +2509,7 @@ window.renderAuthPage = function() {
         subtitleEl.textContent = 'Hire vetted electricians, mechanics, tilers, and stylists in Port Harcourt with zero price gouging.';
       } else {
         titleEl.textContent = 'Register as Verified Pro';
-        subtitleEl.textContent = 'Join Port Harcourt’s premier trades network. Enjoy 3 Months Free on Verified Pro (₦0 platform commission).';
+        subtitleEl.textContent = 'Join Port Harcourt’s premier trades network with First 1 Month Free (₦0 subscription).';
       }
     }
   }
@@ -2066,7 +2564,7 @@ window.renderAuthForm = function() {
       </form>
     `;
   } else if (isHirer) {
-    // Hirer Sign Up Form
+    // Hirer Sign Up Form: Phone number plus code (easier than email for most people)
     const phAreas = AREAS.filter(a => a !== 'All Port Harcourt');
     container.innerHTML = `
       <form onsubmit="handleHirerSignupSubmit(event)">
@@ -2077,12 +2575,12 @@ window.renderAuthForm = function() {
 
         <div class="auth-field-grid">
           <div class="auth-input-group">
-            <label class="auth-label">Email Address</label>
-            <input type="email" id="hirerEmail" required class="auth-input" placeholder="tonye@example.com" />
+            <label class="auth-label">Phone Number (+234)</label>
+            <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" />
           </div>
           <div class="auth-input-group">
-            <label class="auth-label">Nigerian Phone (+234)</label>
-            <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" />
+            <label class="auth-label">SMS Verification Code</label>
+            <input type="text" id="hirerCode" required maxlength="4" class="auth-input" value="1234" placeholder="1234" style="letter-spacing: 4px; font-weight: 800; text-align: center;" />
           </div>
         </div>
 
@@ -2103,8 +2601,8 @@ window.renderAuthForm = function() {
             </button>
           </div>
           <div class="auth-input-group">
-            <label class="auth-label">Confirm Password</label>
-            <input type="password" id="hirerConfirmPassword" required minlength="6" class="auth-input" placeholder="Repeat password" />
+            <label class="auth-label">Email Address (Optional)</label>
+            <input type="email" id="hirerEmail" class="auth-input" placeholder="tonye@example.com" />
           </div>
         </div>
 
@@ -2126,30 +2624,56 @@ window.renderAuthForm = function() {
       </form>
     `;
   } else {
-    // Artisan / Pro Sign Up Form
+    // Artisan / Pro Sign Up Form: Name, Business Name, Phone, Main Service + "First 1 Month Free"
     const phAreas = AREAS.filter(a => a !== 'All Port Harcourt');
     container.innerHTML = `
       <form onsubmit="handleArtisanSignupSubmit(event)">
+        <!-- 1-Month Free Promo Callout Banner -->
+        <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 18px;">
+          <div style="font-weight: 800; font-size: 0.9rem; color: var(--amber-dark); margin-bottom: 2px;">
+            🎁 First 1 Month Free Verified Pro Trial Active
+          </div>
+          <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
+            ₦0 subscription fees for your first 30 days. Higher-ticket subscription renewal: ₦2,000/mo. Platform commission: 5% on completed milestones.
+          </div>
+        </div>
+
         <div class="auth-field-grid">
           <div class="auth-input-group">
-            <label class="auth-label">Master Craftsman Name</label>
+            <label class="auth-label">Your Name</label>
             <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Engr. Tari Davies" />
           </div>
           <div class="auth-input-group">
-            <label class="auth-label">Trade / Workshop Brand Name</label>
+            <label class="auth-label">Business Name</label>
             <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Prime Ceilings & Tiling Works" />
           </div>
         </div>
 
         <div class="auth-field-grid">
           <div class="auth-input-group">
-            <label class="auth-label">Primary Trade Category</label>
+            <label class="auth-label">Phone Number (+234)</label>
+            <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" />
+          </div>
+          <div class="auth-input-group">
+            <label class="auth-label">SMS Verification Code</label>
+            <input type="text" id="artisanCode" required maxlength="4" class="auth-input" value="1234" placeholder="1234" style="letter-spacing: 4px; font-weight: 800; text-align: center;" />
+          </div>
+        </div>
+
+        <div class="auth-field-grid">
+          <div class="auth-input-group">
+            <label class="auth-label">Main Service</label>
             <select id="artisanCategory" required class="auth-input ed-select-input" style="height: 46px;">
-              <option value="home-repairs:Home Repairs">Home Repairs (Electrician, Generator, AC)</option>
-              <option value="solar-tech:Tech & Solar">Tech & Solar (Solar Inverter, CCTV)</option>
-              <option value="interior:Interior & Tiling">Interior & Tiling (POP, Tile Laying, Painting)</option>
-              <option value="beauty:Beauty & Grooming">Beauty & Grooming (Luxury Braids, Hair Stylist)</option>
-              <option value="auto:Vehicle Upkeep">Vehicle Upkeep (Mobile Mechanic, Auto Scan)</option>
+              <option value="power-gen">Power &amp; Generators</option>
+              <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
+              <option value="interior-pop">Interior POP &amp; Tiling</option>
+              <option value="plumbing">Plumbing &amp; Boreholes</option>
+              <option value="electrical">Electrical &amp; Conduit</option>
+              <option value="ac-chillers">AC &amp; Refrigeration</option>
+              <option value="auto-mechanic">Auto Mechanic &amp; Diagnostics</option>
+              <option value="beauty-hair">Beauty, Hair &amp; Braids</option>
+              <option value="carpentry">Carpentry &amp; Woodwork</option>
+              <option value="painting">Painting &amp; Screeding</option>
             </select>
           </div>
           <div class="auth-input-group">
@@ -2162,33 +2686,6 @@ window.renderAuthForm = function() {
 
         <div class="auth-field-grid">
           <div class="auth-input-group">
-            <label class="auth-label">Phone / WhatsApp Number (+234)</label>
-            <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" />
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Years of Trade Experience</label>
-            <select id="artisanExp" class="auth-input ed-select-input" style="height: 46px;">
-              <option value="3+ years">3+ years in Port Harcourt</option>
-              <option value="5+ years" selected>5+ years verified trade experience</option>
-              <option value="8+ years">8+ years master craftsman</option>
-              <option value="10+ years">10+ years industrial contractor</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="auth-field-grid">
-          <div class="auth-input-group">
-            <label class="auth-label">Email Address (Optional)</label>
-            <input type="email" id="artisanEmail" class="auth-input" placeholder="craftsman@workshop.ng" />
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Starting Service Rate (₦)</label>
-            <input type="number" id="artisanStartingPrice" required min="3000" step="500" value="10000" class="auth-input" placeholder="10000" />
-          </div>
-        </div>
-
-        <div class="auth-field-grid">
-          <div class="auth-input-group">
             <label class="auth-label">Password</label>
             <input type="password" id="artisanPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
             <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">
@@ -2196,28 +2693,18 @@ window.renderAuthForm = function() {
             </button>
           </div>
           <div class="auth-input-group">
-            <label class="auth-label">Confirm Password</label>
-            <input type="password" id="artisanConfirmPassword" required minlength="6" class="auth-input" placeholder="Repeat password" />
-          </div>
-        </div>
-
-        <!-- 3-Month Free Promo callout box -->
-        <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
-          <div style="font-weight: 800; font-size: 0.88rem; color: var(--amber-dark); margin-bottom: 4px;">
-            🎁 3-Month Free Verified Pro Trial Activated
-          </div>
-          <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
-            Zero platform fees for your first 90 days. Keep 100% of your earnings. Standard renewal at ₦3,000/mo after trial period.
+            <label class="auth-label">Starting Service Rate (₦)</label>
+            <input type="number" id="artisanStartingPrice" required min="3000" step="500" value="10000" class="auth-input" placeholder="10000" />
           </div>
         </div>
 
         <label class="auth-checkbox-label">
           <input type="checkbox" id="artisanTerms" required checked />
-          <span>I confirm our workshop adheres to Port Harcourt trade quality standards, fixed transparent rates, and safe Escrow delivery.</span>
+          <span>I confirm our workshop adheres to Port Harcourt trade quality standards, 5% escrow commission, and verified safety delivery.</span>
         </label>
 
         <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
-          <span>Register as Verified Artisan &rarr;</span>
+          <span>Register as Verified Pro &rarr;</span>
         </button>
 
         <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
@@ -2311,8 +2798,8 @@ window.renderAuthTrust = function() {
         <div class="auth-feature-row">
           <div class="auth-feature-icon">🎁</div>
           <div>
-            <div class="auth-feature-title">3-Month Free Trial (₦0 Platform Fees)</div>
-            <div class="auth-feature-desc">Join early and enjoy 90 days of unlimited leads with zero subscription costs. Keep 100% of your earnings.</div>
+            <div class="auth-feature-title">First 1 Month Free Trial (30 Days)</div>
+            <div class="auth-feature-desc">Join early and enjoy 30 days of unlimited leads with zero subscription costs. Keep 100% of your earnings. Standard renewal at ₦2,000/mo.</div>
           </div>
         </div>
 
@@ -2387,7 +2874,7 @@ window.handleLoginSubmit = function(e) {
     title: `Welcome, ${matchedUser.name}!`,
     message: role === 'hirer'
       ? `Logged in as <strong>Hirer (Client)</strong>. You can now book Port Harcourt artisans with 100% Escrow protection.`
-      : `Logged in to <strong>Artisan Pro Portal</strong> for <strong>${matchedUser.businessName || matchedUser.name}</strong>. Your 3-Month Free Trial is active.`,
+      : `Logged in to <strong>Artisan Pro Portal</strong> for <strong>${matchedUser.businessName || matchedUser.name}</strong>. Your First 1 Month Free Trial is active.`,
     confirmText: 'Continue to Marketplace'
   });
 
@@ -2397,31 +2884,22 @@ window.handleLoginSubmit = function(e) {
 window.handleHirerSignupSubmit = function(e) {
   e.preventDefault();
   const name = document.getElementById('hirerFullName').value.trim();
-  const email = document.getElementById('hirerEmail').value.trim();
+  const emailInput = document.getElementById('hirerEmail');
+  const email = emailInput ? emailInput.value.trim() : '';
   const phone = document.getElementById('hirerPhone').value.trim();
+  const code = document.getElementById('hirerCode') ? document.getElementById('hirerCode').value.trim() : '1234';
   const area = document.getElementById('hirerArea').value;
   const password = document.getElementById('hirerPassword').value;
-  const confirmPassword = document.getElementById('hirerConfirmPassword').value;
-
-  if (password !== confirmPassword) {
-    showAppNotice({
-      icon: '⚠️',
-      eyebrow: 'PASSWORD MISMATCH',
-      title: 'Passwords Do Not Match',
-      message: 'Please ensure both password fields match exactly before submitting.',
-      confirmText: 'Fix Password'
-    });
-    return;
-  }
 
   const newUser = {
     id: 'usr-' + Date.now(),
     name: name,
-    email: email,
+    email: email || `${phone.replace(/[^0-9]/g, '')}@client.servhive.ng`,
     phone: phone,
     role: 'hirer',
     area: area,
     password: password,
+    verifiedPhone: true,
     createdAt: new Date().toISOString()
   };
 
@@ -2432,9 +2910,9 @@ window.handleHirerSignupSubmit = function(e) {
 
   showAppNotice({
     icon: '🎉',
-    eyebrow: 'ACCOUNT CREATED',
+    eyebrow: 'PHONE VERIFIED & ACCOUNT CREATED',
     title: `Welcome to Servhive, ${name}!`,
-    message: `Your Hirer account is active. Preferred location set to <strong>${area}</strong>. All bookings are safeguarded with 100% Escrow protection.`,
+    message: `Phone number (<strong>+234 ${phone}</strong>) verified via instant code <strong>${code}</strong>. Preferred location set to <strong>${area}</strong>.<br><br>All bookings are safeguarded with 100% Escrow protection (5% platform safety fee).`,
     confirmText: 'Explore Verified Artisans'
   });
 
@@ -2448,24 +2926,14 @@ window.handleArtisanSignupSubmit = function(e) {
   const catVal = document.getElementById('artisanCategory').value;
   const area = document.getElementById('artisanArea').value;
   const phone = document.getElementById('artisanPhone').value.trim();
-  const exp = document.getElementById('artisanExp').value;
-  const email = document.getElementById('artisanEmail').value.trim() || `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
-  const startingPrice = Number(document.getElementById('artisanStartingPrice').value) || 10000;
+  const code = document.getElementById('artisanCode') ? document.getElementById('artisanCode').value.trim() : '1234';
+  const email = `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
+  const startingPrice = Number(document.getElementById('artisanStartingPrice')?.value) || 10000;
   const password = document.getElementById('artisanPassword').value;
-  const confirmPassword = document.getElementById('artisanConfirmPassword').value;
 
-  if (password !== confirmPassword) {
-    showAppNotice({
-      icon: '⚠️',
-      eyebrow: 'PASSWORD MISMATCH',
-      title: 'Passwords Do Not Match',
-      message: 'Please ensure both password fields match exactly before submitting.',
-      confirmText: 'Fix Password'
-    });
-    return;
-  }
-
-  const [catId, catName] = catVal.split(':');
+  const catId = catVal.includes(':') ? catVal.split(':')[0] : catVal;
+  const foundCat = INITIAL_CATEGORIES.find(c => c.id === catId);
+  const catName = foundCat ? foundCat.name : 'Master Trade Specialist';
   const matchedLm = PH_LANDMARKS.find(l => l.zone.toLowerCase() === area.toLowerCase()) || PH_LANDMARKS[0];
 
   const newUser = {
@@ -2478,9 +2946,11 @@ window.handleArtisanSignupSubmit = function(e) {
     trade: catName,
     category: catId,
     area: area,
-    experience: exp,
+    experience: '5+ years verified',
     startingPrice: startingPrice,
     password: password,
+    trialDaysLeft: 30,
+    subscriptionStatus: 'trial',
     createdAt: new Date().toISOString()
   };
 
@@ -2495,15 +2965,21 @@ window.handleArtisanSignupSubmit = function(e) {
     area: area,
     lat: matchedLm.lat,
     lng: matchedLm.lng,
-    landmarks: [matchedLm.name],
+    landmarks: [matchedLm.name, area],
     rating: 5.0,
     reviewCount: 1,
     verified: true,
+    boosted: false,
     status: 'approved',
     image: '/assets/hero_tradesman.jpg',
     startingPrice: startingPrice,
     responseTime: '~15 mins',
-    bio: `${bizName} is a verified service enterprise based in ${area}, Port Harcourt with ${exp} experience. 3-Month Free Pro Member.`,
+    bio: `${bizName} is a verified service enterprise based in ${area}, Port Harcourt. First 1 Month Free Verified Pro Member.`,
+    workPhotos: [
+      { url: '/assets/hero_tradesman.jpg', caption: 'Live on-site technical inspection in Port Harcourt' },
+      { url: '/assets/hero_tradesman.jpg', caption: 'Workshop testing & diagnostic equipment calibration' },
+      { url: '/assets/hero_tradesman.jpg', caption: 'Completed installation handover to client' }
+    ],
     services: [
       { name: `Standard ${catName} Consultation & Service`, price: startingPrice, type: 'Starting from' },
       { name: 'Comprehensive Diagnostic / Site Inspection', price: Math.round(startingPrice * 0.7), type: 'Fixed' }
@@ -2523,8 +2999,12 @@ window.handleArtisanSignupSubmit = function(e) {
     icon: '✨',
     eyebrow: 'PRO MEMBERSHIP ACTIVATED',
     title: `Welcome, ${bizName}!`,
-    message: `Your Artisan Pro profile is now live in the Port Harcourt directory with the <strong>Teal Verified Badge</strong>.<br><br>🎁 <strong>3-Month Free Trial</strong> active (₦0 platform commission for 90 days). Direct Escrow payouts configured for your bank account.`,
-    confirmText: 'View My Live Listing'
+    message: `Your Artisan Pro profile is live with the <strong>Teal Verified Badge</strong>.<br><br>🎁 <strong>First 1 Month Free Trial</strong> active (30 days free, standard renewal: ₦2,000/month). 5% Escrow commission guaranteed on milestone payouts.`,
+    confirmText: 'View My Live Listing',
+    onConfirm: () => {
+      switchToMarketplaceView();
+      openProfileModal(newPro.id);
+    }
   });
 
   switchToMarketplaceView();
@@ -2618,6 +3098,13 @@ window.updateAuthUI = function() {
   const mobileContainer = document.getElementById('mobileAuthArea');
   const proCtaBtn = document.getElementById('headerProCtaBtn');
   const user = state.currentUser;
+
+  const savedBadge = document.getElementById('navSavedBadge');
+  if (savedBadge) {
+    const count = (state.savedProviderIds || []).length;
+    savedBadge.textContent = count;
+    savedBadge.style.display = count > 0 ? 'inline-block' : 'none';
+  }
 
   if (desktopContainer) {
     if (!user) {
@@ -2719,7 +3206,7 @@ window.updateAuthUI = function() {
           <span>Create Account</span>
         </a>
         <a href="/login.html#signup-artisan" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; border-color: var(--amber); text-decoration: none; text-align: center;">
-          <span>Join as Pro Artisan (3 Mo Free)</span>
+          <span>Join as Pro Artisan (1 Mo Free)</span>
         </a>
       `;
     } else {
@@ -3013,6 +3500,530 @@ window.submitReport = function(e) {
   });
 };
 
+// ==================== MY ACCOUNT (PAST JOBS, SAVED PROS, SUPPORT) ====================
+let currentMyAccountTab = 'jobs';
+
+window.openMyAccountModal = function() {
+  const jobsCountEl = document.getElementById('myAccJobsCount');
+  const savedCountEl = document.getElementById('myAccSavedCount');
+  if (jobsCountEl) jobsCountEl.textContent = state.escrowJobs.length;
+  if (savedCountEl) savedCountEl.textContent = state.savedProviderIds.length;
+
+  switchMyAccountTab(currentMyAccountTab || 'jobs');
+  const modal = document.getElementById('myAccountModal');
+  if (modal) modal.classList.add('open');
+};
+
+window.switchMyAccountTab = function(tab) {
+  currentMyAccountTab = tab;
+  ['jobs', 'saved', 'support'].forEach(t => {
+    const btn = document.getElementById(`myAccTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+  renderMyAccountView();
+};
+
+window.renderMyAccountView = function() {
+  const container = document.getElementById('myAccountContentArea');
+  if (!container) return;
+
+  const jobsCountEl = document.getElementById('myAccJobsCount');
+  const savedCountEl = document.getElementById('myAccSavedCount');
+  if (jobsCountEl) jobsCountEl.textContent = state.escrowJobs.length;
+  if (savedCountEl) savedCountEl.textContent = state.savedProviderIds.length;
+
+  if (currentMyAccountTab === 'jobs') {
+    if (state.escrowJobs.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px 16px; background: var(--bg-surface-subtle); border-radius: var(--radius-md); border: 1px dashed var(--border);">
+          <div style="font-size: 2rem; margin-bottom: 8px;">🛡️</div>
+          <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin-bottom: 4px;">No Escrow Jobs Yet</h4>
+          <p style="font-size: 0.84rem; color: var(--muted-foreground); max-width: 420px; margin: 0 auto 16px;">
+            Book any verified Port Harcourt artisan with 100% Escrow protection. Funds remain locked until you approve the finished work.
+          </p>
+          <button class="ed-button ed-button-amber ed-btn-compact" onclick="closeModal('myAccountModal'); location.href='#directory';">
+            <span>Find Artisans Now</span>
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        ${state.escrowJobs.map(job => {
+          const isDone = job.status === 'completed';
+          const isAwaiting = job.status === 'awaiting_release';
+          const commission = job.commissionAmount || Math.round(job.amount * 0.05);
+          const payout = job.payoutAmount || (job.amount - commission);
+
+          return `
+            <div class="ed-escrow-card" style="margin: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                    <span class="ed-hero-tag" style="margin: 0; padding: 1px 6px; font-size: 0.68rem;">#${job.id}</span>
+                    <span style="font-size: 0.76rem; color: var(--muted-foreground);">📍 ${job.area}</span>
+                  </div>
+                  <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin: 0 0 2px;">${job.proName}</h4>
+                  <div style="font-size: 0.84rem; font-weight: 700; color: var(--amber-dark);">${job.serviceName}</div>
+                  <div style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 2px;">Scheduled: ${job.dateTime || 'Standard Dispatch'} · ${job.address}</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.25rem; font-weight: 900; color: var(--foreground);">${formatNaira(job.amount)}</div>
+                  <span class="badge ${isDone ? 'ed-badge-verified' : isAwaiting ? 'badge-secondary' : 'ed-badge-boosted'}" style="font-size: 0.7rem; margin-top: 4px;">
+                    ${isDone ? '✓ Paid to Artisan' : isAwaiting ? '⏳ Inspection Ready' : '🔒 Held in Escrow'}
+                  </span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border); gap: 8px; flex-wrap: wrap;">
+                <div style="font-size: 0.74rem; color: var(--muted-foreground);">
+                  Commission (5%): <strong>${formatNaira(commission)}</strong> · Net Payout: <strong>${formatNaira(payout)}</strong>
+                </div>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  ${!isDone && !isAwaiting ? `
+                    <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.75rem;" onclick="simulateArtisanDone('${job.id}')">
+                      Simulate Artisan Done &rarr;
+                    </button>
+                  ` : ''}
+                  ${isAwaiting ? `
+                    <button class="ed-button ed-button-amber ed-btn-compact" style="font-size: 0.78rem;" onclick="releaseEscrowPayment('${job.id}')">
+                      Approve &amp; Release Payout
+                    </button>
+                  ` : ''}
+                  ${isDone ? `
+                    <button class="ed-button ed-button-amber ed-btn-compact" style="font-size: 0.75rem;" onclick="closeModal('myAccountModal'); showAddReviewPrompt('${job.proId}');">
+                      ★ Rate &amp; Review
+                    </button>
+                  ` : ''}
+                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; color: #DC2626;" onclick="closeModal('myAccountModal'); openReportModal('${job.proId}', '${job.proName}');">
+                    Report Issue
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  } else if (currentMyAccountTab === 'saved') {
+    const savedPros = state.providers.filter(p => state.savedProviderIds.includes(p.id));
+    if (savedPros.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px 16px; background: var(--bg-surface-subtle); border-radius: var(--radius-md); border: 1px dashed var(--border);">
+          <div style="font-size: 2rem; margin-bottom: 8px;">❤️</div>
+          <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin-bottom: 4px;">No Saved Providers Yet</h4>
+          <p style="font-size: 0.84rem; color: var(--muted-foreground); max-width: 420px; margin: 0 auto 16px;">
+            Click the heart bookmark icon on any provider in the Port Harcourt directory to save them here for quick access.
+          </p>
+          <button class="ed-button ed-button-amber ed-btn-compact" onclick="closeModal('myAccountModal'); location.href='#directory';">
+            <span>Browse Directory</span>
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px;">
+        ${savedPros.map(pro => `
+          <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                <img src="${pro.image}" alt="${pro.businessName}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">
+                <div style="flex: 1; min-width: 0;">
+                  <h5 style="font-size: 0.95rem; font-weight: 800; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--foreground);">${pro.businessName}</h5>
+                  <div style="font-size: 0.74rem; color: var(--muted-foreground);">📍 ${pro.area} · ★ ${pro.rating.toFixed(1)}</div>
+                </div>
+              </div>
+              <div style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.4; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                ${pro.bio}
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px;">
+              <span style="font-size: 0.86rem; font-weight: 800; color: var(--foreground);">${formatNaira(pro.startingPrice)}</span>
+              <div style="display: flex; gap: 6px;">
+                <button class="ed-button ed-button-amber ed-btn-compact" style="font-size: 0.72rem; padding: 4px 10px;" onclick="closeModal('myAccountModal'); openProfileModal('${pro.id}');">
+                  View Profile
+                </button>
+                <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 4px 8px; color: #DC2626;" onclick="toggleSaveProvider('${pro.id}'); renderMyAccountView();">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  } else if (currentMyAccountTab === 'support') {
+    container.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px;">
+          <div class="hero-eyebrow" style="margin-bottom: 4px;">CONCIERGE &amp; MEDIATION DESK</div>
+          <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin-bottom: 8px;">Port Harcourt Operations Support</h4>
+          <p style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 14px;">
+            Need help with an artisan, rate dispute, or escrow milestone release? Godfrey and the Rivers State field concierge team resolve queries within 2 hours.
+          </p>
+          <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 6px; color: var(--foreground); margin-bottom: 16px;">
+            <div>📞 <strong>Hotline:</strong> +234 800-SERVHIVE (Toll Free)</div>
+            <div>💬 <strong>WhatsApp Concierge:</strong> +234 803 123 4567</div>
+            <div>🏢 <strong>Physical Hub:</strong> Trans-Amadi Industrial Layout, Port Harcourt</div>
+          </div>
+          <button class="ed-button ed-button-black" style="width: 100%; border-color: rgba(220, 38, 38, 0.4); color: #DC2626; padding: 10px;" onclick="closeModal('myAccountModal'); openReportModal('general', 'General Service Dispute');">
+            <span>⚠️ Open a Support Dispute Ticket</span>
+          </button>
+        </div>
+
+        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px;">
+          <div class="hero-eyebrow" style="margin-bottom: 4px;">100% ESCROW PROTECTION POLICY</div>
+          <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin-bottom: 8px;">How Servhive Protects Clients</h4>
+          <ul style="padding-left: 18px; margin: 0 0 16px; font-size: 0.8rem; color: var(--muted-foreground); line-height: 1.55;">
+            <li>Funds are deposited before work begins and held securely in trust.</li>
+            <li>Artisans cannot charge beyond agreed transparent rate cards.</li>
+            <li>Artisan only receives 95% net payout after you personally inspect work and approve release.</li>
+            <li>5% Servhive platform safety fee guarantees dispute mediation and satisfaction warranty.</li>
+          </ul>
+          <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 0.76rem; color: var(--teal); font-weight: 700;">
+            ✓ All artisans are vetted via Rivers State Ministry &amp; NIN KYC standards.
+          </div>
+        </div>
+      </div>
+    `;
+  }
+};
+
+// ==================== PRO HOME (ARTISAN DASHBOARD, QUOTES & BOOSTS) ====================
+let proSelectedBoostDays = 3;
+
+window.openProHomeModal = function() {
+  const reqsCountEl = document.getElementById('proHomeRequestsCount');
+  if (reqsCountEl) {
+    reqsCountEl.textContent = state.quoteRequests.filter(r => r.status === 'pending').length;
+  }
+  renderProHomeRequests();
+  const modal = document.getElementById('proHomeModal');
+  if (modal) modal.classList.add('open');
+};
+
+window.renderProHomeRequests = function() {
+  const container = document.getElementById('proHomeRequestsList');
+  if (!container) return;
+
+  if (state.quoteRequests.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 32px 14px; color: var(--muted-foreground); font-size: 0.86rem;">
+        No active quote requests right now. New customer inquiries from Port Harcourt will show up here.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      ${state.quoteRequests.map(req => {
+        const isPending = req.status === 'pending';
+        const isQuoted = req.status === 'quoted';
+        const isDeclined = req.status === 'declined';
+
+        return `
+          <div class="quote-request-card" style="margin: 0; background: var(--bg-surface-subtle); border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                  <span class="ed-hero-tag" style="margin: 0; padding: 1px 6px; font-size: 0.68rem;">#${req.id}</span>
+                  <span style="font-size: 0.76rem; color: var(--muted-foreground);">📍 ${req.area}</span>
+                  <span style="font-size: 0.74rem; color: var(--muted-foreground);">🕒 ${req.createdAt}</span>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 0 0 2px;">${req.title}</h4>
+                <div style="font-size: 0.82rem; color: var(--muted-foreground);">
+                  Client: <strong>${req.customerName}</strong> (${req.customerPhone}) · ${req.address || req.area}
+                </div>
+              </div>
+              <div>
+                <span class="badge ${isPending ? 'ed-badge-boosted' : isQuoted ? 'ed-badge-verified' : 'badge-secondary'}" style="font-size: 0.74rem;">
+                  ${isPending ? '⚡ Pending Quote' : isQuoted ? `✓ Quoted (${formatNaira(req.quoteAmount)})` : 'Declined'}
+                </span>
+              </div>
+            </div>
+
+            <p style="font-size: 0.82rem; color: var(--foreground); line-height: 1.45; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; margin: 6px 0 10px;">
+              <strong>Client Description:</strong> "${req.details}"
+            </p>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <div style="font-size: 0.76rem; color: var(--muted-foreground);">
+                ${isQuoted ? `Turnaround: ${req.quoteNotes || 'Same day'}` : 'Submit an official quote to win this job.'}
+              </div>
+              <div style="display: flex; gap: 6px;">
+                ${isPending ? `
+                  <button class="ed-button ed-button-amber ed-btn-compact" style="font-size: 0.76rem;" onclick="openProEnterQuoteModal('${req.id}')">
+                    Enter Quote &rarr;
+                  </button>
+                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem;" onclick="closeModal('proHomeModal'); openChatDrawer('${req.proId || 'pro-1'}');">
+                    💬 Message Client
+                  </button>
+                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem; color: #DC2626;" onclick="declineProRequest('${req.id}')">
+                    Decline
+                  </button>
+                ` : isQuoted ? `
+                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem;" onclick="closeModal('proHomeModal'); openChatDrawer('${req.proId || 'pro-1'}');">
+                    💬 Open in Chat
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+};
+
+window.openProEnterQuoteModal = function(reqId) {
+  const req = state.quoteRequests.find(r => r.id === reqId);
+  if (!req) return;
+
+  document.getElementById('quoteReqId').value = req.id;
+  const ctx = document.getElementById('quoteModalClientContext');
+  if (ctx) {
+    ctx.innerHTML = `Quoting for <strong>${req.customerName}</strong> in <strong>${req.area}</strong>: <em>${req.title}</em>`;
+  }
+  const amtInput = document.getElementById('quoteAmountInput');
+  if (amtInput) {
+    amtInput.value = '25000';
+    updateQuoteBreakdown(25000);
+  }
+
+  const modal = document.getElementById('proEnterQuoteModal');
+  if (modal) modal.classList.add('open');
+};
+
+window.updateQuoteBreakdown = function(val) {
+  const num = Number(val) || 0;
+  const comm = Math.round(num * 0.05);
+  const payout = num - comm;
+
+  const totalEl = document.getElementById('quoteTotalDisplay');
+  const commEl = document.getElementById('quoteCommissionDisplay');
+  const payoutEl = document.getElementById('quoteNetPayoutDisplay');
+
+  if (totalEl) totalEl.textContent = formatNaira(num);
+  if (commEl) commEl.textContent = `${formatNaira(comm)} (5%)`;
+  if (payoutEl) payoutEl.textContent = formatNaira(payout);
+};
+
+window.handleProSubmitQuote = function(e) {
+  e.preventDefault();
+  const reqId = document.getElementById('quoteReqId').value;
+  const amount = Number(document.getElementById('quoteAmountInput').value) || 25000;
+  const duration = document.getElementById('quoteDurationInput').value.trim();
+  const notes = document.getElementById('quoteNotesInput').value.trim();
+
+  const req = state.quoteRequests.find(r => r.id === reqId);
+  if (!req) return;
+
+  req.status = 'quoted';
+  req.quoteAmount = amount;
+  req.quoteDuration = duration;
+  req.quoteNotes = notes;
+
+  const proId = req.proId || 'pro-1';
+  if (!state.chatMessages[proId]) state.chatMessages[proId] = [];
+
+  state.chatMessages[proId].push({
+    sender: 'provider',
+    isQuote: true,
+    quoteId: 'quot-' + Date.now().toString().slice(-4),
+    serviceName: req.title,
+    amount: amount,
+    duration: duration,
+    notes: notes
+  });
+
+  persistState();
+  closeModal('proEnterQuoteModal');
+  renderProHomeRequests();
+
+  showAppNotice({
+    icon: '⚡',
+    eyebrow: 'QUOTE SUBMITTED TO CLIENT',
+    title: `Official Quote of ${formatNaira(amount)} Sent!`,
+    message: `Your quote has been transmitted directly to <strong>${req.customerName}</strong> in chat. When the client approves, the funds will be placed into Escrow before you proceed to site.`,
+    confirmText: 'Great!'
+  });
+};
+
+window.declineProRequest = function(reqId) {
+  const req = state.quoteRequests.find(r => r.id === reqId);
+  if (req) {
+    req.status = 'declined';
+    persistState();
+    renderProHomeRequests();
+  }
+};
+
+window.selectBoostDays = function(days) {
+  proSelectedBoostDays = days;
+  [1, 3, 7, 14].forEach(d => {
+    const chip = document.getElementById(`boostChip-${d}`);
+    if (chip) chip.classList.toggle('active', d === days);
+  });
+
+  const cost = days * (state.boostDailyRate || 500);
+  const btn = document.getElementById('activateBoostBtn');
+  if (btn) {
+    btn.innerHTML = `<span>⚡ Activate Visibility Boost (${days} ${days === 1 ? 'Day' : 'Days'} · ${formatNaira(cost)})</span>`;
+  }
+};
+
+window.activateProVisibilityBoost = function() {
+  const days = proSelectedBoostDays || 3;
+  const cost = days * (state.boostDailyRate || 500);
+
+  // Boost pro-1 (and any active artisan)
+  const targetPro = state.providers.find(p => p.id === 'pro-1') || state.providers[0];
+  if (targetPro) {
+    targetPro.boosted = true;
+    targetPro.boostDaysRemaining = days;
+  }
+
+  persistState();
+  renderProviders();
+
+  showAppNotice({
+    icon: '⚡',
+    eyebrow: 'VISIBILITY BOOST ACTIVATED',
+    title: `Pinned to Top of PH Search (${days} Days)!`,
+    message: `Your profile (<strong>${targetPro ? targetPro.businessName : 'PowerVolt'}</strong>) has been pinned to the top boosted tier for ${days} days (${formatNaira(cost)}).\n\nExpect significantly increased customer quote inquiries from Port Harcourt residents.`,
+    confirmText: 'View Directory →',
+    onConfirm: () => {
+      closeModal('proHomeModal');
+      location.href = '#directory';
+    }
+  });
+};
+
+// ==================== PROFILE BUILDER & VERIFICATION ====================
+let pbCurrentTab = 'about';
+let pbCurrentProId = 'pro-1';
+let pbRateCardItems = [];
+
+window.openProfileBuilderModal = function(proId) {
+  pbCurrentProId = proId || 'pro-1';
+  const pro = state.providers.find(p => p.id === pbCurrentProId) || state.providers[0];
+  if (!pro) return;
+
+  const nameEl = document.getElementById('pbName');
+  const bizEl = document.getElementById('pbBizName');
+  const phoneEl = document.getElementById('pbPhone');
+  const catEl = document.getElementById('pbCategory');
+  const bioEl = document.getElementById('pbBio');
+
+  if (nameEl) nameEl.value = pro.name || 'Engr. Emeka Obi';
+  if (bizEl) bizEl.value = pro.businessName;
+  if (phoneEl) phoneEl.value = '0802 345 6789';
+  if (catEl) catEl.value = pro.category;
+  if (bioEl) bioEl.value = pro.bio;
+
+  // Set areas checkboxes
+  const checkboxes = document.querySelectorAll('#pbAreasCheckboxes input[name="pbArea"]');
+  checkboxes.forEach(cb => {
+    cb.checked = (pro.landmarks && pro.landmarks.includes(cb.value)) || pro.area.includes(cb.value);
+  });
+
+  // Load rate cards
+  pbRateCardItems = pro.services && pro.services.length > 0
+    ? JSON.parse(JSON.stringify(pro.services))
+    : [
+        { name: 'Standard Diagnostics', price: 10000, type: 'Fixed' },
+        { name: 'Full Service Overhaul', price: 35000, type: 'Starting from' }
+      ];
+  renderPbServicesList();
+
+  switchProfileBuilderTab('about');
+  const modal = document.getElementById('profileBuilderModal');
+  if (modal) modal.classList.add('open');
+};
+
+window.switchProfileBuilderTab = function(tab) {
+  pbCurrentTab = tab;
+  ['about', 'areas', 'services', 'verification'].forEach(t => {
+    const btn = document.getElementById(`pbTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+    const sec = document.getElementById(`pbSection${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (sec) sec.style.display = t === tab ? 'block' : 'none';
+  });
+};
+
+window.renderPbServicesList = function() {
+  const container = document.getElementById('pbServicesList');
+  if (!container) return;
+
+  container.innerHTML = pbRateCardItems.map((item, idx) => `
+    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: center; background: var(--bg-surface-subtle); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+      <input type="text" class="ed-search-input" style="height: 36px; padding: 0 8px; font-size: 0.82rem; background: var(--card); color: var(--foreground); border: 1px solid var(--border);" value="${item.name}" placeholder="Service Name" oninput="pbRateCardItems[${idx}].name = this.value">
+      <input type="number" class="ed-search-input" style="height: 36px; padding: 0 8px; font-size: 0.82rem; background: var(--card); color: var(--foreground); border: 1px solid var(--border);" value="${item.price}" placeholder="Price (₦)" oninput="pbRateCardItems[${idx}].price = Number(this.value)">
+      <select class="ed-select-input" style="height: 36px; padding: 0 8px; font-size: 0.78rem; background: var(--card); color: var(--foreground); border: 1px solid var(--border);" onchange="pbRateCardItems[${idx}].type = this.value">
+        <option value="Fixed" ${item.type === 'Fixed' ? 'selected' : ''}>Fixed Price</option>
+        <option value="Starting from" ${item.type === 'Starting from' ? 'selected' : ''}>Starting from</option>
+      </select>
+      <button type="button" class="ed-button ed-button-black ed-btn-compact" style="color: #DC2626; height: 36px; padding: 0 8px;" onclick="removePbServiceItem(${idx})">✕</button>
+    </div>
+  `).join('');
+};
+
+window.addPbServiceItem = function() {
+  pbRateCardItems.push({ name: 'New Custom Service', price: 15000, type: 'Fixed' });
+  renderPbServicesList();
+};
+
+window.removePbServiceItem = function(idx) {
+  pbRateCardItems.splice(idx, 1);
+  renderPbServicesList();
+};
+
+window.handleSaveProfileBuilder = function(e) {
+  e.preventDefault();
+  const pro = state.providers.find(p => p.id === pbCurrentProId) || state.providers[0];
+  if (!pro) return;
+
+  const nameVal = document.getElementById('pbName').value.trim();
+  const bizVal = document.getElementById('pbBizName').value.trim();
+  const catVal = document.getElementById('pbCategory').value;
+  const bioVal = document.getElementById('pbBio').value.trim();
+
+  pro.name = nameVal;
+  pro.businessName = bizVal;
+  pro.category = catVal;
+  pro.bio = bioVal;
+  pro.services = pbRateCardItems.filter(s => s.name && s.price > 0);
+  if (pro.services.length > 0) {
+    pro.startingPrice = Math.min(...pro.services.map(s => s.price));
+  }
+
+  // Update areas
+  const checkedAreas = Array.from(document.querySelectorAll('#pbAreasCheckboxes input[name="pbArea"]:checked')).map(cb => cb.value);
+  if (checkedAreas.length > 0) {
+    pro.landmarks = checkedAreas;
+  }
+
+  persistState();
+  renderProviders();
+  closeModal('profileBuilderModal');
+
+  showAppNotice({
+    icon: '✓',
+    eyebrow: 'PROFILE & RATE CARD UPDATED',
+    title: 'Listing Refreshed Successfully!',
+    message: `Your verified profile (<strong>${pro.businessName}</strong>) and services &amp; prices rate card have been saved and updated across Port Harcourt search results.`,
+    confirmText: 'View in Directory →',
+    onConfirm: () => {
+      openProfileModal(pro.id);
+    }
+  });
+};
+
 // Theme Toggle Engine
 window.toggleTheme = function() {
   const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -3151,3 +4162,25 @@ window.toggleUserMenu = toggleUserMenu;
 window.openForgotPasswordModal = openForgotPasswordModal;
 window.handleForgotPasswordSubmit = handleForgotPasswordSubmit;
 window.updateAuthUI = updateAuthUI;
+window.openMyAccountModal = openMyAccountModal;
+window.switchMyAccountTab = switchMyAccountTab;
+window.renderMyAccountView = renderMyAccountView;
+window.openProHomeModal = openProHomeModal;
+window.renderProHomeRequests = renderProHomeRequests;
+window.openProEnterQuoteModal = openProEnterQuoteModal;
+window.updateQuoteBreakdown = updateQuoteBreakdown;
+window.handleProSubmitQuote = handleProSubmitQuote;
+window.declineProRequest = declineProRequest;
+window.selectBoostDays = selectBoostDays;
+window.activateProVisibilityBoost = activateProVisibilityBoost;
+window.openProfileBuilderModal = openProfileBuilderModal;
+window.switchProfileBuilderTab = switchProfileBuilderTab;
+window.renderPbServicesList = renderPbServicesList;
+window.addPbServiceItem = addPbServiceItem;
+window.removePbServiceItem = removePbServiceItem;
+window.handleSaveProfileBuilder = handleSaveProfileBuilder;
+window.switchChatTab = switchChatTab;
+window.submitJobQuoteRequest = submitJobQuoteRequest;
+window.acceptQuoteAndPayEscrow = acceptQuoteAndPayEscrow;
+window.openPhotoZoom = openPhotoZoom;
+window.toggleSaveProvider = toggleSaveProvider;

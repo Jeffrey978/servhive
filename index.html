@@ -31,11 +31,18 @@
       <!-- Center: Clean Corporate Navigation (Short Labels, Non-Wrapping) -->
       <nav class="ed-nav-links" aria-label="Main Navigation">
         <a href="#directory" class="ed-nav-link">Find Artisans</a>
-        <a href="#categories" class="ed-nav-link">Categories</a>
-        <a href="#escrow-how" class="ed-nav-link">Escrow Protection</a>
+        <a href="#categories" class="ed-nav-link">10 Categories</a>
+        <a href="javascript:void(0)" onclick="openMyAccountModal()" class="ed-nav-link" id="headerMyAccountLink">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>My Account</span>
+          <span id="navSavedBadge" class="ed-nav-escrow-badge" style="background: var(--teal); display: none;">0</span>
+        </a>
+        <a href="javascript:void(0)" onclick="openProHomeModal()" class="ed-nav-link" id="headerProHomeLink" style="color: var(--amber-dark); font-weight: 700;">
+          <span>Pro Home</span>
+        </a>
         <a href="javascript:void(0)" onclick="openEscrowHub()" class="ed-nav-link ed-nav-escrow" id="headerEscrowLink">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          <span>Escrow Hub</span>
+          <span>Escrow Vault</span>
           <span id="navEscrowBadge" class="ed-nav-escrow-badge">1</span>
         </a>
       </nav>
@@ -70,8 +77,13 @@
     <div id="edMobileMenu" class="ed-mobile-drawer">
       <div class="ed-mobile-drawer-inner">
         <a href="#directory" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">Find Artisans</a>
-        <a href="#categories" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">Categories</a>
-        <a href="#spotlight" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">Master Craftsmen</a>
+        <a href="#categories" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">10 Trade Categories</a>
+        <a href="javascript:void(0)" onclick="openMyAccountModal(); toggleMobileMenu();" class="ed-mobile-nav-link" style="color: var(--teal); font-weight: 700;">
+          👤 My Account (Past Jobs & Saved)
+        </a>
+        <a href="javascript:void(0)" onclick="openProHomeModal(); toggleMobileMenu();" class="ed-mobile-nav-link" style="color: var(--amber-dark); font-weight: 700;">
+          ⚡ Pro Home (Artisan Portal & Boost)
+        </a>
         <a href="#escrow-how" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">How Escrow Works</a>
         <a href="#safety" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">Trust & Verification</a>
         <a href="javascript:void(0)" onclick="openEscrowHub(); toggleMobileMenu();" class="ed-mobile-nav-link" style="color: var(--teal); display: flex; align-items: center; justify-content: space-between;">
@@ -85,13 +97,13 @@
         <!-- Mobile Auth Area -->
         <div id="mobileAuthArea" style="margin-top: 14px; border-top: 1px solid var(--hairline); padding-top: 14px; display: flex; flex-direction: column; gap: 8px;">
           <a href="/login.html" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; text-decoration: none; text-align: center;">
-            <span>Log In (Client Portal / Artisan)</span>
+            <span>Log In (Client / Artisan)</span>
           </a>
           <a href="/login.html#signup" class="ed-button ed-button-amber" style="width: 100%; padding: 12px; font-size: 0.88rem; text-decoration: none; text-align: center;">
-            <span>Create Account</span>
+            <span>Create Account (Phone + Code)</span>
           </a>
           <a href="/login.html#signup-artisan" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; border-color: var(--amber); text-decoration: none; text-align: center;">
-            <span>Join as Pro Artisan (3 Mo Free)</span>
+            <span>Join as Pro Artisan (1 Mo Free)</span>
           </a>
         </div>
       </div>
@@ -167,68 +179,45 @@
 
     </section>
 
-    <!-- ==================== EXPLORE TOP CATEGORIES (Standalone Icons) ==================== -->
+    <!-- ==================== EXPLORE THE 10 TOP CATEGORIES ==================== -->
     <section id="categories" class="ed-categories-section">
       <div class="section-header-row">
         <div>
-          <div class="hero-eyebrow" style="margin-bottom: 6px;">PORT HARCOURT TRADES</div>
-          <h2 class="ed-section-title">Browse Port Harcourt's Top Service Sectors</h2>
-          <p class="ed-section-sub">Standardized rate cards in ₦ with zero on-site price renegotiation.</p>
+          <div class="hero-eyebrow" style="margin-bottom: 6px;">PORT HARCOURT TRADES · 10 CORE SECTORS</div>
+          <h2 class="ed-section-title">Browse Port Harcourt's 10 Core Service Sectors</h2>
+          <p class="ed-section-sub">Standardized rate cards in ₦ with zero roadside price renegotiation.</p>
         </div>
         <a href="#directory" class="ed-button ed-button-black" onclick="resetFilters()">
-          <span>View All Categories &rarr;</span>
+          <span>View All Verified Pros &rarr;</span>
         </a>
       </div>
 
-      <div class="categories-grid">
-        <!-- Category 1: Power & Generators -->
-        <div class="category-card" onclick="selectCategory('home-repairs'); location.href='#directory';">
+      <div class="categories-10-grid">
+        <!-- 1: Power & Generators -->
+        <div class="category-icon-tile" onclick="selectCategory('power-gen'); location.href='#directory';">
           <div class="category-card-top">
             <div class="category-card-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
               </svg>
             </div>
-            <span class="category-badge-count">46+ Verified Pros</span>
+            <span class="category-badge-count">46+ Pros</span>
           </div>
           <div>
-            <h3 class="category-card-name">Power Infrastructure & Generators</h3>
-            <p class="category-card-desc">Generators, ATS changeover switches & industrial load balancing.</p>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Power & Generators</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Mikano, Perkins, ATS changeover & load balancing.</p>
           </div>
-          <div class="category-card-footer">
-            <span class="category-rate-from">Rates from <strong>₦8,000</strong></span>
-            <span class="category-explore-link">Browse Pros &rarr;</span>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦8,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
           </div>
         </div>
 
-        <!-- Category 2: Interior & Tiling -->
-        <div class="category-card" onclick="selectCategory('interior'); location.href='#directory';">
+        <!-- 2: Solar & Inverters -->
+        <div class="category-icon-tile" onclick="selectCategory('solar-tech'); location.href='#directory';">
           <div class="category-card-top">
             <div class="category-card-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18"></path>
-                <path d="M5 21V7l7-4 7 4v14"></path>
-                <path d="M9 10v11"></path>
-                <path d="M15 10v11"></path>
-              </svg>
-            </div>
-            <span class="category-badge-count">38+ Verified Pros</span>
-          </div>
-          <div>
-            <h3 class="category-card-name">Interior Finishing & POP Ceilings</h3>
-            <p class="category-card-desc">Suspended POP ceilings, Italian tiling & luxury screeding.</p>
-          </div>
-          <div class="category-card-footer">
-            <span class="category-rate-from">Rates from <strong>₦15,000</strong></span>
-            <span class="category-explore-link">Browse Pros &rarr;</span>
-          </div>
-        </div>
-
-        <!-- Category 3: Renewable Tech & Solar -->
-        <div class="category-card" onclick="selectCategory('solar-tech'); location.href='#directory';">
-          <div class="category-card-top">
-            <div class="category-card-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="4"></circle>
                 <path d="M12 2v2"></path>
                 <path d="M12 20v2"></path>
@@ -236,27 +225,136 @@
                 <path d="M17.66 17.66l1.41 1.41"></path>
                 <path d="M2 12h2"></path>
                 <path d="M20 12h2"></path>
-                <path d="M4.93 19.07l1.41-1.41"></path>
-                <path d="M17.66 6.34l1.41-1.41"></path>
               </svg>
             </div>
-            <span class="category-badge-count">29+ Verified Pros</span>
+            <span class="category-badge-count">34+ Pros</span>
           </div>
           <div>
-            <h3 class="category-card-name">Renewable Solar & Smart Security</h3>
-            <p class="category-card-desc">Hybrid solar setups, battery balancing & CCTV networks.</p>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Solar & Inverters</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Hybrid solar setups, lithium banks & CCTV.</p>
           </div>
-          <div class="category-card-footer">
-            <span class="category-rate-from">Rates from <strong>₦25,000</strong></span>
-            <span class="category-explore-link">Browse Pros &rarr;</span>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦12,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
           </div>
         </div>
 
-        <!-- Category 4: Beauty & Grooming -->
-        <div class="category-card" onclick="selectCategory('beauty'); location.href='#directory';">
+        <!-- 3: POP & Interior -->
+        <div class="category-icon-tile" onclick="selectCategory('interior-pop'); location.href='#directory';">
           <div class="category-card-top">
             <div class="category-card-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18"></path>
+                <path d="M5 21V7l7-4 7 4v14"></path>
+                <path d="M9 10v11"></path>
+                <path d="M15 10v11"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">38+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">POP Ceilings & Interior</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Suspended POP ceilings, Italian tiling & screeding.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦15,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 4: Plumbing & Pumps -->
+        <div class="category-icon-tile" onclick="selectCategory('plumbing'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">29+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Plumbing & Boreholes</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Submersible pumps, piping repairs & water tanks.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦10,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 5: Electrical & Wiring -->
+        <div class="category-icon-tile" onclick="selectCategory('electrical'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+              </svg>
+            </div>
+            <span class="category-badge-count">41+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Electrical & Wiring</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Conduit piping, distribution boards & fault repairs.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦7,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 6: AC & Refrigeration -->
+        <div class="category-icon-tile" onclick="selectCategory('ac-chillers'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">32+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">AC & Refrigeration</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Split AC maintenance, gas top-ups & chillers.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦8,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 7: Auto Diagnostics -->
+        <div class="category-icon-tile" onclick="selectCategory('auto-mechanic'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
+                <circle cx="7" cy="17" r="2"></circle>
+                <path d="M9 17h6"></path>
+                <circle cx="17" cy="17" r="2"></circle>
+              </svg>
+            </div>
+            <span class="category-badge-count">31+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Auto Diagnostics</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">OBD-2 computer scanner, brakes & mobile mechanic.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦6,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 8: Beauty & Grooming -->
+        <div class="category-icon-tile" onclick="selectCategory('beauty-hair'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="6" cy="6" r="3"></circle>
                 <circle cx="6" cy="18" r="3"></circle>
                 <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
@@ -264,58 +362,59 @@
                 <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
               </svg>
             </div>
-            <span class="category-badge-count">52+ Verified Pros</span>
+            <span class="category-badge-count">52+ Pros</span>
           </div>
           <div>
-            <h3 class="category-card-name">Beauty, Hair & Luxury Grooming</h3>
-            <p class="category-card-desc">Knotless box braids, wig customization & scalp therapy.</p>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Beauty & Grooming</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Knotless braids, luxury wigs & scalp therapy.</p>
           </div>
-          <div class="category-card-footer">
-            <span class="category-rate-from">Rates from <strong>₦7,000</strong></span>
-            <span class="category-explore-link">Browse Pros &rarr;</span>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦7,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
           </div>
         </div>
 
-        <!-- Category 5: Vehicle Upkeep -->
-        <div class="category-card" onclick="selectCategory('auto'); location.href='#directory';">
+        <!-- 9: Carpentry & Furniture -->
+        <div class="category-icon-tile" onclick="selectCategory('carpentry'); location.href='#directory';">
           <div class="category-card-top">
             <div class="category-card-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path>
-                <circle cx="7" cy="17" r="2"></circle>
-                <path d="M9 17h6"></path>
-                <circle cx="17" cy="17" r="2"></circle>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                <rect x="1" y="3" width="22" height="5"></rect>
+                <line x1="10" y1="12" x2="14" y2="12"></line>
               </svg>
             </div>
-            <span class="category-badge-count">31+ Verified Pros</span>
+            <span class="category-badge-count">27+ Pros</span>
           </div>
           <div>
-            <h3 class="category-card-name">Mobile Computerized Diagnostics</h3>
-            <p class="category-card-desc">OBD-2 diagnostics, brake overhauls & mobile mechanics.</p>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Carpentry & Furniture</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Modular kitchens, custom wardrobes & furniture.</p>
           </div>
-          <div class="category-card-footer">
-            <span class="category-rate-from">Rates from <strong>₦6,000</strong></span>
-            <span class="category-explore-link">Browse Pros &rarr;</span>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦10,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
           </div>
         </div>
 
-        <!-- Category 6: Plumbing & Pumps -->
-        <div class="category-card" onclick="quickSearch('Plumbing'); location.href='#directory';">
+        <!-- 10: Painting & Screeding -->
+        <div class="category-icon-tile" onclick="selectCategory('painting'); location.href='#directory';">
           <div class="category-card-top">
             <div class="category-card-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18.37 2.63L14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3z"></path>
+                <path d="M9 8c-2 3-4 3.5-7 4l8 8c.5-3 1-5 4-7"></path>
+                <path d="M14.5 17.5L4.5 7.5"></path>
               </svg>
             </div>
-            <span class="category-badge-count">24+ Verified Pros</span>
+            <span class="category-badge-count">35+ Pros</span>
           </div>
           <div>
-            <h3 class="category-card-name">Plumbing, Boreholes & Pumps</h3>
-            <p class="category-card-desc">Submersible pumps, piping repairs & water storage tanks.</p>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Painting & Screeding</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Weather-shield exterior paint & luxury interior stucco.</p>
           </div>
-          <div class="category-card-footer">
-            <span class="category-rate-from">Rates from <strong>₦10,000</strong></span>
-            <span class="category-explore-link">Browse Pros &rarr;</span>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦12,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
           </div>
         </div>
       </div>
@@ -429,22 +528,56 @@
         </div>
       </div>
 
-      <!-- Filter Controls Row -->
+      <!-- Filter Controls Row (Area, Rating, Price & Verified Gating) -->
       <div class="ed-filter-row">
         <!-- Category Pill Tabs -->
         <div id="filterPills" class="ed-pill-tabs">
           <!-- Populated by JS -->
         </div>
 
-        <!-- Filter Controls -->
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-          <label style="font-size: 0.84rem; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--teal);">
+        <!-- Filter Controls: Area, Rating, Price, Sort -->
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <!-- Area Filter -->
+          <select id="filterAreaSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground);" onchange="filterByArea(this.value)" aria-label="Filter by Area">
+            <option value="All Port Harcourt">All Areas in PH</option>
+            <option value="Old GRA">Old GRA</option>
+            <option value="New GRA / Phase 2">New GRA / Phase 2</option>
+            <option value="Peter Odili Road">Peter Odili Road</option>
+            <option value="Trans-Amadi">Trans-Amadi</option>
+            <option value="Woji">Woji</option>
+            <option value="D-Line">D-Line</option>
+            <option value="Ada George">Ada George</option>
+            <option value="Choba / Uniport">Choba / Uniport</option>
+            <option value="Rumuodara">Rumuodara</option>
+            <option value="Rumuola">Rumuola</option>
+            <option value="Alakahia">Alakahia</option>
+          </select>
+
+          <!-- Rating Filter -->
+          <select id="ratingFilterSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground);" onchange="state.ratingFilter = this.value; renderProviders();" aria-label="Filter by Rating">
+            <option value="all">★ Any Rating</option>
+            <option value="4.8">★ 4.8+ Top Rated</option>
+            <option value="4.5">★ 4.5+ High Quality</option>
+            <option value="4.0">★ 4.0+ Recommended</option>
+          </select>
+
+          <!-- Price Filter -->
+          <select id="priceFilterSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground);" onchange="state.priceFilter = this.value; renderProviders();" aria-label="Filter by Price">
+            <option value="all">₦ All Prices</option>
+            <option value="under-10k">Under ₦10,000</option>
+            <option value="10k-25k">₦10,000 – ₦25,000</option>
+            <option value="above-25k">₦25,000+ High Ticket</option>
+          </select>
+
+          <!-- Verified Only -->
+          <label style="font-size: 0.82rem; font-weight: 700; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--teal);">
             <input type="checkbox" id="verifiedOnlyCheckbox" onchange="state.verifiedOnly = this.checked; renderProviders();">
-            <span>✓ Rivers Verified Only</span>
+            <span>✓ Verified</span>
           </label>
 
-          <select id="sortSelect" class="ed-select-input" style="height: 40px; border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.84rem; background: var(--bg-surface);">
-            <option value="featured">Sort: Featured</option>
+          <!-- Sort Select -->
+          <select id="sortSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground);" onchange="state.sortBy = this.value; renderProviders();">
+            <option value="featured">Sort: Featured (⚡ Boosted Top)</option>
             <option value="distance">Nearest to Me (📍)</option>
             <option value="rating">Highest Rated (★)</option>
             <option value="price-low">Price: Low to High</option>
@@ -452,6 +585,9 @@
           </select>
         </div>
       </div>
+
+      <!-- Boosted Providers Near Top Showcase -->
+      <div id="boostedTopRibbon" style="display: none; margin-bottom: 24px;"></div>
 
       <!-- Providers Grid Container -->
       <div id="providersGrid" class="ed-providers-grid">
@@ -601,12 +737,12 @@
         <div class="artisan-cta-content">
           <h2 class="artisan-cta-title">Are You a Skilled Artisan in Port Harcourt?</h2>
           <p class="artisan-cta-desc">
-            Get hired by verified homeowners and corporate facilities in Old GRA, Peter Odili, Trans-Amadi and Woji. Join today and receive your first <strong>3 Months 100% Free</strong> on our Verified Pro tier (₦3,000–₦6,000/mo value).
+            Get hired by verified homeowners and corporate facilities in Old GRA, Peter Odili, Trans-Amadi and Woji. Join today and receive your first <strong>1 Month 100% Free</strong> on our Verified Pro tier (₦2,000/mo value).
           </p>
         </div>
         <div class="artisan-cta-actions">
           <button class="ed-button ed-button-amber" style="padding: 12px 24px; font-size: 0.9rem;" onclick="openProviderRegisterModal()">
-            <span>Register as a Pro (3 Mo Free)</span>
+            <span>Register as a Pro (1 Mo Free)</span>
           </button>
           <button class="ed-button ed-button-black" style="padding: 12px 20px;" onclick="openProBenefitsModal()">
             <span>Learn About Pro Benefits</span>
@@ -816,14 +952,14 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
           <div style="background: var(--bg-surface); border: 1px solid var(--hairline); border-radius: var(--radius-md); padding: 28px;">
             <div class="hero-eyebrow" style="margin-bottom: 8px;">ACTIVE POLICY</div>
-            <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 10px;">Artisan 3-Month Free Trial</h3>
+            <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 10px;">Artisan 1-Month Free Trial</h3>
             <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
-              To build deep supply density in Port Harcourt, verified providers enjoy 90 days of free listings with zero subscription fees.
+              To build deep supply density in Port Harcourt, verified providers enjoy 30 days of free listings with zero subscription fees.
             </p>
             <div style="border-top: 1px solid var(--hairline); padding-top: 16px;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.88rem;">
                 <span>Trial Duration:</span>
-                <strong>90 Days</strong>
+                <strong>30 Days (First 1 Month Free)</strong>
               </div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.88rem;">
                 <span>Active Trial Providers:</span>
@@ -831,7 +967,7 @@
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
                 <span>Escrow Platform Commission:</span>
-                <strong class="text-amber">10% per completed milestone</strong>
+                <strong class="text-amber">5% per completed milestone</strong>
               </div>
             </div>
           </div>
@@ -885,22 +1021,72 @@
       <button class="ed-modal-close" style="position: static; width: 28px; height: 28px;" onclick="closeChatDrawer()">&times;</button>
     </div>
 
-    <div id="chatMessages" style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: var(--chat-bg);">
-      <!-- Messages rendered by JS -->
+    <!-- Chat Tabs: Chat vs Request a Quote -->
+    <div class="chat-drawer-tabs">
+      <button type="button" class="chat-drawer-tab active" id="chatTabMessages" onclick="switchChatTab('chat')">💬 Live Chat</button>
+      <button type="button" class="chat-drawer-tab" id="chatTabQuote" onclick="switchChatTab('quote')">📋 Describe Job &amp; Get Quote</button>
     </div>
 
-    <!-- Quick questions chip bar -->
-    <div style="padding: 8px 12px; background: var(--bg-surface); border-top: 1px solid var(--hairline); display: flex; gap: 6px; overflow-x: auto;">
-      <button class="hero-quick-chip" style="font-size: 0.72rem; padding: 4px 10px;" onclick="sendChatMessage('Are you available tomorrow morning?')">Available tomorrow?</button>
-      <button class="hero-quick-chip" style="font-size: 0.72rem; padding: 4px 10px;" onclick="sendChatMessage('Can you give a quote for Peter Odili Rd?')">Quote for Peter Odili?</button>
-      <button class="hero-quick-chip" style="font-size: 0.72rem; padding: 4px 10px;" onclick="sendChatMessage('Do you do home service in GRA?')">Home service in GRA?</button>
+    <div id="chatLiveArea" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+      <div id="chatMessages" style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: var(--chat-bg);">
+        <!-- Messages rendered by JS -->
+      </div>
+
+      <!-- Quick questions chip bar -->
+      <div style="padding: 8px 12px; background: var(--bg-surface); border-top: 1px solid var(--hairline); display: flex; gap: 6px; overflow-x: auto;">
+        <button class="hero-quick-chip" style="font-size: 0.72rem; padding: 4px 10px;" onclick="sendChatMessage('Are you available tomorrow morning?')">Available tomorrow?</button>
+        <button class="hero-quick-chip" style="font-size: 0.72rem; padding: 4px 10px;" onclick="sendChatMessage('Can you give a quote for Peter Odili Rd?')">Quote for Peter Odili?</button>
+        <button class="hero-quick-chip" style="font-size: 0.72rem; padding: 4px 10px;" onclick="sendChatMessage('Do you do home service in GRA?')">Home service in GRA?</button>
+      </div>
+
+      <div style="padding: 12px 16px; background: var(--bg-surface); border-top: 1px solid var(--hairline); display: flex; gap: 8px;">
+        <input type="text" id="chatInput" class="ed-search-input" style="height: 42px; font-size: 0.88rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); padding: 0 12px;" placeholder="Type a message to provider..." onkeypress="if(event.key === 'Enter') sendChatMessage();">
+        <button class="ed-button ed-button-amber" style="padding: 0 16px; height: 42px;" onclick="sendChatMessage()">
+          <span>Send</span>
+        </button>
+      </div>
     </div>
 
-    <div style="padding: 12px 16px; background: var(--bg-surface); border-top: 1px solid var(--hairline); display: flex; gap: 8px;">
-      <input type="text" id="chatInput" class="ed-search-input" style="height: 42px; font-size: 0.88rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); padding: 0 12px;" placeholder="Type a message to provider..." onkeypress="if(event.key === 'Enter') sendChatMessage();">
-      <button class="ed-button ed-button-amber" style="padding: 0 16px; height: 42px;" onclick="sendChatMessage()">
-        <span>Send</span>
-      </button>
+    <!-- Describe Job & Get Quote Form -->
+    <div id="chatQuoteFormArea" style="display: none; flex-direction: column; flex: 1; padding: 20px; overflow-y: auto; background: var(--chat-bg);">
+      <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px;">
+        <div class="hero-eyebrow" style="margin-bottom: 4px;">JOB SPECIFICATION</div>
+        <h4 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 6px 0; color: var(--foreground);">Describe Job &amp; Get Official Quote</h4>
+        <p style="font-size: 0.82rem; color: var(--muted-foreground); margin-bottom: 16px;">
+          Send exact job scope to <strong id="chatQuoteProName" class="text-amber">Provider</strong>. They will submit an official fixed quote backed by 5% Escrow Protection.
+        </p>
+
+        <form onsubmit="submitJobQuoteRequest(event)">
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Service Type</label>
+            <input type="text" id="chatQuoteService" required class="ed-search-input" style="height: 40px; padding: 0 12px; font-size: 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); width: 100%; background: var(--bg-surface); color: var(--foreground);" placeholder="e.g. 50kVA Generator Diagnostic &amp; Service">
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Your Location in Port Harcourt</label>
+            <select id="chatQuoteArea" class="ed-select-input" style="height: 40px; padding: 0 12px; font-size: 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); width: 100%; background: var(--bg-surface); color: var(--foreground);">
+              <option value="Peter Odili Road">Peter Odili Road</option>
+              <option value="Trans-Amadi">Trans-Amadi</option>
+              <option value="Woji">Woji</option>
+              <option value="Old GRA">Old GRA</option>
+              <option value="New GRA / Phase 2">New GRA</option>
+              <option value="D-Line">D-Line</option>
+              <option value="Ada George">Ada George</option>
+              <option value="Choba / Uniport">Choba / Uniport</option>
+              <option value="Rumuola">Rumuola</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">Job Description &amp; Fault Details</label>
+            <textarea id="chatQuoteDetails" rows="4" required class="ed-search-input" style="width: 100%; padding: 10px 12px; font-size: 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--foreground);" placeholder="Describe what needs repair or installation, any symptoms, and preferred day/time..."></textarea>
+          </div>
+
+          <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 12px;">
+            <span>Submit Job &amp; Request Official Quote &rarr;</span>
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -1070,8 +1256,8 @@
         <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: var(--bg-surface-subtle); border: 1px solid var(--hairline); border-radius: var(--radius-sm);">
           <span style="font-size: 1.25rem; line-height: 1;">🎁</span>
           <div>
-            <div style="font-weight: 800; font-size: 0.92rem; color: var(--canvas); margin-bottom: 2px;">3-Month Free Trial (₦0 Platform Fees)</div>
-            <div style="font-size: 0.82rem; color: var(--text-muted);">Zero subscription fees for your first 90 days. Future renewal at just ₦3,000/month.</div>
+            <div style="font-weight: 800; font-size: 0.92rem; color: var(--canvas); margin-bottom: 2px;">First 1 Month Free Trial (30 Days)</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">Zero subscription fees for your first 30 days. Future renewal at just ₦2,000/month (5% platform escrow commission).</div>
           </div>
         </div>
 
@@ -1207,6 +1393,9 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
   <!-- ==================== FORGOT PASSWORD MODAL ==================== -->
   <div id="forgotPasswordModal" class="modal-backdrop">
     <div class="ed-modal-box" style="max-width: 480px; padding: 28px;">
@@ -1232,6 +1421,371 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ==================== MY ACCOUNT (PAST JOBS, SAVED, SUPPORT, REPORT A PROBLEM) ==================== -->
+  <div id="myAccountModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 760px; padding: 28px;">
+      <button class="ed-modal-close" onclick="closeModal('myAccountModal')">&times;</button>
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; padding-right: 36px;">
+        <div>
+          <div class="hero-eyebrow" style="margin-bottom: 4px;">CLIENT DASHBOARD &amp; ESCROW PROTOCOL</div>
+          <h2 style="font-size: 1.55rem; font-weight: 800; color: var(--foreground); margin: 0;">My Account</h2>
+          <p style="font-size: 0.85rem; color: var(--muted-foreground); margin-top: 2px;">
+            Manage past bookings, saved master craftsmen, and mediation support in Port Harcourt.
+          </p>
+        </div>
+        <button class="ed-button ed-button-black ed-btn-compact" style="border-color: rgba(220, 38, 38, 0.4); color: #DC2626;" onclick="closeModal('myAccountModal'); openReportModal('general', 'General Service Dispute');">
+          <span>⚠️ Report a Problem</span>
+        </button>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div style="display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; overflow-x: auto;">
+        <button class="my-account-tab-btn active" id="myAccTabJobs" onclick="switchMyAccountTab('jobs')">
+          Past &amp; Active Jobs (<span id="myAccJobsCount">0</span>)
+        </button>
+        <button class="my-account-tab-btn" id="myAccTabSaved" onclick="switchMyAccountTab('saved')">
+          Saved Providers (<span id="myAccSavedCount">0</span>)
+        </button>
+        <button class="my-account-tab-btn" id="myAccTabSupport" onclick="switchMyAccountTab('support')">
+          Support &amp; Concierge
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div id="myAccountContentArea" style="min-height: 280px;">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRO HOME (ARTISAN BUSINESS PORTAL & DASHBOARD) ==================== -->
+  <div id="proHomeModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 860px; padding: 28px;">
+      <button class="ed-modal-close" onclick="closeModal('proHomeModal')">&times;</button>
+      
+      <!-- Top Pro Greeting & Status -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 14px; padding-right: 36px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <div class="hero-eyebrow" style="margin: 0;">ARTISAN PRO HOME</div>
+            <span class="badge ed-badge-verified">✓ Rivers Verified Active</span>
+          </div>
+          <h2 id="proHomeBizTitle" style="font-size: 1.6rem; font-weight: 800; color: var(--foreground); margin: 0;">PowerVolt Generator &amp; Electrical Works</h2>
+          <div id="proHomeLeadSubtitle" style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">Lead Pro: Engr. Emeka Obi · Trans-Amadi Workshop</div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="ed-button ed-button-amber ed-btn-compact" onclick="openProfileBuilderModal()">
+            <span>✏️ Edit Profile &amp; Rates</span>
+          </button>
+          <button class="ed-button ed-button-black ed-btn-compact" onclick="closeModal('proHomeModal'); location.href='#directory';">
+            <span>Marketplace</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 5 Metric KPI Stats Grid -->
+      <div class="pro-kpi-grid">
+        <div class="pro-kpi-card">
+          <div class="pro-kpi-lbl">Review Status</div>
+          <div class="pro-kpi-val" style="font-size: 1.25rem; color: var(--teal); margin: 8px 0 4px;">✓ Verified</div>
+          <div class="pro-kpi-sub">Full Rivers State KYC pass</div>
+        </div>
+        <div class="pro-kpi-card">
+          <div class="pro-kpi-lbl">Free Trial Days Left</div>
+          <div class="pro-kpi-val" style="color: var(--amber-dark);">28 <small style="font-size: 0.95rem; font-weight: 600;">days</small></div>
+          <div class="pro-kpi-sub">First 1 Month Free Active</div>
+        </div>
+        <div class="pro-kpi-card">
+          <div class="pro-kpi-lbl">Weekly Profile Views</div>
+          <div class="pro-kpi-val">184</div>
+          <div class="pro-kpi-sub text-teal">↑ 24% vs last week</div>
+        </div>
+        <div class="pro-kpi-card">
+          <div class="pro-kpi-lbl">Active Requests</div>
+          <div id="proHomeRequestsCount" class="pro-kpi-val">2</div>
+          <div class="pro-kpi-sub">Client quote inquiries</div>
+        </div>
+        <div class="pro-kpi-card">
+          <div class="pro-kpi-lbl">Artisan Rating</div>
+          <div class="pro-kpi-val" style="color: var(--amber-dark);">★ 4.9</div>
+          <div class="pro-kpi-sub">46 Client reviews</div>
+        </div>
+      </div>
+
+      <!-- Request & Quote Manager Section -->
+      <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin: 0;">Customer Requests &amp; Quotes</h3>
+            <p style="font-size: 0.82rem; color: var(--muted-foreground); margin-top: 2px;">Review client descriptions, submit official quotes, message clients, or decline.</p>
+          </div>
+          <span class="badge badge-secondary" style="font-weight: 700;">5% Escrow commission on milestone release</span>
+        </div>
+
+        <div id="proHomeRequestsList">
+          <!-- Rendered dynamically by renderProHomeRequests() -->
+        </div>
+      </div>
+
+      <!-- Plan and Boost Section (Verified Pro subscription & optional boosts) -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <!-- Subscription Panel -->
+        <div class="boost-panel-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+            <div>
+              <div class="hero-eyebrow" style="margin: 0;">PRO SUBSCRIPTION</div>
+              <h4 style="font-size: 1.15rem; font-weight: 800; margin-top: 2px;">Verified Pro Tier</h4>
+            </div>
+            <span class="badge" style="background: var(--teal-light); color: var(--teal); font-weight: 800;">1 Mo Free Active</span>
+          </div>
+          <div style="font-size: 1.5rem; font-weight: 900; color: var(--foreground); margin-bottom: 4px;">
+            ₦2,000 <span style="font-size: 0.85rem; font-weight: 600; color: var(--muted-foreground);">/ month</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 14px;">
+            Higher ticket services &amp; master craftsmen tier. Unlocks 100% Escrow payouts, verified teal trust badge, and priority customer matching.
+          </p>
+          <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 0.78rem; color: var(--foreground);">
+            ✓ <strong>First 1 Month 100% Free</strong>. Renews Nov 29, 2026. Zero upfront card requirement.
+          </div>
+        </div>
+
+        <!-- Visibility Boost Panel -->
+        <div class="boost-panel-card" style="border-color: var(--hairline-amber);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+            <div>
+              <div class="hero-eyebrow" style="margin: 0; color: var(--amber-dark);">VISIBILITY BOOST</div>
+              <h4 style="font-size: 1.15rem; font-weight: 800; margin-top: 2px;">Pin to Top of PH Search</h4>
+            </div>
+            <span class="badge ed-badge-boosted">⚡ ₦500 / Day</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 12px;">
+            Boost your profile near the top of the Home page and search results for instant client inquiries in Port Harcourt.
+          </p>
+          
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px;">
+            <div class="boost-day-chip" id="boostChip-1" onclick="selectBoostDays(1)">1 Day<br><small>₦500</small></div>
+            <div class="boost-day-chip active" id="boostChip-3" onclick="selectBoostDays(3)">3 Days<br><small>₦1,500</small></div>
+            <div class="boost-day-chip" id="boostChip-7" onclick="selectBoostDays(7)">7 Days<br><small>₦3,500</small></div>
+            <div class="boost-day-chip" id="boostChip-14" onclick="selectBoostDays(14)">14 Days<br><small>₦7,000</small></div>
+          </div>
+
+          <button id="activateBoostBtn" class="ed-button ed-button-amber" style="width: 100%; padding: 11px;" onclick="activateProVisibilityBoost()">
+            <span>⚡ Activate Visibility Boost (3 Days · ₦1,500)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRO ENTER QUOTE MODAL ==================== -->
+  <div id="proEnterQuoteModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 500px; padding: 28px;">
+      <button class="ed-modal-close" onclick="closeModal('proEnterQuoteModal')">&times;</button>
+      <div class="hero-eyebrow" style="margin-bottom: 6px;">SUBMIT OFFICIAL QUOTE</div>
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--foreground); margin-bottom: 6px;">Enter Quote for Client</h3>
+      <p id="quoteModalClientContext" style="font-size: 0.85rem; color: var(--muted-foreground); margin-bottom: 18px;">
+        Job request from client
+      </p>
+
+      <form onsubmit="handleProSubmitQuote(event)">
+        <input type="hidden" id="quoteReqId" value="">
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Total Quoted Price (₦)</label>
+          <input type="number" id="quoteAmountInput" required min="3000" step="500" class="ed-search-input" style="height: 44px; padding: 0 12px; font-size: 1.1rem; font-weight: 800; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); color: var(--foreground);" placeholder="e.g. 25000" oninput="updateQuoteBreakdown(this.value)">
+        </div>
+
+        <!-- Commission breakdown -->
+        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px; font-size: 0.8rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Job Total:</span>
+            <strong id="quoteTotalDisplay">₦0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--muted-foreground);">
+            <span>Platform Protection (5%):</span>
+            <span id="quoteCommissionDisplay">₦0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-weight: 800; color: var(--teal); border-top: 1px solid var(--hairline); padding-top: 4px; margin-top: 4px;">
+            <span>Your Net Escrow Payout:</span>
+            <span id="quoteNetPayoutDisplay">₦0</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Estimated Turnaround / Completion Time</label>
+          <input type="text" id="quoteDurationInput" required class="ed-search-input" style="height: 42px; padding: 0 12px; font-size: 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); color: var(--foreground);" value="Same day (within 4 hours)">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Scope &amp; Material Notes</label>
+          <textarea id="quoteNotesInput" rows="3" required class="ed-search-input" style="width: 100%; padding: 10px 12px; font-size: 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); color: var(--foreground);" placeholder="e.g. Includes on-site diagnostics, labor, and warranty. Parts supplied separately if needed."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button type="submit" class="ed-button ed-button-amber" style="flex: 1; padding: 12px;">
+            <span>Send Official Quote to Client</span>
+          </button>
+          <button type="button" class="ed-button ed-button-black" style="padding: 12px 18px;" onclick="closeModal('proEnterQuoteModal')">
+            <span>Cancel</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== PROFILE BUILDER & VERIFICATION MODAL ==================== -->
+  <div id="profileBuilderModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 720px; padding: 28px; max-height: 90vh; overflow-y: auto;">
+      <button class="ed-modal-close" onclick="closeModal('profileBuilderModal')">&times;</button>
+      
+      <div class="hero-eyebrow" style="margin-bottom: 4px;">ARTISAN PRO PROFILE &amp; VERIFICATION</div>
+      <h2 style="font-size: 1.55rem; font-weight: 800; color: var(--foreground); margin: 0 0 4px 0;">Profile Builder</h2>
+      <p style="font-size: 0.85rem; color: var(--muted-foreground); margin-bottom: 18px;">
+        Configure your public profile, verification documents, Port Harcourt coverage areas, and services &amp; prices.
+      </p>
+
+      <!-- Section Tabs -->
+      <div style="display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; overflow-x: auto;">
+        <button type="button" class="my-account-tab-btn active" id="pbTabAbout" onclick="switchProfileBuilderTab('about')">About You</button>
+        <button type="button" class="my-account-tab-btn" id="pbTabAreas" onclick="switchProfileBuilderTab('areas')">Areas Covered</button>
+        <button type="button" class="my-account-tab-btn" id="pbTabServices" onclick="switchProfileBuilderTab('services')">Services &amp; Prices</button>
+        <button type="button" class="my-account-tab-btn" id="pbTabVerification" onclick="switchProfileBuilderTab('verification')">Verification (ID &amp; Licence)</button>
+      </div>
+
+      <form id="profileBuilderForm" onsubmit="handleSaveProfileBuilder(event)">
+        <!-- Tab 1: About You -->
+        <div id="pbSectionAbout" class="pb-section">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Master Craftsman Name</label>
+              <input type="text" id="pbName" required class="ed-search-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--card); color: var(--foreground); width: 100%;">
+            </div>
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Business / Brand Name</label>
+              <input type="text" id="pbBizName" required class="ed-search-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--card); color: var(--foreground); width: 100%;">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Phone Number (WhatsApp Direct)</label>
+              <input type="tel" id="pbPhone" required class="ed-search-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--card); color: var(--foreground); width: 100%;">
+            </div>
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Primary Trade Category</label>
+              <select id="pbCategory" class="ed-select-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--card); color: var(--foreground); width: 100%;">
+                <option value="power-gen">Power &amp; Generators</option>
+                <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
+                <option value="interior-pop">Interior POP Ceilings &amp; Tiling</option>
+                <option value="plumbing">Plumbing, Boreholes &amp; Water Pumps</option>
+                <option value="electrical">Electrical Wiring &amp; Conduit</option>
+                <option value="ac-chillers">Air Conditioning &amp; Refrigeration</option>
+                <option value="auto-mechanic">Auto Mechanics &amp; Diagnostics</option>
+                <option value="beauty-hair">Beauty, Hair &amp; Luxury Braids</option>
+                <option value="carpentry">Carpentry &amp; Cabinetry</option>
+                <option value="painting">Painting &amp; Wall Screeding</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">About You &amp; Business Overview</label>
+            <textarea id="pbBio" rows="3" required class="ed-search-input" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); color: var(--foreground); font-size: 0.85rem;" placeholder="Describe your experience, workshop equipment, and customer service guarantees..."></textarea>
+          </div>
+        </div>
+
+        <!-- Tab 2: Areas Covered -->
+        <div id="pbSectionAreas" class="pb-section" style="display: none;">
+          <label style="font-size: 0.84rem; font-weight: 700; display: block; margin-bottom: 10px;">Port Harcourt Areas &amp; Neighborhoods Covered</label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px;" id="pbAreasCheckboxes">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Trans-Amadi" checked style="accent-color: var(--amber-dark);"> Trans-Amadi</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Peter Odili Road" checked style="accent-color: var(--amber-dark);"> Peter Odili Road</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Woji" checked style="accent-color: var(--amber-dark);"> Woji / Golf Estate</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Old GRA" checked style="accent-color: var(--amber-dark);"> Old GRA</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="New GRA / Phase 2" checked style="accent-color: var(--amber-dark);"> New GRA</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="D-Line" checked style="accent-color: var(--amber-dark);"> D-Line / Garrison</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Ada George" checked style="accent-color: var(--amber-dark);"> Ada George / Wimpey</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Choba / Uniport" style="accent-color: var(--amber-dark);"> Choba / Uniport</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Rumuola" checked style="accent-color: var(--amber-dark);"> Rumuola</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Rumuodara" style="accent-color: var(--amber-dark);"> Rumuodara / Artillery</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Elelenwo" style="accent-color: var(--amber-dark);"> Elelenwo</label>
+          </div>
+        </div>
+
+        <!-- Tab 3: Services & Prices -->
+        <div id="pbSectionServices" class="pb-section" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <label style="font-size: 0.84rem; font-weight: 700; margin: 0;">Transparent Rate Card Items</label>
+            <button type="button" class="ed-button ed-button-black ed-btn-compact" onclick="addPbServiceItem()">+ Add Service Item</button>
+          </div>
+          <div id="pbServicesList" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Tab 4: Verification (ID, 3 Work Photos, Licence for regulated trades) -->
+        <div id="pbSectionVerification" class="pb-section" style="display: none;">
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 0.84rem; font-weight: 700; display: block; margin-bottom: 6px;">1. Government Issued ID (NIN / Voter's Card / Driver's License)</label>
+            <div style="border: 1px dashed var(--teal-bright); background: var(--bg-surface-subtle); padding: 14px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.84rem; color: var(--teal); font-weight: 700;">✓ NIN_Verification_Uploaded.jpg (Verified)</span>
+              <span class="badge ed-badge-verified" style="font-size: 0.72rem;">Validated</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 0.84rem; font-weight: 700; display: block; margin-bottom: 6px;">2. Past Work Photos (Upload 3 Project Images)</label>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <div style="border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; background: var(--bg-surface-subtle);">
+                <div style="font-size: 1.4rem; margin-bottom: 4px;">📸</div>
+                <div style="font-size: 0.78rem; font-weight: 700;">Work Photo #1</div>
+                <div style="font-size: 0.7rem; color: var(--muted-foreground);">ATS Panel Wiring</div>
+              </div>
+              <div style="border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; background: var(--bg-surface-subtle);">
+                <div style="font-size: 1.4rem; margin-bottom: 4px;">📸</div>
+                <div style="font-size: 0.78rem; font-weight: 700;">Work Photo #2</div>
+                <div style="font-size: 0.7rem; color: var(--muted-foreground);">Perkins Overhaul</div>
+              </div>
+              <div style="border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; background: var(--bg-surface-subtle);">
+                <div style="font-size: 1.4rem; margin-bottom: 4px;">📸</div>
+                <div style="font-size: 0.78rem; font-weight: 700;">Work Photo #3</div>
+                <div style="font-size: 0.7rem; color: var(--muted-foreground);">Distribution Board</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 0.84rem; font-weight: 700; display: block; margin-bottom: 6px;">3. Licence for Regulated Trades (COREN / NEMSA / Medical / Technical Certificate)</label>
+            <input type="text" id="pbLicenseDoc" class="ed-search-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--card); color: var(--foreground); width: 100%; font-size: 0.85rem;" value="Rivers State Electrical/Mechanical Reg #2026-PH-449" placeholder="Enter license registration number or body">
+            <span style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 4px; display: block;">Mandatory for high-voltage electrical, plumbing, structural repairs, and specialized crafts.</span>
+          </div>
+        </div>
+
+        <!-- Submit & Cancel -->
+        <div style="display: flex; gap: 10px; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 18px;">
+          <button type="submit" class="ed-button ed-button-amber" style="flex: 1; padding: 12px;">
+            <span>Save Profile &amp; Update Live Listing</span>
+          </button>
+          <button type="button" class="ed-button ed-button-black" style="padding: 12px 18px;" onclick="closeModal('profileBuilderModal')">
+            <span>Cancel</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== WORK PHOTO FULL ZOOM MODAL ==================== -->
+  <div id="photoZoomModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 640px; padding: 18px; text-align: center;">
+      <button class="ed-modal-close" onclick="closeModal('photoZoomModal')">&times;</button>
+      <div style="border-radius: var(--radius-md); overflow: hidden; margin-bottom: 12px; background: #000;">
+        <img id="photoZoomImg" src="" alt="Work Sample" style="max-width: 100%; max-height: 440px; object-fit: contain; display: block; margin: 0 auto;">
+      </div>
+      <p id="photoZoomCaption" style="font-size: 0.88rem; font-weight: 700; color: var(--foreground);"></p>
     </div>
   </div>
 

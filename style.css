@@ -2498,3 +2498,255 @@ button, input, select, textarea {
     justify-content: space-between;
   }
 }
+
+/* ==================== SERVHIV E SYSTEM ENHANCEMENTS: BOOST, GALLERY, QUOTES, PRO PORTAL ==================== */
+.ed-badge-boosted {
+  background: var(--amber-light);
+  color: var(--amber-dark);
+  border: 1px solid var(--hairline-amber);
+  font-weight: 800;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.3px;
+}
+[data-theme="dark"] .ed-badge-boosted {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.ed-heart-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+}
+.ed-heart-btn:hover {
+  transform: scale(1.08);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+.ed-heart-btn.saved {
+  color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+/* 10 Category Icons Responsive Grid */
+.categories-10-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+@media (max-width: 1080px) {
+  .categories-10-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .categories-10-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+.category-icon-tile {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 16px;
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+}
+.category-icon-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--amber);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Photos of Past Work Gallery */
+.pro-work-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .pro-work-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+.pro-work-photo-card {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.pro-work-photo-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-sm);
+}
+.pro-work-photo-card img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  display: block;
+}
+.pro-work-photo-caption {
+  padding: 8px 10px;
+  font-size: 0.74rem;
+  color: var(--foreground);
+  line-height: 1.35;
+  background: var(--bg-surface-subtle);
+  border-top: 1px solid var(--hairline);
+  font-weight: 600;
+}
+
+/* Pro Home KPI Grid */
+.pro-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.pro-kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-xs);
+}
+.pro-kpi-val {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--foreground);
+  margin: 6px 0 2px;
+  line-height: 1.1;
+}
+.pro-kpi-lbl {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.pro-kpi-sub {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* Boost Duration Buttons */
+.boost-day-chip {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-subtle);
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-align: center;
+  transition: var(--transition);
+}
+.boost-day-chip.active {
+  border-color: var(--amber);
+  background: var(--amber-light);
+  color: var(--amber-dark);
+}
+
+/* Quote Cards in Chat */
+.quote-request-card {
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--hairline-teal);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin: 6px 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+.quote-proposal-card {
+  background: var(--card);
+  border: 2px solid var(--amber);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin: 6px 0;
+  box-shadow: var(--shadow-sm);
+}
+
+/* My Account Tab Buttons */
+.my-account-tab-btn {
+  padding: 12px 18px;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.my-account-tab-btn.active {
+  color: var(--foreground);
+  border-bottom-color: var(--amber);
+}
+
+/* Boosted Top Ribbon */
+.boosted-ribbon-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Chat Drawer Header Tabs */
+.chat-drawer-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--bg-surface);
+}
+.chat-drawer-tab {
+  flex: 1;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  text-align: center;
+  transition: var(--transition);
+}
+.chat-drawer-tab.active {
+  color: var(--foreground);
+  border-bottom-color: var(--amber);
+}

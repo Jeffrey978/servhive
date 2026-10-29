@@ -209,11 +209,11 @@
 
     <div class="auth-faq-item">
       <button type="button" class="auth-faq-question" onclick="toggleFaq(this)">
-        <span>How does the 3-Month Free Trial work for Artisan Pros?</span>
+        <span>How does the First 1 Month Free Trial work for Artisan Pros?</span>
         <span class="auth-faq-icon">▾</span>
       </button>
       <div class="auth-faq-answer">
-        Verified artisans joining Servhive enjoy zero platform commission fees (₦0) and complimentary listing in the Port Harcourt directory for their first 90 days. You keep 100% of your earnings deposited directly to your Nigerian bank account.
+        Verified artisans joining Servhive enjoy zero platform subscription fees (₦0) and complimentary listing in the Port Harcourt directory for their first 30 days. Future renewal is ₦2,000/month for higher ticket services, with only a 5% safety commission on released escrow milestones.
       </div>
     </div>
 
@@ -360,7 +360,7 @@
           titleEl.textContent = isHirer ? 'Create Client Account' : 'Register as Verified Pro';
           subtitleEl.textContent = isHirer
             ? 'Hire vetted Port Harcourt artisans with 100% Escrow payment security.'
-            : 'Join Port Harcourt’s premier trades network with 3 Months Free (₦0 fees).';
+            : 'Join Port Harcourt’s premier trades network with First 1 Month Free.';
         }
       }
 
@@ -420,7 +420,7 @@
           </form>
         `;
       } else if (isHirer) {
-        // Hirer Signup Form
+        // Hirer Signup Form: Phone number + Code (easier than email)
         container.innerHTML = `
           <form onsubmit="handleHirerSignupSubmit(event)">
             <div class="auth-input-group">
@@ -430,12 +430,12 @@
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
-                <label class="auth-label">Email Address</label>
-                <input type="email" id="hirerEmail" required class="auth-input" placeholder="tonye@example.com" />
+                <label class="auth-label">Phone Number (+234)</label>
+                <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" />
               </div>
               <div class="auth-input-group">
-                <label class="auth-label">Phone Number (WhatsApp)</label>
-                <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" />
+                <label class="auth-label">SMS Verification Code</label>
+                <input type="text" id="hirerCode" required maxlength="4" class="auth-input" value="1234" placeholder="1234" style="letter-spacing: 4px; font-weight: 800; text-align: center;" />
               </div>
             </div>
 
@@ -464,8 +464,8 @@
                 </button>
               </div>
               <div class="auth-input-group">
-                <label class="auth-label">Confirm Password</label>
-                <input type="password" id="hirerConfirmPassword" required minlength="6" class="auth-input" placeholder="Repeat password" />
+                <label class="auth-label">Email (Optional)</label>
+                <input type="email" id="hirerEmail" class="auth-input" placeholder="tonye@example.com" />
               </div>
             </div>
 
@@ -487,35 +487,60 @@
           </form>
         `;
       } else {
-        // Artisan Signup Form
+        // Artisan / Pro Signup Form: Name, Business Name, Phone, Main Service + "First 1 Month Free"
         container.innerHTML = `
           <form onsubmit="handleArtisanSignupSubmit(event)">
+            <!-- 1-Month Free Promo Callout Banner -->
+            <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 18px;">
+              <div style="font-weight: 800; font-size: 0.9rem; color: var(--amber-dark); margin-bottom: 2px;">
+                🎁 First 1 Month Free Verified Pro Trial Active
+              </div>
+              <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
+                ₦0 subscription fees for your first 30 days. Higher-ticket subscription renewal: ₦2,000/mo. Platform commission: 5% on completed milestones.
+              </div>
+            </div>
+
             <div class="auth-field-grid">
               <div class="auth-input-group">
-                <label class="auth-label">Master Artisan Full Name</label>
+                <label class="auth-label">Your Name</label>
                 <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Engr. Emeka Obi" />
               </div>
               <div class="auth-input-group">
-                <label class="auth-label">Workshop / Business Name</label>
+                <label class="auth-label">Business Name</label>
                 <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. PowerVolt Generator Works" />
               </div>
             </div>
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
-                <label class="auth-label">Trade Sector</label>
+                <label class="auth-label">Phone Number (+234)</label>
+                <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" />
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">SMS Verification Code</label>
+                <input type="text" id="artisanCode" required maxlength="4" class="auth-input" value="1234" placeholder="1234" style="letter-spacing: 4px; font-weight: 800; text-align: center;" />
+              </div>
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Main Service</label>
                 <select id="artisanCategory" class="auth-input">
-                  <option value="home-repairs:Power & Generators">Power, Generator &amp; ATS Works</option>
-                  <option value="interior:Interior Finishing & POP">Interior Finishing &amp; POP Ceilings</option>
-                  <option value="solar-tech:Renewable Solar & Inverters">Solar Inverter &amp; CCTV Security</option>
-                  <option value="beauty:Beauty & Luxury Braids">Beauty, Braids &amp; Salon Grooming</option>
-                  <option value="auto:Mobile Vehicle Diagnostics">Mobile Auto Scanner &amp; Diagnostics</option>
-                  <option value="home-repairs:Plumbing & Boreholes">Plumbing, Pumps &amp; Boreholes</option>
+                  <option value="power-gen">Power &amp; Generators</option>
+                  <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
+                  <option value="interior-pop">Interior POP &amp; Tiling</option>
+                  <option value="plumbing">Plumbing &amp; Boreholes</option>
+                  <option value="electrical">Electrical &amp; Conduit</option>
+                  <option value="ac-chillers">AC &amp; Refrigeration</option>
+                  <option value="auto-mechanic">Auto Mechanic &amp; Diagnostics</option>
+                  <option value="beauty-hair">Beauty, Hair &amp; Braids</option>
+                  <option value="carpentry">Carpentry &amp; Woodwork</option>
+                  <option value="painting">Painting &amp; Screeding</option>
                 </select>
               </div>
 
               <div class="auth-input-group">
-                <label class="auth-label">Workshop Base Area (PH)</label>
+                <label class="auth-label">Workshop Base Area (Port Harcourt)</label>
                 <select id="artisanArea" class="auth-input">
                   <option value="Trans-Amadi">Trans-Amadi / Slaughter</option>
                   <option value="Peter Odili Road">Peter Odili Road</option>
@@ -532,32 +557,6 @@
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
-                <label class="auth-label">Phone Number (WhatsApp Active)</label>
-                <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" />
-              </div>
-              <div class="auth-input-group">
-                <label class="auth-label">Years in Trade</label>
-                <select id="artisanExp" class="auth-input">
-                  <option value="3-5 Years">3 - 5 Years Experience</option>
-                  <option value="5-8 Years" selected>5 - 8 Years Experience</option>
-                  <option value="8+ Years (Master Pro)">8+ Years (Master Pro)</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="auth-field-grid">
-              <div class="auth-input-group">
-                <label class="auth-label">Workshop Email (Optional)</label>
-                <input type="email" id="artisanEmail" class="auth-input" placeholder="emeka@powervolt.ng" />
-              </div>
-              <div class="auth-input-group">
-                <label class="auth-label">Starting Base Rate (₦)</label>
-                <input type="number" id="artisanStartingPrice" required min="3000" step="500" class="auth-input" value="10000" />
-              </div>
-            </div>
-
-            <div class="auth-field-grid">
-              <div class="auth-input-group">
                 <label class="auth-label">Password</label>
                 <input type="password" id="artisanPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
                 <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">
@@ -565,28 +564,18 @@
                 </button>
               </div>
               <div class="auth-input-group">
-                <label class="auth-label">Confirm Password</label>
-                <input type="password" id="artisanConfirmPassword" required minlength="6" class="auth-input" placeholder="Repeat password" />
-              </div>
-            </div>
-
-            <!-- 3-Month Free Promo callout box -->
-            <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 20px;">
-              <div style="font-weight: 800; font-size: 0.88rem; color: var(--amber-dark); margin-bottom: 4px;">
-                🎁 3-Month Free Verified Pro Trial Activated
-              </div>
-              <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
-                Zero platform fees for your first 90 days. Keep 100% of your earnings. Standard renewal at ₦3,000/mo after trial period.
+                <label class="auth-label">Starting Base Rate (₦)</label>
+                <input type="number" id="artisanStartingPrice" required min="3000" step="500" class="auth-input" value="10000" />
               </div>
             </div>
 
             <label class="auth-checkbox-label">
               <input type="checkbox" id="artisanTerms" required checked />
-              <span>I confirm our workshop adheres to Port Harcourt trade quality standards, fixed transparent rates, and safe Escrow delivery.</span>
+              <span>I confirm our workshop adheres to Port Harcourt trade quality standards, 5% escrow commission, and verified safety delivery.</span>
             </label>
 
             <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
-              <span>Register as Verified Artisan &rarr;</span>
+              <span>Register as Verified Pro &rarr;</span>
             </button>
 
             <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
@@ -713,8 +702,8 @@
                 </svg>
               </div>
               <div>
-                <div class="auth-feature-title">3-Month Free Trial (₦0 Platform Fees)</div>
-                <div class="auth-feature-desc">Join early and enjoy 90 days of unlimited leads with zero subscription costs. Keep 100% of your earnings.</div>
+                <div class="auth-feature-title">First 1 Month Free Trial (30 Days)</div>
+                <div class="auth-feature-desc">Join early and enjoy 30 days of unlimited leads with zero subscription costs. Keep 100% of your earnings. Standard renewal at ₦2,000/mo.</div>
               </div>
             </div>
 
@@ -942,13 +931,13 @@
           image: '/assets/hero_tradesman.jpg',
           startingPrice: startingPrice,
           responseTime: '~15 mins',
-          bio: `${bizName} is a verified service enterprise based in ${area}, Port Harcourt with ${exp} experience. 3-Month Free Pro Member.`
+          bio: `${bizName} is a verified service enterprise based in ${area}, Port Harcourt with verified credentials. First 1 Month Free Pro Member.`
         };
         storedProviders.unshift(newPro);
         localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
       } catch (err) {}
 
-      showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your Artisan Pro profile is activated with 3-Month Free Trial. Redirecting...`, 'success');
+      showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your Artisan Pro profile is activated with First 1 Month Free Trial. Redirecting...`, 'success');
 
       setTimeout(() => {
         window.location.href = '/index.html';
