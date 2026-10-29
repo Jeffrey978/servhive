@@ -452,86 +452,8 @@
           </button>
         </div>
 
-        <div class="spotlight-grid-wrap">
-          <!-- Pro 1 -->
-          <div class="spotlight-card">
-            <div class="spotlight-img-wrap">
-              <img src="/assets/hero_tradesman.jpg" alt="Engr. Emeka Obi" loading="lazy">
-              <span class="ed-badge-verified" style="position: absolute; bottom: 10px; left: 10px;">✓ Verified Pro</span>
-            </div>
-            <div style="padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="font-size: 0.76rem; font-weight: 800; color: var(--teal); text-transform: uppercase;">Generator & Power</div>
-                <h4 style="font-size: 1.05rem; font-weight: 800; margin: 4px 0 2px;">PowerVolt Generator Works</h4>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Engr. Emeka Obi · Trans-Amadi</div>
-                <div style="font-size: 0.82rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 14px;">★ 4.9 (46 ratings)</div>
-              </div>
-              <div style="border-top: 1px solid var(--hairline); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.85rem; font-weight: 800;">From ₦15,000</span>
-                <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('pro-1')">View Rates</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pro 2 -->
-          <div class="spotlight-card">
-            <div class="spotlight-img-wrap">
-              <img src="/assets/interior_pop.jpg" alt="Tari Davies" loading="lazy">
-              <span class="ed-badge-verified" style="position: absolute; bottom: 10px; left: 10px;">✓ Verified Pro</span>
-            </div>
-            <div style="padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="font-size: 0.76rem; font-weight: 800; color: var(--teal); text-transform: uppercase;">Interior & POP</div>
-                <h4 style="font-size: 1.05rem; font-weight: 800; margin: 4px 0 2px;">Prime POP & Ceilings</h4>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Tari Davies · Woji</div>
-                <div style="font-size: 0.82rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 14px;">★ 4.8 (34 ratings)</div>
-              </div>
-              <div style="border-top: 1px solid var(--hairline); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.85rem; font-weight: 800;">From ₦15,000</span>
-                <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('pro-3')">View Rates</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pro 3 -->
-          <div class="spotlight-card">
-            <div class="spotlight-img-wrap">
-              <img src="/assets/solar_tech.jpg" alt="Engr. Franklyn Nnamdi" loading="lazy">
-              <span class="ed-badge-verified" style="position: absolute; bottom: 10px; left: 10px;">✓ Verified Pro</span>
-            </div>
-            <div style="padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="font-size: 0.76rem; font-weight: 800; color: var(--teal); text-transform: uppercase;">Solar & Inverters</div>
-                <h4 style="font-size: 1.05rem; font-weight: 800; margin: 4px 0 2px;">SunWave Clean Energy</h4>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Engr. Franklyn · Peter Odili</div>
-                <div style="font-size: 0.82rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 14px;">★ 4.9 (51 ratings)</div>
-              </div>
-              <div style="border-top: 1px solid var(--hairline); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.85rem; font-weight: 800;">From ₦25,000</span>
-                <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('pro-4')">View Rates</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pro 4 -->
-          <div class="spotlight-card">
-            <div class="spotlight-img-wrap">
-              <img src="/assets/hairstylist.jpg" alt="Blessing Amadi" loading="lazy">
-              <span class="ed-badge-verified" style="position: absolute; bottom: 10px; left: 10px;">✓ Verified Pro</span>
-            </div>
-            <div style="padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
-              <div>
-                <div style="font-size: 0.76rem; font-weight: 800; color: var(--teal); text-transform: uppercase;">Beauty & Braids</div>
-                <h4 style="font-size: 1.05rem; font-weight: 800; margin: 4px 0 2px;">Crown & Braids Lounge</h4>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Blessing Amadi · New GRA</div>
-                <div style="font-size: 0.82rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 14px;">★ 5.0 (62 ratings)</div>
-              </div>
-              <div style="border-top: 1px solid var(--hairline); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.85rem; font-weight: 800;">From ₦7,000</span>
-                <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('pro-2')">View Rates</button>
-              </div>
-            </div>
-          </div>
+        <div class="spotlight-grid-wrap" id="spotlightGridWrap">
+          <!-- Populated dynamically by renderSpotlight() in app.js -->
         </div>
       </div>
     </section>
@@ -1182,10 +1104,10 @@
         <div style="background: var(--bg-surface-subtle); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
             <div>
-              <div id="escrowProName" style="font-weight: 800; font-size: 1.05rem; color: var(--canvas);">PowerVolt Generator</div>
-              <div id="escrowServiceName" style="font-size: 0.85rem; color: var(--teal); font-weight: 700;">Generator Servicing</div>
+              <div id="escrowProName" style="font-weight: 800; font-size: 1.05rem; color: var(--canvas);">Verified Artisan</div>
+              <div id="escrowServiceName" style="font-size: 0.85rem; color: var(--teal); font-weight: 700;">Standard Trade Service</div>
             </div>
-            <div id="escrowPriceDisplay" style="font-size: 1.3rem; font-weight: 900; color: var(--amber-dark);">₦15,000</div>
+            <div id="escrowPriceDisplay" style="font-size: 1.3rem; font-weight: 900; color: var(--amber-dark);">₦0</div>
           </div>
           <div style="font-size: 0.76rem; color: var(--text-muted);">Standard rate from provider's verified rate card</div>
         </div>
@@ -1502,8 +1424,8 @@
             <div class="hero-eyebrow" style="margin: 0;">ARTISAN PRO HOME</div>
             <span class="badge ed-badge-verified">✓ Rivers Verified Active</span>
           </div>
-          <h2 id="proHomeBizTitle" style="font-size: 1.6rem; font-weight: 800; color: var(--foreground); margin: 0;">PowerVolt Generator &amp; Electrical Works</h2>
-          <div id="proHomeLeadSubtitle" style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">Lead Pro: Engr. Emeka Obi · Trans-Amadi Workshop</div>
+          <h2 id="proHomeBizTitle" style="font-size: 1.6rem; font-weight: 800; color: var(--foreground); margin: 0;">Artisan Workshop</h2>
+          <div id="proHomeLeadSubtitle" style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">Lead Pro: Verified Craftsman</div>
         </div>
 
         <div style="display: flex; gap: 8px;">
@@ -1525,23 +1447,23 @@
         </div>
         <div class="pro-kpi-card">
           <div class="pro-kpi-lbl">Free Trial Days Left</div>
-          <div class="pro-kpi-val" style="color: var(--amber-dark);">28 <small style="font-size: 0.95rem; font-weight: 600;">days</small></div>
+          <div class="pro-kpi-val" style="color: var(--amber-dark);">30 <small style="font-size: 0.95rem; font-weight: 600;">days</small></div>
           <div class="pro-kpi-sub">First 1 Month Free Active</div>
         </div>
         <div class="pro-kpi-card">
           <div class="pro-kpi-lbl">Weekly Profile Views</div>
-          <div class="pro-kpi-val">184</div>
-          <div class="pro-kpi-sub text-teal">↑ 24% vs last week</div>
+          <div class="pro-kpi-val">0</div>
+          <div class="pro-kpi-sub text-teal">Active in Port Harcourt</div>
         </div>
         <div class="pro-kpi-card">
           <div class="pro-kpi-lbl">Active Requests</div>
-          <div id="proHomeRequestsCount" class="pro-kpi-val">2</div>
+          <div id="proHomeRequestsCount" class="pro-kpi-val">0</div>
           <div class="pro-kpi-sub">Client quote inquiries</div>
         </div>
         <div class="pro-kpi-card">
           <div class="pro-kpi-lbl">Artisan Rating</div>
-          <div class="pro-kpi-val" style="color: var(--amber-dark);">★ 4.9</div>
-          <div class="pro-kpi-sub">46 Client reviews</div>
+          <div class="pro-kpi-val" style="color: var(--amber-dark);">★ 5.0</div>
+          <div class="pro-kpi-sub">0 Client reviews</div>
         </div>
       </div>
 

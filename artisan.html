@@ -37,9 +37,9 @@
         <span style="position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-radius: 50%; background: #10b981; border: 2px solid var(--bg-surface);"></span>
       </div>
       <div>
-        <div id="artisanHeaderBizName" style="font-size: 0.88rem; font-weight: 800; color: var(--foreground); line-height: 1.2;">PowerVolt Generator &amp; Electrical Works</div>
+        <div id="artisanHeaderBizName" style="font-size: 0.88rem; font-weight: 800; color: var(--foreground); line-height: 1.2;">Artisan Pro Services</div>
         <div style="display: flex; align-items: center; gap: 6px; margin-top: 1px;">
-          <span id="artisanHeaderName" style="font-size: 0.74rem; color: var(--muted-foreground);">Engr. Emeka Obi</span>
+          <span id="artisanHeaderName" style="font-size: 0.74rem; color: var(--muted-foreground);">Verified Craftsman</span>
           <span class="badge" style="font-size: 0.65rem; padding: 1px 6px; background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25); font-weight: 700;">✓ Rivers Verified Active</span>
         </div>
       </div>
@@ -80,13 +80,13 @@
       <a href="#requests" class="artisan-nav-item" id="navItem-requests" onclick="switchArtisanSection('requests')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         <span>Requests &amp; Quotes</span>
-        <span id="badgeRequestsCount" class="artisan-sidebar-badge badge-amber" style="margin-left: auto;">2</span>
+        <span id="badgeRequestsCount" class="artisan-sidebar-badge badge-amber" style="margin-left: auto;">0</span>
       </a>
 
       <a href="#jobs" class="artisan-nav-item" id="navItem-jobs" onclick="switchArtisanSection('jobs')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         <span>Active Jobs &amp; Escrow</span>
-        <span id="badgeJobsCount" class="artisan-sidebar-badge badge-teal" style="margin-left: auto;">1</span>
+        <span id="badgeJobsCount" class="artisan-sidebar-badge badge-teal" style="margin-left: auto;">0</span>
       </a>
 
       <a href="#profile" class="artisan-nav-item" id="navItem-profile" onclick="switchArtisanSection('profile')">
@@ -129,7 +129,7 @@
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
           <div>
             <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark); margin-bottom: 4px;">OPERATIONS TELEMETRY</div>
-            <h1 style="font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 6px; color: var(--foreground);" id="proHomeWelcomeTitle">Welcome Back, Engr. Emeka Obi</h1>
+            <h1 style="font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 6px; color: var(--foreground);" id="proHomeWelcomeTitle">Welcome Back, Craftsman</h1>
             <p style="font-size: 0.88rem; color: var(--muted-foreground); margin: 0; line-height: 1.5;">
               Monitor client leads, live escrow deposits, and search visibility across Port Harcourt.
             </p>
@@ -159,29 +159,29 @@
 
           <div class="pro-kpi-card">
             <div class="pro-kpi-lbl">FREE TRIAL STATUS</div>
-            <div class="pro-kpi-val">28 <small style="font-size: 0.85rem; font-weight: 500; color: var(--muted-foreground);">days</small></div>
+            <div class="pro-kpi-val">30 <small style="font-size: 0.85rem; font-weight: 500; color: var(--muted-foreground);">days</small></div>
             <div class="pro-kpi-sub">First 1 Month Free Tier</div>
           </div>
 
           <div class="pro-kpi-card">
             <div class="pro-kpi-lbl">WEEKLY PROFILE VIEWS</div>
-            <div class="pro-kpi-val">184</div>
-            <div class="pro-kpi-sub" style="color: var(--teal); font-weight: 600;">↑ 24% in Trans-Amadi &amp; Odili</div>
+            <div class="pro-kpi-val">0</div>
+            <div class="pro-kpi-sub" style="color: var(--teal); font-weight: 600;">Active in Port Harcourt</div>
           </div>
 
           <div class="pro-kpi-card">
             <div class="pro-kpi-lbl">ACTIVE INQUIRIES</div>
-            <div id="proHomeActiveReqsVal" class="pro-kpi-val">2</div>
+            <div id="proHomeActiveReqsVal" class="pro-kpi-val">0</div>
             <div class="pro-kpi-sub">Ready for official quotation</div>
           </div>
 
           <div class="pro-kpi-card">
             <div class="pro-kpi-lbl">ARTISAN RATING</div>
             <div class="pro-kpi-val" style="display: flex; align-items: center; gap: 4px;">
-              <span>4.9</span>
+              <span id="artisanRatingVal">5.0</span>
               <span style="font-size: 1.1rem; color: var(--amber);">★</span>
             </div>
-            <div class="pro-kpi-sub">46 Verified client reviews</div>
+            <div class="pro-kpi-sub" id="artisanReviewsSub">0 Verified client reviews</div>
           </div>
         </div>
 
@@ -287,7 +287,7 @@
           </div>
           <div style="background: var(--bg-surface-subtle); border: 1px solid var(--hairline-teal); border-radius: var(--radius-sm); padding: 8px 16px; text-align: right;">
             <div style="font-size: 0.72rem; color: var(--teal); font-weight: 800;">ESCROW VAULT SECURED</div>
-            <div id="artisanEscrowBalanceDisplay" style="font-size: 1.25rem; font-weight: 900; color: var(--foreground);">₦15,000</div>
+            <div id="artisanEscrowBalanceDisplay" style="font-size: 1.25rem; font-weight: 900; color: var(--foreground);">₦0</div>
           </div>
         </div>
 
@@ -407,7 +407,7 @@
               <span class="badge ed-badge-verified">✓ ID Validated</span>
             </div>
             <div style="border: 1px dashed var(--teal-bright); background: var(--bg-surface-subtle); padding: 14px 18px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
-              <span style="font-size: 0.85rem; color: var(--teal); font-weight: 700;">📄 National_ID_NIN_Engr_Emeka.pdf (Attached)</span>
+              <span style="font-size: 0.85rem; color: var(--teal); font-weight: 700;">📄 Government_ID_NIN_Document.pdf (Attached)</span>
               <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.74rem;" onclick="simulateReupload('ID')">Re-upload New File</button>
             </div>
           </div>
@@ -419,30 +419,24 @@
                 <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">2. Past Work Portfolio Photos (Minimum 3 Photos)</h3>
                 <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">High resolution photographs of past completed installations or repairs in Port Harcourt.</p>
               </div>
-              <span class="badge ed-badge-verified">✓ 3 Photos Live</span>
+              <span class="badge ed-badge-verified">✓ Portfolio Verification</span>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px;" id="verificationWorkPhotosGrid">
-              <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;">
-                <img src="/assets/hero_tradesman.jpg" alt="Work Photo 1" style="width: 100%; height: 130px; object-fit: cover;">
-                <div style="padding: 10px;">
-                  <div style="font-size: 0.82rem; font-weight: 700;">Photo 1: ATS Changeover</div>
-                  <div style="font-size: 0.72rem; color: var(--muted-foreground);">Trans-Amadi Industrial project</div>
-                </div>
+              <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo 1')">
+                <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 1</div>
+                <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
               </div>
-              <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;">
-                <img src="/assets/solar_tech.jpg" alt="Work Photo 2" style="width: 100%; height: 130px; object-fit: cover;">
-                <div style="padding: 10px;">
-                  <div style="font-size: 0.82rem; font-weight: 700;">Photo 2: Perkins Overhaul</div>
-                  <div style="font-size: 0.72rem; color: var(--muted-foreground);">Woji residential generator overhaul</div>
-                </div>
+              <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo 2')">
+                <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 2</div>
+                <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
               </div>
-              <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;">
-                <img src="/assets/interior_pop.jpg" alt="Work Photo 3" style="width: 100%; height: 130px; object-fit: cover;">
-                <div style="padding: 10px;">
-                  <div style="font-size: 0.82rem; font-weight: 700;">Photo 3: Distribution Board</div>
-                  <div style="font-size: 0.72rem; color: var(--muted-foreground);">Peter Odili Road switchgear wiring</div>
-                </div>
+              <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo 3')">
+                <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 3</div>
+                <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
               </div>
             </div>
           </div>
@@ -454,12 +448,12 @@
                 <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">3. Licence for Regulated Trades</h3>
                 <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Mandatory for high voltage electrical, plumbing pumps, structural mechanics, and certified crafts.</p>
               </div>
-              <span class="badge ed-badge-verified">✓ Licence Approved</span>
+              <span class="badge ed-badge-verified">✓ Licence Verified</span>
             </div>
 
             <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-top: 10px;">
               <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Registration Certificate / Body Number</label>
-              <input type="text" id="verificationLicenceInput" class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--foreground);" value="Rivers State Mechanical/Electrical Contractors Reg #2026-PH-449">
+              <input type="text" id="verificationLicenceInput" class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--foreground);" placeholder="e.g. Rivers State Mechanical/Electrical Contractors Reg #2026-PH-..." value="">
               <span style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 6px; display: block;">Issued under Rivers State Ministry of Commerce &amp; Technical Guild guidelines.</span>
             </div>
           </div>

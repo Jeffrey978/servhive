@@ -3,111 +3,43 @@
 // Dedicated Dashboard for Verified Artisans: Quotes, Escrow, Profile, Verification, Complaints
 // ============================================================================
 
-// --- INITIAL FALLBACK DATA ---
-const DEFAULT_PROVIDER = {
-  id: 'pro-1',
-  name: 'Engr. Emeka Obi',
-  businessName: 'PowerVolt Generator & Electrical Works',
-  category: 'power-gen',
-  categoryName: 'Power & Generators',
-  subSpecialty: 'Generator & Inverter Specialist',
-  area: 'Trans-Amadi',
-  rating: 4.9,
-  reviewCount: 46,
-  verified: true,
-  boosted: true,
-  boostDays: 7,
-  boostExpires: 'Nov 5, 2026',
-  status: 'approved',
-  image: '/assets/hero_tradesman.jpg',
-  startingPrice: 8000,
-  responseTime: '~15 mins',
-  bio: 'Over 9 years solving electrical faults and power fluctuations in Port Harcourt. Specialized in Mikano, Perkins, and Firman generator servicing, automatic changeover switches, and industrial load balancing.',
-  workPhotos: [
-    { url: '/assets/hero_tradesman.jpg', caption: 'Mikano 30kVA ATS installation & engine overhaul in Trans-Amadi' },
-    { url: '/assets/solar_tech.jpg', caption: 'Automatic changeover load balancing panel for corporate facility' },
-    { url: '/assets/interior_pop.jpg', caption: 'Emergency generator re-wiring & control unit setup' }
-  ],
-  services: [
-    { name: 'Generator Diagnostic & Servicing', price: 15000, type: 'Starting from' },
-    { name: 'Emergency Fault Finding & Rewiring', price: 8000, type: 'Fixed' },
-    { name: 'Automatic Changeover Installation', price: 12000, type: 'Fixed' },
-    { name: 'Inverter Backup Integration', price: 25000, type: 'Starting from' }
-  ],
-  areasCovered: ['Trans-Amadi', 'Peter Odili Road', 'Woji', 'Old GRA', 'New GRA / Phase 2', 'D-Line', 'Ada George', 'Rumuola'],
-  licenceNumber: 'Rivers State Mechanical/Electrical Contractors Reg #2026-PH-449'
-};
+// Clean template generator for a new artisan account
+function createInitialArtisanProfile(user) {
+  const name = (user && user.name) ? user.name.replace(/\s*\(Pro\)/gi, '').trim() : 'Master Craftsman';
+  const bizName = (user && user.businessName) ? user.businessName : `${name} Engineering Works`;
+  const area = (user && user.area) ? user.area : 'Trans-Amadi';
+  const category = (user && user.category) ? user.category : 'power-gen';
+  const categoryName = (user && user.trade) ? user.trade : 'Power & Generators';
 
-const INITIAL_QUOTE_REQUESTS = [
-  {
-    id: 'req-201',
-    proId: 'pro-1',
-    proName: 'PowerVolt Generator & Electrical Works',
-    customerName: 'Tonye Briggs',
-    customerPhone: '0803 123 4567',
-    area: 'Peter Odili Road',
-    address: 'Plot 14, Off Peter Odili Rd, Trans-Amadi Gardens',
-    title: 'ATS Changeover Switch Malfunction & Generator Servicing',
-    details: 'Mikano 27kVA changeover switch fails to switch when grid drops. Needs urgent on-site diagnostics and service.',
-    preferredDate: 'Tomorrow, 10:00 AM',
-    status: 'pending', // 'pending' | 'quoted' | 'accepted' | 'declined'
-    quoteAmount: null,
-    quoteNotes: '',
-    createdAt: 'Today, 9:30 AM'
-  },
-  {
-    id: 'req-203',
-    proId: 'pro-1',
-    proName: 'PowerVolt Generator & Electrical Works',
-    customerName: 'Dr. Ibiere F.',
-    customerPhone: '0809 332 1100',
-    area: 'Old GRA',
-    address: 'Forces Avenue, Old GRA, Port Harcourt',
-    title: 'Perkins 40kVA Complete Servicing & Injector Calibration',
-    details: 'Generator emits dark smoke on full facility load. Requires filter replacement, oil change, and injector nozzle testing.',
-    preferredDate: 'Saturday, 8:30 AM',
-    status: 'quoted',
-    quoteAmount: 38000,
-    quoteNotes: 'Includes OEM fuel & oil filters, Mobil Delvac 15W40 lubricant, injector nozzle calibration, and 60-day warranty.',
-    createdAt: 'Yesterday, 3:15 PM'
-  }
-];
+  return {
+    id: (user && user.id) ? (user.id.startsWith('pro-') ? user.id : 'pro-' + user.id.replace('usr-', '')) : 'pro-' + Date.now(),
+    name: name,
+    businessName: bizName,
+    category: category,
+    categoryName: categoryName,
+    subSpecialty: `${categoryName} Specialist`,
+    area: area,
+    rating: 5.0,
+    reviewCount: 0,
+    verified: false,
+    boosted: false,
+    boostDays: 0,
+    boostExpires: null,
+    status: 'approved',
+    image: '/assets/hero_tradesman.jpg',
+    startingPrice: (user && user.startingPrice) ? user.startingPrice : 10000,
+    responseTime: '~15 mins',
+    bio: (user && user.bio) ? user.bio : `Professional ${categoryName} services serving clients across ${area} and greater Port Harcourt.`,
+    workPhotos: [],
+    services: [],
+    areasCovered: [area, 'Peter Odili Road', 'Woji', 'Old GRA', 'New GRA / Phase 2', 'D-Line'],
+    licenceNumber: ''
+  };
+}
 
-const INITIAL_ESCROW_JOBS = [
-  {
-    id: 'esc-101',
-    proId: 'pro-1',
-    proName: 'PowerVolt Generator & Electrical Works',
-    customerName: 'Tonye Briggs',
-    customerPhone: '0803 123 4567',
-    serviceName: 'Generator Diagnostic & Servicing',
-    area: 'Peter Odili Road',
-    address: 'Plot 12, Federal Housing Estate, Peter Odili Rd',
-    dateTime: 'Today, 2:00 PM',
-    amount: 15000,
-    status: 'in_progress', // 'in_progress' | 'awaiting_release' | 'completed' | 'disputed'
-    createdAt: 'Today',
-    commissionPct: 5,
-    commissionAmount: 750,
-    payoutAmount: 14250,
-    scopeNotes: 'Inspect Mikano 27kVA control board, changeover solenoid, and overhaul oil filters.'
-  }
-];
-
-const INITIAL_REPORTS = [
-  {
-    id: 'rep-1',
-    providerId: 'pro-1',
-    providerName: 'PowerVolt Generator & Electrical Works',
-    customerName: 'Kelechi O. (Trans-Amadi)',
-    customerPhone: '0805 771 9922',
-    reason: 'Schedule delay due to heavy rain',
-    notes: 'Artisan was scheduled for 11 AM but arrived at 1:30 PM citing downpour at Garrison flyover. Job completed satisfactorily afterwards.',
-    date: '3 days ago',
-    status: 'pending', // 'pending' | 'under_review' | 'resolved'
-    artisanResponse: null
-  }
-];
+const INITIAL_QUOTE_REQUESTS = [];
+const INITIAL_ESCROW_JOBS = [];
+const INITIAL_REPORTS = [];
 
 // --- PORTAL APPLICATION STATE ---
 const artisanState = {
@@ -124,7 +56,8 @@ const artisanState = {
 // INITIALIZATION & HYDRATION
 // ============================================================================
 function initArtisanPortal() {
-  loadStoredData();
+  const loaded = loadStoredData();
+  if (!loaded) return; // redirected to login
   setupIdentityHeader();
   renderKpis();
   renderArtisanRequests();
@@ -140,12 +73,44 @@ function initArtisanPortal() {
 }
 
 function loadStoredData() {
+  // Purge any legacy dummy mock artisans from localStorage
+  const dummyProIds = new Set(['pro-1', 'pro-2', 'pro-3', 'pro-4', 'pro-5', 'pro-6', 'pro-7', 'pro-8', 'pro-9', 'pro-10', 'pro-11']);
+  const dummyNames = new Set([
+    'Engr. Emeka Obi', 'Blessing Amadi', 'Tamuno George', 'Chidi Okonkwo',
+    'Franklyn Eke', 'Tari Princewill', 'Victor Nnamdi', 'Idowu Alabi',
+    'Samuel Dike', 'Kenneth Jumbo', 'Somto Okon', 'Tari Davies', 'Engr. Franklyn Nnamdi',
+    'PowerVolt Generator & Electrical Works', 'Precision Mobile Auto Diagnostics'
+  ]);
+
   // Current user
   try {
     const storedUser = localStorage.getItem('servhive_current_user');
     artisanState.currentUser = storedUser ? JSON.parse(storedUser) : null;
+    if (artisanState.currentUser && (dummyNames.has(artisanState.currentUser.name) || dummyNames.has(artisanState.currentUser.businessName))) {
+      artisanState.currentUser = null;
+      localStorage.removeItem('servhive_current_user');
+    }
   } catch (e) {
     artisanState.currentUser = null;
+  }
+
+  // If not logged in as artisan, attempt to check registered users
+  if (!artisanState.currentUser || artisanState.currentUser.role !== 'artisan') {
+    try {
+      const allUsers = JSON.parse(localStorage.getItem('servhive_users')) || [];
+      const realArtisan = allUsers.find(u => u.role === 'artisan' && !dummyNames.has(u.name));
+      if (realArtisan) {
+        artisanState.currentUser = realArtisan;
+        localStorage.setItem('servhive_current_user', JSON.stringify(realArtisan));
+      } else {
+        // Redirect unauthenticated user to artisan login
+        window.location.href = '/login.html#login-artisan';
+        return false;
+      }
+    } catch (e) {
+      window.location.href = '/login.html#login-artisan';
+      return false;
+    }
   }
 
   // Providers list
@@ -153,58 +118,66 @@ function loadStoredData() {
   try {
     const p = localStorage.getItem('servhive_providers');
     storedProviders = p ? JSON.parse(p) : [];
+    storedProviders = storedProviders.filter(pro => !dummyProIds.has(pro.id) && !dummyNames.has(pro.name) && !dummyNames.has(pro.businessName));
+    localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
   } catch (e) {
     storedProviders = [];
   }
 
   // Find matching provider record
-  if (artisanState.currentUser && artisanState.currentUser.role === 'artisan') {
-    artisanState.provider = storedProviders.find(p => 
-      p.id === artisanState.currentUser.id || 
-      p.businessName === artisanState.currentUser.businessName ||
-      p.name === artisanState.currentUser.name
-    ) || { ...DEFAULT_PROVIDER, name: artisanState.currentUser.name, businessName: artisanState.currentUser.businessName || DEFAULT_PROVIDER.businessName };
-  } else {
-    // Default to Engr. Emeka Obi
-    artisanState.provider = storedProviders.find(p => p.id === 'pro-1') || DEFAULT_PROVIDER;
+  artisanState.provider = storedProviders.find(p => 
+    p.id === artisanState.currentUser.id || 
+    p.id === 'pro-' + String(artisanState.currentUser.id).replace('usr-', '') ||
+    (p.businessName && p.businessName === artisanState.currentUser.businessName) ||
+    p.name === artisanState.currentUser.name
+  );
+
+  if (!artisanState.provider) {
+    artisanState.provider = createInitialArtisanProfile(artisanState.currentUser);
+    storedProviders.unshift(artisanState.provider);
+    localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
   }
 
   // Quote Requests
   try {
     const r = localStorage.getItem('servhive_quote_requests');
-    artisanState.quoteRequests = r ? JSON.parse(r) : INITIAL_QUOTE_REQUESTS;
+    const allReqs = r ? JSON.parse(r) : [];
+    artisanState.quoteRequests = allReqs.filter(req => 
+      !dummyProIds.has(req.proId) && 
+      !['req-201', 'req-202', 'req-203'].includes(req.id) &&
+      (req.proId === artisanState.provider.id || req.proName === artisanState.provider.businessName)
+    );
   } catch (e) {
-    artisanState.quoteRequests = INITIAL_QUOTE_REQUESTS;
-  }
-  // Ensure we have some requests for this artisan
-  if (!artisanState.quoteRequests.length) {
-    artisanState.quoteRequests = INITIAL_QUOTE_REQUESTS;
-    localStorage.setItem('servhive_quote_requests', JSON.stringify(artisanState.quoteRequests));
+    artisanState.quoteRequests = [];
   }
 
   // Escrow Jobs
   try {
     const j = localStorage.getItem('servhive_escrow_jobs');
-    artisanState.escrowJobs = j ? JSON.parse(j) : INITIAL_ESCROW_JOBS;
+    const allJobs = j ? JSON.parse(j) : [];
+    artisanState.escrowJobs = allJobs.filter(job => 
+      !dummyProIds.has(job.proId) && 
+      job.id !== 'esc-101' &&
+      (job.proId === artisanState.provider.id || job.proName === artisanState.provider.businessName)
+    );
   } catch (e) {
-    artisanState.escrowJobs = INITIAL_ESCROW_JOBS;
-  }
-  if (!artisanState.escrowJobs.length) {
-    artisanState.escrowJobs = INITIAL_ESCROW_JOBS;
-    localStorage.setItem('servhive_escrow_jobs', JSON.stringify(artisanState.escrowJobs));
+    artisanState.escrowJobs = [];
   }
 
   // Complaints / Reports
   try {
     const rep = localStorage.getItem('servhive_reports');
-    artisanState.reports = rep ? JSON.parse(rep) : INITIAL_REPORTS;
+    const allReps = rep ? JSON.parse(rep) : [];
+    artisanState.reports = allReps.filter(rp => 
+      !dummyProIds.has(rp.providerId) && 
+      rp.id !== 'rep-1' &&
+      (rp.providerId === artisanState.provider.id || rp.providerName === artisanState.provider.businessName)
+    );
   } catch (e) {
-    artisanState.reports = INITIAL_REPORTS;
+    artisanState.reports = [];
   }
-  if (!artisanState.reports.length) {
-    artisanState.reports = INITIAL_REPORTS;
-    localStorage.setItem('servhive_reports', JSON.stringify(artisanState.reports));
-  }
+
+  return true;
 }
 
 function persistQuoteRequests() {
@@ -881,12 +854,18 @@ function renderPbServicesList() {
   const container = document.getElementById('pbServicesList');
   if (!container) return;
 
-  const services = artisanState.provider.services || [
-    { name: 'Generator Diagnostic & Servicing', price: 15000, type: 'Starting from' },
-    { name: 'Emergency Fault Finding & Rewiring', price: 8000, type: 'Fixed' },
-    { name: 'Automatic Changeover Installation', price: 12000, type: 'Fixed' },
-    { name: 'Inverter Backup Integration', price: 25000, type: 'Starting from' }
-  ];
+  const services = (artisanState.provider && artisanState.provider.services && artisanState.provider.services.length)
+    ? artisanState.provider.services
+    : [];
+
+  if (services.length === 0) {
+    container.innerHTML = `
+      <div style="background: var(--bg-surface); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 20px; text-align: center; color: var(--muted-foreground); font-size: 0.86rem;">
+        No service items added yet. Click <strong>"+ Add Service Item"</strong> above to publish your first trade rate.
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = services.map((svc, idx) => `
     <div class="pb-service-row" style="display: flex; gap: 10px; align-items: center; background: var(--bg-surface-subtle); border: 1px solid var(--border); padding: 10px 14px; border-radius: var(--radius-sm);">
@@ -980,6 +959,31 @@ function initVerificationSection() {
   const licenceInput = document.getElementById('verificationLicenceInput');
   if (licenceInput && artisanState.provider && artisanState.provider.licenceNumber) {
     licenceInput.value = artisanState.provider.licenceNumber;
+  }
+
+  // Render dynamic work photos if available
+  const photosGrid = document.getElementById('verificationWorkPhotosGrid');
+  if (photosGrid && artisanState.provider) {
+    const photos = artisanState.provider.workPhotos || [];
+    if (photos.length > 0) {
+      photosGrid.innerHTML = photos.map((photo, i) => `
+        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;">
+          <img src="${photo.url || '/assets/hero_tradesman.jpg'}" alt="Work Photo ${i + 1}" style="width: 100%; height: 130px; object-fit: cover;">
+          <div style="padding: 10px;">
+            <div style="font-size: 0.82rem; font-weight: 700;">Photo ${i + 1}</div>
+            <div style="font-size: 0.72rem; color: var(--muted-foreground);">${photo.caption || 'Completed job photo'}</div>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      photosGrid.innerHTML = [1, 2, 3].map(slot => `
+        <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo')">
+          <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
+          <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo ${slot}</div>
+          <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
+        </div>
+      `).join('');
+    }
   }
 }
 
@@ -1121,8 +1125,8 @@ function openArtisanChatDrawer(clientName, clientPhone, jobTitle) {
         🔒 Secure In-App Communications. Phone numbers masked for mutual safety until booking confirmation.
       </div>
       <div class="ed-chat-bubble them" style="align-self: flex-start; background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: 12px 12px 12px 2px; padding: 10px 14px; max-width: 80%; font-size: 0.86rem; color: var(--foreground);">
-        Hello Engr. Emeka! Regarding <strong>${jobTitle || 'the inquiry'}</strong>, when can your team inspect the site?
-        <div style="font-size: 0.68rem; color: var(--muted-foreground); margin-top: 4px; text-align: right;">Today, 9:32 AM</div>
+        Hello! Regarding <strong>${jobTitle || 'the inquiry'}</strong>, when can your team inspect the site?
+        <div style="font-size: 0.68rem; color: var(--muted-foreground); margin-top: 4px; text-align: right;">Just now</div>
       </div>
     `;
   }

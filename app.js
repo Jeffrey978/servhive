@@ -256,427 +256,126 @@ const PH_LANDMARKS = [
   }
 ];
 
-const INITIAL_PROVIDERS = [
-  {
-    id: 'pro-1',
-    name: 'Engr. Emeka Obi',
-    businessName: 'PowerVolt Generator & Electrical Works',
-    category: 'power-gen',
-    categoryName: 'Power & Generators',
-    subSpecialty: 'Generator & Inverter Specialist',
-    area: 'Trans-Amadi',
-    lat: 4.8190,
-    lng: 7.0350,
-    landmarks: ['Trans-Amadi & Slaughter Bridge', 'Peter Odili Road & Trans-Amadi Gardens', 'Artillery Junction & Okporo', 'Garrison Junction & D-Line'],
-    rating: 4.9,
-    reviewCount: 46,
-    verified: true,
-    boosted: true,
-    boostDays: 7,
-    boostExpires: 'Nov 5, 2026',
-    status: 'approved',
-    image: '/assets/hero_tradesman.jpg',
-    startingPrice: 8000,
-    responseTime: '~15 mins',
-    bio: 'Over 9 years solving electrical faults and power fluctuations in Port Harcourt. Specialized in Mikano, Perkins, and Firman generator servicing, automatic changeover switches, and industrial load balancing.',
-    workPhotos: [
-      { url: '/assets/hero_tradesman.jpg', caption: 'Mikano 30kVA ATS installation & engine overhaul in Trans-Amadi' },
-      { url: '/assets/solar_tech.jpg', caption: 'Automatic changeover load balancing panel for corporate facility' },
-      { url: '/assets/interior_pop.jpg', caption: 'Emergency generator re-wiring & control unit setup' }
-    ],
-    services: [
-      { name: 'Generator Diagnostic & Servicing', price: 15000, type: 'Starting from' },
-      { name: 'Emergency Fault Finding & Rewiring', price: 8000, type: 'Fixed' },
-      { name: 'Automatic Changeover Installation', price: 12000, type: 'Fixed' },
-      { name: 'Inverter Backup Integration', price: 25000, type: 'Starting from' }
-    ],
-    reviews: [
-      { author: 'Chukwuma K.', area: 'Peter Odili', rating: 5, date: '2 days ago', text: 'Prompt and very knowledgeable. Fixed my Mikano 30kVA changeover cleanly.' },
-      { author: 'Mrs. Briggs', area: 'Trans-Amadi', rating: 5, date: '1 week ago', text: 'Fair pricing and arrived exactly when he promised. Highly recommended.' }
-    ]
-  },
-  {
-    id: 'pro-2',
-    name: 'Blessing Amadi',
-    businessName: 'Crown & Braids Beauty Lounge',
-    category: 'beauty-hair',
-    categoryName: 'Beauty & Grooming',
-    subSpecialty: 'Luxury Braids & Hair Treatments',
-    area: 'New GRA / Phase 2',
-    lat: 4.8180,
-    lng: 6.9980,
-    landmarks: ['New GRA (Tombia / Birabi)', 'Hotel Presidential & Rumuola', 'Waterlines / Aba Road', 'Old GRA & Government House'],
-    rating: 5.0,
-    reviewCount: 62,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/hairstylist.jpg',
-    startingPrice: 7000,
-    responseTime: '~10 mins',
-    bio: 'Professional cosmetologist and hair architect in New GRA. We deliver neat knotless braids, frontal installations, and restorative scalping in a serene environment or home service.',
-    workPhotos: [
-      { url: '/assets/hairstylist.jpg', caption: 'Signature knotless box braids with seamless parting in New GRA' },
-      { url: '/assets/interior_pop.jpg', caption: 'Custom HD lace frontal wig customization & melting' },
-      { url: '/assets/hero_tradesman.jpg', caption: 'Scalp therapy treatment & deep steam conditioning' }
-    ],
-    services: [
-      { name: 'Signature Knotless Box Braids', price: 18000, type: 'Starting from' },
-      { name: 'Lace Frontal Wig Customization & Install', price: 22000, type: 'Fixed' },
-      { name: 'Deep Conditioning & Scalp Therapy', price: 9000, type: 'Fixed' },
-      { name: 'Pedicure & Gel Nail Refill', price: 7000, type: 'Fixed' }
-    ],
-    reviews: [
-      { author: 'Amanda T.', area: 'Old GRA', rating: 5, date: '3 days ago', text: 'Her attention to detail is unmatched. Zero pain on edges and very neat.' },
-      { author: 'Nkechi W.', area: 'Peter Odili', rating: 5, date: '2 weeks ago', text: 'Clean salon and top tier customer service.' }
-    ]
-  },
-  {
-    id: 'pro-3',
-    name: 'Tari Davies',
-    businessName: 'Prime POP & Architectural Ceilings',
-    category: 'interior-pop',
-    categoryName: 'POP & Interior',
-    subSpecialty: 'POP Ceiling & Italian Tiling',
-    area: 'Woji',
-    lat: 4.8250,
-    lng: 7.0580,
-    landmarks: ['Woji & Golf Estate Gate', 'Peter Odili Road & Trans-Amadi Gardens', 'Oil Mill Junction & Elelenwo', 'Trans-Amadi & Slaughter Bridge'],
-    rating: 4.8,
-    reviewCount: 34,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/interior_pop.jpg',
-    startingPrice: 15000,
-    responseTime: '~30 mins',
-    bio: 'Master of modern ceiling acoustics and Italian porcelain tiling. Serving high-end homes and developments in Woji, Peter Odili, and Golf Estate.',
-    workPhotos: [
-      { url: '/assets/interior_pop.jpg', caption: 'Suspended POP ceiling with warm hidden LED cove in Golf Estate' },
-      { url: '/assets/hero_tradesman.jpg', caption: 'Italian porcelain tile floor alignment (60x120cm) in Woji' },
-      { url: '/assets/solar_tech.jpg', caption: 'Drywall partitioning & smooth wall screeding' }
-    ],
-    services: [
-      { name: 'Modern Suspended POP Design (Per Room)', price: 45000, type: 'Starting from' },
-      { name: 'Porcelain Tile Laying (Per Sqm)', price: 3500, type: 'Fixed' },
-      { name: 'Screeding & Luxury Emulsion Painting', price: 30000, type: 'Starting from' }
-    ],
-    reviews: [
-      { author: 'Arch. Belema D.', area: 'Woji', rating: 5, date: '1 week ago', text: 'Tari did the POP ceilings for our duplex. Laser accurate lines and zero cracks.' }
-    ]
-  },
-  {
-    id: 'pro-4',
-    name: 'Chinedu Eze',
-    businessName: 'SunWave Solar & Clean Energy',
-    category: 'solar-tech',
-    categoryName: 'Solar & Inverters',
-    subSpecialty: 'Solar Hybrid Systems & CCTV',
-    area: 'Peter Odili Road',
-    lat: 4.8080,
-    lng: 7.0450,
-    landmarks: ['Peter Odili Road & Trans-Amadi Gardens', 'Trans-Amadi & Slaughter Bridge', 'Woji & Golf Estate Gate', 'Garrison Junction & D-Line'],
-    rating: 4.9,
-    reviewCount: 51,
-    verified: true,
-    boosted: true,
-    boostDays: 7,
-    boostExpires: 'Nov 5, 2026',
-    status: 'approved',
-    image: '/assets/solar_tech.jpg',
-    startingPrice: 12000,
-    responseTime: '~20 mins',
-    bio: 'Certified renewable energy specialist. Helping PH households beat unpredictable grid blackouts with reliable lithium and tubular battery solar setups.',
-    workPhotos: [
-      { url: '/assets/solar_tech.jpg', caption: '5kVA Hybrid Inverter installation with 48V 200Ah Lithium Bank' },
-      { url: '/assets/hero_tradesman.jpg', caption: 'High efficiency monocrystalline solar array on Peter Odili duplex' },
-      { url: '/assets/interior_pop.jpg', caption: '8-Channel HD Night Vision CCTV surveillance network' }
-    ],
-    services: [
-      { name: 'Solar Inverter System Health Audit', price: 12000, type: 'Fixed' },
-      { name: '5KVA Hybrid Solar Installation', price: 65000, type: 'Starting from' },
-      { name: '8-Channel HD CCTV Security Setup', price: 35000, type: 'Starting from' }
-    ],
-    reviews: [
-      { author: 'Engr. Diri', area: 'Peter Odili', rating: 5, date: '4 days ago', text: 'Installed our 3.5kVA system. Power hasn’t blinked in 2 months. Very professional.' }
-    ]
-  },
-  {
-    id: 'pro-5',
-    name: 'Ibrahim Aliyu',
-    businessName: 'Precision Mobile Auto Diagnostics',
-    category: 'auto-mechanic',
-    categoryName: 'Auto Diagnostics',
-    subSpecialty: 'Mobile Mechanic & Scanner',
-    area: 'D-Line',
-    lat: 4.8055,
-    lng: 7.0150,
-    landmarks: ['Garrison Junction & D-Line', 'Waterlines / Aba Road', 'Hotel Presidential & Rumuola', 'Mile 1-3 Diobu & Education Bus Stop'],
-    rating: 4.7,
-    reviewCount: 29,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/hero_tradesman.jpg',
-    startingPrice: 6000,
-    responseTime: '~25 mins',
-    bio: 'Mobile computerized OBD-2 engine scanning, brake bleeding, suspension troubleshooting, and roadside mechanical assistance across Port Harcourt.',
-    workPhotos: [
-      { url: '/assets/hero_tradesman.jpg', caption: 'OBD-2 scan & live sensor graph reading in D-Line' },
-      { url: '/assets/solar_tech.jpg', caption: 'Brembo brake pad replacement & hydraulic bleeding' },
-      { url: '/assets/interior_pop.jpg', caption: 'Roadside alternator diagnostics & battery health test' }
-    ],
-    services: [
-      { name: 'Full OBD-2 Computerized Diagnostics', price: 7000, type: 'Fixed' },
-      { name: 'On-Site Brake Pad Replacement', price: 6000, type: 'Fixed' },
-      { name: 'Routine Engine Oil & Filter Service', price: 5000, type: 'Fixed' }
-    ],
-    reviews: [
-      { author: 'Ovie S.', area: 'D-Line', rating: 4.5, date: '5 days ago', text: 'Came to my office when my car threw a check engine code. Diagnosed bad sensor in 10 minutes.' }
-    ]
-  },
-  {
-    id: 'pro-6',
-    name: 'Nurse Joyce Jumbo',
-    businessName: 'CarePlus Home Healthcare',
-    category: 'approval-required',
-    categoryName: 'Home Health Aide',
-    subSpecialty: 'Geriatric & Post-Op Care',
-    area: 'Old GRA',
-    lat: 4.7760,
-    lng: 7.0100,
-    landmarks: ['Old GRA & Government House', 'Port Harcourt Mall / Spar', 'Garrison Junction & D-Line'],
-    rating: 5.0,
-    reviewCount: 0,
-    verified: false,
-    boosted: false,
-    status: 'pending',
-    licenseDoc: 'Rivers State Nursing Council Reg #RN-2024-8842.pdf',
-    image: '/assets/hairstylist.jpg',
-    startingPrice: 20000,
-    responseTime: '~1 hr',
-    bio: 'Registered nurse providing licensed in-home elderly companionship, vitals monitoring, and rehabilitation support in Port Harcourt.',
-    workPhotos: [
-      { url: '/assets/hairstylist.jpg', caption: 'Licensed post-operative dressing care in Old GRA' }
-    ],
-    services: [
-      { name: 'Daily In-Home Nursing Visit', price: 20000, type: 'Starting from' },
-      { name: 'Post-Surgery Vitals & Dressing Care', price: 25000, type: 'Fixed' }
-    ],
-    reviews: []
-  },
-  {
-    id: 'pro-7',
-    name: 'Kelechi Nwosu',
-    businessName: 'Apex Refrigeration & AC Chiller Repairs',
-    category: 'ac-chillers',
-    categoryName: 'AC & Refrigeration',
-    subSpecialty: 'Air Conditioning & Cold Room Engineer',
-    area: 'Choba / Uniport',
-    lat: 4.8980,
-    lng: 6.9240,
-    landmarks: ['Choba & Uniport Delta Park', 'UPTH Gate & Alakahia', 'Rumuokoro Flyover & Roundabout'],
-    rating: 4.9,
-    reviewCount: 38,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/hero_tradesman.jpg',
-    startingPrice: 10000,
-    responseTime: '~20 mins',
-    bio: 'Specialist AC installation, gas top-ups, inverter compressor diagnostics, and commercial cold-room servicing in Choba, Uniport, Alakahia, and Ada George.',
-    workPhotos: [
-      { url: '/assets/hero_tradesman.jpg', caption: 'Inverter split AC compressor repair in Uniport Quarters' },
-      { url: '/assets/solar_tech.jpg', caption: 'Commercial cold room temperature calibration in Choba' },
-      { url: '/assets/interior_pop.jpg', caption: 'Chemical coil flush & R410A gas vacuum charging' }
-    ],
-    services: [
-      { name: 'Split AC Deep Chemical Wash & Service', price: 10000, type: 'Fixed' },
-      { name: 'AC Refrigerant R410A / R22 Re-gas', price: 18000, type: 'Fixed' },
-      { name: 'Inverter AC Sensor & PCB Repair', price: 15000, type: 'Fixed' }
-    ],
-    reviews: [
-      { author: 'Dr. Tammy K.', area: 'Uniport', rating: 5, date: '3 days ago', text: 'Fast response to Uniport staff quarters. Fixed two inverter AC units.' }
-    ]
-  },
-  {
-    id: 'pro-8',
-    name: 'Tamuno George',
-    businessName: 'FlowMaster Borehole & Plumbing Works',
-    category: 'plumbing',
-    categoryName: 'Plumbing & Pumps',
-    subSpecialty: 'Plumbing & Deep Well Submersible Pumps',
-    area: 'Ada George',
-    lat: 4.8420,
-    lng: 6.9750,
-    landmarks: ['Ada George & Wimpey Junction', 'Agip Roundabout & Ikwerre Road', 'Rumuokoro Flyover & Roundabout'],
-    rating: 4.8,
-    reviewCount: 42,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/solar_tech.jpg',
-    startingPrice: 10000,
-    responseTime: '~25 mins',
-    bio: 'Expert borehole drilling maintenance, Italian submersible pump rewinding, automatic float switches, and domestic plumbing piping in Ada George and Rumueme.',
-    workPhotos: [
-      { url: '/assets/solar_tech.jpg', caption: 'Submersible 2HP borehole pump replacement & electrical wiring' },
-      { url: '/assets/hero_tradesman.jpg', caption: 'Automatic water level control switch for 5000L tank' },
-      { url: '/assets/interior_pop.jpg', caption: 'PPR pipe manifold installation for residential apartment block' }
-    ],
-    services: [
-      { name: 'Borehole Submersible Pump Extraction & Repair', price: 25000, type: 'Starting from' },
-      { name: 'Automated Water Level Controller Installation', price: 14000, type: 'Fixed' },
-      { name: 'Whole-Home Pressure Piping Inspection', price: 10000, type: 'Fixed' }
-    ],
-    reviews: [
-      { author: 'Pastor George', area: 'Ada George', rating: 5, date: '1 week ago', text: 'Restored water in our estate within 2 hours. Very honest craftsman.' }
-    ]
-  },
-  {
-    id: 'pro-9',
-    name: 'Osas Ighodaro',
-    businessName: 'VoltGuard Industrial Electrical Systems',
-    category: 'electrical',
-    categoryName: 'Electrical & Wiring',
-    subSpecialty: 'Conduit Piping & Distribution Panels',
-    area: 'Old GRA',
-    lat: 4.7760,
-    lng: 7.0100,
-    landmarks: ['Old GRA & Government House', 'Port Harcourt Mall / Spar', 'Garrison Junction & D-Line'],
-    rating: 4.9,
-    reviewCount: 35,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/hero_tradesman.jpg',
-    startingPrice: 7000,
-    responseTime: '~15 mins',
-    bio: 'Certified electrical technician specializing in modern conduit wiring, main distribution board overhauls, earth-pit resistance testing, and architectural lighting in Old GRA.',
-    workPhotos: [
-      { url: '/assets/hero_tradesman.jpg', caption: 'Main distribution breaker panel overhaul with surge suppressor' },
-      { url: '/assets/solar_tech.jpg', caption: 'Earth leakage circuit breaker testing and earthing pit renewal' },
-      { url: '/assets/interior_pop.jpg', caption: 'Architectural recessed ceiling spotlight wiring in Old GRA' }
-    ],
-    services: [
-      { name: 'Distribution Board (DB) Troubleshooting', price: 12000, type: 'Fixed' },
-      { name: 'Complete Room Conduit Re-wiring', price: 25000, type: 'Starting from' },
-      { name: 'Earthing & Lightning Protection Audit', price: 18000, type: 'Fixed' }
-    ],
-    reviews: [
-      { author: 'Sir Jude M.', area: 'Old GRA', rating: 5, date: '5 days ago', text: 'Resolved a tripping breaker issue that 2 previous electricians failed to diagnose. Outstanding skill.' }
-    ]
-  },
-  {
-    id: 'pro-10',
-    name: 'Bassey Edet',
-    businessName: 'Heritage Woodcraft & Kitchen Studio',
-    category: 'carpentry',
-    categoryName: 'Carpentry & Furniture',
-    subSpecialty: 'Custom Cabinetry & Wardrobe Joinery',
-    area: 'Rumuodara',
-    lat: 4.8510,
-    lng: 7.0420,
-    landmarks: ['Rumuodara Junction', 'Artillery Junction & Okporo', 'Oil Mill Junction & Elelenwo'],
-    rating: 4.8,
-    reviewCount: 27,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/interior_pop.jpg',
-    startingPrice: 10000,
-    responseTime: '~30 mins',
-    bio: 'Crafting bespoke modular kitchen cabinets, high-gloss TV consoles, and walk-in wardrobes with imported soft-close hydraulic hardware across Port Harcourt.',
-    workPhotos: [
-      { url: '/assets/interior_pop.jpg', caption: 'Modular acrylic kitchen cabinets with quartz countertop' },
-      { url: '/assets/hero_tradesman.jpg', caption: 'Custom sliding wardrobe with tinted glass doors' },
-      { url: '/assets/solar_tech.jpg', caption: 'Floating TV wall console with integrated acoustic wood slats' }
-    ],
-    services: [
-      { name: 'Cabinet Door Hinge & Hydraulic Repair', price: 10000, type: 'Fixed' },
-      { name: 'Custom Modular Kitchen Cabinetry (Per Metre)', price: 40000, type: 'Starting from' },
-      { name: 'Walk-In Wardrobe Design & Fitting', price: 55000, type: 'Starting from' }
-    ],
-    reviews: [
-      { author: 'Efe O.', area: 'Rumuodara', rating: 5, date: '2 weeks ago', text: 'Solid wood finishing and precision fitting for our kitchen renovation.' }
-    ]
-  },
-  {
-    id: 'pro-11',
-    name: 'Somto Okon',
-    businessName: 'Royal Finish Painting & Luxury Screeding',
-    category: 'painting',
-    categoryName: 'Painting & Screeding',
-    subSpecialty: 'Texture Coating & Interior Velvet Finishes',
-    area: 'Peter Odili Road',
-    lat: 4.8080,
-    lng: 7.0450,
-    landmarks: ['Peter Odili Road & Trans-Amadi Gardens', 'Trans-Amadi & Slaughter Bridge', 'Woji & Golf Estate Gate'],
-    rating: 4.9,
-    reviewCount: 31,
-    verified: true,
-    boosted: false,
-    status: 'approved',
-    image: '/assets/hairstylist.jpg',
-    startingPrice: 12000,
-    responseTime: '~20 mins',
-    bio: 'Specialist in Venetian plaster, luxury screeding, and weather-shield exterior paint finishes that withstand Port Harcourt humidity and heavy rain.',
-    workPhotos: [
-      { url: '/assets/hairstylist.jpg', caption: 'Luxury satin velvet wall finish in Peter Odili duplex' },
-      { url: '/assets/interior_pop.jpg', caption: 'Venetian marble plaster accent wall in living lounge' },
-      { url: '/assets/solar_tech.jpg', caption: 'Weather-shield exterior coating with anti-fungal seal' }
-    ],
-    services: [
-      { name: 'Room Wall Screeding & Premium Emulsion', price: 25000, type: 'Starting from' },
-      { name: 'Italian Stucco / Venetian Plaster Accent Wall', price: 35000, type: 'Fixed' },
-      { name: 'Exterior Weather-Proof Painting', price: 45000, type: 'Starting from' }
-    ],
-    reviews: [
-      { author: 'Ifeoma A.', area: 'Peter Odili', rating: 5, date: '4 days ago', text: 'Clean painters! They covered our furniture with plastic dropsheets and finished in record time.' }
-    ]
-  }
-];
+// Purge legacy mock dummy records from browser localStorage
+(function purgeDummyArtisansFromStorage() {
+  const dummyProIds = new Set(['pro-1', 'pro-2', 'pro-3', 'pro-4', 'pro-5', 'pro-6', 'pro-7', 'pro-8', 'pro-9', 'pro-10', 'pro-11']);
+  const dummyUserIds = new Set(['usr-2']);
+  const dummyReqIds = new Set(['req-201', 'req-202', 'req-203']);
+  const dummyJobIds = new Set(['esc-101']);
+  const dummyRepIds = new Set(['rep-1']);
+  const dummyNames = new Set([
+    'Engr. Emeka Obi', 'Blessing Amadi', 'Tamuno George', 'Chidi Okonkwo',
+    'Franklyn Eke', 'Tari Princewill', 'Victor Nnamdi', 'Idowu Alabi',
+    'Samuel Dike', 'Kenneth Jumbo', 'Somto Okon', 'Tari Davies', 'Engr. Franklyn Nnamdi',
+    'PowerVolt Generator & Electrical Works', 'Precision Mobile Auto Diagnostics'
+  ]);
+
+  try {
+    const rawPros = localStorage.getItem('servhive_providers');
+    if (rawPros) {
+      const parsed = JSON.parse(rawPros);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.filter(p => p && !dummyProIds.has(p.id) && !dummyNames.has(p.name) && !dummyNames.has(p.businessName));
+        localStorage.setItem('servhive_providers', JSON.stringify(cleaned));
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const rawUsers = localStorage.getItem('servhive_users');
+    if (rawUsers) {
+      const parsed = JSON.parse(rawUsers);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.filter(u => u && !dummyUserIds.has(u.id) && !dummyNames.has(u.name) && !dummyNames.has(u.businessName));
+        localStorage.setItem('servhive_users', JSON.stringify(cleaned));
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const rawReqs = localStorage.getItem('servhive_quote_requests');
+    if (rawReqs) {
+      const parsed = JSON.parse(rawReqs);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.filter(r => r && !dummyReqIds.has(r.id) && !dummyProIds.has(r.proId));
+        localStorage.setItem('servhive_quote_requests', JSON.stringify(cleaned));
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const rawJobs = localStorage.getItem('servhive_escrow_jobs');
+    if (rawJobs) {
+      const parsed = JSON.parse(rawJobs);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.filter(j => j && !dummyJobIds.has(j.id) && !dummyProIds.has(j.proId));
+        localStorage.setItem('servhive_escrow_jobs', JSON.stringify(cleaned));
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const rawReps = localStorage.getItem('servhive_reports');
+    if (rawReps) {
+      const parsed = JSON.parse(rawReps);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.filter(r => r && !dummyRepIds.has(r.id) && !dummyProIds.has(r.providerId));
+        localStorage.setItem('servhive_reports', JSON.stringify(cleaned));
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const rawSaved = localStorage.getItem('servhive_saved_providers');
+    if (rawSaved) {
+      const parsed = JSON.parse(rawSaved);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.filter(id => !dummyProIds.has(id));
+        localStorage.setItem('servhive_saved_providers', JSON.stringify(cleaned));
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const cur = localStorage.getItem('servhive_current_user');
+    if (cur) {
+      const parsed = JSON.parse(cur);
+      if (dummyUserIds.has(parsed.id) || dummyNames.has(parsed.name) || dummyNames.has(parsed.businessName)) {
+        localStorage.removeItem('servhive_current_user');
+      }
+    }
+  } catch (e) {}
+})();
+
+// Empty default providers list - only real registered artisans will be displayed
+const INITIAL_PROVIDERS = [];
 
 // Fallback & Hydration to ensure coordinates and landmarks exist even on previously cached local storage
 function hydrateProvidersWithCoordinates(providers) {
-  if (!Array.isArray(providers) || providers.length === 0) return INITIAL_PROVIDERS;
-  
-  // Ensure default INITIAL_PROVIDERS exist
-  const existingIds = new Set(providers.map(p => p.id));
-  const merged = [...providers];
-  INITIAL_PROVIDERS.forEach(initP => {
-    if (!existingIds.has(initP.id)) {
-      merged.push(initP);
-    }
+  if (!Array.isArray(providers) || providers.length === 0) return [];
+
+  const dummyProIds = new Set(['pro-1', 'pro-2', 'pro-3', 'pro-4', 'pro-5', 'pro-6', 'pro-7', 'pro-8', 'pro-9', 'pro-10', 'pro-11']);
+  const dummyNames = new Set([
+    'Engr. Emeka Obi', 'Blessing Amadi', 'Tamuno George', 'Chidi Okonkwo',
+    'Franklyn Eke', 'Tari Princewill', 'Victor Nnamdi', 'Idowu Alabi',
+    'Samuel Dike', 'Kenneth Jumbo', 'Somto Okon', 'Tari Davies', 'Engr. Franklyn Nnamdi',
+    'PowerVolt Generator & Electrical Works', 'Precision Mobile Auto Diagnostics'
+  ]);
+
+  const realProviders = providers.filter(p => {
+    if (!p) return false;
+    if (dummyProIds.has(p.id)) return false;
+    if (dummyNames.has(p.name) || dummyNames.has(p.businessName)) return false;
+    return true;
   });
 
-  return merged.map(p => {
-    const defaultMatch = INITIAL_PROVIDERS.find(ip => ip.id === p.id);
-    if (defaultMatch) {
-      return {
-        ...defaultMatch,
-        ...p,
-        category: defaultMatch.category,
-        categoryName: defaultMatch.categoryName,
-        workPhotos: (p.workPhotos && p.workPhotos.length) ? p.workPhotos : defaultMatch.workPhotos,
-        boosted: p.boosted !== undefined ? p.boosted : defaultMatch.boosted,
-        boostDays: p.boostDays || defaultMatch.boostDays,
-        boostExpires: p.boostExpires || defaultMatch.boostExpires,
-        lat: p.lat || defaultMatch.lat,
-        lng: p.lng || defaultMatch.lng,
-        landmarks: (p.landmarks && p.landmarks.length) ? p.landmarks : defaultMatch.landmarks
-      };
-    }
-    const landmarkMatch = PH_LANDMARKS.find(l => l.zone.toLowerCase() === (p.area || '').toLowerCase()) || PH_LANDMARKS[0];
+  return realProviders.map(p => {
+    const landmarkMatch = PH_LANDMARKS.find(l => (l.zone || '').toLowerCase() === (p.area || '').toLowerCase()) || PH_LANDMARKS[0];
     return {
       ...p,
       category: p.category || 'power-gen',
       categoryName: p.categoryName || 'Power & Generators',
-      workPhotos: p.workPhotos || [
-        { url: '/assets/hero_tradesman.jpg', caption: 'On-site technical service in Port Harcourt' },
-        { url: '/assets/solar_tech.jpg', caption: 'Equipment installation & testing' },
-        { url: '/assets/interior_pop.jpg', caption: 'Finishing and handover inspection' }
-      ],
+      workPhotos: (p.workPhotos && p.workPhotos.length) ? p.workPhotos : [],
       boosted: p.boosted || false,
       lat: p.lat || landmarkMatch.lat,
       lng: p.lng || landmarkMatch.lng,
@@ -685,65 +384,14 @@ function hydrateProvidersWithCoordinates(providers) {
   });
 }
 
-const SHOWCASE_ITEMS = [
-  {
-    proId: 'pro-1',
-    image: '/assets/hero_tradesman.jpg',
-    title: 'PowerVolt Generator & Electrical Works',
-    area: 'Trans-Amadi, Port Harcourt · ★ 4.9 Verified'
-  },
-  {
-    proId: 'pro-3',
-    image: '/assets/interior_pop.jpg',
-    title: 'Prime POP & Architectural Ceilings',
-    area: 'Woji, Port Harcourt · ★ 4.8 Verified'
-  },
-  {
-    proId: 'pro-4',
-    image: '/assets/solar_tech.jpg',
-    title: 'SunWave Solar & Clean Energy',
-    area: 'Peter Odili Road, Port Harcourt · ★ 4.9 Verified'
-  },
-  {
-    proId: 'pro-2',
-    image: '/assets/hairstylist.jpg',
-    title: 'Crown & Braids Beauty Lounge',
-    area: 'New GRA / Phase 2, Port Harcourt · ★ 5.0 Verified'
-  }
-];
+const SHOWCASE_ITEMS = [];
 
 // State
 const state = {
   currentView: 'marketplace',
   providers: hydrateProvidersWithCoordinates(JSON.parse(localStorage.getItem('servhive_providers'))),
-  reports: JSON.parse(localStorage.getItem('servhive_reports')) || [
-    {
-      id: 'rep-1',
-      providerId: 'pro-5',
-      providerName: 'Precision Mobile Auto Diagnostics',
-      reason: 'Price discrepancy on site',
-      notes: 'Quoted 6000 on app but requested 9000 upon arrival.',
-      date: 'Yesterday',
-      status: 'pending'
-    }
-  ],
-  escrowJobs: JSON.parse(localStorage.getItem('servhive_escrow_jobs')) || [
-    {
-      id: 'esc-101',
-      proId: 'pro-1',
-      proName: 'PowerVolt Generator & Electrical Works',
-      serviceName: 'Generator Diagnostic & Servicing',
-      amount: 15000,
-      area: 'Peter Odili Road',
-      address: 'Plot 12, Federal Housing Estate, Peter Odili Rd',
-      dateTime: 'Today, 2:00 PM',
-      status: 'awaiting_release', // 'in_progress' | 'awaiting_release' | 'completed' | 'disputed'
-      createdAt: 'Today',
-      commissionPct: 5,
-      commissionAmount: 750,
-      payoutAmount: 14250
-    }
-  ],
+  reports: JSON.parse(localStorage.getItem('servhive_reports')) || [],
+  escrowJobs: JSON.parse(localStorage.getItem('servhive_escrow_jobs')) || [],
   selectedCategory: 'all',
   selectedArea: 'All Port Harcourt',
   selectedLandmark: null,
@@ -760,40 +408,8 @@ const state = {
   activeChatProvider: null,
   activeProfileModalProvider: null,
   chatMessages: {},
-  savedProviderIds: JSON.parse(localStorage.getItem('servhive_saved_providers')) || ['pro-1', 'pro-4'],
-  quoteRequests: JSON.parse(localStorage.getItem('servhive_quote_requests')) || [
-    {
-      id: 'req-201',
-      proId: 'pro-1',
-      proName: 'PowerVolt Generator & Electrical Works',
-      customerName: 'Tonye Briggs',
-      customerPhone: '0803 123 4567',
-      area: 'Peter Odili Road',
-      address: 'Plot 14, Off Peter Odili Rd, Trans-Amadi Gardens',
-      title: 'ATS Changeover Switch Malfunction & Generator Servicing',
-      details: 'Mikano 27kVA changeover switch fails to switch when grid drops. Needs urgent on-site diagnostics.',
-      preferredDate: 'Tomorrow, 10:00 AM',
-      status: 'pending', // 'pending' | 'quoted' | 'accepted' | 'declined'
-      quoteAmount: null,
-      createdAt: 'Today, 9:30 AM'
-    },
-    {
-      id: 'req-202',
-      proId: 'pro-4',
-      proName: 'SunWave Solar & Clean Energy',
-      customerName: 'Arch. Belema D.',
-      customerPhone: '0802 987 6543',
-      area: 'Woji',
-      address: 'Golf Estate Phase 2, Woji',
-      title: '5kVA Solar Inverter Setup with Lithium Battery Balancing',
-      details: 'Need certified installation for 5kVA Felicity hybrid inverter with 48V 200Ah lithium battery bank.',
-      preferredDate: 'Friday, 11:00 AM',
-      status: 'quoted',
-      quoteAmount: 45000,
-      quoteNotes: 'Includes complete DC surge protection, battery cable lugs, and 3-month installation warranty.',
-      createdAt: 'Yesterday'
-    }
-  ],
+  savedProviderIds: JSON.parse(localStorage.getItem('servhive_saved_providers')) || [],
+  quoteRequests: JSON.parse(localStorage.getItem('servhive_quote_requests')) || [],
   // Authentication & Role State
   authMode: 'login', // 'login' | 'signup'
   authRole: 'hirer', // 'hirer' | 'artisan'
@@ -808,19 +424,6 @@ const state = {
       area: 'Peter Odili Road',
       password: 'password123',
       createdAt: '2026-09-15'
-    },
-    {
-      id: 'usr-2',
-      name: 'Engr. Emeka Obi',
-      businessName: 'PowerVolt Generator & Electrical Works',
-      email: 'emeka@powervolt.ng',
-      phone: '08023456789',
-      role: 'artisan',
-      trade: 'Generator & Inverter Specialist',
-      category: 'power-gen',
-      area: 'Trans-Amadi',
-      password: 'password123',
-      createdAt: '2026-08-10'
     }
   ]
 };
@@ -1070,11 +673,59 @@ window.selectCategory = function(catId) {
   renderProviders();
 };
 
+// Dynamic Spotlight on Homepage
+function renderSpotlight() {
+  const container = document.getElementById('spotlightGridWrap');
+  if (!container) return;
+
+  const validPros = (state.providers || []).filter(p => p.status === 'approved');
+  if (validPros.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius-md); padding: 48px 24px; text-align: center;">
+        <div style="font-size: 2.4rem; margin-bottom: 12px;">🏆</div>
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--foreground); margin-bottom: 6px;">Spotlight Reserved for Verified Port Harcourt Artisans</h3>
+        <p style="font-size: 0.9rem; color: var(--muted-foreground); max-width: 540px; margin: 0 auto 20px; line-height: 1.55;">
+          Join Servhive as an approved master technician. Get <strong>1 Month Free</strong>, 100% Escrow payment security, and direct customer leads from Trans-Amadi, Old GRA, Woji, and Peter Odili.
+        </p>
+        <button class="ed-button ed-button-amber" onclick="openProviderRegisterModal()" style="padding: 12px 28px; font-weight: 800;">
+          <span>Register as a Pro (1 Month Free) &rarr;</span>
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  const spotlightPros = [...validPros].sort((a, b) => (b.boosted ? 1 : 0) - (a.boosted ? 1 : 0) || (b.rating * b.reviewCount) - (a.rating * a.reviewCount)).slice(0, 4);
+
+  container.innerHTML = spotlightPros.map(pro => `
+    <div class="spotlight-card">
+      <div class="spotlight-img-wrap">
+        <img src="${pro.image || '/assets/hero_tradesman.jpg'}" alt="${pro.name}" loading="lazy">
+        <span class="ed-badge-verified" style="position: absolute; bottom: 10px; left: 10px;">✓ ${pro.verified ? 'Verified Pro' : 'Rivers Registered'}</span>
+      </div>
+      <div style="padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 0.76rem; font-weight: 800; color: var(--teal); text-transform: uppercase;">${pro.categoryName}</div>
+          <h4 style="font-size: 1.05rem; font-weight: 800; margin: 4px 0 2px;">${pro.businessName}</h4>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">${pro.name} · ${pro.area}</div>
+          <div style="font-size: 0.82rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 14px;">★ ${(pro.rating || 5.0).toFixed(1)} (${pro.reviewCount || 0} reviews)</div>
+        </div>
+        <div style="border-top: 1px solid var(--hairline); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.85rem; font-weight: 800;">From ${formatNaira(pro.startingPrice || 10000)}</span>
+          <button class="ed-button ed-button-black ed-btn-compact" onclick="openProfileModal('${pro.id}')">View Rates</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
 // Render Providers with Proximity Auto-Suggest, Boost Prioritization & Filters
 function renderProviders() {
   const grid = document.getElementById('providersGrid');
   const countEl = document.getElementById('resultsCount');
   if (!grid) return;
+
+  renderSpotlight();
 
   let filtered = state.providers.filter(p => p.status === 'approved');
 
@@ -1265,6 +916,29 @@ function renderProviders() {
       </button>
     </div>
   ` : '';
+
+  if (state.providers.length === 0) {
+    grid.innerHTML = bannerHtml + `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: var(--card); border-radius: var(--radius-lg); border: 1px dashed var(--border);">
+        <div style="margin-bottom: 16px; font-size: 2.6rem;">
+          🛠️
+        </div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--foreground); margin-bottom: 8px;">No Artisans Listed Yet</h3>
+        <p style="color: var(--muted-foreground); max-width: 520px; margin: 0 auto 20px; font-size: 0.9375rem; line-height: 1.55;">
+          Be among the first verified master craftsmen in Port Harcourt. Register your workshop today to enjoy <strong>1 Month Free</strong>, 100% Escrow deposit safety, and high-visibility local client leads.
+        </p>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+          <button class="ed-button ed-button-amber" onclick="openProviderRegisterModal()" style="font-weight: 800; padding: 12px 24px;">
+            <span>Register as a Pro (1 Mo Free) &rarr;</span>
+          </button>
+          <button class="ed-button ed-button-black" onclick="openProBenefitsModal()" style="padding: 12px 20px;">
+            <span>Learn About Pro Benefits</span>
+          </button>
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   if (filtered.length === 0) {
     grid.innerHTML = bannerHtml + `
@@ -2451,11 +2125,25 @@ window.quickFillDemo = function(role) {
   const passwordInput = document.getElementById('loginPassword');
 
   if (role === 'hirer') {
-    if (contactInput) contactInput.value = 'tonye@example.com';
-    if (passwordInput) passwordInput.value = 'password123';
+    const hirer = state.users.find(u => u.role === 'hirer');
+    if (contactInput) contactInput.value = hirer ? hirer.email : 'tonye@example.com';
+    if (passwordInput) passwordInput.value = hirer ? hirer.password : 'password123';
   } else {
-    if (contactInput) contactInput.value = 'emeka@powervolt.ng';
-    if (passwordInput) passwordInput.value = 'password123';
+    const artisan = state.users.find(u => u.role === 'artisan');
+    if (artisan) {
+      if (contactInput) contactInput.value = artisan.email || artisan.phone;
+      if (passwordInput) passwordInput.value = artisan.password || 'password123';
+    } else {
+      switchAuthTab('signup', 'artisan');
+      showAppNotice({
+        icon: '🛠️',
+        eyebrow: 'REGISTER AS ARTISAN',
+        title: 'No Dummy Artisans Exist',
+        message: 'Register your real workshop on Servhive to access the Artisan Pro Portal with 1 month free!',
+        confirmText: 'Register Now'
+      });
+      return;
+    }
   }
 
   if (contactInput) {
@@ -2531,7 +2219,7 @@ window.renderAuthForm = function() {
       <form onsubmit="handleLoginSubmit(event)">
         <div class="auth-input-group">
           <label class="auth-label">${isHirer ? 'Email or Mobile Number' : 'Artisan Email or Phone (+234)'}</label>
-          <input type="text" id="loginContact" required class="auth-input" placeholder="${isHirer ? 'e.g. tonye@example.com or 0803 123 4567' : 'e.g. emeka@powervolt.ng or 0802 345 6789'}" />
+          <input type="text" id="loginContact" required class="auth-input" placeholder="${isHirer ? 'e.g. tonye@example.com or 0803 123 4567' : 'e.g. workshop@servhive.ng or 0802 345 6789'}" />
         </div>
 
         <div class="auth-input-group">
@@ -2769,7 +2457,7 @@ window.renderAuthTrust = function() {
       <!-- Hirer Testimonial Card -->
       <div class="auth-trust-card" style="background: var(--bg-surface-subtle); border-left: 4px solid var(--amber);">
         <div style="font-size: 0.95rem; line-height: 1.55; color: var(--canvas); font-style: italic; margin-bottom: 14px;">
-          "I needed an emergency Mikano generator overhaul in Peter Odili Rd. Engr. Emeka arrived in 25 mins and my money was totally protected in Escrow until the test run passed."
+          "I needed an emergency generator technician in Peter Odili Rd. The verified artisan arrived promptly and my money was totally protected in Escrow until the test run passed."
         </div>
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <div>
@@ -2824,12 +2512,12 @@ window.renderAuthTrust = function() {
       <!-- Artisan Testimonial Card -->
       <div class="auth-trust-card" style="background: var(--bg-surface-subtle); border-left: 4px solid var(--teal);">
         <div style="font-size: 0.95rem; line-height: 1.55; color: var(--canvas); font-style: italic; margin-bottom: 14px;">
-          "Before Servhive, customers in PH would delay payments for weeks after generator servicing. Now the money is locked in Escrow before I buy spare parts. Guaranteed peace of mind."
+          "Before Servhive, customers in PH would delay payments for weeks after jobs. Now the money is locked in Escrow before I buy spare parts. Guaranteed peace of mind."
         </div>
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <div>
-            <div style="font-weight: 800; font-size: 0.88rem; color: var(--canvas);">Engr. Emeka Obi</div>
-            <div style="font-size: 0.76rem; color: var(--text-muted);">PowerVolt Generator Works · Trans-Amadi</div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: var(--canvas);">Verified Craftsman</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted);">Master Technical Guild · Port Harcourt</div>
           </div>
           <div style="color: var(--teal); font-weight: 800; font-size: 0.8rem;">★ 4.9 Pro</div>
         </div>
@@ -2851,16 +2539,17 @@ window.handleLoginSubmit = function(e) {
   );
 
   if (!matchedUser) {
-    // If testing with any valid credentials, create an active session for the role
+    const isArt = (role === 'artisan');
+    const defaultName = isArt ? (contact.includes('@') ? contact.split('@')[0] : 'Artisan ' + contact.slice(-4)) : 'Tonye Briggs';
     matchedUser = {
       id: 'usr-' + Date.now(),
-      name: role === 'hirer' ? 'Tonye Briggs' : 'Engr. Emeka Obi',
-      businessName: role === 'artisan' ? 'PowerVolt Generator & Electrical Works' : null,
+      name: defaultName,
+      businessName: isArt ? `${defaultName} Workshop` : null,
       email: contact.includes('@') ? contact : `${role}@servhive.ng`,
       phone: contact.includes('@') ? '08034567890' : contact,
       role: role,
-      area: role === 'hirer' ? 'Peter Odili Road' : 'Trans-Amadi',
-      verified: true
+      area: isArt ? 'Trans-Amadi' : 'Peter Odili Road',
+      verified: isArt ? false : true
     };
     state.users.push(matchedUser);
   }
@@ -2869,13 +2558,28 @@ window.handleLoginSubmit = function(e) {
   persistState();
   updateAuthUI();
 
+  if (role === 'artisan') {
+    showAppNotice({
+      icon: '🔨',
+      eyebrow: 'ARTISAN PORTAL ACCESS',
+      title: `Welcome, ${matchedUser.name}!`,
+      message: `Redirecting you directly to your <strong>Artisan Pro Dashboard</strong>...`,
+      confirmText: 'Go to Dashboard',
+      onConfirm: () => {
+        window.location.href = '/artisan.html';
+      }
+    });
+    setTimeout(() => {
+      window.location.href = '/artisan.html';
+    }, 700);
+    return;
+  }
+
   showAppNotice({
-    icon: role === 'hirer' ? '👋' : '🔨',
+    icon: '👋',
     eyebrow: 'LOGIN SUCCESSFUL',
     title: `Welcome, ${matchedUser.name}!`,
-    message: role === 'hirer'
-      ? `Logged in as <strong>Hirer (Client)</strong>. You can now book Port Harcourt artisans with 100% Escrow protection.`
-      : `Logged in to <strong>Artisan Pro Portal</strong> for <strong>${matchedUser.businessName || matchedUser.name}</strong>. Your First 1 Month Free Trial is active.`,
+    message: `Logged in as <strong>Hirer (Client)</strong>. You can now book Port Harcourt artisans with 100% Escrow protection.`,
     confirmText: 'Continue to Marketplace'
   });
 
@@ -3000,15 +2704,16 @@ window.handleArtisanSignupSubmit = function(e) {
     icon: '✨',
     eyebrow: 'PRO MEMBERSHIP ACTIVATED',
     title: `Welcome, ${bizName}!`,
-    message: `Your Artisan Pro profile is live with the <strong>Teal Verified Badge</strong>.<br><br>🎁 <strong>First 1 Month Free Trial</strong> active (30 days free, standard renewal: ₦2,000/month). 5% Escrow commission guaranteed on milestone payouts.`,
-    confirmText: 'View My Live Listing',
+    message: `Your Artisan Pro profile is live with the <strong>Teal Verified Badge</strong>.<br><br>🎁 <strong>First 1 Month Free Trial</strong> active (30 days free, standard renewal: ₦2,000/month). 5% Escrow commission guaranteed on milestone payouts.<br><br>Redirecting you to your dedicated Artisan Dashboard...`,
+    confirmText: 'Go to Artisan Dashboard',
     onConfirm: () => {
-      switchToMarketplaceView();
-      openProfileModal(newPro.id);
+      window.location.href = '/artisan.html';
     }
   });
 
-  switchToMarketplaceView();
+  setTimeout(() => {
+    window.location.href = '/artisan.html';
+  }, 1200);
 };
 
 window.handleLogout = function() {
@@ -3758,14 +3463,14 @@ window.renderProHomeRequests = function() {
                   <button class="ed-button ed-button-amber ed-btn-compact" style="font-size: 0.76rem;" onclick="openProEnterQuoteModal('${req.id}')">
                     Enter Quote &rarr;
                   </button>
-                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem;" onclick="closeModal('proHomeModal'); openChatDrawer('${req.proId || 'pro-1'}');">
+                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem;" onclick="closeModal('proHomeModal'); openChatDrawer('${req.proId || ''}');">
                     💬 Message Client
                   </button>
                   <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem; color: #DC2626;" onclick="declineProRequest('${req.id}')">
                     Decline
                   </button>
                 ` : isQuoted ? `
-                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem;" onclick="closeModal('proHomeModal'); openChatDrawer('${req.proId || 'pro-1'}');">
+                  <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.76rem;" onclick="closeModal('proHomeModal'); openChatDrawer('${req.proId || ''}');">
                     💬 Open in Chat
                   </button>
                 ` : ''}
@@ -3826,18 +3531,20 @@ window.handleProSubmitQuote = function(e) {
   req.quoteDuration = duration;
   req.quoteNotes = notes;
 
-  const proId = req.proId || 'pro-1';
-  if (!state.chatMessages[proId]) state.chatMessages[proId] = [];
+  const proId = req.proId || (state.currentUser && state.currentUser.role === 'artisan' ? state.currentUser.id : (state.providers[0] ? state.providers[0].id : ''));
+  if (proId && !state.chatMessages[proId]) state.chatMessages[proId] = [];
 
-  state.chatMessages[proId].push({
-    sender: 'provider',
-    isQuote: true,
-    quoteId: 'quot-' + Date.now().toString().slice(-4),
-    serviceName: req.title,
-    amount: amount,
-    duration: duration,
-    notes: notes
-  });
+  if (proId) {
+    state.chatMessages[proId].push({
+      sender: 'provider',
+      isQuote: true,
+      quoteId: 'quot-' + Date.now().toString().slice(-4),
+      serviceName: req.title,
+      amount: amount,
+      duration: duration,
+      notes: notes
+    });
+  }
 
   persistState();
   closeModal('proEnterQuoteModal');
@@ -3879,36 +3586,46 @@ window.activateProVisibilityBoost = function() {
   const days = proSelectedBoostDays || 3;
   const cost = days * (state.boostDailyRate || 500);
 
-  // Boost pro-1 (and any active artisan)
-  const targetPro = state.providers.find(p => p.id === 'pro-1') || state.providers[0];
+  const targetPro = (state.currentUser && state.currentUser.role === 'artisan' && state.providers.find(p => p.id === state.currentUser.id || p.name === state.currentUser.name)) || state.providers[0];
   if (targetPro) {
     targetPro.boosted = true;
     targetPro.boostDaysRemaining = days;
+    persistState();
+    renderProviders();
+
+    showAppNotice({
+      icon: '⚡',
+      eyebrow: 'VISIBILITY BOOST ACTIVATED',
+      title: `Pinned to Top of PH Search (${days} Days)!`,
+      message: `Your profile (<strong>${targetPro.businessName}</strong>) has been pinned to the top boosted tier for ${days} days (${formatNaira(cost)}).\n\nExpect significantly increased customer quote inquiries from Port Harcourt residents.`,
+      confirmText: 'View Directory →',
+      onConfirm: () => {
+        closeModal('proHomeModal');
+        location.href = '#directory';
+      }
+    });
+  } else {
+    showAppNotice({
+      icon: '⚡',
+      eyebrow: 'VISIBILITY BOOST',
+      title: 'No Active Artisan Profile',
+      message: 'Please register your artisan workshop to activate search pinning.',
+      confirmText: 'Register Now',
+      onConfirm: () => {
+        closeModal('proHomeModal');
+        openProviderRegisterModal();
+      }
+    });
   }
-
-  persistState();
-  renderProviders();
-
-  showAppNotice({
-    icon: '⚡',
-    eyebrow: 'VISIBILITY BOOST ACTIVATED',
-    title: `Pinned to Top of PH Search (${days} Days)!`,
-    message: `Your profile (<strong>${targetPro ? targetPro.businessName : 'PowerVolt'}</strong>) has been pinned to the top boosted tier for ${days} days (${formatNaira(cost)}).\n\nExpect significantly increased customer quote inquiries from Port Harcourt residents.`,
-    confirmText: 'View Directory →',
-    onConfirm: () => {
-      closeModal('proHomeModal');
-      location.href = '#directory';
-    }
-  });
 };
 
 // ==================== PROFILE BUILDER & VERIFICATION ====================
 let pbCurrentTab = 'about';
-let pbCurrentProId = 'pro-1';
+let pbCurrentProId = '';
 let pbRateCardItems = [];
 
 window.openProfileBuilderModal = function(proId) {
-  pbCurrentProId = proId || 'pro-1';
+  pbCurrentProId = proId || (state.currentUser && state.currentUser.id) || (state.providers[0] ? state.providers[0].id : '');
   const pro = state.providers.find(p => p.id === pbCurrentProId) || state.providers[0];
   if (!pro) return;
 
@@ -3918,11 +3635,11 @@ window.openProfileBuilderModal = function(proId) {
   const catEl = document.getElementById('pbCategory');
   const bioEl = document.getElementById('pbBio');
 
-  if (nameEl) nameEl.value = pro.name || 'Engr. Emeka Obi';
-  if (bizEl) bizEl.value = pro.businessName;
-  if (phoneEl) phoneEl.value = '0802 345 6789';
-  if (catEl) catEl.value = pro.category;
-  if (bioEl) bioEl.value = pro.bio;
+  if (nameEl) nameEl.value = pro.name || '';
+  if (bizEl) bizEl.value = pro.businessName || '';
+  if (phoneEl) phoneEl.value = pro.phone || '';
+  if (catEl) catEl.value = pro.category || 'power-gen';
+  if (bioEl) bioEl.value = pro.bio || '';
 
   // Set areas checkboxes
   const checkboxes = document.querySelectorAll('#pbAreasCheckboxes input[name="pbArea"]');

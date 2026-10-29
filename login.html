@@ -264,19 +264,6 @@
           area: 'Peter Odili Road',
           password: 'password123',
           createdAt: '2026-09-15'
-        },
-        {
-          id: 'usr-2',
-          name: 'Engr. Emeka Obi',
-          businessName: 'PowerVolt Generator & Electrical Works',
-          email: 'emeka@powervolt.ng',
-          phone: '08023456789',
-          role: 'artisan',
-          trade: 'Generator & Inverter Specialist',
-          category: 'home-repairs',
-          area: 'Trans-Amadi',
-          password: 'password123',
-          createdAt: '2026-08-10'
         }
       ]
     };
@@ -503,11 +490,11 @@
             <div class="auth-field-grid">
               <div class="auth-input-group">
                 <label class="auth-label">Your Name</label>
-                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Engr. Emeka Obi" />
+                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Master Craftsman Full Name" />
               </div>
               <div class="auth-input-group">
                 <label class="auth-label">Business Name</label>
-                <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. PowerVolt Generator Works" />
+                <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Precision Engineering & Repair" />
               </div>
             </div>
 
@@ -769,11 +756,19 @@
       const passwordInput = document.getElementById('loginPassword');
 
       if (role === 'hirer') {
-        if (contactInput) contactInput.value = 'tonye@example.com';
-        if (passwordInput) passwordInput.value = 'password123';
+        const hirer = authState.users.find(u => u.role === 'hirer');
+        if (contactInput) contactInput.value = hirer ? hirer.email : 'tonye@example.com';
+        if (passwordInput) passwordInput.value = hirer ? hirer.password : 'password123';
       } else {
-        if (contactInput) contactInput.value = 'emeka@powervolt.ng';
-        if (passwordInput) passwordInput.value = 'password123';
+        const artisan = authState.users.find(u => u.role === 'artisan');
+        if (artisan) {
+          if (contactInput) contactInput.value = artisan.email || artisan.phone;
+          if (passwordInput) passwordInput.value = artisan.password || 'password123';
+        } else {
+          switchAuthTab('signup', 'artisan');
+          showInlineNotice('No dummy artisan accounts exist. Register your real artisan workshop with 1 month free!', 'info');
+          return;
+        }
       }
 
       if (contactInput) {
@@ -822,15 +817,16 @@
       } else {
         // New account on the fly
         isArtisan = (role === 'artisan');
+        const defaultName = isArtisan ? (contact.includes('@') ? contact.split('@')[0] : 'Artisan ' + contact.slice(-4)) : 'Tonye Briggs';
         matchedUser = {
           id: 'usr-' + Date.now(),
-          name: isArtisan ? 'Engr. Emeka Obi' : 'Tonye Briggs',
-          businessName: isArtisan ? 'PowerVolt Generator & Electrical Works' : null,
+          name: defaultName,
+          businessName: isArtisan ? `${defaultName} Workshop` : null,
           email: contact.includes('@') ? contact : `${isArtisan ? 'artisan' : 'client'}@servhive.ng`,
           phone: contact.includes('@') ? '08034567890' : contact,
           role: isArtisan ? 'artisan' : 'hirer',
           area: isArtisan ? 'Trans-Amadi' : 'Peter Odili Road',
-          verified: true
+          verified: isArtisan ? false : true
         };
         authState.users.push(matchedUser);
         localStorage.setItem('servhive_users', JSON.stringify(authState.users));
