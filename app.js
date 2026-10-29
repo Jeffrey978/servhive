@@ -3046,6 +3046,9 @@ window.switchUserRole = function() {
       trade: 'Home Repairs',
       verified: true
     };
+    persistState();
+    window.location.href = '/artisan.html';
+    return;
   } else {
     state.currentUser = {
       id: 'usr-hirer-' + Date.now(),
@@ -3167,10 +3170,10 @@ window.updateAuthUI = function() {
             </button>
 
             ${!isHirer ? `
-              <button class="auth-dropdown-item" onclick="toggleUserMenu(); location.href='#directory';">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-                <span>My Public Rate Card</span>
-              </button>
+              <a href="/artisan.html" class="auth-dropdown-item" style="text-decoration: none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Artisan Pro Dashboard &rarr;</span>
+              </a>
             ` : ''}
 
             <div class="auth-dropdown-divider"></div>
@@ -3698,13 +3701,7 @@ window.renderMyAccountView = function() {
 let proSelectedBoostDays = 3;
 
 window.openProHomeModal = function() {
-  const reqsCountEl = document.getElementById('proHomeRequestsCount');
-  if (reqsCountEl) {
-    reqsCountEl.textContent = state.quoteRequests.filter(r => r.status === 'pending').length;
-  }
-  renderProHomeRequests();
-  const modal = document.getElementById('proHomeModal');
-  if (modal) modal.classList.add('open');
+  window.location.href = '/artisan.html';
 };
 
 window.renderProHomeRequests = function() {

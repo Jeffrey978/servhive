@@ -829,11 +829,12 @@
 
       localStorage.setItem('servhive_current_user', JSON.stringify(matchedUser));
 
-      showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Redirecting you to the verified marketplace...`, 'success');
+      const isArtisan = matchedUser.role === 'artisan';
+      showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Redirecting you to ${isArtisan ? 'your Artisan Portal Dashboard' : 'the client marketplace'}...`, 'success');
 
       // Auto redirect after 0.9 seconds
       setTimeout(() => {
-        window.location.href = '/index.html';
+        window.location.href = isArtisan ? '/artisan.html' : '/index.html';
       }, 900);
     }
 
@@ -937,10 +938,10 @@
         localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
       } catch (err) {}
 
-      showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your Artisan Pro profile is activated with First 1 Month Free Trial. Redirecting...`, 'success');
+      showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your Artisan Pro profile is activated with First 1 Month Free Trial. Redirecting to Artisan Dashboard...`, 'success');
 
       setTimeout(() => {
-        window.location.href = '/index.html';
+        window.location.href = '/artisan.html';
       }, 1000);
     }
 
