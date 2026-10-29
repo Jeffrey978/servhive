@@ -526,15 +526,25 @@
         </div>
       </div>
 
-      <!-- Filter Controls Row (Area, Rating, Price & Verified Gating) -->
+      <!-- Filter Controls Row (Category, Area, Rating, Price, Verified, Sort) -->
       <div class="ed-filter-row">
-        <!-- Category Pill Tabs -->
-        <div id="filterPills" class="ed-pill-tabs">
-          <!-- Populated by JS -->
-        </div>
+        <!-- Unified Filter Controls: Category Dropdown, Area, Rating, Price, Sort -->
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%;">
+          <!-- Category Filter Dropdown -->
+          <select id="categoryFilterSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground); font-weight: 600;" onchange="selectCategory(this.value)" aria-label="Filter by Trade Category">
+            <option value="all">🛠️ All 10 Categories</option>
+            <option value="power-gen">⚡ Power &amp; Generators</option>
+            <option value="solar-tech">☀️ Solar, Inverters &amp; CCTV</option>
+            <option value="interior-pop">🏠 POP Ceilings &amp; Tiling</option>
+            <option value="plumbing">🚰 Plumbing &amp; Boreholes</option>
+            <option value="electrical">💡 Electrical &amp; Wiring</option>
+            <option value="ac-chillers">❄️ AC &amp; Refrigeration</option>
+            <option value="auto-mechanic">🚗 Auto Diagnostics</option>
+            <option value="beauty-hair">✂️ Beauty &amp; Luxury Braids</option>
+            <option value="carpentry">🪚 Carpentry &amp; Furniture</option>
+            <option value="painting">🎨 Painting &amp; Screeding</option>
+          </select>
 
-        <!-- Filter Controls: Area, Rating, Price, Sort -->
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
           <!-- Area Filter -->
           <select id="filterAreaSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground);" onchange="filterByArea(this.value)" aria-label="Filter by Area">
             <option value="All Port Harcourt">All Areas in PH</option>
@@ -574,7 +584,7 @@
           </label>
 
           <!-- Sort Select -->
-          <select id="sortSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground);" onchange="state.sortBy = this.value; renderProviders();">
+          <select id="sortSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground); margin-left: auto;" onchange="state.sortBy = this.value; renderProviders();">
             <option value="featured">Sort: Featured (⚡ Boosted Top)</option>
             <option value="distance">Nearest to Me (📍)</option>
             <option value="rating">Highest Rated (★)</option>

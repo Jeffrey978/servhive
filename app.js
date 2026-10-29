@@ -1053,21 +1053,20 @@ window.switchFeaturedShowcase = function(index, el) {
   if (area) area.textContent = item.area;
 };
 
-// Render Filter Tabs
+// Category Filter Synchronization (Dropdown)
 function renderFilterPills() {
-  const container = document.getElementById('filterPills');
-  if (!container) return;
-
-  container.innerHTML = INITIAL_CATEGORIES.map(cat => `
-    <button class="ed-pill-tab ${state.selectedCategory === cat.id ? 'active' : ''}" onclick="selectCategory('${cat.id}')">
-      ${cat.name}
-    </button>
-  `).join('');
+  const select = document.getElementById('categoryFilterSelect');
+  if (select && select.value !== state.selectedCategory) {
+    select.value = state.selectedCategory;
+  }
 }
 
 window.selectCategory = function(catId) {
-  state.selectedCategory = state.selectedCategory === catId ? 'all' : catId;
-  renderFilterPills();
+  state.selectedCategory = catId || 'all';
+  const select = document.getElementById('categoryFilterSelect');
+  if (select && select.value !== state.selectedCategory) {
+    select.value = state.selectedCategory;
+  }
   renderProviders();
 };
 
@@ -1371,6 +1370,7 @@ window.resetFilters = function() {
   state.sortBy = 'featured';
 
   const areaSelect = document.getElementById('heroAreaSelect');
+  const catFilterSelect = document.getElementById('categoryFilterSelect');
   const filterAreaSelect = document.getElementById('filterAreaSelect');
   const ratingSelect = document.getElementById('ratingFilterSelect');
   const priceSelect = document.getElementById('priceFilterSelect');
@@ -1381,6 +1381,7 @@ window.resetFilters = function() {
   const btnText = geoBtn ? geoBtn.querySelector('.geo-btn-text') : null;
 
   if (areaSelect) areaSelect.value = 'All Port Harcourt';
+  if (catFilterSelect) catFilterSelect.value = 'all';
   if (filterAreaSelect) filterAreaSelect.value = 'All Port Harcourt';
   if (ratingSelect) ratingSelect.value = 'all';
   if (priceSelect) priceSelect.value = 'all';
