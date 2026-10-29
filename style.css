@@ -104,72 +104,72 @@
 /* ==================== DARK MODE (shadcn Zinc Dark Palette) ==================== */
 [data-theme="dark"] {
   --background: #09090b;
-  --foreground: #fafafa;
-  --card: #09090b;
-  --card-foreground: #fafafa;
-  --popover: #09090b;
-  --popover-foreground: #fafafa;
+  --foreground: #f4f4f5;
+  --card: #121215;
+  --card-foreground: #f4f4f5;
+  --popover: #121215;
+  --popover-foreground: #f4f4f5;
   --primary: #f59e0b;
   --primary-hover: #d97706;
   --primary-foreground: #09090b;
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
-  --muted: #27272a;
+  --secondary: #18181c;
+  --secondary-foreground: #f4f4f5;
+  --muted: #18181c;
   --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
+  --accent: #18181c;
+  --accent-foreground: #f4f4f5;
   --destructive: #7f1d1d;
-  --destructive-foreground: #fafafa;
-  --border: #27272a;
-  --border-hover: #3f3f46;
-  --input: #27272a;
-  --ring: #d4d4d8;
+  --destructive-foreground: #f4f4f5;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.16);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #f59e0b;
   --ring-offset: rgba(245, 158, 11, 0.2);
 
   --bg-primary: #09090b;
-  --bg-surface: #09090b;
-  --bg-surface-subtle: #18181b;
-  --bg-card: #09090b;
-  --bg-card-hover: #18181b;
-  --bg-input: #09090b;
-  --bg-header: #09090b;
+  --bg-surface: #0e0f12;
+  --bg-surface-subtle: #16171b;
+  --bg-card: #121215;
+  --bg-card-hover: #18181d;
+  --bg-input: #121316;
+  --bg-header: #0e0f12;
 
   --amber: #f59e0b;
-  --amber-dark: #d97706;
-  --amber-light: rgba(245, 158, 11, 0.15);
-  --amber-faint: rgba(245, 158, 11, 0.12);
+  --amber-dark: #fbbf24;
+  --amber-light: rgba(245, 158, 11, 0.12);
+  --amber-faint: rgba(245, 158, 11, 0.06);
 
   --teal: #14b8a6;
   --teal-dark: #0f766e;
   --teal-bright: #2dd4bf;
-  --teal-light: rgba(20, 184, 166, 0.15);
-  --teal-faint: rgba(20, 184, 166, 0.1);
+  --teal-light: rgba(20, 184, 166, 0.12);
+  --teal-faint: rgba(20, 184, 166, 0.06);
 
-  --ink: #fafafa;
+  --ink: #f4f4f5;
   --ink-secondary: #e4e4e7;
   --text-muted: #a1a1aa;
   --text-faint: #71717a;
-  --canvas: #fafafa;
+  --canvas: #f4f4f5;
   --canvas-muted: #d4d4d8;
 
-  --hairline: #27272a;
-  --hairline-hover: #3f3f46;
-  --hairline-amber: rgba(245, 158, 11, 0.4);
-  --hairline-teal: rgba(20, 184, 166, 0.3);
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-hover: rgba(255, 255, 255, 0.16);
+  --hairline-amber: rgba(245, 158, 11, 0.3);
+  --hairline-teal: rgba(20, 184, 166, 0.25);
 
-  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.6);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.6);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.7);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.8);
-  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.5);
-  --modal-backdrop-bg: rgba(0, 0, 0, 0.85);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  --shadow-lg: 0 10px 25px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  --shadow-xl: 0 20px 35px -5px rgba(0, 0, 0, 0.8);
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.8);
 
-  --chip-bg: #18181b;
-  --chat-bg: #09090b;
-  --chat-bubble-peer: #18181b;
-  --tag-bg: #18181b;
-  --surface-dark: #09090b;
+  --chip-bg: #16171b;
+  --chat-bg: #0c0d0f;
+  --chat-bubble-peer: #16171b;
+  --tag-bg: #16171b;
+  --surface-dark: #0e0f12;
 }
 
 /* ==================== GLOBAL BASE & RESET ==================== */
@@ -2755,69 +2755,84 @@ button, input, select, textarea {
   border-bottom-color: var(--amber);
 }
 
-/* ==================== ARTISAN MULTI-PAGE PORTAL ==================== */
+/* ==================== ARTISAN MULTI-PAGE PORTAL (PEAK CRAFT) ==================== */
 .artisan-app-container {
   display: flex;
   min-height: calc(100vh - 65px);
   width: 100%;
 }
 .artisan-sidebar {
-  width: 270px;
+  width: 260px;
   background: var(--bg-surface);
   border-right: 1px solid var(--border);
-  padding: 24px 16px;
+  padding: 20px 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   flex-shrink: 0;
 }
 .artisan-nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
-  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
   color: var(--muted-foreground);
-  font-weight: 700;
-  font-size: 0.88rem;
+  font-weight: 600;
+  font-size: 0.86rem;
   text-decoration: none;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: var(--transition);
+  transition: all 0.15s ease;
+  position: relative;
 }
 .artisan-nav-item:hover {
-  background: var(--bg-surface-subtle);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--foreground);
 }
 .artisan-nav-item.active {
-  background: var(--amber-light);
-  color: var(--amber-dark);
-  border-color: var(--hairline-amber);
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.artisan-nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--amber);
 }
 .artisan-main-content {
   flex: 1;
-  padding: 32px 40px;
+  padding: 36px 44px;
   overflow-y: auto;
   background: var(--background);
+  max-width: 1360px;
 }
 .artisan-header {
   height: 65px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-surface);
-  padding: 0 24px;
+  padding: 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 50;
+  backdrop-filter: blur(12px);
 }
 .artisan-section {
   display: none;
 }
 .artisan-section.active {
   display: block;
-  animation: fadeIn 0.18s ease-out;
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Pro Home KPI Grid & Cards */
@@ -2825,23 +2840,47 @@ button, input, select, textarea {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
-  margin-bottom: 28px;
+  margin-bottom: 30px;
 }
 .pro-kpi-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 20px 18px;
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 124px;
-  transition: var(--transition);
+  min-height: 126px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 .pro-kpi-card:hover {
-  border-color: var(--border-hover, var(--muted-foreground));
-  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.pro-kpi-val {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--foreground);
+  margin: 6px 0 3px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.pro-kpi-lbl {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.pro-kpi-sub {
+  font-size: 0.76rem;
+  color: var(--muted-foreground);
+  line-height: 1.35;
 }
 
 /* Plan & Boost Panel Grid */
@@ -2856,14 +2895,52 @@ button, input, select, textarea {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 24px;
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: var(--transition);
+  transition: all 0.2s ease;
 }
 .boost-panel-card:hover {
-  border-color: var(--border-hover, var(--hairline-amber));
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* Boost Duration Buttons */
+.boost-day-chip {
+  padding: 12px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-subtle);
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.boost-day-chip small {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+.boost-day-chip:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+.boost-day-chip.active {
+  border-color: var(--amber);
+  background: var(--amber-light);
+  color: var(--amber-dark);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+}
+.boost-day-chip.active small {
+  color: var(--amber-dark);
 }
 
 /* 2-Column Responsive Form Helper */
@@ -2901,7 +2978,7 @@ button, input, select, textarea {
     font-size: 0.82rem;
   }
   .artisan-main-content {
-    padding: 20px 16px;
+    padding: 24px 18px;
   }
   .artisan-plan-boost-grid {
     grid-template-columns: 1fr;

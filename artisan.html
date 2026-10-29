@@ -20,34 +20,44 @@
 
   <!-- ==================== ARTISAN TOP BAR ==================== -->
   <header class="artisan-header">
-    <div style="display: flex; align-items: center; gap: 14px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
       <a href="/artisan.html" class="ed-logo" style="text-decoration: none;">
         <span>servhive<strong>PH</strong></span>
       </a>
-      <span class="badge" style="font-size: 0.72rem; font-weight: 800; background: var(--bg-surface-subtle); color: var(--foreground); border: 1px solid var(--border); letter-spacing: 0.5px;">ARTISAN PRO PORTAL</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: var(--radius-full); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); font-size: 0.68rem; font-weight: 700; color: var(--muted-foreground); letter-spacing: 0.04em;">
+        <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);"></span>
+        <span>PRO CONSOLE</span>
+      </span>
     </div>
 
     <!-- Center: Identity & Verification -->
-    <div style="display: flex; align-items: center; gap: 10px;" id="artisanHeaderIdentity">
-      <img id="artisanAvatar" src="/assets/hero_tradesman.jpg" alt="Artisan" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border);">
+    <div style="display: flex; align-items: center; gap: 12px;" id="artisanHeaderIdentity">
+      <div style="position: relative;">
+        <img id="artisanAvatar" src="/assets/hero_tradesman.jpg" alt="Artisan" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--border); display: block;">
+        <span style="position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-radius: 50%; background: #10b981; border: 2px solid var(--bg-surface);"></span>
+      </div>
       <div>
         <div id="artisanHeaderBizName" style="font-size: 0.88rem; font-weight: 800; color: var(--foreground); line-height: 1.2;">PowerVolt Generator &amp; Electrical Works</div>
-        <div style="display: flex; align-items: center; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 1px;">
           <span id="artisanHeaderName" style="font-size: 0.74rem; color: var(--muted-foreground);">Engr. Emeka Obi</span>
-          <span class="badge ed-badge-verified" style="font-size: 0.65rem; padding: 1px 6px;">✓ Rivers Verified Active</span>
+          <span class="badge" style="font-size: 0.65rem; padding: 1px 6px; background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25); font-weight: 700;">✓ Rivers Verified Active</span>
         </div>
       </div>
     </div>
 
     <!-- Right: Navigation Controls -->
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <a href="/index.html" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none;">
-        <span>Marketplace (Client View) &rarr;</span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <a href="/index.html?view=client" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none; font-size: 0.8rem; gap: 6px; display: inline-flex; align-items: center;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span>Marketplace (Client View)</span>
       </a>
-      <button id="themeToggleBtn" class="ed-theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark Mode" aria-label="Toggle Theme">
-        <span id="themeToggleIcon">🌙</span>
+      <button id="themeToggleBtn" class="ed-theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark Mode" aria-label="Toggle Theme" style="width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; background: var(--bg-surface-subtle); border: 1px solid var(--border); color: var(--foreground); cursor: pointer;">
+        <span id="themeToggleIcon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </span>
       </button>
-      <button class="ed-button ed-button-black ed-btn-compact" style="color: #DC2626;" onclick="artisanLogout()">
+      <button class="ed-button ed-button-black ed-btn-compact" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2); font-size: 0.8rem;" onclick="artisanLogout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
         <span>Sign Out</span>
       </button>
     </div>
@@ -58,48 +68,56 @@
 
     <!-- Left Sidebar Navigation -->
     <aside class="artisan-sidebar">
-      <div style="font-size: 0.72rem; font-weight: 800; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; padding-left: 8px;">
-        Management Hub
+      <div style="font-size: 0.68rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; padding-left: 10px;">
+        Operations
       </div>
 
       <a href="#home" class="artisan-nav-item active" id="navItem-home" onclick="switchArtisanSection('home')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         <span>Pro Home &amp; Metrics</span>
       </a>
 
       <a href="#requests" class="artisan-nav-item" id="navItem-requests" onclick="switchArtisanSection('requests')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         <span>Requests &amp; Quotes</span>
-        <span id="badgeRequestsCount" class="badge badge-secondary" style="margin-left: auto; font-size: 0.7rem; background: var(--amber); color: #000;">2</span>
+        <span id="badgeRequestsCount" class="artisan-sidebar-badge badge-amber" style="margin-left: auto;">2</span>
       </a>
 
       <a href="#jobs" class="artisan-nav-item" id="navItem-jobs" onclick="switchArtisanSection('jobs')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         <span>Active Jobs &amp; Escrow</span>
-        <span id="badgeJobsCount" class="badge badge-secondary" style="margin-left: auto; font-size: 0.7rem; background: var(--teal); color: #fff;">1</span>
+        <span id="badgeJobsCount" class="artisan-sidebar-badge badge-teal" style="margin-left: auto;">1</span>
       </a>
 
       <a href="#profile" class="artisan-nav-item" id="navItem-profile" onclick="switchArtisanSection('profile')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
         <span>Profile &amp; Rate Card</span>
       </a>
 
       <a href="#verification" class="artisan-nav-item" id="navItem-verification" onclick="switchArtisanSection('verification')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
         <span>KYC &amp; Licences</span>
-        <span class="badge ed-badge-verified" style="margin-left: auto; font-size: 0.65rem;">✓ Pass</span>
+        <span class="artisan-sidebar-badge badge-teal" style="margin-left: auto; font-size: 0.65rem;">✓ Pass</span>
       </a>
 
       <a href="#complaints" class="artisan-nav-item" id="navItem-complaints" onclick="switchArtisanSection('complaints')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
         <span>Dispute &amp; Complaints</span>
-        <span id="badgeComplaintsCount" class="badge" style="margin-left: auto; font-size: 0.7rem; background: rgba(220, 38, 38, 0.2); color: #DC2626;">0</span>
+        <span id="badgeComplaintsCount" class="artisan-sidebar-badge badge-red" style="margin-left: auto;">0</span>
       </a>
 
       <!-- Quick Pro Status Box -->
-      <div class="artisan-sidebar-footer-box" style="margin-top: auto; padding: 14px; background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm);">
-        <div style="font-size: 0.75rem; font-weight: 800; color: var(--amber-dark); margin-bottom: 2px;">🎁 1 MONTH FREE ACTIVE</div>
-        <div style="font-size: 0.74rem; color: var(--muted-foreground); line-height: 1.4;">28 Days remaining. Renewal: ₦2,000/mo. Platform safety commission: 5%.</div>
+      <div class="artisan-sidebar-footer-box" style="margin-top: auto; padding: 14px 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: var(--radius-md);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 0.72rem; font-weight: 800; color: var(--amber-dark); letter-spacing: 0.04em;">PRO TRIAL</span>
+          <span style="font-size: 0.7rem; font-weight: 700; color: var(--teal);">28 Days Left</span>
+        </div>
+        <div style="height: 4px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; margin-bottom: 8px;">
+          <div style="width: 88%; height: 100%; background: linear-gradient(90deg, var(--teal), var(--amber)); border-radius: 2px;"></div>
+        </div>
+        <div style="font-size: 0.72rem; color: var(--muted-foreground); line-height: 1.4;">
+          Renews at ₦2,000/mo. Platform fee: 5% on completed milestones.
+        </div>
       </div>
     </aside>
 
@@ -108,49 +126,61 @@
 
       <!-- ==================== SECTION 1: PRO HOME (ANALYTICS & METRICS) ==================== -->
       <section id="sec-home" class="artisan-section active">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
           <div>
-            <div class="hero-eyebrow" style="margin-bottom: 4px;">OPERATIONS OVERVIEW</div>
-            <h1 style="font-size: 1.85rem; font-weight: 800; margin: 0; color: var(--foreground);" id="proHomeWelcomeTitle">Welcome Back, Engr. Emeka Obi</h1>
-            <p style="font-size: 0.88rem; color: var(--muted-foreground); margin-top: 4px;">
-              Manage your client quote inquiries, escrow payouts, and Port Harcourt search visibility.
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark); margin-bottom: 4px;">OPERATIONS TELEMETRY</div>
+            <h1 style="font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 6px; color: var(--foreground);" id="proHomeWelcomeTitle">Welcome Back, Engr. Emeka Obi</h1>
+            <p style="font-size: 0.88rem; color: var(--muted-foreground); margin: 0; line-height: 1.5;">
+              Monitor client leads, live escrow deposits, and search visibility across Port Harcourt.
             </p>
           </div>
-          <div style="display: flex; gap: 8px;">
-            <button class="ed-button ed-button-amber ed-btn-compact" onclick="switchArtisanSection('requests')">
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="ed-button ed-button-amber ed-btn-compact" onclick="switchArtisanSection('requests')" style="font-weight: 700;">
               <span>View Incoming Inquiries &rarr;</span>
             </button>
-            <button class="ed-button ed-button-black ed-btn-compact" onclick="switchArtisanSection('jobs')">
+            <button class="ed-button ed-button-black ed-btn-compact" onclick="switchArtisanSection('jobs')" style="font-weight: 700;">
               <span>Active Escrow Jobs</span>
             </button>
           </div>
         </div>
 
-        <!-- 5 KPI Stats Grid -->
-        <div class="pro-kpi-grid" style="margin-bottom: 28px;">
+        <!-- 5 KPI Stats Telemetry Grid -->
+        <div class="pro-kpi-grid" style="margin-bottom: 30px;">
           <div class="pro-kpi-card">
-            <div class="pro-kpi-lbl">Review Status</div>
-            <div class="pro-kpi-val" style="font-size: 1.25rem; color: var(--teal); margin: 8px 0 4px;">✓ Verified Active</div>
-            <div class="pro-kpi-sub">Rivers State KYC &amp; NIN Passed</div>
+            <div class="pro-kpi-lbl">REVIEW STATUS</div>
+            <div class="pro-kpi-val" style="color: var(--foreground); display: flex; align-items: center; gap: 8px;">
+              <span>Active</span>
+              <span style="font-size: 0.8rem; line-height: 1; color: var(--teal);">●</span>
+            </div>
+            <div class="pro-kpi-sub">
+              <span class="badge" style="font-size: 0.68rem; padding: 1px 6px; background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25);">✓ Rivers KYC Passed</span>
+            </div>
           </div>
+
           <div class="pro-kpi-card">
-            <div class="pro-kpi-lbl">Free Trial Days Left</div>
-            <div class="pro-kpi-val" style="color: var(--amber-dark);">28 <small style="font-size: 0.95rem; font-weight: 600;">days</small></div>
-            <div class="pro-kpi-sub">First 1 Month Free Active</div>
+            <div class="pro-kpi-lbl">FREE TRIAL STATUS</div>
+            <div class="pro-kpi-val">28 <small style="font-size: 0.85rem; font-weight: 500; color: var(--muted-foreground);">days</small></div>
+            <div class="pro-kpi-sub">First 1 Month Free Tier</div>
           </div>
+
           <div class="pro-kpi-card">
-            <div class="pro-kpi-lbl">Weekly Profile Views</div>
+            <div class="pro-kpi-lbl">WEEKLY PROFILE VIEWS</div>
             <div class="pro-kpi-val">184</div>
-            <div class="pro-kpi-sub text-teal">↑ 24% in Trans-Amadi &amp; Odili</div>
+            <div class="pro-kpi-sub" style="color: var(--teal); font-weight: 600;">↑ 24% in Trans-Amadi &amp; Odili</div>
           </div>
+
           <div class="pro-kpi-card">
-            <div class="pro-kpi-lbl">Active Inquiries</div>
+            <div class="pro-kpi-lbl">ACTIVE INQUIRIES</div>
             <div id="proHomeActiveReqsVal" class="pro-kpi-val">2</div>
-            <div class="pro-kpi-sub">Ready for official quote</div>
+            <div class="pro-kpi-sub">Ready for official quotation</div>
           </div>
+
           <div class="pro-kpi-card">
-            <div class="pro-kpi-lbl">Artisan Rating</div>
-            <div class="pro-kpi-val" style="color: var(--amber-dark);">★ 4.9</div>
+            <div class="pro-kpi-lbl">ARTISAN RATING</div>
+            <div class="pro-kpi-val" style="display: flex; align-items: center; gap: 4px;">
+              <span>4.9</span>
+              <span style="font-size: 1.1rem; color: var(--amber);">★</span>
+            </div>
             <div class="pro-kpi-sub">46 Verified client reviews</div>
           </div>
         </div>
@@ -159,45 +189,57 @@
         <div class="artisan-plan-boost-grid">
           <!-- Pro Subscription Card -->
           <div class="boost-panel-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <div>
-                <div class="hero-eyebrow" style="margin: 0;">PRO SUBSCRIPTION</div>
-                <h3 style="font-size: 1.25rem; font-weight: 800; margin-top: 2px;">Verified Pro Tier</h3>
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint);">MEMBERSHIP TIER</div>
+                <span class="badge" style="background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25); font-weight: 700; font-size: 0.72rem;">1 Mo Free Active</span>
               </div>
-              <span class="badge" style="background: var(--teal-light); color: var(--teal); font-weight: 800;">1 Mo Free Active</span>
+              <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em;">Verified Pro Guild</h3>
+              <div style="font-size: 1.85rem; font-weight: 900; color: var(--foreground); margin-bottom: 12px; font-variant-numeric: tabular-nums;">
+                ₦2,000 <span style="font-size: 0.85rem; font-weight: 500; color: var(--muted-foreground);">/ month</span>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--muted-foreground); line-height: 1.55; margin-bottom: 18px;">
+                Designed for master craftsmen in Port Harcourt. Includes 100% Escrow deposit safety, the official Rivers State trust badge, and priority customer inquiries.
+              </p>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 900; color: var(--foreground); margin-bottom: 6px;">
-              ₦2,000 <span style="font-size: 0.85rem; font-weight: 600; color: var(--muted-foreground);">/ month</span>
-            </div>
-            <p style="font-size: 0.84rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 16px;">
-              Designed for higher ticket services and master craftsmen. Unlocks 100% Escrow deposit security, verified teal trust badge, and priority customer matching.
-            </p>
-            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; font-size: 0.8rem; color: var(--foreground);">
-              ✓ <strong>First 1 Month 100% Free</strong>. Renews automatically on Nov 29, 2026. Only a 5% escrow platform fee is charged on completed milestones.
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.8rem; color: var(--foreground); line-height: 1.5;">
+              ✓ <strong>First 1 Month 100% Free</strong>. Renews automatically on Nov 29, 2026. Only a 5% escrow safety fee is deducted upon completed milestones.
             </div>
           </div>
 
           <!-- Visibility Boost Panel -->
-          <div class="boost-panel-card" style="border-color: var(--hairline-amber);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <div>
-                <div class="hero-eyebrow" style="margin: 0; color: var(--amber-dark);">VISIBILITY BOOST</div>
-                <h3 style="font-size: 1.25rem; font-weight: 800; margin-top: 2px;">Pin to Top of Port Harcourt Search</h3>
+          <div class="boost-panel-card">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark);">SEARCH VISIBILITY ENGINE</div>
+                <span class="badge ed-badge-boosted" style="font-size: 0.72rem;">⚡ ₦500 / Day</span>
               </div>
-              <span class="badge ed-badge-boosted">⚡ ₦500 / Day</span>
-            </div>
-            <p style="font-size: 0.84rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 14px;">
-              Boost your profile in the top-pinned ribbon on the homepage and search results for immediate customer inquiries.
-            </p>
-            
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;">
-              <div class="boost-day-chip" id="boostChip-1" onclick="selectBoostDays(1)">1 Day<br><small>₦500</small></div>
-              <div class="boost-day-chip active" id="boostChip-3" onclick="selectBoostDays(3)">3 Days<br><small>₦1,500</small></div>
-              <div class="boost-day-chip" id="boostChip-7" onclick="selectBoostDays(7)">7 Days<br><small>₦3,500</small></div>
-              <div class="boost-day-chip" id="boostChip-14" onclick="selectBoostDays(14)">14 Days<br><small>₦7,000</small></div>
+              <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em;">Pin to Top of PH Search</h3>
+              <p style="font-size: 0.84rem; color: var(--muted-foreground); line-height: 1.55; margin-bottom: 16px;">
+                Feature your workshop at the top of directory results across Trans-Amadi, Peter Odili, Old GRA, and Woji.
+              </p>
+              
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px;">
+                <div class="boost-day-chip" id="boostChip-1" onclick="selectBoostDays(1)">
+                  <span>1 Day</span>
+                  <small>₦500</small>
+                </div>
+                <div class="boost-day-chip active" id="boostChip-3" onclick="selectBoostDays(3)">
+                  <span>3 Days</span>
+                  <small>₦1,500</small>
+                </div>
+                <div class="boost-day-chip" id="boostChip-7" onclick="selectBoostDays(7)">
+                  <span>7 Days</span>
+                  <small>₦3,500</small>
+                </div>
+                <div class="boost-day-chip" id="boostChip-14" onclick="selectBoostDays(14)">
+                  <span>14 Days</span>
+                  <small>₦7,000</small>
+                </div>
+              </div>
             </div>
 
-            <button id="activateBoostBtn" class="ed-button ed-button-amber" style="width: 100%; padding: 12px;" onclick="activateProVisibilityBoost()">
+            <button id="activateBoostBtn" class="ed-button ed-button-amber" style="width: 100%; padding: 13px; font-weight: 800; font-size: 0.9rem;" onclick="activateProVisibilityBoost()">
               <span>⚡ Activate Visibility Boost (3 Days · ₦1,500)</span>
             </button>
           </div>
