@@ -2951,14 +2951,273 @@ button, input, select, textarea {
   margin-bottom: 16px;
 }
 
+/* Artisan Card Box */
+.artisan-card-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease;
+}
+
+/* Boost Days Grid */
+.boost-days-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+/* Rate Card Builder Row */
+.pb-service-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s ease;
+}
+.pb-service-row:hover {
+  border-color: var(--border-hover);
+}
+.pb-service-row-main {
+  display: flex;
+  flex: 2;
+  gap: 8px;
+  align-items: center;
+}
+.pb-service-row-main .pb-svc-name {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 0.88rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  border-radius: var(--radius-sm);
+}
+.pb-service-row-meta {
+  display: flex;
+  flex: 2;
+  gap: 8px;
+  align-items: center;
+}
+.pb-service-price-wrap {
+  position: relative;
+  flex: 1;
+}
+.pb-currency-prefix {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 800;
+  color: var(--muted-foreground);
+  font-size: 0.88rem;
+  pointer-events: none;
+}
+.pb-service-price-wrap .pb-svc-price {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px 0 24px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  border-radius: var(--radius-sm);
+}
+.pb-service-row-meta .pb-svc-type {
+  flex: 1;
+  height: 40px;
+  padding: 0 10px;
+  font-size: 0.84rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  border-radius: var(--radius-sm);
+}
+.pb-svc-remove {
+  color: #DC2626;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.95rem;
+}
+
+/* PH Coverage Areas Checkboxes Grid */
+.pb-areas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.pb-area-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  cursor: pointer;
+  padding: 8px 10px;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+.pb-area-chip:hover {
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Verification Work Photos Upload Grid */
+.verification-work-photos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 12px;
+}
+.verification-upload-card {
+  background: var(--bg-surface-subtle);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.verification-upload-card:hover {
+  border-color: var(--amber);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+/* Escrow Financial Breakdown Grid (Receipt style) */
+.escrow-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+/* Card Actions Toolbar */
+.artisan-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+/* Header Text Responsive Toggles */
+.artisan-header-btn-mobile {
+  display: none;
+}
+.artisan-header-btn-desktop {
+  display: inline;
+}
+
+/* ==================== PROVIDER PROFILE MODAL (CLIENT & ARTISAN VIEW) ==================== */
+.profile-modal-cover {
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  background: #0F141C;
+}
+.profile-modal-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  display: block;
+}
+.profile-modal-cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%);
+}
+.profile-modal-badges {
+  position: absolute;
+  bottom: 16px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.profile-modal-body {
+  padding: 28px;
+}
+.profile-modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.profile-service-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  gap: 12px;
+  flex-wrap: wrap;
+  transition: border-color 0.15s ease;
+}
+.profile-service-card:hover {
+  border-color: var(--border-hover);
+}
+.profile-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.profile-modal-actions .ed-button {
+  padding: 13px 14px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ==================== MEDIA QUERIES: ARTISAN & PROFILE MOBILE ADAPTATIONS ==================== */
+
 @media (max-width: 1200px) {
   .pro-kpi-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
 @media (max-width: 900px) {
   .artisan-app-container {
     flex-direction: column;
+    min-height: auto;
+  }
+  .artisan-sidebar-heading {
+    display: none !important;
   }
   .artisan-sidebar {
     width: 100%;
@@ -2966,42 +3225,271 @@ button, input, select, textarea {
     border-bottom: 1px solid var(--border);
     flex-direction: row;
     overflow-x: auto;
-    padding: 12px 16px;
+    overflow-y: hidden;
+    padding: 8px 12px;
     gap: 8px;
+    position: sticky;
+    top: 58px;
+    z-index: 40;
+    background: var(--bg-surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .artisan-sidebar::-webkit-scrollbar {
+    display: none;
   }
   .artisan-sidebar-footer-box {
     display: none;
   }
   .artisan-nav-item {
     white-space: nowrap;
-    padding: 8px 12px;
+    padding: 8px 14px;
     font-size: 0.82rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    min-height: 40px;
+    background: var(--bg-surface-subtle);
+    border: 1px solid var(--border);
+  }
+  .artisan-nav-item.active::before {
+    display: none;
+  }
+  .artisan-nav-item.active {
+    background: rgba(245, 158, 11, 0.16);
+    color: var(--amber-dark);
+    border-color: rgba(245, 158, 11, 0.45);
+    font-weight: 800;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
   }
   .artisan-main-content {
-    padding: 24px 18px;
+    padding: 20px 14px;
+    max-width: 100%;
   }
   .artisan-plan-boost-grid {
     grid-template-columns: 1fr;
   }
 }
+
 @media (max-width: 768px) {
   #artisanHeaderIdentity {
-    display: none;
+    display: none !important;
   }
   .artisan-header {
-    padding: 0 16px;
+    padding: 0 12px;
+    height: 58px;
   }
   .pro-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .verification-work-photos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 }
+
 @media (max-width: 640px) {
+  /* Prevent iOS Safari auto-zoom on input focus */
+  .artisan-main-content input[type="text"],
+  .artisan-main-content input[type="tel"],
+  .artisan-main-content input[type="number"],
+  .artisan-main-content select,
+  .artisan-main-content textarea,
+  .ed-modal-box input,
+  .ed-modal-box select,
+  .ed-modal-box textarea {
+    font-size: 16px !important;
+  }
+
   .artisan-form-grid-2 {
     grid-template-columns: 1fr;
   }
+  .artisan-card-box {
+    padding: 16px 14px;
+  }
+  .artisan-header-btn-desktop {
+    display: none;
+  }
+  .artisan-header-btn-mobile {
+    display: inline;
+  }
+
+  /* Rate Card Builder Row Mobile Reflow */
+  .pb-service-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px;
+  }
+  .pb-service-row-main {
+    width: 100%;
+  }
+  .pb-service-row-meta {
+    width: 100%;
+  }
+  .pb-svc-remove {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Areas Grid on Mobile */
+  .pb-areas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  /* Escrow Financial Breakdown on Mobile (Receipt View) */
+  .escrow-breakdown-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+  .escrow-breakdown-grid > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .escrow-breakdown-grid > div:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  /* Artisan Card Actions Toolbar on Mobile */
+  .artisan-card-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .artisan-card-actions > div,
+  .artisan-card-actions .ed-button {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  /* Provider Profile Modal Mobile Reflow */
+  .modal-backdrop {
+    padding: 10px 6px;
+    align-items: flex-end;
+  }
+  .ed-modal-box {
+    max-height: 92vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    width: 100%;
+  }
+  .profile-modal-cover {
+    height: 180px;
+  }
+  .profile-modal-badges {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+  .profile-modal-badges .badge,
+  .profile-modal-badges span {
+    font-size: 0.7rem !important;
+    padding: 3px 8px !important;
+  }
+  .profile-modal-body {
+    padding: 18px 14px;
+  }
+  .profile-modal-header-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .profile-modal-header-row > div:last-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  .profile-modal-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .profile-service-card {
+    padding: 12px 14px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .profile-service-card > div:last-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-top: 1px dashed var(--border);
+    padding-top: 8px;
+  }
+  .pro-work-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .pro-work-photo-card img {
+    height: 125px;
+  }
 }
+
 @media (max-width: 480px) {
+  .artisan-main-content {
+    padding: 14px 10px;
+  }
   .pro-kpi-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
+  .boost-days-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .boost-day-chip {
+    min-height: 50px;
+  }
+  .verification-work-photos-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .pro-work-gallery {
+    grid-template-columns: 1fr;
+  }
+  .pro-work-photo-card img {
+    height: 150px;
+  }
+}
+
+/* ==================== DEMO VERSION BANNER ==================== */
+.demo-version-banner {
+  background: #f59e0b;
+  color: #000;
+  text-align: center;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 6px 16px;
+  position: relative;
+  z-index: 9999;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[data-theme="dark"] .demo-version-banner {
+  background: #f59e0b;
+  color: #000;
+}
+
+/* Zero horizontal scrolling safety guarantee */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }

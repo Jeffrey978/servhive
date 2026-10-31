@@ -18,6 +18,11 @@
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column; background: var(--background);">
 
+  <!-- ==================== DEMO VERSION BANNER ==================== -->
+  <div class="demo-version-banner">
+    <span>⚡ Demo version — Preview and testing build</span>
+  </div>
+
   <!-- ==================== ARTISAN TOP BAR ==================== -->
   <header class="artisan-header">
     <div style="display: flex; align-items: center; gap: 12px;">
@@ -26,7 +31,7 @@
       </a>
       <span style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: var(--radius-full); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); font-size: 0.68rem; font-weight: 700; color: var(--muted-foreground); letter-spacing: 0.04em;">
         <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);"></span>
-        <span>PRO CONSOLE</span>
+        <span>PRO DASHBOARD</span>
       </span>
     </div>
 
@@ -34,13 +39,13 @@
     <div style="display: flex; align-items: center; gap: 12px;" id="artisanHeaderIdentity">
       <div style="position: relative;">
         <img id="artisanAvatar" src="/assets/hero_tradesman.jpg" alt="Artisan" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--border); display: block;">
-        <span style="position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-radius: 50%; background: #10b981; border: 2px solid var(--bg-surface);"></span>
+        <span id="artisanAvatarStatusDot" style="position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; border: 2px solid var(--bg-surface);"></span>
       </div>
       <div>
         <div id="artisanHeaderBizName" style="font-size: 0.88rem; font-weight: 800; color: var(--foreground); line-height: 1.2;">Artisan Pro Services</div>
         <div style="display: flex; align-items: center; gap: 6px; margin-top: 1px;">
-          <span id="artisanHeaderName" style="font-size: 0.74rem; color: var(--muted-foreground);">Verified Craftsman</span>
-          <span class="badge" style="font-size: 0.65rem; padding: 1px 6px; background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25); font-weight: 700;">✓ Rivers Verified Active</span>
+          <span id="artisanHeaderName" style="font-size: 0.74rem; color: var(--muted-foreground);">Craftsman</span>
+          <span id="artisanHeaderBadge" class="badge" style="font-size: 0.65rem; padding: 1px 6px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700;">⏳ Under review</span>
         </div>
       </div>
     </div>
@@ -49,7 +54,8 @@
     <div style="display: flex; align-items: center; gap: 8px;">
       <a href="/index.html?view=client" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none; font-size: 0.8rem; gap: 6px; display: inline-flex; align-items: center;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        <span>Marketplace (Client View)</span>
+        <span class="artisan-header-btn-desktop">Marketplace (Client View)</span>
+        <span class="artisan-header-btn-mobile">Client View</span>
       </a>
       <button id="themeToggleBtn" class="ed-theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark Mode" aria-label="Toggle Theme" style="width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; background: var(--bg-surface-subtle); border: 1px solid var(--border); color: var(--foreground); cursor: pointer;">
         <span id="themeToggleIcon" style="display: flex; align-items: center; justify-content: center;">
@@ -68,41 +74,41 @@
 
     <!-- Left Sidebar Navigation -->
     <aside class="artisan-sidebar">
-      <div style="font-size: 0.68rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; padding-left: 10px;">
+      <div class="artisan-sidebar-heading" style="font-size: 0.68rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; padding-left: 10px;">
         Operations
       </div>
 
       <a href="#home" class="artisan-nav-item active" id="navItem-home" onclick="switchArtisanSection('home')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        <span>Pro Home &amp; Metrics</span>
+        <span>Pro Home</span>
       </a>
 
       <a href="#requests" class="artisan-nav-item" id="navItem-requests" onclick="switchArtisanSection('requests')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        <span>Requests &amp; Quotes</span>
+        <span>Requests</span>
         <span id="badgeRequestsCount" class="artisan-sidebar-badge badge-amber" style="margin-left: auto;">0</span>
       </a>
 
       <a href="#jobs" class="artisan-nav-item" id="navItem-jobs" onclick="switchArtisanSection('jobs')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-        <span>Active Jobs &amp; Escrow</span>
+        <span>Active Jobs</span>
         <span id="badgeJobsCount" class="artisan-sidebar-badge badge-teal" style="margin-left: auto;">0</span>
       </a>
 
       <a href="#profile" class="artisan-nav-item" id="navItem-profile" onclick="switchArtisanSection('profile')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-        <span>Profile &amp; Rate Card</span>
+        <span>Profile &amp; Rates</span>
       </a>
 
       <a href="#verification" class="artisan-nav-item" id="navItem-verification" onclick="switchArtisanSection('verification')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
         <span>KYC &amp; Licences</span>
-        <span class="artisan-sidebar-badge badge-teal" style="margin-left: auto; font-size: 0.65rem;">✓ Pass</span>
+        <span id="badgeKycStatus" class="artisan-sidebar-badge badge-teal" style="margin-left: auto; font-size: 0.65rem;">✓ Pass</span>
       </a>
 
       <a href="#complaints" class="artisan-nav-item" id="navItem-complaints" onclick="switchArtisanSection('complaints')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-        <span>Dispute &amp; Complaints</span>
+        <span>Disputes</span>
         <span id="badgeComplaintsCount" class="artisan-sidebar-badge badge-red" style="margin-left: auto;">0</span>
       </a>
 
@@ -128,18 +134,18 @@
       <section id="sec-home" class="artisan-section active">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
           <div>
-            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark); margin-bottom: 4px;">OPERATIONS TELEMETRY</div>
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark); margin-bottom: 4px;">DASHBOARD</div>
             <h1 style="font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 6px; color: var(--foreground);" id="proHomeWelcomeTitle">Welcome Back, Craftsman</h1>
             <p style="font-size: 0.88rem; color: var(--muted-foreground); margin: 0; line-height: 1.5;">
-              Monitor client leads, live escrow deposits, and search visibility across Port Harcourt.
+              Monitor client leads, payment protected deposits, and search visibility across Port Harcourt.
             </p>
           </div>
-          <div style="display: flex; gap: 10px; align-items: center;">
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
             <button class="ed-button ed-button-amber ed-btn-compact" onclick="switchArtisanSection('requests')" style="font-weight: 700;">
               <span>View Incoming Inquiries &rarr;</span>
             </button>
             <button class="ed-button ed-button-black ed-btn-compact" onclick="switchArtisanSection('jobs')" style="font-weight: 700;">
-              <span>Active Escrow Jobs</span>
+              <span>Active Jobs</span>
             </button>
           </div>
         </div>
@@ -148,19 +154,18 @@
         <div class="pro-kpi-grid" style="margin-bottom: 30px;">
           <div class="pro-kpi-card">
             <div class="pro-kpi-lbl">REVIEW STATUS</div>
-            <div class="pro-kpi-val" style="color: var(--foreground); display: flex; align-items: center; gap: 8px;">
-              <span>Active</span>
-              <span style="font-size: 0.8rem; line-height: 1; color: var(--teal);">●</span>
+            <div class="pro-kpi-val" id="proHomeReviewStatusVal" style="color: #f59e0b; display: flex; align-items: center; gap: 8px; font-size: 1.35rem;">
+              <span>Under review</span>
             </div>
-            <div class="pro-kpi-sub">
-              <span class="badge" style="font-size: 0.68rem; padding: 1px 6px; background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25);">✓ Rivers KYC Passed</span>
+            <div class="pro-kpi-sub" id="proHomeReviewSub">
+              ID checked by Servhive
             </div>
           </div>
 
           <div class="pro-kpi-card">
             <div class="pro-kpi-lbl">FREE TRIAL STATUS</div>
-            <div class="pro-kpi-val">30 <small style="font-size: 0.85rem; font-weight: 500; color: var(--muted-foreground);">days</small></div>
-            <div class="pro-kpi-sub">First 1 Month Free Tier</div>
+            <div class="pro-kpi-val">28 <small style="font-size: 0.85rem; font-weight: 500; color: var(--muted-foreground);">days</small></div>
+            <div class="pro-kpi-sub">1 Month Free Trial</div>
           </div>
 
           <div class="pro-kpi-card">
@@ -178,10 +183,10 @@
           <div class="pro-kpi-card">
             <div class="pro-kpi-lbl">ARTISAN RATING</div>
             <div class="pro-kpi-val" style="display: flex; align-items: center; gap: 4px;">
-              <span id="artisanRatingVal">5.0</span>
+              <span id="artisanRatingVal">—</span>
               <span style="font-size: 1.1rem; color: var(--amber);">★</span>
             </div>
-            <div class="pro-kpi-sub" id="artisanReviewsSub">0 Verified client reviews</div>
+            <div class="pro-kpi-sub" id="artisanReviewsSub">No reviews yet</div>
           </div>
         </div>
 
@@ -194,16 +199,16 @@
                 <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint);">MEMBERSHIP TIER</div>
                 <span class="badge" style="background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25); font-weight: 700; font-size: 0.72rem;">1 Mo Free Active</span>
               </div>
-              <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em;">Verified Pro Guild</h3>
+              <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em;">Verified Pro Membership</h3>
               <div style="font-size: 1.85rem; font-weight: 900; color: var(--foreground); margin-bottom: 12px; font-variant-numeric: tabular-nums;">
                 ₦2,000 <span style="font-size: 0.85rem; font-weight: 500; color: var(--muted-foreground);">/ month</span>
               </div>
               <p style="font-size: 0.84rem; color: var(--muted-foreground); line-height: 1.55; margin-bottom: 18px;">
-                Designed for master craftsmen in Port Harcourt. Includes 100% Escrow deposit safety, the official Rivers State trust badge, and priority customer inquiries.
+                1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made.
               </p>
             </div>
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 0.8rem; color: var(--foreground); line-height: 1.5;">
-              ✓ <strong>First 1 Month 100% Free</strong>. Renews automatically on Nov 29, 2026. Only a 5% escrow safety fee is deducted upon completed milestones.
+              ✓ <strong>5% commission</strong> applies to jobs paid through the app. Customer payments are held safely by licensed payment partner Paystack and released only after the customer confirms the job is done.
             </div>
           </div>
 
@@ -211,36 +216,28 @@
           <div class="boost-panel-card">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark);">SEARCH VISIBILITY ENGINE</div>
-                <span class="badge ed-badge-boosted" style="font-size: 0.72rem;">⚡ ₦500 / Day</span>
+                <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark);">BOOST YOUR PROFILE</div>
+                <span class="badge ed-badge-boosted" style="font-size: 0.72rem;">⚡ ₦1,500 / Week</span>
               </div>
-              <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em;">Pin to Top of PH Search</h3>
+              <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em;">Appear at the top</h3>
               <p style="font-size: 0.84rem; color: var(--muted-foreground); line-height: 1.55; margin-bottom: 16px;">
-                Feature your workshop at the top of directory results across Trans-Amadi, Peter Odili, Old GRA, and Woji.
+                Feature your workshop at the top of Port Harcourt search results and category listings for 1 week.
               </p>
               
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px;">
-                <div class="boost-day-chip" id="boostChip-1" onclick="selectBoostDays(1)">
-                  <span>1 Day</span>
-                  <small>₦500</small>
+              <div style="background: var(--bg-surface-subtle); border: 1px solid var(--amber); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-weight: 800; font-size: 1rem; color: var(--foreground);">1 Week Search Boost</div>
+                  <div style="font-size: 0.78rem; color: var(--muted-foreground);">Top placement across all Port Harcourt zones</div>
                 </div>
-                <div class="boost-day-chip active" id="boostChip-3" onclick="selectBoostDays(3)">
-                  <span>3 Days</span>
-                  <small>₦1,500</small>
-                </div>
-                <div class="boost-day-chip" id="boostChip-7" onclick="selectBoostDays(7)">
-                  <span>7 Days</span>
-                  <small>₦3,500</small>
-                </div>
-                <div class="boost-day-chip" id="boostChip-14" onclick="selectBoostDays(14)">
-                  <span>14 Days</span>
-                  <small>₦7,000</small>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.3rem; font-weight: 900; color: var(--amber-dark); font-variant-numeric: tabular-nums;">₦1,500</div>
+                  <div style="font-size: 0.72rem; color: var(--muted-foreground); font-weight: 600;">per week</div>
                 </div>
               </div>
             </div>
 
             <button id="activateBoostBtn" class="ed-button ed-button-amber" style="width: 100%; padding: 13px; font-weight: 800; font-size: 0.9rem;" onclick="activateProVisibilityBoost()">
-              <span>⚡ Activate Visibility Boost (3 Days · ₦1,500)</span>
+              <span>⚡ Boost Profile for 1 Week (₦1,500)</span>
             </button>
           </div>
         </div>
@@ -267,7 +264,7 @@
               Review client descriptions, submit official fixed quotes, message customers, or accept/decline bookings.
             </p>
           </div>
-          <span class="badge badge-secondary" style="font-weight: 700;">5% Escrow commission applies to released payouts</span>
+          <span class="badge badge-secondary" style="font-weight: 700;">5% commission applies to jobs paid through the app</span>
         </div>
 
         <div id="artisanRequestsContainer" style="display: flex; flex-direction: column; gap: 14px;">
@@ -275,18 +272,18 @@
         </div>
       </section>
 
-      <!-- ==================== SECTION 3: JOB EXECUTION & ESCROW MANAGEMENT ==================== -->
+      <!-- ==================== SECTION 3: JOB EXECUTION & PAYMENT PROTECTION ==================== -->
       <section id="sec-jobs" class="artisan-section">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; flex-wrap: wrap; gap: 12px;">
           <div>
-            <div class="hero-eyebrow" style="margin-bottom: 4px;">WORK ORDERS &amp; ESCROW SECURITY</div>
-            <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0; color: var(--foreground);">Active Jobs &amp; Escrow Tracker</h2>
+            <div class="hero-eyebrow" style="margin-bottom: 4px;">WORK ORDERS &amp; PAYMENT PROTECTION</div>
+            <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0; color: var(--foreground);">Active Jobs &amp; Payment Protection</h2>
             <p style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">
-              Track active client jobs, view verified escrow funds held safely in trust, and click "Job Completed" when work is finished.
+              Track active client jobs, view funds held safely by licensed payment provider Paystack, and click "Job Completed" when work is finished.
             </p>
           </div>
           <div style="background: var(--bg-surface-subtle); border: 1px solid var(--hairline-teal); border-radius: var(--radius-sm); padding: 8px 16px; text-align: right;">
-            <div style="font-size: 0.72rem; color: var(--teal); font-weight: 800;">ESCROW VAULT SECURED</div>
+            <div style="font-size: 0.7rem; color: var(--teal); font-weight: 800; letter-spacing: 0.04em;">PAYMENT PROTECTION (PAYSTACK)</div>
             <div id="artisanEscrowBalanceDisplay" style="font-size: 1.25rem; font-weight: 900; color: var(--foreground);">₦0</div>
           </div>
         </div>
@@ -306,7 +303,7 @@
           </p>
         </div>
 
-        <form onsubmit="handleSaveProfileBuilder(event)" style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px;">
+        <form onsubmit="handleSaveProfileBuilder(event)" class="artisan-card-box">
           
           <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 16px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
             1. About You &amp; Workshop Details
@@ -330,18 +327,34 @@
             </div>
             <div>
               <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Primary Trade Category</label>
-              <select id="pbCategory" class="ed-select-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--bg-surface); color: var(--foreground); width: 100%;">
-                <option value="power-gen">Power &amp; Generators</option>
-                <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
-                <option value="interior-pop">Interior POP Ceilings &amp; Tiling</option>
-                <option value="plumbing">Plumbing, Boreholes &amp; Water Pumps</option>
-                <option value="electrical">Electrical Wiring &amp; Conduit</option>
-                <option value="ac-chillers">Air Conditioning &amp; Refrigeration</option>
-                <option value="auto-mechanic">Auto Mechanics &amp; Diagnostics</option>
-                <option value="beauty-hair">Beauty, Hair &amp; Luxury Braids</option>
-                <option value="carpentry">Carpentry &amp; Cabinetry</option>
-                <option value="painting">Painting &amp; Wall Screeding</option>
+              <select id="pbCategory" class="ed-select-input" onchange="handlePbCategoryChange(this.value)" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--bg-surface); color: var(--foreground); width: 100%;">
+                <optgroup label="Standard Trade Categories">
+                  <option value="power-gen">Power &amp; Generators</option>
+                  <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
+                  <option value="interior-pop">Interior POP Ceilings &amp; Tiling</option>
+                  <option value="plumbing">Plumbing, Boreholes &amp; Water Pumps</option>
+                  <option value="electrical">Electrical Wiring &amp; Conduit</option>
+                  <option value="ac-chillers">Air Conditioning &amp; Refrigeration</option>
+                  <option value="auto-mechanic">Auto Mechanics &amp; Diagnostics</option>
+                  <option value="beauty-hair">Beauty, Hair &amp; Luxury Braids</option>
+                  <option value="carpentry">Carpentry &amp; Cabinetry</option>
+                  <option value="painting">Painting &amp; Wall Screeding</option>
+                </optgroup>
+                <optgroup label="Regulated Trades (Licence Required Before Approval)">
+                  <option value="home-health">Home Health Aide (Licence Required)</option>
+                  <option value="laser-tech">Laser Tech &amp; Electrologist (Licence Required)</option>
+                  <option value="tattoo-piercing">Tattoo &amp; Body Piercer (Licence Required)</option>
+                  <option value="funeral-director">Funeral Director (Licence Required)</option>
+                </optgroup>
+                <optgroup label="Unavailable Categories (Not Permitted)">
+                  <option value="nanny" disabled>Nanny / Babysitter (Not selectable)</option>
+                  <option value="childcare" disabled>Childcare / Daycare (Not selectable)</option>
+                  <option value="tutor" disabled>Private Tutor (Not selectable)</option>
+                </optgroup>
               </select>
+              <div id="pbRegulatedNotice" style="display: none; padding: 10px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid var(--amber); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--amber-dark); font-weight: 700; margin-top: 8px;">
+                ⚠️ Regulated Trade: You must upload a valid licence in the KYC &amp; Licences tab before your profile can be approved.
+              </div>
             </div>
           </div>
 
@@ -354,18 +367,18 @@
             2. Areas Covered in Port Harcourt
           </h3>
           <p style="font-size: 0.82rem; color: var(--muted-foreground); margin-bottom: 12px;">Select all Port Harcourt zones where your team can be dispatched:</p>
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 28px;" id="pbAreasCheckboxes">
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Trans-Amadi" checked style="accent-color: var(--amber-dark);"> Trans-Amadi</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Peter Odili Road" checked style="accent-color: var(--amber-dark);"> Peter Odili Road</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Woji" checked style="accent-color: var(--amber-dark);"> Woji / Golf Estate</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Old GRA" checked style="accent-color: var(--amber-dark);"> Old GRA</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="New GRA / Phase 2" checked style="accent-color: var(--amber-dark);"> New GRA</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="D-Line" checked style="accent-color: var(--amber-dark);"> D-Line / Garrison</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Ada George" checked style="accent-color: var(--amber-dark);"> Ada George / Wimpey</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Choba / Uniport" style="accent-color: var(--amber-dark);"> Choba / Uniport</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Rumuola" checked style="accent-color: var(--amber-dark);"> Rumuola</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Rumuodara" style="accent-color: var(--amber-dark);"> Rumuodara / Artillery</label>
-            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; cursor: pointer;"><input type="checkbox" name="pbArea" value="Elelenwo" style="accent-color: var(--amber-dark);"> Elelenwo</label>
+          <div class="pb-areas-grid" id="pbAreasCheckboxes">
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Trans-Amadi" checked style="accent-color: var(--amber-dark);"> Trans-Amadi</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Peter Odili Road" checked style="accent-color: var(--amber-dark);"> Peter Odili Road</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Woji" checked style="accent-color: var(--amber-dark);"> Woji / Golf Estate</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Old GRA" checked style="accent-color: var(--amber-dark);"> Old GRA</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="New GRA / Phase 2" checked style="accent-color: var(--amber-dark);"> New GRA</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="D-Line" checked style="accent-color: var(--amber-dark);"> D-Line / Garrison</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Ada George" checked style="accent-color: var(--amber-dark);"> Ada George / Wimpey</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Choba / Uniport" style="accent-color: var(--amber-dark);"> Choba / Uniport</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Rumuola" checked style="accent-color: var(--amber-dark);"> Rumuola</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Rumuodara" style="accent-color: var(--amber-dark);"> Rumuodara / Artillery</label>
+            <label class="pb-area-chip"><input type="checkbox" name="pbArea" value="Elelenwo" style="accent-color: var(--amber-dark);"> Elelenwo</label>
           </div>
 
           <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 16px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
@@ -388,25 +401,25 @@
       <!-- ==================== SECTION 5: VERIFICATION (ID, 3 PHOTOS, LICENCE) ==================== -->
       <section id="sec-verification" class="artisan-section">
         <div style="margin-bottom: 22px;">
-          <div class="hero-eyebrow" style="margin-bottom: 4px;">STATUTORY TRUST INFRASTRUCTURE</div>
+          <div class="hero-eyebrow" style="margin-bottom: 4px;">IDENTITY &amp; VERIFICATION</div>
           <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0; color: var(--foreground);">Verification &amp; Credentials</h2>
           <p style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">
             Port Harcourt clients require validated government ID, 3 work portfolio photos, and licences for regulated trades.
           </p>
         </div>
 
-        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px; display: flex; flex-direction: column; gap: 24px;">
+        <div class="artisan-card-box" style="display: flex; flex-direction: column; gap: 24px;">
           
           <!-- 1. Government ID -->
           <div style="border-bottom: 1px solid var(--border); padding-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
               <div>
                 <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">1. Upload Government ID</h3>
                 <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">National Identification Number (NIN Slip), Voter's Card, or Driver's License.</p>
               </div>
-              <span class="badge ed-badge-verified">✓ ID Validated</span>
+              <span id="verificationIdBadge" class="badge ed-badge-verified">✓ ID checked by Servhive</span>
             </div>
-            <div style="border: 1px dashed var(--teal-bright); background: var(--bg-surface-subtle); padding: 14px 18px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+            <div style="border: 1px dashed var(--teal-bright); background: var(--bg-surface-subtle); padding: 14px 18px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 10px;">
               <span style="font-size: 0.85rem; color: var(--teal); font-weight: 700;">📄 Government_ID_NIN_Document.pdf (Attached)</span>
               <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.74rem;" onclick="simulateReupload('ID')">Re-upload New File</button>
             </div>
@@ -414,26 +427,26 @@
 
           <!-- 2. Work Portfolio Photos -->
           <div style="border-bottom: 1px solid var(--border); padding-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
               <div>
                 <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">2. Past Work Portfolio Photos (Minimum 3 Photos)</h3>
                 <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">High resolution photographs of past completed installations or repairs in Port Harcourt.</p>
               </div>
-              <span class="badge ed-badge-verified">✓ Portfolio Verification</span>
+              <span class="badge ed-badge-verified">✓ 3 Photos Uploaded</span>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px;" id="verificationWorkPhotosGrid">
-              <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo 1')">
+            <div class="verification-work-photos-grid" id="verificationWorkPhotosGrid">
+              <div class="verification-upload-card" onclick="simulateReupload('Portfolio Photo 1')">
                 <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
                 <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 1</div>
                 <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
               </div>
-              <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo 2')">
+              <div class="verification-upload-card" onclick="simulateReupload('Portfolio Photo 2')">
                 <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
                 <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 2</div>
                 <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
               </div>
-              <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo 3')">
+              <div class="verification-upload-card" onclick="simulateReupload('Portfolio Photo 3')">
                 <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
                 <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 3</div>
                 <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
@@ -446,15 +459,15 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
               <div>
                 <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">3. Licence for Regulated Trades</h3>
-                <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Mandatory for high voltage electrical, plumbing pumps, structural mechanics, and certified crafts.</p>
+                <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Mandatory for regulated trades (health, tattoo, laser, funeral, high voltage electrical, etc.) before approval.</p>
               </div>
-              <span class="badge ed-badge-verified">✓ Licence Verified</span>
+              <span id="verificationLicenceBadge" class="badge ed-badge-verified">✓ Licence checked by Servhive</span>
             </div>
 
             <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-top: 10px;">
               <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Registration Certificate / Body Number</label>
-              <input type="text" id="verificationLicenceInput" class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--foreground);" placeholder="e.g. Rivers State Mechanical/Electrical Contractors Reg #2026-PH-..." value="">
-              <span style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 6px; display: block;">Issued under Rivers State Ministry of Commerce &amp; Technical Guild guidelines.</span>
+              <input type="text" id="verificationLicenceInput" class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--foreground);" placeholder="e.g. Professional Practice Licence #..." value="">
+              <span style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 6px; display: block;">Required for regulated trades before verification approval.</span>
             </div>
           </div>
 
@@ -467,10 +480,10 @@
       <!-- ==================== SECTION 6: DISPUTE & COMPLAINTS HUB ==================== -->
       <section id="sec-complaints" class="artisan-section">
         <div style="margin-bottom: 22px;">
-          <div class="hero-eyebrow" style="margin-bottom: 4px;">CLIENT SATISFACTION &amp; MEDIATION</div>
+          <div class="hero-eyebrow" style="margin-bottom: 4px;">CLIENT INQUIRIES &amp; SUPPORT</div>
           <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0; color: var(--foreground);">Dispute &amp; Complaints Hub</h2>
           <p style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">
-            View and respond to client inquiries, quality disputes, or mediation cases handled by Godfrey &amp; the dispute desk.
+            View and respond to client inquiries, quality concerns, or mediation cases handled by the Servhive support team.
           </p>
         </div>
 
@@ -486,7 +499,7 @@
   <div id="artisanEnterQuoteModal" class="modal-backdrop">
     <div class="ed-modal-box" style="max-width: 500px; padding: 28px;">
       <button class="ed-modal-close" onclick="closeModal('artisanEnterQuoteModal')">&times;</button>
-      <div class="hero-eyebrow" style="margin-bottom: 6px;">OFFICIAL ESCROW PROPOSAL</div>
+      <div class="hero-eyebrow" style="margin-bottom: 6px;">OFFICIAL QUOTE WITH PAYMENT PROTECTION</div>
       <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--foreground); margin-bottom: 4px;">Enter Quote for Client</h3>
       <p id="artisanQuoteModalContext" style="font-size: 0.84rem; color: var(--muted-foreground); margin-bottom: 18px;">
         Job request from client
@@ -506,11 +519,11 @@
             <strong id="artisanQuoteTotalDisplay">₦0</strong>
           </div>
           <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--muted-foreground);">
-            <span>Platform Protection (5%):</span>
+            <span>Platform Commission (5%):</span>
             <span id="artisanQuoteCommissionDisplay">₦0</span>
           </div>
           <div style="display: flex; justify-content: space-between; font-weight: 800; color: var(--teal); border-top: 1px solid var(--border); padding-top: 4px; margin-top: 4px;">
-            <span>Your Net Escrow Payout:</span>
+            <span>Your Net Payout (Paystack Protection):</span>
             <span id="artisanQuoteNetPayoutDisplay">₦0</span>
           </div>
         </div>

@@ -446,6 +446,12 @@ function formatNaira(amount) {
   return '₦' + Number(amount).toLocaleString('en-NG');
 }
 
+function formatReviewCount(count) {
+  if (!count || count === 0) return 'No reviews yet';
+  if (count === 1) return '1 review';
+  return `${count} reviews`;
+}
+
 // Great-circle Haversine Distance in Kilometers
 function getDistanceKm(lat1, lon1, lat2, lon2) {
   if (typeof lat1 !== 'number' || typeof lon1 !== 'number' || typeof lat2 !== 'number' || typeof lon2 !== 'number') {
@@ -708,7 +714,7 @@ function renderSpotlight() {
           <div style="font-size: 0.76rem; font-weight: 800; color: var(--teal); text-transform: uppercase;">${pro.categoryName}</div>
           <h4 style="font-size: 1.05rem; font-weight: 800; margin: 4px 0 2px;">${pro.businessName}</h4>
           <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">${pro.name} · ${pro.area}</div>
-          <div style="font-size: 0.82rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 14px;">★ ${(pro.rating || 5.0).toFixed(1)} (${pro.reviewCount || 0} reviews)</div>
+          <div style="font-size: 0.82rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 14px;">${pro.reviewCount > 0 ? `★ ${(pro.rating || 5.0).toFixed(1)} (${formatReviewCount(pro.reviewCount)})` : '★ — (No reviews yet)'}</div>
         </div>
         <div style="border-top: 1px solid var(--hairline); padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
           <span style="font-size: 0.85rem; font-weight: 800;">From ${formatNaira(pro.startingPrice || 10000)}</span>
@@ -987,11 +993,15 @@ function renderProviders() {
           ${pro.verified ? `
             <span class="badge ed-badge-verified">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              Rivers Verified Pro
+              ID checked by Servhive
             </span>
-          ` : ''}
+          ` : `
+            <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.68rem; font-weight: 700;">
+              ⏳ Under review
+            </span>
+          `}
           <div class="badge badge-outline" style="font-size: 0.75rem; gap: 4px;">
-            <span style="color: var(--primary);">★</span> ${pro.rating.toFixed(1)} <span style="color: var(--muted-foreground); font-weight: 500;">(${pro.reviewCount})</span>
+            ${pro.reviewCount > 0 ? `<span style="color: var(--primary);">★</span> ${pro.rating.toFixed(1)} <span style="color: var(--muted-foreground); font-weight: 500;">(${formatReviewCount(pro.reviewCount)})</span>` : `<span style="color: var(--muted-foreground); font-weight: 500;">No reviews yet</span>`}
           </div>
           <span class="badge badge-secondary">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -1123,47 +1133,49 @@ window.openProfileModal = function(proId) {
   const primaryService = pro.services && pro.services[0] ? pro.services[0] : { name: 'Standard Service', price: pro.startingPrice };
 
   modalBody.innerHTML = `
-    <div style="height: 220px; position: relative; overflow: hidden; background: #0F141C;">
-      <img src="${pro.image}" alt="${pro.name}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;" />
-      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%);"></div>
-      <div style="position: absolute; bottom: 16px; left: 24px; display: flex; gap: 8px; flex-wrap: wrap;">
+    <div class="profile-modal-cover">
+      <img src="${pro.image}" alt="${pro.name}" />
+      <div class="profile-modal-cover-overlay"></div>
+      <div class="profile-modal-badges">
         ${pro.boosted ? `<span class="badge ed-badge-boosted">⚡ Boosted Pro</span>` : ''}
         <span class="ed-badge-verified" style="background: var(--teal); color: #FFFFFF;">✓ Rivers Verified Pro</span>
         <span style="background: rgba(0,0,0,0.65); color: #FFFFFF; padding: 3px 10px; border-radius: var(--radius-full); font-size: 0.76rem; font-weight: 700;">📍 ${pro.area}, Port Harcourt</span>
       </div>
     </div>
 
-    <div style="padding: 28px;">
+    <div class="profile-modal-body">
       <!-- Title & Rating -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+      <div class="profile-modal-header-row">
         <div>
-          <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; color: var(--foreground);">${pro.businessName}</h2>
-          <div style="font-size: 0.9rem; color: var(--muted-foreground); font-weight: 600;">Lead Pro: ${pro.name} • ${pro.subSpecialty}</div>
+          <h2 style="font-size: 1.55rem; font-weight: 800; margin-bottom: 4px; color: var(--foreground); line-height: 1.25;">${pro.businessName}</h2>
+          <div style="font-size: 0.88rem; color: var(--muted-foreground); font-weight: 600;">Lead Pro: ${pro.name} • ${pro.subSpecialty}</div>
         </div>
-        <div style="text-align: right; display: flex; align-items: center; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
           <button id="profileSaveBtn" class="ed-button ed-button-black ed-btn-compact" onclick="toggleSaveProvider('${pro.id}')">
             <span>${isSaved ? '♥ Saved Provider' : '♡ Save Provider'}</span>
           </button>
-          <div>
-            <div style="font-size: 1.3rem; font-weight: 800; color: var(--amber-dark);">★ ${pro.rating.toFixed(1)}</div>
-            <div style="font-size: 0.76rem; color: var(--muted-foreground);">${pro.reviewCount} client reviews</div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--amber-dark); line-height: 1.2;">
+              ${pro.reviewCount > 0 ? `★ ${pro.rating.toFixed(1)}` : '—'}
+            </div>
+            <div style="font-size: 0.74rem; color: var(--muted-foreground);">${formatReviewCount(pro.reviewCount)}</div>
           </div>
         </div>
       </div>
 
       <!-- About the Service -->
-      <div style="margin-bottom: 24px;">
-        <h4 style="font-size: 0.86rem; font-weight: 800; margin-bottom: 6px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">About the Service</h4>
-        <p style="color: var(--muted-foreground); font-size: 0.92rem; line-height: 1.6;">${pro.bio}</p>
+      <div style="margin-bottom: 22px;">
+        <h4 style="font-size: 0.82rem; font-weight: 800; margin-bottom: 6px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">About the Service</h4>
+        <p style="color: var(--muted-foreground); font-size: 0.9rem; line-height: 1.55;">${pro.bio}</p>
       </div>
 
       <!-- Photos of Past Work (Specification Requirement) -->
-      <div style="margin-bottom: 26px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h4 style="font-size: 0.86rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
+          <h4 style="font-size: 0.82rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">
             Photos of Past Work (${(pro.workPhotos || []).length})
           </h4>
-          <span style="font-size: 0.76rem; color: var(--muted-foreground);">Verified Port Harcourt Projects</span>
+          <span style="font-size: 0.74rem; color: var(--muted-foreground);">Verified Port Harcourt Projects</span>
         </div>
         <div class="pro-work-gallery">
           ${(pro.workPhotos || []).map(wp => `
@@ -1178,21 +1190,21 @@ window.openProfileModal = function(proId) {
       </div>
 
       <!-- Services and Prices (Transparent Rate Card) -->
-      <div style="margin-bottom: 28px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h4 style="font-size: 0.86rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">Services and Transparent Prices</h4>
-          <span style="font-size: 0.76rem; color: var(--teal); font-weight: 700;">100% Escrow Protected</span>
+      <div style="margin-bottom: 26px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
+          <h4 style="font-size: 0.82rem; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.5px;">Services and Transparent Prices</h4>
+          <span style="font-size: 0.74rem; color: var(--teal); font-weight: 700;">100% Escrow Protected</span>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 10px;">
           ${pro.services.map(s => `
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); gap: 12px; flex-wrap: wrap;">
+            <div class="profile-service-card">
               <div>
                 <div style="font-weight: 800; font-size: 0.92rem; color: var(--foreground);">${s.name}</div>
-                <div style="font-size: 0.75rem; color: var(--muted-foreground);">${s.type}</div>
+                <div style="font-size: 0.74rem; color: var(--muted-foreground);">${s.type}</div>
               </div>
               <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="font-weight: 800; color: var(--amber-dark); font-size: 1.05rem;">
+                <div style="font-weight: 800; color: var(--amber-dark); font-size: 1.05rem; font-variant-numeric: tabular-nums;">
                   ${formatNaira(s.price)}
                 </div>
                 <button class="ed-button ed-button-amber ed-btn-compact" onclick="openEscrowBookingModal('${pro.id}', '${s.name.replace(/'/g, "\\'")}', ${s.price}); closeModal('profileModal');">
@@ -1204,40 +1216,44 @@ window.openProfileModal = function(proId) {
         </div>
       </div>
 
-      <!-- Action Buttons: Chat or Request / Book -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px;">
-        <button class="ed-button ed-button-black" style="padding: 13px;" onclick="openChatDrawer('${pro.id}', true); closeModal('profileModal');">
-          <span>💬 Chat &amp; Describe Job (Get Quote)</span>
+      <!-- Action Buttons: Chat or Request / Book (Mobile Stacked, Desktop Side-by-side) -->
+      <div class="profile-modal-actions">
+        <button class="ed-button ed-button-black" onclick="openChatDrawer('${pro.id}', true); closeModal('profileModal');">
+          <span>💬 Chat &amp; Describe Job</span>
         </button>
-        <button class="ed-button ed-button-amber" style="padding: 13px;" onclick="openEscrowBookingModal('${pro.id}', '${primaryService.name.replace(/'/g, "\\'")}', ${primaryService.price}); closeModal('profileModal');">
+        <button class="ed-button ed-button-amber" onclick="openEscrowBookingModal('${pro.id}', '${primaryService.name.replace(/'/g, "\\'")}', ${primaryService.price}); closeModal('profileModal');">
           <span>🛡️ Request / Book with Escrow</span>
         </button>
       </div>
 
       <!-- Reviews -->
-      <div style="border-top: 1px solid var(--border); padding-top: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground);">Client Reviews (${pro.reviews.length})</h4>
+      <div style="border-top: 1px solid var(--border); padding-top: 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+          <h4 style="font-size: 1rem; font-weight: 800; color: var(--foreground);">Client Reviews (${formatReviewCount(pro.reviews ? pro.reviews.length : 0)})</h4>
           <button class="ed-button ed-button-black ed-btn-compact" onclick="showAddReviewPrompt('${pro.id}')">
             <span>+ Add Review</span>
           </button>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          ${pro.reviews.map(r => `
-            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span style="font-weight: 800; font-size: 0.9rem; color: var(--foreground);">${r.author} <small style="color: var(--muted-foreground); font-weight: 500;">(${r.area})</small></span>
-                <span style="color: var(--amber-dark); font-size: 0.85rem; font-weight: 800;">★ ${r.rating}</span>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          ${(!pro.reviews || pro.reviews.length === 0) ? `
+            <div style="text-align: center; padding: 22px 14px; background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); color: var(--muted-foreground); font-size: 0.86rem;">
+              No reviews yet. Reviews come only from completed jobs.
+            </div>
+          ` : pro.reviews.map(r => `
+            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px; align-items: center;">
+                <span style="font-weight: 800; font-size: 0.88rem; color: var(--foreground);">${r.author} <small style="color: var(--muted-foreground); font-weight: 500;">(${r.area})</small></span>
+                <span style="color: var(--amber-dark); font-size: 0.82rem; font-weight: 800;">★ ${r.rating}</span>
               </div>
-              <p style="font-size: 0.86rem; color: var(--muted-foreground); line-height: 1.45;">${r.text}</p>
+              <p style="font-size: 0.85rem; color: var(--muted-foreground); line-height: 1.45; margin: 0;">${r.text}</p>
             </div>
           `).join('')}
         </div>
       </div>
 
       <!-- Report problem link -->
-      <div style="margin-top: 24px; text-align: center;">
+      <div style="margin-top: 22px; text-align: center;">
         <button style="background: none; border: none; color: #DC2626; font-size: 0.8rem; font-weight: 700; cursor: pointer;" onclick="openReportModal('${pro.id}', '${pro.businessName}')">
           ⚠️ Report a problem with this provider
         </button>
@@ -1319,6 +1335,42 @@ window.showAppNotice = function({
 window.showAddReviewPrompt = function(proId) {
   const pro = state.providers.find(p => p.id === proId);
   if (!pro) return;
+
+  // 1. A provider cannot review themselves
+  if (state.currentUser && (
+    state.currentUser.id === proId ||
+    state.currentUser.id === pro.id ||
+    state.currentUser.name === pro.name ||
+    (state.currentUser.businessName && state.currentUser.businessName === pro.businessName)
+  )) {
+    showAppNotice({
+      icon: '⚠️',
+      eyebrow: 'RESTRICTED ACTION',
+      title: 'Self-Reviews Not Permitted',
+      message: 'Providers cannot write reviews for their own business. Reviews must come directly from real completed client jobs.',
+      confirmText: 'Understood'
+    });
+    return;
+  }
+
+  // 2. Reviews come only from completed jobs
+  const userCompletedJob = state.escrowJobs.some(j =>
+    (j.proId === proId || j.proId === pro.id || j.proName === pro.businessName) &&
+    j.status === 'completed' &&
+    state.currentUser &&
+    (j.customerName === state.currentUser.name || j.customerPhone === state.currentUser.phone)
+  );
+
+  if (!userCompletedJob && state.escrowJobs.length > 0) {
+    showAppNotice({
+      icon: '🛡️',
+      eyebrow: 'VERIFIED REVIEW POLICY',
+      title: 'Completed Job Required',
+      message: `Reviews come only from completed jobs. You must have a confirmed completed job with <strong>${pro.businessName}</strong> to leave a review.`,
+      confirmText: 'Understood'
+    });
+    return;
+  }
 
   const reviewModal = document.getElementById('reviewPromptModal');
   if (reviewModal) {
@@ -1688,12 +1740,12 @@ window.renderRegisterStep = function() {
         <div style="font-size: 2.8rem; color: var(--teal); margin-bottom: 12px;">✓</div>
         <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; color: var(--canvas);">Application Submitted!</h2>
         <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
-          Your profile has been routed to Godfrey and the Servhive verification team.
+          Your profile has been routed to the Servhive verification team.
         </p>
 
         <div style="background: var(--bg-surface-subtle); border: 1px solid var(--hairline-amber); padding: 18px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
-          <div style="font-weight: 800; color: var(--amber-dark); font-size: 0.95rem; margin-bottom: 4px;">🎁 First 1 Month Free Verified Pro Activated</div>
-          <div style="font-size: 0.85rem; color: var(--text-muted);">As an early Port Harcourt provider, you enjoy 30 days with zero platform fees. Future renewal: ₦2,000/month (5% escrow commission).</div>
+          <div style="font-weight: 800; color: var(--amber-dark); font-size: 0.95rem; margin-bottom: 4px;">🎁 1 Month Free Trial for New Providers</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made. 5% commission applies to jobs paid through the app.</div>
         </div>
 
         <button class="ed-button ed-button-amber" onclick="closeModal('providerRegisterModal');">
@@ -1745,8 +1797,8 @@ window.checkCategoryGating = function(val) {
     regState.isApproval = true;
     container.innerHTML = `
       <div style="background: rgba(255, 167, 38, 0.12); border: 1px solid rgba(255, 167, 38, 0.4); padding: 14px; border-radius: 8px; color: #FFA726;">
-        <div style="font-weight: 800; font-size: 0.9rem; margin-bottom: 4px;">⚠️ Statutory Licence Required</div>
-        <div style="font-size: 0.82rem; line-height: 1.5;">${item ? item.reason : ''} In the next step, upload your Rivers State registration certificate. Profile requires Admin sign-off before going live.</div>
+        <div style="font-weight: 800; font-size: 0.9rem; margin-bottom: 4px;">⚠️ Professional Licence Required</div>
+        <div style="font-size: 0.82rem; line-height: 1.5;">${item ? item.reason : ''} In the next step, upload your professional registration licence. Profile requires Admin sign-off before going live.</div>
       </div>
     `;
     btn.disabled = false;
@@ -2320,21 +2372,21 @@ window.renderAuthForm = function() {
         <!-- 1-Month Free Promo Callout Banner -->
         <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 18px;">
           <div style="font-weight: 800; font-size: 0.9rem; color: var(--amber-dark); margin-bottom: 2px;">
-            🎁 First 1 Month Free Verified Pro Trial Active
+            🎁 1 Month Free Trial for New Providers
           </div>
           <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
-            ₦0 subscription fees for your first 30 days. Higher-ticket subscription renewal: ₦2,000/mo. Platform commission: 5% on completed milestones.
+            1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made. 5% commission applies to jobs paid through the app.
           </div>
         </div>
 
         <div class="auth-field-grid">
           <div class="auth-input-group">
             <label class="auth-label">Your Name</label>
-            <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Engr. Tari Davies" />
+            <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Master Craftsman Full Name" />
           </div>
           <div class="auth-input-group">
             <label class="auth-label">Business Name</label>
-            <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Prime Ceilings & Tiling Works" />
+            <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Precision Engineering & Repair" />
           </div>
         </div>
 
@@ -2351,18 +2403,31 @@ window.renderAuthForm = function() {
 
         <div class="auth-field-grid">
           <div class="auth-input-group">
-            <label class="auth-label">Main Service</label>
+            <label class="auth-label">Primary Trade Category</label>
             <select id="artisanCategory" required class="auth-input ed-select-input" style="height: 46px;">
-              <option value="power-gen">Power &amp; Generators</option>
-              <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
-              <option value="interior-pop">Interior POP &amp; Tiling</option>
-              <option value="plumbing">Plumbing &amp; Boreholes</option>
-              <option value="electrical">Electrical &amp; Conduit</option>
-              <option value="ac-chillers">AC &amp; Refrigeration</option>
-              <option value="auto-mechanic">Auto Mechanic &amp; Diagnostics</option>
-              <option value="beauty-hair">Beauty, Hair &amp; Braids</option>
-              <option value="carpentry">Carpentry &amp; Woodwork</option>
-              <option value="painting">Painting &amp; Screeding</option>
+              <optgroup label="Standard Trade Categories">
+                <option value="power-gen">Power &amp; Generators</option>
+                <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
+                <option value="interior-pop">Interior POP Ceilings &amp; Tiling</option>
+                <option value="plumbing">Plumbing &amp; Water Pumps</option>
+                <option value="electrical">Electrical Wiring &amp; Conduit</option>
+                <option value="ac-chillers">AC &amp; Refrigeration</option>
+                <option value="auto-mechanic">Auto Mechanics &amp; Diagnostics</option>
+                <option value="beauty-hair">Beauty, Hair &amp; Luxury Braids</option>
+                <option value="carpentry">Carpentry &amp; Cabinetry</option>
+                <option value="painting">Painting &amp; Wall Screeding</option>
+              </optgroup>
+              <optgroup label="Regulated Trades (Licence Required Before Approval)">
+                <option value="home-health">Home Health Aide (Licence Required)</option>
+                <option value="laser-tech">Laser Tech &amp; Electrologist (Licence Required)</option>
+                <option value="tattoo-piercing">Tattoo &amp; Body Piercer (Licence Required)</option>
+                <option value="funeral-director">Funeral Director (Licence Required)</option>
+              </optgroup>
+              <optgroup label="Unavailable Categories (Not Permitted)">
+                <option value="nanny" disabled>Nanny / Babysitter (Not selectable)</option>
+                <option value="childcare" disabled>Childcare / Daycare (Not selectable)</option>
+                <option value="tutor" disabled>Private Tutor (Not selectable)</option>
+              </optgroup>
             </select>
           </div>
           <div class="auth-input-group">
@@ -2389,15 +2454,15 @@ window.renderAuthForm = function() {
 
         <label class="auth-checkbox-label">
           <input type="checkbox" id="artisanTerms" required checked />
-          <span>I confirm our workshop adheres to Port Harcourt trade quality standards, 5% escrow commission, and verified safety delivery.</span>
+          <span>I confirm our workshop adheres to Port Harcourt trade quality standards and 5% commission on jobs paid through the app.</span>
         </label>
 
         <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
-          <span>Register as Verified Pro &rarr;</span>
+          <span>Register as Provider &rarr;</span>
         </button>
 
         <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
-          Already registered as an Artisan? 
+          Already registered as a Provider? 
           <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
             Log in here &rarr;
           </a>
@@ -2503,7 +2568,7 @@ window.renderAuthTrust = function() {
         <div class="auth-feature-row">
           <div class="auth-feature-icon">⚡</div>
           <div>
-            <div class="auth-feature-title">Godfrey & Team Concierge Mediation</div>
+            <div class="auth-feature-title">Servhive Support Team</div>
             <div class="auth-feature-desc">Dedicated Port Harcourt administrative support to mediate disputes fairly and protect artisans.</div>
           </div>
         </div>
@@ -2671,27 +2736,20 @@ window.handleArtisanSignupSubmit = function(e) {
     lat: matchedLm.lat,
     lng: matchedLm.lng,
     landmarks: [matchedLm.name, area],
-    rating: 5.0,
-    reviewCount: 1,
-    verified: true,
+    rating: 0,
+    reviewCount: 0,
+    verified: false,
     boosted: false,
-    status: 'approved',
+    status: 'under_review',
     image: '/assets/hero_tradesman.jpg',
     startingPrice: startingPrice,
     responseTime: '~15 mins',
-    bio: `${bizName} is a verified service enterprise based in ${area}, Port Harcourt. First 1 Month Free Verified Pro Member.`,
-    workPhotos: [
-      { url: '/assets/hero_tradesman.jpg', caption: 'Live on-site technical inspection in Port Harcourt' },
-      { url: '/assets/hero_tradesman.jpg', caption: 'Workshop testing & diagnostic equipment calibration' },
-      { url: '/assets/hero_tradesman.jpg', caption: 'Completed installation handover to client' }
-    ],
+    bio: `${bizName} is a Port Harcourt workshop based in ${area}. ID checked by Servhive (Under review).`,
+    workPhotos: [],
     services: [
-      { name: `Standard ${catName} Consultation & Service`, price: startingPrice, type: 'Starting from' },
-      { name: 'Comprehensive Diagnostic / Site Inspection', price: Math.round(startingPrice * 0.7), type: 'Fixed' }
+      { name: `Standard ${catName} Consultation & Service`, price: startingPrice, type: 'Starting from' }
     ],
-    reviews: [
-      { author: 'Servhive Verification Ops', area: 'Port Harcourt', rating: 5, date: 'Today', text: 'Verified Port Harcourt artisan onboarding completed. Phone & workshop KYC approved.' }
-    ]
+    reviews: []
   };
 
   state.users.push(newUser);
@@ -2702,10 +2760,10 @@ window.handleArtisanSignupSubmit = function(e) {
 
   showAppNotice({
     icon: '✨',
-    eyebrow: 'PRO MEMBERSHIP ACTIVATED',
+    eyebrow: 'PRO APPLICATION SUBMITTED',
     title: `Welcome, ${bizName}!`,
-    message: `Your Artisan Pro profile is live with the <strong>Teal Verified Badge</strong>.<br><br>🎁 <strong>First 1 Month Free Trial</strong> active (30 days free, standard renewal: ₦2,000/month). 5% Escrow commission guaranteed on milestone payouts.<br><br>Redirecting you to your dedicated Artisan Dashboard...`,
-    confirmText: 'Go to Artisan Dashboard',
+    message: `Your provider account has been registered and is currently <strong>Under review</strong>.<br><br>🎁 <strong>1 Month Free Trial</strong> active (₦2,000/month after trial for all providers). 5% commission applies to jobs paid through the app. Verified badges appear after admin review.<br><br>Redirecting you to your Pro Dashboard...`,
+    confirmText: 'Go to Pro Dashboard',
     onConfirm: () => {
       window.location.href = '/artisan.html';
     }
@@ -2797,7 +2855,7 @@ window.handleForgotPasswordSubmit = function(e) {
     icon: '📲',
     eyebrow: 'SECURITY PIN SENT',
     title: 'Reset PIN Dispatched',
-    message: `A 6-digit verification PIN has been dispatched to <strong>${contact}</strong> via SMS / Email.<br><br>For instant assistance, Godfrey & the Port Harcourt admin desk can be reached at <strong>+234 800-SERVHIVE</strong>.`,
+    message: `A 6-digit verification PIN has been dispatched to <strong>${contact}</strong> via SMS / Email.<br><br>For instant assistance, the Servhive support team can be reached at <strong>+234 800-SERVHIVE</strong>.`,
     confirmText: 'Understood'
   });
 };
@@ -3016,7 +3074,7 @@ function renderAdminEscrowLedger() {
       </td>
       <td style="padding: 14px 16px; font-size: 0.82rem;">📍 ${job.area}</td>
       <td style="padding: 14px 16px; font-weight: 800; color: var(--canvas);">${formatNaira(job.amount)}</td>
-      <td style="padding: 14px 16px; font-weight: 800; color: var(--teal-bright);">${formatNaira(job.commissionAmount)} (10%)</td>
+      <td style="padding: 14px 16px; font-weight: 800; color: var(--teal-bright);">${formatNaira(job.commissionAmount)} (5%)</td>
       <td style="padding: 14px 16px; font-weight: 800; color: var(--amber);">${formatNaira(job.payoutAmount)}</td>
       <td style="padding: 14px 16px; text-align: right;">
         <span style="padding: 4px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 800; ${job.status === 'completed' ? 'background: rgba(16, 185, 129, 0.15); color: #10B981;' : job.status === 'awaiting_release' ? 'background: rgba(255, 167, 38, 0.15); color: #FFA726;' : 'background: rgba(26, 140, 140, 0.15); color: var(--teal-bright);'}">
@@ -3204,7 +3262,7 @@ window.submitReport = function(e) {
     icon: '🛡️',
     eyebrow: 'REPORT SUBMITTED',
     title: 'Dispute Logged with Admin Ops',
-    message: 'Your report has been routed to Godfrey and the Servhive dispute mediation team. We will review the details and reach out.',
+    message: 'Your report has been routed to the Servhive dispute mediation team. We will review the details and reach out.',
     confirmText: 'Understood'
   });
 };
@@ -3372,7 +3430,7 @@ window.renderMyAccountView = function() {
           <div class="hero-eyebrow" style="margin-bottom: 4px;">CONCIERGE &amp; MEDIATION DESK</div>
           <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin-bottom: 8px;">Port Harcourt Operations Support</h4>
           <p style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 14px;">
-            Need help with an artisan, rate dispute, or escrow milestone release? Godfrey and the Rivers State field concierge team resolve queries within 2 hours.
+            Need help with an artisan, rate inquiry, or payment protection release? The Servhive support team resolves queries within 2 hours.
           </p>
           <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 6px; color: var(--foreground); margin-bottom: 16px;">
             <div>📞 <strong>Hotline:</strong> +234 800-SERVHIVE (Toll Free)</div>
@@ -3569,35 +3627,25 @@ window.declineProRequest = function(reqId) {
 };
 
 window.selectBoostDays = function(days) {
-  proSelectedBoostDays = days;
-  [1, 3, 7, 14].forEach(d => {
-    const chip = document.getElementById(`boostChip-${d}`);
-    if (chip) chip.classList.toggle('active', d === days);
-  });
-
-  const cost = days * (state.boostDailyRate || 500);
-  const btn = document.getElementById('activateBoostBtn');
-  if (btn) {
-    btn.innerHTML = `<span>⚡ Activate Visibility Boost (${days} ${days === 1 ? 'Day' : 'Days'} · ${formatNaira(cost)})</span>`;
-  }
+  proSelectedBoostDays = 7;
 };
 
 window.activateProVisibilityBoost = function() {
-  const days = proSelectedBoostDays || 3;
-  const cost = days * (state.boostDailyRate || 500);
+  const cost = 1500;
+  const days = 7;
 
   const targetPro = (state.currentUser && state.currentUser.role === 'artisan' && state.providers.find(p => p.id === state.currentUser.id || p.name === state.currentUser.name)) || state.providers[0];
   if (targetPro) {
     targetPro.boosted = true;
-    targetPro.boostDaysRemaining = days;
+    targetPro.boostDaysRemaining = 7;
     persistState();
     renderProviders();
 
     showAppNotice({
       icon: '⚡',
-      eyebrow: 'VISIBILITY BOOST ACTIVATED',
-      title: `Pinned to Top of PH Search (${days} Days)!`,
-      message: `Your profile (<strong>${targetPro.businessName}</strong>) has been pinned to the top boosted tier for ${days} days (${formatNaira(cost)}).\n\nExpect significantly increased customer quote inquiries from Port Harcourt residents.`,
+      eyebrow: 'PROFILE BOOST ACTIVATED',
+      title: 'Appear at the top (1 Week)!',
+      message: `Your profile (<strong>${targetPro.businessName}</strong>) has been boosted to appear at the top of Port Harcourt search results for 1 week (${formatNaira(cost)}).`,
       confirmText: 'View Directory →',
       onConfirm: () => {
         closeModal('proHomeModal');
@@ -3607,7 +3655,7 @@ window.activateProVisibilityBoost = function() {
   } else {
     showAppNotice({
       icon: '⚡',
-      eyebrow: 'VISIBILITY BOOST',
+      eyebrow: 'BOOST YOUR PROFILE',
       title: 'No Active Artisan Profile',
       message: 'Please register your artisan workshop to activate search pinning.',
       confirmText: 'Register Now',

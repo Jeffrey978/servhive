@@ -18,6 +18,9 @@
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-primary);">
 
+  <!-- Demo Version Banner -->
+  <div class="demo-version-banner">⚡ Demo version — Preview and testing build</div>
+
   <!-- ==================== DEDICATED AUTH HEADER (DIFFERENT FROM MARKETPLACE) ==================== -->
   <header class="auth-landing-header">
     <div class="auth-header-container">
@@ -31,7 +34,7 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
-        <span>100% Escrow Protection · Rivers State Verified Gateway</span>
+        <span>Payment Protection via Paystack · Port Harcourt Verified Gateway</span>
       </div>
 
       <!-- Right: Action Controls -->
@@ -47,10 +50,10 @@
   <!-- ==================== AUTH HERO BANNER ==================== -->
   <section class="auth-hero-banner">
     <h1 style="font-size: 2.15rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; color: var(--canvas);">
-      One Account. 100% Escrow Security.
+      One Account. Payment Protection via Paystack.
     </h1>
     <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.55; max-width: 620px; margin: 0 auto;">
-      Connect directly with vetted Port Harcourt artisans, protect your funds in safe Escrow, and experience zero roadside price gouging.
+      Connect directly with vetted Port Harcourt artisans, protect your funds safely until you confirm the job is done, and experience zero roadside price gouging.
     </p>
   </section>
 
@@ -101,7 +104,7 @@
           Log In to Client Portal
         </h2>
         <p id="authSubtitle" style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
-          Access vetted Port Harcourt artisans with 100% Escrow payment security and live tracking.
+          Access vetted Port Harcourt artisans with Payment Protection and live tracking.
         </p>
       </div>
 
@@ -111,19 +114,6 @@
       <!-- Dynamic Form Container -->
       <div id="authFormContainer">
         <!-- Rendered by renderAuthForm() -->
-      </div>
-
-      <!-- Quick 1-Click Demo Shortcut (Subtle & Non-Intrusive) -->
-      <div class="auth-demo-bar">
-        <span class="auth-demo-label">Demo Quick-Fill:</span>
-        <button type="button" class="auth-demo-chip" onclick="quickFillDemo('hirer')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          <span>Client</span>
-        </button>
-        <button type="button" class="auth-demo-chip" onclick="quickFillDemo('artisan')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-          <span>Artisan Pro</span>
-        </button>
       </div>
 
     </div>
@@ -143,9 +133,9 @@
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
       </div>
-      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">100% Escrow Protection</h3>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Payment Protection</h3>
       <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
-        Your deposit remains frozen in our secure vault. The artisan only receives payout once you inspect and personally confirm the finished job.
+        You pay in the app, the money is held safely by licensed payment provider Paystack (not in our own account), and it is released to the provider only after you confirm the job is done.
       </p>
     </div>
 
@@ -174,9 +164,9 @@
           <line x1="18" y1="10" x2="18" y2="21"></line>
         </svg>
       </div>
-      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Statutory Rivers KYC</h3>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">ID Checked by Servhive</h3>
       <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
-        Every pro undergoes identity validation, workshop verification, and trade competence auditing in alignment with Rivers State commercial standards.
+        Every pro undergoes identity validation and verification. Regulated trades must upload a verified licence before approval.
       </p>
     </div>
   </section>
@@ -189,11 +179,11 @@
 
     <div class="auth-faq-item open">
       <button type="button" class="auth-faq-question" onclick="toggleFaq(this)">
-        <span>How does the 100% Escrow Guarantee protect my money?</span>
+        <span>How does Payment Protection protect my money?</span>
         <span class="auth-faq-icon">▾</span>
       </button>
       <div class="auth-faq-answer">
-        When you book a service, your payment is held safely in Servhive Escrow. The technician can see the confirmed funded commitment, but cannot withdraw funds until you physically inspect their completed handiwork and authorize release. If quality standards aren't met, funds remain protected while Godfrey &amp; the dispute desk mediate.
+        The customer pays in the app, the money is held by licensed payment provider Paystack and not in our own account, and it is released to the provider only after the customer confirms the job is done. If quality standards aren't met, funds remain protected while the Servhive support team helps resolve the issue.
       </div>
     </div>
 
@@ -209,11 +199,11 @@
 
     <div class="auth-faq-item">
       <button type="button" class="auth-faq-question" onclick="toggleFaq(this)">
-        <span>How does the First 1 Month Free Trial work for Artisan Pros?</span>
+        <span>How do fees and the 1 Month Free Trial work for Providers?</span>
         <span class="auth-faq-icon">▾</span>
       </button>
       <div class="auth-faq-answer">
-        Verified artisans joining Servhive enjoy zero platform subscription fees (₦0) and complimentary listing in the Port Harcourt directory for their first 30 days. Future renewal is ₦2,000/month for higher ticket services, with only a 5% safety commission on released escrow milestones.
+        Every new provider receives a 1 month free trial. After that, it is ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made. A 5% commission applies to jobs paid through the app.
       </div>
     </div>
 
@@ -235,11 +225,11 @@
         <span>servhive<strong>PH</strong></span>
       </a>
       <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 520px; line-height: 1.5;">
-        Port Harcourt's premier verified trade &amp; talent infrastructure. Enforcing statutory verification, masked contact privacy, and Escrow payment protection.
+        Port Harcourt's verified trade &amp; talent infrastructure. ID checked by Servhive, masked contact privacy, and payment protection via Paystack.
       </p>
       <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; font-size: 0.84rem; font-weight: 600;">
         <a href="/index.html" style="color: var(--canvas); text-decoration: none;">Explore Marketplace</a>
-        <a href="#trustStrip" style="color: var(--text-muted); text-decoration: none;">Escrow &amp; Privacy Protocol</a>
+        <a href="#trustStrip" style="color: var(--text-muted); text-decoration: none;">Payment Protection &amp; Privacy Protocol</a>
         <a href="#faqSection" style="color: var(--text-muted); text-decoration: none;">Help &amp; FAQs</a>
       </div>
       <div style="font-size: 0.76rem; color: var(--text-faint); margin-top: 6px;">
@@ -389,8 +379,8 @@
                 <span>Remember this device</span>
               </label>
               <span style="font-size: 0.76rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                256-bit Encrypted
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Payment Protection (Paystack)
               </span>
             </div>
 
@@ -458,7 +448,7 @@
 
             <label class="auth-checkbox-label">
               <input type="checkbox" id="hirerTerms" required checked />
-              <span>I agree to Servhive's <a href="#trustStrip" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Escrow &amp; Privacy Protocol</a> and standard Rivers State commercial guidelines.</span>
+              <span>I agree to Servhive's <a href="#trustStrip" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Payment Protection &amp; Privacy Protocol</a>.</span>
             </label>
 
             <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
@@ -474,16 +464,16 @@
           </form>
         `;
       } else {
-        // Artisan / Pro Signup Form: Name, Business Name, Phone, Main Service + "First 1 Month Free"
+        // Artisan / Pro Signup Form
         container.innerHTML = `
           <form onsubmit="handleArtisanSignupSubmit(event)">
             <!-- 1-Month Free Promo Callout Banner -->
             <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 18px;">
               <div style="font-weight: 800; font-size: 0.9rem; color: var(--amber-dark); margin-bottom: 2px;">
-                🎁 First 1 Month Free Verified Pro Trial Active
+                🎁 1 Month Free Trial for New Providers
               </div>
               <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
-                ₦0 subscription fees for your first 30 days. Higher-ticket subscription renewal: ₦2,000/mo. Platform commission: 5% on completed milestones.
+                1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made. 5% commission applies to jobs paid through the app.
               </div>
             </div>
 
@@ -511,19 +501,35 @@
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
-                <label class="auth-label">Main Service</label>
-                <select id="artisanCategory" class="auth-input">
-                  <option value="power-gen">Power &amp; Generators</option>
-                  <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
-                  <option value="interior-pop">Interior POP &amp; Tiling</option>
-                  <option value="plumbing">Plumbing &amp; Boreholes</option>
-                  <option value="electrical">Electrical &amp; Conduit</option>
-                  <option value="ac-chillers">AC &amp; Refrigeration</option>
-                  <option value="auto-mechanic">Auto Mechanic &amp; Diagnostics</option>
-                  <option value="beauty-hair">Beauty, Hair &amp; Braids</option>
-                  <option value="carpentry">Carpentry &amp; Woodwork</option>
-                  <option value="painting">Painting &amp; Screeding</option>
+                <label class="auth-label">Primary Trade Category</label>
+                <select id="artisanCategory" class="auth-input" onchange="handleAuthCategoryChange(this.value)">
+                  <optgroup label="Standard Trade Categories">
+                    <option value="power-gen:Power &amp; Generators">Power &amp; Generators</option>
+                    <option value="solar-tech:Solar, Inverters &amp; CCTV">Solar, Inverters &amp; CCTV</option>
+                    <option value="interior-pop:Interior POP Ceilings &amp; Tiling">Interior POP Ceilings &amp; Tiling</option>
+                    <option value="plumbing:Plumbing &amp; Water Pumps">Plumbing &amp; Water Pumps</option>
+                    <option value="electrical:Electrical Wiring &amp; Conduit">Electrical Wiring &amp; Conduit</option>
+                    <option value="ac-chillers:Air Conditioning &amp; Refrigeration">AC &amp; Refrigeration</option>
+                    <option value="auto-mechanic:Auto Mechanics &amp; Diagnostics">Auto Mechanics &amp; Diagnostics</option>
+                    <option value="beauty-hair:Beauty, Hair &amp; Luxury Braids">Beauty, Hair &amp; Luxury Braids</option>
+                    <option value="carpentry:Carpentry &amp; Cabinetry">Carpentry &amp; Cabinetry</option>
+                    <option value="painting:Painting &amp; Wall Screeding">Painting &amp; Wall Screeding</option>
+                  </optgroup>
+                  <optgroup label="Regulated Trades (Licence Required Before Approval)">
+                    <option value="home-health:Home Health Aide">Home Health Aide (Licence Required)</option>
+                    <option value="laser-tech:Laser Tech &amp; Electrologist">Laser Tech &amp; Electrologist (Licence Required)</option>
+                    <option value="tattoo-piercing:Tattoo &amp; Body Piercer">Tattoo &amp; Body Piercer (Licence Required)</option>
+                    <option value="funeral-director:Funeral Director">Funeral Director (Licence Required)</option>
+                  </optgroup>
+                  <optgroup label="Unavailable Categories (Not Permitted)">
+                    <option value="nanny:Nanny" disabled>Nanny / Babysitter (Not selectable)</option>
+                    <option value="childcare:Childcare" disabled>Childcare / Daycare (Not selectable)</option>
+                    <option value="tutor:Private Tutor" disabled>Private Tutor (Not selectable)</option>
+                  </optgroup>
                 </select>
+                <div id="authRegulatedNotice" style="display: none; padding: 10px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid var(--amber); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--amber-dark); font-weight: 700; margin-top: 8px;">
+                  ⚠️ Regulated Trade: You must upload a valid trade licence in your Pro Dashboard before your profile can be approved.
+                </div>
               </div>
 
               <div class="auth-input-group">
@@ -558,21 +564,30 @@
 
             <label class="auth-checkbox-label">
               <input type="checkbox" id="artisanTerms" required checked />
-              <span>I confirm our workshop adheres to Port Harcourt trade quality standards, 5% escrow commission, and verified safety delivery.</span>
+              <span>I confirm our workshop adheres to Port Harcourt trade quality standards and 5% commission on jobs paid through the app.</span>
             </label>
 
             <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
-              <span>Register as Verified Pro &rarr;</span>
+              <span>Register as Provider &rarr;</span>
             </button>
 
             <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
-              Already registered as an Artisan? 
+              Already registered as a Provider? 
               <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
                 Log in here &rarr;
               </a>
             </div>
           </form>
         `;
+      }
+    }
+
+    function handleAuthCategoryChange(val) {
+      const notice = document.getElementById('authRegulatedNotice');
+      const regulatedKeys = ['home-health', 'laser-tech', 'tattoo-piercing', 'funeral-director'];
+      const key = val.split(':')[0];
+      if (notice) {
+        notice.style.display = regulatedKeys.includes(key) ? 'block' : 'none';
       }
     }
 
@@ -596,8 +611,8 @@
                 </svg>
               </div>
               <div>
-                <div class="auth-feature-title">100% Escrow Protection</div>
-                <div class="auth-feature-desc">Your payment is frozen in trust. The artisan is NOT paid until you personally inspect the completed job.</div>
+                <div class="auth-feature-title">Payment Protection</div>
+                <div class="auth-feature-desc">Customer pays in the app, the money is held safely by licensed provider Paystack (not in our own account), and released to the provider only after you confirm the job is done.</div>
               </div>
             </div>
 
@@ -642,19 +657,19 @@
           <div class="auth-stats-grid">
             <div class="auth-stat-card">
               <div class="auth-stat-value">100%</div>
-              <div class="auth-stat-label">Escrow Protected</div>
+              <div class="auth-stat-label">Payment Protection</div>
             </div>
             <div class="auth-stat-card">
-              <div class="auth-stat-value">420+</div>
-              <div class="auth-stat-label">Verified Pros</div>
+              <div class="auth-stat-value">ID</div>
+              <div class="auth-stat-label">Checked by Servhive</div>
             </div>
             <div class="auth-stat-card">
               <div class="auth-stat-value">~15m</div>
               <div class="auth-stat-label">Avg. Dispatch</div>
             </div>
             <div class="auth-stat-card">
-              <div class="auth-stat-value">4.9★</div>
-              <div class="auth-stat-label">PH Satisfaction</div>
+              <div class="auth-stat-value">5%</div>
+              <div class="auth-stat-label">Commission</div>
             </div>
           </div>
         `;
@@ -673,8 +688,8 @@
                 </svg>
               </div>
               <div>
-                <div class="auth-feature-title">Guaranteed Escrow Payouts</div>
-                <div class="auth-feature-desc">Client funds are deposited in Escrow before you start work. No more clients disappearing without paying.</div>
+                <div class="auth-feature-title">Guaranteed Payment Protection</div>
+                <div class="auth-feature-desc">Customer pays in the app, money is held by Paystack (not Servhive), and released directly to your account after completion is confirmed.</div>
               </div>
             </div>
 
@@ -689,8 +704,8 @@
                 </svg>
               </div>
               <div>
-                <div class="auth-feature-title">First 1 Month Free Trial (30 Days)</div>
-                <div class="auth-feature-desc">Join early and enjoy 30 days of unlimited leads with zero subscription costs. Keep 100% of your earnings. Standard renewal at ₦2,000/mo.</div>
+                <div class="auth-feature-title">1 Month Free Trial</div>
+                <div class="auth-feature-desc">1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, profile is hidden until payment is made.</div>
               </div>
             </div>
 
@@ -701,8 +716,8 @@
                 </svg>
               </div>
               <div>
-                <div class="auth-feature-title">Verified Trust Badge</div>
-                <div class="auth-feature-desc">Stand out directly to high-ticket estate clients and commercial facilities in Old GRA, Woji, and Trans-Amadi.</div>
+                <div class="auth-feature-title">ID Checked by Servhive</div>
+                <div class="auth-feature-desc">New providers start as Under review. Verified badges appear after approval in admin console. Regulated trades upload licences before approval.</div>
               </div>
             </div>
 
@@ -716,8 +731,8 @@
                 </svg>
               </div>
               <div>
-                <div class="auth-feature-title">Concierge Admin Mediation</div>
-                <div class="auth-feature-desc">Dedicated Port Harcourt administrative support to mediate disputes fairly and protect artisans.</div>
+                <div class="auth-feature-title">Servhive Support Team</div>
+                <div class="auth-feature-desc">Dedicated Port Harcourt support team to assist with client inquiries, dispute mediation, and fast resolutions.</div>
               </div>
             </div>
           </div>
@@ -725,20 +740,20 @@
           <!-- Quick Metrics Strip -->
           <div class="auth-stats-grid">
             <div class="auth-stat-card">
-              <div class="auth-stat-value">₦0</div>
-              <div class="auth-stat-label">90-Day Fees</div>
+              <div class="auth-stat-value">1 Mo</div>
+              <div class="auth-stat-label">Free Trial</div>
             </div>
             <div class="auth-stat-card">
-              <div class="auth-stat-value">100%</div>
-              <div class="auth-stat-label">Payout Delivery</div>
+              <div class="auth-stat-value">₦2,000</div>
+              <div class="auth-stat-label">Per Month</div>
             </div>
             <div class="auth-stat-card">
-              <div class="auth-stat-value">Direct</div>
-              <div class="auth-stat-label">Bank Deposit</div>
+              <div class="auth-stat-value">5%</div>
+              <div class="auth-stat-label">Commission</div>
             </div>
             <div class="auth-stat-card">
-              <div class="auth-stat-value">Verified</div>
-              <div class="auth-stat-label">Teal Pro Trust</div>
+              <div class="auth-stat-value">₦1,500</div>
+              <div class="auth-stat-label">Weekly Boost</div>
             </div>
           </div>
         `;
@@ -929,20 +944,24 @@
           categoryName: catName,
           subSpecialty: `${catName} Specialist`,
           area: area,
-          rating: 5.0,
-          reviewCount: 1,
-          verified: true,
-          status: 'approved',
+          rating: 0,
+          reviewCount: 0,
+          reviews: [],
+          verified: false,
+          status: 'under_review',
           image: '/assets/hero_tradesman.jpg',
           startingPrice: startingPrice,
           responseTime: '~15 mins',
-          bio: `${bizName} is a verified service enterprise based in ${area}, Port Harcourt with verified credentials. First 1 Month Free Pro Member.`
+          bio: `${bizName} is a Port Harcourt workshop based in ${area}. ID checked by Servhive (Under review).`,
+          workPhotos: [],
+          services: [],
+          areasCovered: [area, 'Peter Odili Road', 'Trans-Amadi', 'Old GRA', 'Woji']
         };
         storedProviders.unshift(newPro);
         localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
       } catch (err) {}
 
-      showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your Artisan Pro profile is activated with First 1 Month Free Trial. Redirecting to Artisan Dashboard...`, 'success');
+      showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your provider account is registered and currently <strong>Under review</strong>. Verified badges will appear after admin review. Redirecting to Pro Dashboard...`, 'success');
 
       setTimeout(() => {
         window.location.href = '/artisan.html';

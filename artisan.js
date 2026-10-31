@@ -19,13 +19,14 @@ function createInitialArtisanProfile(user) {
     categoryName: categoryName,
     subSpecialty: `${categoryName} Specialist`,
     area: area,
-    rating: 5.0,
+    rating: 0,
     reviewCount: 0,
+    reviews: [],
     verified: false,
     boosted: false,
     boostDays: 0,
     boostExpires: null,
-    status: 'approved',
+    status: 'under_review',
     image: '/assets/hero_tradesman.jpg',
     startingPrice: (user && user.startingPrice) ? user.startingPrice : 10000,
     responseTime: '~15 mins',
@@ -212,23 +213,60 @@ function setupIdentityHeader() {
   const bizEl = document.getElementById('artisanHeaderBizName');
   const nameEl = document.getElementById('artisanHeaderName');
   const avatarEl = document.getElementById('artisanAvatar');
+  const avatarDot = document.getElementById('artisanAvatarStatusDot');
+  const headerBadge = document.getElementById('artisanHeaderBadge');
+  const kycBadge = document.getElementById('badgeKycStatus');
   const welcomeTitle = document.getElementById('proHomeWelcomeTitle');
 
-  if (bizEl && artisanState.provider) {
-    bizEl.textContent = artisanState.provider.businessName || 'Master Workshop Services';
+  const p = artisanState.provider;
+  if (!p) return;
+
+  if (bizEl) {
+    bizEl.textContent = p.businessName || 'Master Workshop Services';
   }
-  if (nameEl && artisanState.provider) {
-    const rawName = artisanState.provider.name || 'Verified Craftsman';
+  if (nameEl) {
+    const rawName = p.name || 'Craftsman';
     const cleanName = rawName.replace(/\s*\(Pro\)/gi, '').replace(/\s+/g, ' ').trim();
     nameEl.textContent = cleanName;
   }
-  if (welcomeTitle && artisanState.provider) {
-    const rawName = artisanState.provider.name || 'Craftsman';
+  if (welcomeTitle) {
+    const rawName = p.name || 'Craftsman';
     const cleanName = rawName.replace(/\s*\(Pro\)/gi, '').replace(/\s+/g, ' ').trim();
     welcomeTitle.textContent = `Welcome Back, ${cleanName}`;
   }
-  if (avatarEl && artisanState.provider && artisanState.provider.image) {
-    avatarEl.src = artisanState.provider.image;
+  if (avatarEl && p.image) {
+    avatarEl.src = p.image;
+  }
+
+  const isVerified = p.verified && p.status === 'approved';
+  if (headerBadge) {
+    if (isVerified) {
+      headerBadge.className = 'badge ed-badge-verified';
+      headerBadge.textContent = '✓ ID checked by Servhive';
+      headerBadge.style.background = 'rgba(20, 184, 166, 0.12)';
+      headerBadge.style.color = '#2dd4bf';
+      headerBadge.style.borderColor = 'rgba(20, 184, 166, 0.25)';
+    } else {
+      headerBadge.className = 'badge';
+      headerBadge.textContent = '⏳ Under review';
+      headerBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+      headerBadge.style.color = '#f59e0b';
+      headerBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+    }
+  }
+
+  if (avatarDot) {
+    avatarDot.style.background = isVerified ? '#0d9488' : '#f59e0b';
+  }
+
+  if (kycBadge) {
+    if (isVerified) {
+      kycBadge.className = 'artisan-sidebar-badge badge-teal';
+      kycBadge.textContent = '✓ Pass';
+    } else {
+      kycBadge.className = 'artisan-sidebar-badge badge-amber';
+      kycBadge.textContent = '⏳ Review';
+    }
   }
 }
 
@@ -289,10 +327,43 @@ function handleInitialHash() {
 // PRO HOME (ANALYTICS, KPIS, PLAN & BOOST)
 // ============================================================================
 function renderKpis() {
+  const p = artisanState.provider;
+  const isVerified = p && p.verified && p.status === 'approved';
+
+  // Review Status KPI
+  const reviewStatusVal = document.getElementById('proHomeReviewStatusVal');
+  const reviewSub = document.getElementById('proHomeReviewSub');
+  if (reviewStatusVal) {
+    if (isVerified) {
+      reviewStatusVal.innerHTML = '<span style="color: var(--teal); font-weight: 800;">✓ Active</span>';
+    } else {
+      reviewStatusVal.innerHTML = '<span style="color: #f59e0b; font-weight: 800;">Under review</span>';
+    }
+  }
+  if (reviewSub) {
+    reviewSub.textContent = 'ID checked by Servhive';
+  }
+
+  // Rating KPI
+  const ratingVal = document.getElementById('artisanRatingVal');
+  const reviewsSub = document.getElementById('artisanReviewsSub');
+  const count = (p && p.reviewCount) ? p.reviewCount : 0;
+  if (ratingVal) {
+    ratingVal.textContent = count > 0 ? (p.rating ? p.rating.toFixed(1) : '5.0') : '—';
+  }
+  if (reviewsSub) {
+    if (count === 0) {
+      reviewsSub.textContent = 'No reviews yet';
+    } else if (count === 1) {
+      reviewsSub.textContent = '1 review';
+    } else {
+      reviewsSub.textContent = `${count} reviews`;
+    }
+  }
+
+  // Active Requests
   const activeReqsVal = document.getElementById('proHomeActiveReqsVal');
   const badgeReqs = document.getElementById('badgeRequestsCount');
-
-  // Count requests needing attention
   const activeCount = artisanState.quoteRequests.filter(r => r.status === 'pending' || r.status === 'quoted').length;
   if (activeReqsVal) activeReqsVal.textContent = activeCount;
   if (badgeReqs) badgeReqs.textContent = activeCount;
@@ -317,7 +388,7 @@ function renderHomeRecentRequests() {
   if (!recent.length) {
     container.innerHTML = `
       <div style="text-align: center; padding: 24px; color: var(--muted-foreground); font-size: 0.86rem;">
-        No pending inquiries. Your profile is active and ready for client bookings.
+        No pending inquiries. Your profile is ready for client inquiries.
       </div>
     `;
     return;
@@ -349,38 +420,19 @@ function renderHomeRecentRequests() {
 }
 
 function selectBoostDays(days) {
-  artisanState.selectedBoostDays = Number(days);
-
-  [1, 3, 7, 14].forEach(d => {
-    const chip = document.getElementById(`boostChip-${d}`);
-    if (chip) {
-      if (d === artisanState.selectedBoostDays) {
-        chip.classList.add('active');
-      } else {
-        chip.classList.remove('active');
-      }
-    }
-  });
-
-  const totalCost = artisanState.selectedBoostDays * 500;
-  const btn = document.getElementById('activateBoostBtn');
-  if (btn) {
-    btn.innerHTML = `<span>⚡ Activate Visibility Boost (${artisanState.selectedBoostDays} Day${artisanState.selectedBoostDays > 1 ? 's' : ''} · ₦${totalCost.toLocaleString()})</span>`;
-  }
+  artisanState.selectedBoostDays = 7;
 }
 
 function activateProVisibilityBoost() {
-  const days = artisanState.selectedBoostDays;
-  const cost = days * 500;
-
+  const cost = 1500;
   artisanState.provider.boosted = true;
-  artisanState.provider.boostDays = days;
-  artisanState.provider.boostExpires = 'Nov 5, 2026';
+  artisanState.provider.boostDays = 7;
+  artisanState.provider.boostExpires = '1 Week';
   persistProvider();
 
   showArtisanNotice(
     'Visibility Boost Activated!',
-    `Your craftsman profile is now pinned to the top of Port Harcourt search results and featured in the top ribbon for <strong>${days} days</strong>.<br><br>Cost: <strong>₦${cost.toLocaleString()}</strong> charged to your Pro billing account.`,
+    `Your craftsman profile is now pinned to appear at the top of Port Harcourt search results and category listings for <strong>1 week (7 days)</strong>.<br><br>Cost: <strong>₦1,500/week</strong>.`,
     '⚡',
     'TOP SEARCH PINNING ACTIVE'
   );
@@ -458,8 +510,8 @@ function renderArtisanRequests() {
         ` : ''}
 
         <!-- Actions Toolbar -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--border); padding-top: 14px;">
-          <div style="display: flex; gap: 8px;">
+        <div class="artisan-card-actions">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="ed-button ed-button-amber ed-btn-compact" onclick="openArtisanQuoteModal('${req.id}')">
               <span>${isQuoted ? 'Update Quote Price' : 'Enter Official Quote &rarr;'}</span>
             </button>
@@ -663,11 +715,11 @@ function renderArtisanJobs() {
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
           <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-              <span class="badge" style="background: var(--bg-surface-subtle); color: var(--teal); font-weight: 800; font-size: 0.72rem;">ESCROW #${job.id}</span>
+              <span class="badge" style="background: var(--bg-surface-subtle); color: var(--teal); font-weight: 800; font-size: 0.72rem;">JOB #${job.id}</span>
               <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--foreground);">${job.serviceName}</h3>
             </div>
             <div style="font-size: 0.82rem; color: var(--muted-foreground); display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <span>Client: <strong>${job.customerName || 'Tonye Briggs'}</strong></span>
+              <span>Client: <strong>${job.customerName || 'Client'}</strong></span>
               <span>📞 ${job.customerPhone || '0803 123 4567'}</span>
               <span>📍 ${job.address || job.area}</span>
               <span>📅 Scheduled: ${job.dateTime}</span>
@@ -678,12 +730,12 @@ function renderArtisanJobs() {
           <div>
             ${isInProgress ? `
               <span class="badge" style="background: var(--teal-light); color: var(--teal); font-weight: 800; font-size: 0.82rem; padding: 6px 12px;">
-                ⚙️ Work In Progress — Escrow Secured
+                ⚙️ Work In Progress — Payment Protected
               </span>
             ` : ''}
             ${isAwaitingRelease ? `
               <span class="badge" style="background: var(--amber-light); color: var(--amber-dark); font-weight: 800; font-size: 0.82rem; padding: 6px 12px;">
-                ⏳ Work Marked Done — Awaiting Client Release
+                ⏳ Marked Completed — Awaiting Client Confirmation
               </span>
             ` : ''}
             ${isCompleted ? `
@@ -693,23 +745,23 @@ function renderArtisanJobs() {
             ` : ''}
             ${isDisputed ? `
               <span class="badge" style="background: rgba(220, 38, 38, 0.15); color: #DC2626; font-weight: 800; font-size: 0.82rem; padding: 6px 12px;">
-                ⚠️ Under Mediation Review
+                ⚠️ Under Support Review
               </span>
             ` : ''}
           </div>
         </div>
 
-        <!-- Escrow Financial Breakdown Grid -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
+        <!-- Financial Breakdown Grid -->
+        <div class="escrow-breakdown-grid">
           <div>
-            <div style="font-size: 0.72rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Client Escrow Deposit</div>
+            <div style="font-size: 0.72rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Customer Deposit</div>
             <div style="font-size: 1.15rem; font-weight: 800; color: var(--foreground); margin-top: 2px;">₦${job.amount.toLocaleString()}</div>
-            <div style="font-size: 0.72rem; color: var(--teal);">100% Held in Trust</div>
+            <div style="font-size: 0.72rem; color: var(--teal);">Held safely by Paystack</div>
           </div>
           <div>
-            <div style="font-size: 0.72rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Platform Safety Fee (5%)</div>
+            <div style="font-size: 0.72rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Platform Commission (5%)</div>
             <div style="font-size: 1.15rem; font-weight: 800; color: var(--muted-foreground); margin-top: 2px;">₦${job.commissionAmount.toLocaleString()}</div>
-            <div style="font-size: 0.72rem; color: var(--muted-foreground);">Inspection &amp; Insurance</div>
+            <div style="font-size: 0.72rem; color: var(--muted-foreground);">Jobs paid through app</div>
           </div>
           <div>
             <div style="font-size: 0.72rem; color: var(--teal); text-transform: uppercase; font-weight: 800;">Your Net Payout (95%)</div>
@@ -726,20 +778,20 @@ function renderArtisanJobs() {
         ` : ''}
 
         <!-- Crucial Action Buttons & Workflow -->
-        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 16px; flex-wrap: wrap; gap: 10px;">
+        <div class="artisan-card-actions">
           
-          <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             ${isInProgress ? `
               <!-- CRUCIAL: Job Completion Trigger -->
-              <button class="ed-button ed-button-amber" style="padding: 11px 22px; font-size: 0.92rem; font-weight: 800;" onclick="artisanMarkJobCompleted('${job.id}')">
+              <button class="ed-button ed-button-amber" style="padding: 12px 22px; font-size: 0.92rem; font-weight: 800; min-height: 46px;" onclick="artisanMarkJobCompleted('${job.id}')">
                 <span>✓ Mark Job Completed (Trigger Client Release)</span>
               </button>
             ` : ''}
 
             ${isAwaitingRelease ? `
-              <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <span style="font-size: 0.84rem; color: var(--amber-dark); font-weight: 700;">
-                  📢 Client alerted to inspect &amp; authorize ₦${job.payoutAmount.toLocaleString()} release.
+                  📢 Customer alerted to confirm job completion &amp; authorize ₦${job.payoutAmount.toLocaleString()} release.
                 </span>
                 <button class="ed-button ed-button-black ed-btn-compact" onclick="simulateClientReleaseNow('${job.id}')" title="Demonstration: Trigger instant release as client">
                   <span>⚡ Fast-Track Release (Demo)</span>
@@ -749,19 +801,21 @@ function renderArtisanJobs() {
 
             ${isCompleted ? `
               <div style="font-size: 0.84rem; color: var(--teal); font-weight: 800; display: flex; align-items: center; gap: 6px;">
-                ✓ ₦${job.payoutAmount.toLocaleString()} transferred to Access Bank (Rivers State Guild Account).
+                ✓ ₦${job.payoutAmount.toLocaleString()} released to your registered bank account.
               </div>
             ` : ''}
           </div>
 
-          <div style="display: flex; gap: 8px;">
-            <button class="ed-button ed-button-black ed-btn-compact" onclick="openArtisanChatDrawer('${job.customerName || 'Tonye Briggs'}', '${job.customerPhone || '0803 123 4567'}', '${job.serviceName}')">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="ed-button ed-button-black ed-btn-compact" onclick="openArtisanChatDrawer('${job.customerName || 'Client'}', '${job.customerPhone || '0803 123 4567'}', '${job.serviceName}')">
               <span>💬 Contact Client</span>
             </button>
             <button class="ed-button ed-button-black ed-btn-compact" onclick="showEscrowTermsModal()">
-              <span>Escrow Terms</span>
+              <span>Payment Terms</span>
             </button>
           </div>
+
+        </div>
 
         </div>
 
@@ -781,11 +835,11 @@ function artisanMarkJobCompleted(jobId) {
 
   showArtisanNotice(
     'Job Marked as Completed!',
-    `Great work! You have flagged <strong>${job.serviceName}</strong> as completed.<br><br>
-    The client (<strong>${job.customerName || 'Tonye Briggs'}</strong>) has received an immediate alert on their Servhive Marketplace Portal to inspect your finished installation and authorize the release of your <strong>₦${job.payoutAmount.toLocaleString()} net payout</strong> from the Escrow Vault.<br><br>
-    <em>Under Port Harcourt Escrow Rules: If the client does not respond within 48 hours without filing a dispute, our Admin Desk automatically disburses your funds.</em>`,
+    `Great work! You have marked <strong>${job.serviceName}</strong> as completed.<br><br>
+    The customer (<strong>${job.customerName || 'Client'}</strong>) has received an alert to confirm the job is done. Once confirmed, your <strong>₦${job.payoutAmount.toLocaleString()} net payout</strong> will be released directly from Paystack.<br><br>
+    <em>Payment Protection: The customer pays in the app, the money is held by licensed payment partner Paystack and not in Servhive's account, and it is released to you once the customer confirms the job is done.</em>`,
     '✓',
-    'ESCROW RELEASE WORKFLOW TRIGGERED'
+    'CONFIRMATION ALERT SENT'
   );
 }
 
@@ -799,9 +853,9 @@ function simulateClientReleaseNow(jobId) {
   renderKpis();
 
   showArtisanNotice(
-    'Escrow Funds Disbursed!',
-    `The client inspected the job and authorized release.<br><br>
-    <strong>₦${job.payoutAmount.toLocaleString()}</strong> has been transferred into your registered bank account.<br><br>
+    'Payment Released!',
+    `The customer confirmed the job is completed.<br><br>
+    <strong>₦${job.payoutAmount.toLocaleString()}</strong> has been released via Paystack into your registered bank account.<br><br>
     Receipt ID: <strong>PAY-${job.id.toUpperCase()}-${Date.now().toString().slice(-4)}</strong>.`,
     '🎉',
     'FUNDS RELEASED'
@@ -810,13 +864,14 @@ function simulateClientReleaseNow(jobId) {
 
 function showEscrowTermsModal() {
   showArtisanNotice(
-    'Port Harcourt Escrow Protection Terms',
-    `1. <strong>100% Upfront Deposit:</strong> Client funds are deposited before work commences.<br>
-     2. <strong>Protection Guarantee:</strong> Zero risk of client refusing to pay after labor is delivered.<br>
-     3. <strong>5% Platform Fee:</strong> Deducted solely upon successful milestone completion.<br>
-     4. <strong>Mediation Support:</strong> Godfrey & the dispute desk handle any on-site discrepancies within 24 hours.`,
+    'Payment Protection Terms (via Paystack)',
+    `1. <strong>Customer Pays In-App:</strong> Funds are paid securely in advance.<br>
+     2. <strong>Held by Licensed Partner:</strong> Money is held by licensed payment provider Paystack, not in Servhive's account.<br>
+     3. <strong>5% Commission:</strong> 5% commission applies to jobs paid through the app upon completion.<br>
+     4. <strong>Safe Release:</strong> Funds are released to the provider only after the customer confirms the job is done.<br>
+     5. <strong>Support & Mediation:</strong> The Servhive support team helps resolve any on-site discrepancies.`,
     '🛡️',
-    'STATUTORY ESCROW TERMS'
+    'PAYMENT PROTECTION TERMS'
   );
 }
 
@@ -836,7 +891,10 @@ function initProfileBuilder() {
   if (nameInput) nameInput.value = p.name || '';
   if (bizInput) bizInput.value = p.businessName || '';
   if (phoneInput) phoneInput.value = p.phone || '0803 456 7890';
-  if (catInput) catInput.value = p.category || 'power-gen';
+  if (catInput) {
+    catInput.value = p.category || 'power-gen';
+    handlePbCategoryChange(catInput.value);
+  }
   if (bioInput) bioInput.value = p.bio || '';
 
   // Checkboxes for covered areas
@@ -848,6 +906,14 @@ function initProfileBuilder() {
 
   // Render services
   renderPbServicesList();
+}
+
+function handlePbCategoryChange(val) {
+  const notice = document.getElementById('pbRegulatedNotice');
+  const regulatedTrades = ['home-health', 'laser-tech', 'tattoo-piercing', 'funeral-director'];
+  if (notice) {
+    notice.style.display = regulatedTrades.includes(val) ? 'block' : 'none';
+  }
 }
 
 function renderPbServicesList() {
@@ -868,14 +934,21 @@ function renderPbServicesList() {
   }
 
   container.innerHTML = services.map((svc, idx) => `
-    <div class="pb-service-row" style="display: flex; gap: 10px; align-items: center; background: var(--bg-surface-subtle); border: 1px solid var(--border); padding: 10px 14px; border-radius: var(--radius-sm);">
-      <input type="text" class="ed-search-input pb-svc-name" value="${svc.name}" placeholder="Service description" style="flex: 2; height: 38px; padding: 0 10px; font-size: 0.85rem; background: var(--bg-surface); border: 1px solid var(--border); color: var(--foreground); border-radius: var(--radius-sm);">
-      <input type="number" class="ed-search-input pb-svc-price" value="${svc.price}" placeholder="₦ Price" min="1000" step="500" style="flex: 1; height: 38px; padding: 0 10px; font-size: 0.88rem; font-weight: 700; background: var(--bg-surface); border: 1px solid var(--border); color: var(--foreground); border-radius: var(--radius-sm);">
-      <select class="ed-select-input pb-svc-type" style="flex: 1; height: 38px; padding: 0 10px; font-size: 0.82rem; background: var(--bg-surface); border: 1px solid var(--border); color: var(--foreground); border-radius: var(--radius-sm);">
-        <option value="Fixed" ${svc.type === 'Fixed' ? 'selected' : ''}>Fixed</option>
-        <option value="Starting from" ${svc.type === 'Starting from' ? 'selected' : ''}>Starting from</option>
-      </select>
-      <button type="button" class="ed-button ed-button-black ed-btn-compact" style="color: #DC2626; height: 38px;" onclick="removePbServiceItem(this)">✕</button>
+    <div class="pb-service-row">
+      <div class="pb-service-row-main">
+        <input type="text" class="ed-search-input pb-svc-name" value="${svc.name}" placeholder="Service description (e.g. Inverter Balancing)">
+        <button type="button" class="ed-button ed-button-black ed-btn-compact pb-svc-remove" onclick="removePbServiceItem(this)" title="Remove Service">✕</button>
+      </div>
+      <div class="pb-service-row-meta">
+        <div class="pb-service-price-wrap">
+          <span class="pb-currency-prefix">₦</span>
+          <input type="number" class="ed-search-input pb-svc-price" value="${svc.price}" placeholder="Price" min="1000" step="500">
+        </div>
+        <select class="ed-select-input pb-svc-type">
+          <option value="Fixed" ${svc.type === 'Fixed' ? 'selected' : ''}>Fixed</option>
+          <option value="Starting from" ${svc.type === 'Starting from' ? 'selected' : ''}>Starting from</option>
+        </select>
+      </div>
     </div>
   `).join('');
 }
@@ -886,15 +959,21 @@ function addPbServiceItem() {
 
   const div = document.createElement('div');
   div.className = 'pb-service-row';
-  div.style.cssText = 'display: flex; gap: 10px; align-items: center; background: var(--bg-surface-subtle); border: 1px solid var(--border); padding: 10px 14px; border-radius: var(--radius-sm);';
   div.innerHTML = `
-    <input type="text" class="ed-search-input pb-svc-name" value="" placeholder="Service title (e.g. Inverter Balancing)" style="flex: 2; height: 38px; padding: 0 10px; font-size: 0.85rem; background: var(--bg-surface); border: 1px solid var(--border); color: var(--foreground); border-radius: var(--radius-sm);">
-    <input type="number" class="ed-search-input pb-svc-price" value="10000" placeholder="₦ Price" min="1000" step="500" style="flex: 1; height: 38px; padding: 0 10px; font-size: 0.88rem; font-weight: 700; background: var(--bg-surface); border: 1px solid var(--border); color: var(--foreground); border-radius: var(--radius-sm);">
-    <select class="ed-select-input pb-svc-type" style="flex: 1; height: 38px; padding: 0 10px; font-size: 0.82rem; background: var(--bg-surface); border: 1px solid var(--border); color: var(--foreground); border-radius: var(--radius-sm);">
-      <option value="Fixed">Fixed</option>
-      <option value="Starting from">Starting from</option>
-    </select>
-    <button type="button" class="ed-button ed-button-black ed-btn-compact" style="color: #DC2626; height: 38px;" onclick="removePbServiceItem(this)">✕</button>
+    <div class="pb-service-row-main">
+      <input type="text" class="ed-search-input pb-svc-name" value="" placeholder="Service title (e.g. Inverter Balancing)">
+      <button type="button" class="ed-button ed-button-black ed-btn-compact pb-svc-remove" onclick="removePbServiceItem(this)" title="Remove Service">✕</button>
+    </div>
+    <div class="pb-service-row-meta">
+      <div class="pb-service-price-wrap">
+        <span class="pb-currency-prefix">₦</span>
+        <input type="number" class="ed-search-input pb-svc-price" value="10000" placeholder="Price" min="1000" step="500">
+      </div>
+      <select class="ed-select-input pb-svc-type">
+        <option value="Fixed">Fixed</option>
+        <option value="Starting from">Starting from</option>
+      </select>
+    </div>
   `;
   container.appendChild(div);
 }
@@ -988,12 +1067,12 @@ function initVerificationSection() {
 }
 
 function simulateReupload(docType) {
-  const fileName = docType === 'ID' ? 'NIN_Slip_Rivers_Verified_2026.pdf' : 'Guild_Licence_Renewal.pdf';
+  const fileName = docType === 'ID' ? 'Government_ID_Document.pdf' : 'Work_Evidence_Photo.jpg';
   showArtisanNotice(
-    `${docType} Re-Uploaded`,
-    `A new document <strong>${fileName}</strong> has been encrypted and submitted to the Rivers State Guild Verification Desk. Status remains: <strong>✓ Validated Active</strong>.`,
+    `${docType} Uploaded`,
+    `A new file <strong>${fileName}</strong> has been uploaded and submitted to the Servhive verification team. Status: <strong>Under review</strong>.`,
     '📄',
-    'DOCUMENT RE-VERIFIED'
+    'DOCUMENT SUBMITTED'
   );
 }
 
@@ -1006,9 +1085,9 @@ function saveVerificationDocs() {
 
   showArtisanNotice(
     'Verification Credentials Saved',
-    'Your statutory ID, 3 work portfolio photos, and Rivers State technical licence remain in good standing. Your "Rivers Verified Active" badge is visible to all marketplace clients.',
+    'Your government ID, work portfolio photos, and trade licence details have been updated. Verified badges appear after approval by Servhive admin.',
     '✓',
-    'KYC CREDENTIALS ACTIVE'
+    'CREDENTIALS UPDATED'
   );
 }
 
@@ -1020,13 +1099,19 @@ function renderArtisanComplaints() {
   if (!container) return;
 
   const reports = artisanState.reports;
+  const completedJobsCount = artisanState.escrowJobs.filter(j => j.status === 'completed').length;
+
   if (!reports.length) {
+    const satisfactionMsg = completedJobsCount > 0
+      ? `You have maintained a 100% satisfaction rating across Port Harcourt. If a customer raises a quality inquiry or support ticket, it will appear here for mediation by the Servhive support team.`
+      : `Zero active disputes. When you complete jobs and clients leave feedback or inquiries, they will appear here.`;
+
     container.innerHTML = `
       <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 40px; text-align: center;">
         <div style="font-size: 2.2rem; margin-bottom: 8px;">🛡️</div>
         <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">Zero Active Disputes</h3>
         <p style="font-size: 0.86rem; color: var(--muted-foreground); max-width: 440px; margin: 0 auto;">
-          You have maintained a 100% satisfaction rating across Port Harcourt. If a customer raises an escrow or quality inquiry, it will appear here for mediation.
+          ${satisfactionMsg}
         </p>
       </div>
     `;
@@ -1054,8 +1139,8 @@ function renderArtisanComplaints() {
 
           <div>
             ${isPending ? `<span class="badge" style="background: rgba(220, 38, 38, 0.2); color: #DC2626; font-weight: 800;">Action Required: Submit Explanation</span>` : ''}
-            ${isUnderReview ? `<span class="badge" style="background: var(--amber-light); color: var(--amber-dark); font-weight: 800;">⏳ Statement Under Mediation Review</span>` : ''}
-            ${isResolved ? `<span class="badge ed-badge-verified" style="font-weight: 800;">✓ Resolved by Mediation Desk</span>` : ''}
+            ${isUnderReview ? `<span class="badge" style="background: var(--amber-light); color: var(--amber-dark); font-weight: 800;">⏳ Statement Under Review</span>` : ''}
+            ${isResolved ? `<span class="badge ed-badge-verified" style="font-weight: 800;">✓ Resolved by Support Team</span>` : ''}
           </div>
         </div>
 
@@ -1072,7 +1157,7 @@ function renderArtisanComplaints() {
           </div>
         ` : `
           <form onsubmit="handleArtisanComplaintSubmit(event, '${rep.id}')">
-            <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Your Official Explanation to Godfrey &amp; Admin Desk:</label>
+            <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Your Official Explanation to Servhive Support Team:</label>
             <textarea id="complaintResponseInput-${rep.id}" rows="3" required class="ed-search-input" style="width: 100%; padding: 10px; font-size: 0.86rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--foreground); margin-bottom: 10px;" placeholder="Explain the situation, weather delays, on-site part replacement, or resolution offer..."></textarea>
             <button type="submit" class="ed-button ed-button-amber ed-btn-compact">
               <span>Submit Official Explanation &rarr;</span>
@@ -1103,9 +1188,9 @@ function handleArtisanComplaintSubmit(e, repId) {
 
   showArtisanNotice(
     'Dispute Statement Recorded',
-    `Your statement for dispute <strong>#${repId}</strong> has been forwarded to Godfrey & the Port Harcourt Admin Desk. Both parties will be contacted via WhatsApp/phone to reach mutual settlement.`,
+    `Your statement for dispute <strong>#${repId}</strong> has been forwarded to the Servhive support team. Both parties will be contacted to reach a resolution.`,
     '✓',
-    'ADMIN DESK NOTIFIED'
+    'SUPPORT TEAM NOTIFIED'
   );
 }
 
@@ -1250,6 +1335,7 @@ window.showEscrowTermsModal = showEscrowTermsModal;
 window.addPbServiceItem = addPbServiceItem;
 window.removePbServiceItem = removePbServiceItem;
 window.handleSaveProfileBuilder = handleSaveProfileBuilder;
+window.handlePbCategoryChange = handlePbCategoryChange;
 window.simulateReupload = simulateReupload;
 window.saveVerificationDocs = saveVerificationDocs;
 window.handleArtisanComplaintSubmit = handleArtisanComplaintSubmit;
