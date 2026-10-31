@@ -207,6 +207,56 @@ function persistProvider() {
 }
 
 // ============================================================================
+// PRO DASHBOARD DROPDOWN MENU
+// ============================================================================
+function toggleProDashboardDropdown(e) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  const wrap = document.getElementById('proDashboardDropdownWrap');
+  const btn = document.getElementById('proDashboardDropdownBtn');
+  if (!wrap) return;
+  const isOpen = wrap.classList.toggle('open');
+  if (btn) {
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+}
+
+function closeProDashboardDropdown() {
+  const wrap = document.getElementById('proDashboardDropdownWrap');
+  const btn = document.getElementById('proDashboardDropdownBtn');
+  if (wrap && wrap.classList.contains('open')) {
+    wrap.classList.remove('open');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function selectDropdownNav(sectionId, e) {
+  if (e) {
+    e.preventDefault();
+  }
+  closeProDashboardDropdown();
+  switchArtisanSection(sectionId);
+}
+
+// Global click-outside and escape dismiss for dropdown
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('proDashboardDropdownWrap');
+  if (wrap && wrap.classList.contains('open')) {
+    if (!wrap.contains(e.target)) {
+      closeProDashboardDropdown();
+    }
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeProDashboardDropdown();
+  }
+});
+
+// ============================================================================
 // HEADER & IDENTITY
 // ============================================================================
 function setupIdentityHeader() {
@@ -218,11 +268,18 @@ function setupIdentityHeader() {
   const kycBadge = document.getElementById('badgeKycStatus');
   const welcomeTitle = document.getElementById('proHomeWelcomeTitle');
 
+  // Dropdown elements
+  const dropdownBiz = document.getElementById('dropdownProBizName');
+  const dropdownBadge = document.getElementById('dropdownProBadge');
+
   const p = artisanState.provider;
   if (!p) return;
 
   if (bizEl) {
     bizEl.textContent = p.businessName || 'Master Workshop Services';
+  }
+  if (dropdownBiz) {
+    dropdownBiz.textContent = p.businessName || 'Artisan Pro Services';
   }
   if (nameEl) {
     const rawName = p.name || 'Craftsman';
@@ -252,6 +309,22 @@ function setupIdentityHeader() {
       headerBadge.style.background = 'rgba(245, 158, 11, 0.15)';
       headerBadge.style.color = '#f59e0b';
       headerBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+    }
+  }
+
+  if (dropdownBadge) {
+    if (isVerified) {
+      dropdownBadge.className = 'badge ed-badge-verified';
+      dropdownBadge.textContent = '✓ Active';
+      dropdownBadge.style.background = 'rgba(20, 184, 166, 0.12)';
+      dropdownBadge.style.color = '#2dd4bf';
+      dropdownBadge.style.borderColor = 'rgba(20, 184, 166, 0.25)';
+    } else {
+      dropdownBadge.className = 'badge';
+      dropdownBadge.textContent = '⏳ Under review';
+      dropdownBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+      dropdownBadge.style.color = '#f59e0b';
+      dropdownBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
     }
   }
 
@@ -364,9 +437,11 @@ function renderKpis() {
   // Active Requests
   const activeReqsVal = document.getElementById('proHomeActiveReqsVal');
   const badgeReqs = document.getElementById('badgeRequestsCount');
+  const dropdownReqs = document.getElementById('dropdownRequestsBadge');
   const activeCount = artisanState.quoteRequests.filter(r => r.status === 'pending' || r.status === 'quoted').length;
   if (activeReqsVal) activeReqsVal.textContent = activeCount;
   if (badgeReqs) badgeReqs.textContent = activeCount;
+  if (dropdownReqs) dropdownReqs.textContent = activeCount;
 
   // Active jobs count & Escrow balance
   renderEscrowBalance();
@@ -374,7 +449,12 @@ function renderKpis() {
   // Complaints count
   const complaintsCount = artisanState.reports.filter(r => r.status !== 'resolved').length;
   const badgeComplaints = document.getElementById('badgeComplaintsCount');
+  const dropdownComplaints = document.getElementById('dropdownComplaintsBadge');
   if (badgeComplaints) badgeComplaints.textContent = complaintsCount;
+  if (dropdownComplaints) {
+    dropdownComplaints.textContent = complaintsCount;
+    dropdownComplaints.style.display = complaintsCount > 0 ? 'inline-block' : 'none';
+  }
 
   // Render recent preview on Home
   renderHomeRecentRequests();
@@ -673,6 +753,7 @@ function artisanDeclineRequest(reqId) {
 function renderEscrowBalance() {
   const display = document.getElementById('artisanEscrowBalanceDisplay');
   const badgeJobs = document.getElementById('badgeJobsCount');
+  const dropdownJobs = document.getElementById('dropdownJobsBadge');
 
   // Active jobs are in_progress or awaiting_release
   const activeJobs = artisanState.escrowJobs.filter(j => j.status === 'in_progress' || j.status === 'awaiting_release');
@@ -680,6 +761,7 @@ function renderEscrowBalance() {
 
   if (display) display.textContent = `₦${totalHeld.toLocaleString()}`;
   if (badgeJobs) badgeJobs.textContent = activeJobs.length;
+  if (dropdownJobs) dropdownJobs.textContent = activeJobs.length;
 }
 
 function renderArtisanJobs() {
@@ -1321,6 +1403,9 @@ function artisanLogout() {
 // ============================================================================
 // BIND GLOBAL FUNCTIONS TO WINDOW FOR INLINE HTML COMPATIBILITY
 // ============================================================================
+window.toggleProDashboardDropdown = toggleProDashboardDropdown;
+window.closeProDashboardDropdown = closeProDashboardDropdown;
+window.selectDropdownNav = selectDropdownNav;
 window.switchArtisanSection = switchArtisanSection;
 window.selectBoostDays = selectBoostDays;
 window.activateProVisibilityBoost = activateProVisibilityBoost;
