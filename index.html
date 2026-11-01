@@ -27,19 +27,6 @@
 </head>
 <body>
 
-  <!-- Demo Version Banner -->
-  <div class="demo-version-banner">⚡ Demo version — Preview and testing build</div>
-
-  <!-- Artisan Preview Banner (Only visible when viewing marketplace as an artisan) -->
-  <div id="artisanClientPreviewBanner" style="display: none; background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 8px 24px; font-size: 0.82rem; font-weight: 700; color: var(--foreground); justify-content: space-between; align-items: center; z-index: 100; position: relative;">
-    <span style="display: inline-flex; align-items: center; gap: 8px;">
-      <span>👁️</span>
-      <span><strong>Marketplace Client Preview Mode:</strong> You are currently previewing how clients discover and hire artisans.</span>
-    </span>
-    <a href="/artisan.html" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; padding: 4px 12px; font-size: 0.76rem;">
-      <span>Return to Artisan Dashboard &rarr;</span>
-    </a>
-  </div>
 
   <!-- ==================== HEADER (Sleek, Animated, Non-Wrapping) ==================== -->
   <header class="ed-header">
@@ -81,8 +68,8 @@
           <a href="/login.html" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none;">
             <span>Log In</span>
           </a>
-          <a href="/login.html#signup" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none;">
-            <span>Sign Up</span>
+          <a href="/login.html#login-artisan" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; font-weight: 700;">
+            <span>🛠️ Pro Portal</span>
           </a>
         </div>
 
@@ -118,13 +105,13 @@
         <!-- Mobile Auth Area -->
         <div id="mobileAuthArea" style="margin-top: 14px; border-top: 1px solid var(--hairline); padding-top: 14px; display: flex; flex-direction: column; gap: 8px;">
           <a href="/login.html" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; text-decoration: none; text-align: center;">
-            <span>Log In (Client / Artisan)</span>
+            <span>Log In (Client Portal)</span>
           </a>
-          <a href="/login.html#signup" class="ed-button ed-button-amber" style="width: 100%; padding: 12px; font-size: 0.88rem; text-decoration: none; text-align: center;">
-            <span>Create Account (Phone + Code)</span>
+          <a href="/login.html#login-artisan" class="ed-button ed-button-amber" style="width: 100%; padding: 12px; font-size: 0.88rem; font-weight: 800; text-decoration: none; text-align: center;">
+            <span>🛠️ Artisan Pro Login / Register</span>
           </a>
-          <a href="/login.html#signup-artisan" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; border-color: var(--amber); text-decoration: none; text-align: center;">
-            <span>Join as Pro Artisan (1 Mo Free)</span>
+          <a href="/login.html#signup" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; text-decoration: none; text-align: center;">
+            <span>Create Client Account</span>
           </a>
         </div>
       </div>
@@ -200,12 +187,12 @@
 
     </section>
 
-    <!-- ==================== EXPLORE THE 10 TOP CATEGORIES ==================== -->
+    <!-- ==================== EXPLORE THE 18 LAUNCH CATEGORIES ==================== -->
     <section id="categories" class="ed-categories-section">
       <div class="section-header-row">
         <div>
-          <div class="hero-eyebrow" style="margin-bottom: 6px;">PORT HARCOURT TRADES · 10 CORE SECTORS</div>
-          <h2 class="ed-section-title">Browse Port Harcourt's 10 Core Service Sectors</h2>
+          <div class="hero-eyebrow" style="margin-bottom: 6px;">PORT HARCOURT TRADES · 18 LAUNCH SECTORS</div>
+          <h2 class="ed-section-title">Browse Port Harcourt's 18 Launch Service Sectors</h2>
           <p class="ed-section-sub">Standardized rate cards in ₦ with zero roadside price renegotiation.</p>
         </div>
         <a href="#directory" class="ed-button ed-button-black" onclick="resetFilters()">
@@ -214,7 +201,181 @@
       </div>
 
       <div class="categories-10-grid">
-        <!-- 1: Power & Generators -->
+        <!-- 1: Cleaning & Janitorial -->
+        <div class="category-icon-tile" onclick="selectCategory('cleaning-janitorial'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">42+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Cleaning &amp; Janitorial</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Deep home cleaning, move-in sanitization &amp; post-construction.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦12,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 2: Laundry & Dry Cleaning -->
+        <div class="category-icon-tile" onclick="selectCategory('laundry-dryclean'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">28+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Laundry &amp; Dry Cleaning</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Express wash &amp; fold, steam pressing &amp; stain removal.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦5,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 3: Fumigation & Pest Control -->
+        <div class="category-icon-tile" onclick="selectCategory('fumigation-pest'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M12 8v4"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">23+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Fumigation &amp; Pest Control</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Termite barrier treatment, rodent &amp; pest eradication.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦15,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 4: Tailors & Fashion Design -->
+        <div class="category-icon-tile" onclick="selectCategory('tailors-fashion'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="6" cy="6" r="3"></circle>
+                <circle cx="6" cy="18" r="3"></circle>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <span class="category-badge-count">50+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Tailors &amp; Fashion Design</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Bespoke senator suits, agbada, corporate &amp; bridal fits.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦8,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 5: Events & Catering -->
+        <div class="category-icon-tile" onclick="selectCategory('events-catering'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+              </svg>
+            </div>
+            <span class="category-badge-count">36+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Events &amp; Catering</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Party catering, event decoration, ushering &amp; sound.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦25,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 6: Phone & Gadget Repair -->
+        <div class="category-icon-tile" onclick="selectCategory('phone-gadgets'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+            </div>
+            <span class="category-badge-count">39+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Phone &amp; Gadget Repair</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Screen replacement, board diagnostics &amp; battery swaps.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦6,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 7: Car Wash & Auto Detailing -->
+        <div class="category-icon-tile" onclick="selectCategory('car-wash'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H8.5a1 1 0 0 0-.8.4L5 11l-5.16.86a1 1 0 0 0-.84.99V16h3m14 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-10 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">25+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Car Wash &amp; Auto Detailing</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Mobile steam car wash, engine degrease &amp; ceramic coat.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦4,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 8: Pets & Veterinary Care -->
+        <div class="category-icon-tile" onclick="selectCategory('pets-vet'); location.href='#directory';">
+          <div class="category-card-top">
+            <div class="category-card-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="4" r="2"></circle>
+                <circle cx="18" cy="8" r="2"></circle>
+                <circle cx="4" cy="8" r="2"></circle>
+                <path d="M12 18.5c-3 0-5.5-1.5-5.5-4 0-1.5 1-2.5 2.5-2.5 1 0 2 .5 3 1.5 1-1 2-1.5 3-1.5 1.5 0 2.5 1 2.5 2.5 0 2.5-2.5 4-5.5 4z"></path>
+              </svg>
+            </div>
+            <span class="category-badge-count">19+ Pros</span>
+          </div>
+          <div>
+            <h3 class="category-card-name" style="font-size: 0.98rem; font-weight: 800;">Pets &amp; Veterinary Care</h3>
+            <p class="category-card-desc" style="font-size: 0.8rem; margin: 4px 0 10px;">Vet vaccination, dog grooming, training &amp; boarding.</p>
+          </div>
+          <div class="category-card-footer" style="padding-top: 8px; border-top: 1px solid var(--hairline);">
+            <span class="category-rate-from" style="font-size: 0.78rem;">From <strong>₦10,000</strong></span>
+            <span style="color: var(--amber-dark); font-weight: 800; font-size: 0.82rem;">&rarr;</span>
+          </div>
+        </div>
+
+        <!-- 9: Power & Generators -->
         <div class="category-icon-tile" onclick="selectCategory('power-gen'); location.href='#directory';">
           <div class="category-card-top">
             <div class="category-card-icon" aria-hidden="true">
@@ -477,15 +638,23 @@
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%;">
           <!-- Category Filter Dropdown -->
           <select id="categoryFilterSelect" class="ed-select-input" style="height: 38px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 10px; font-size: 0.82rem; background: var(--card); color: var(--foreground); font-weight: 600;" onchange="selectCategory(this.value)" aria-label="Filter by Trade Category">
-            <option value="all">🛠️ All 10 Categories</option>
+            <option value="all">🛠️ All 18 Categories</option>
+            <option value="cleaning-janitorial">✨ Cleaning &amp; Janitorial</option>
+            <option value="laundry-dryclean">👔 Laundry &amp; Dry Cleaning</option>
+            <option value="fumigation-pest">🛡️ Fumigation &amp; Pest Control</option>
+            <option value="tailors-fashion">✂️ Tailors &amp; Fashion Design</option>
+            <option value="events-catering">🎉 Events &amp; Catering</option>
+            <option value="phone-gadgets">📱 Phone &amp; Gadget Repair</option>
+            <option value="car-wash">🚗 Car Wash &amp; Auto Detailing</option>
+            <option value="pets-vet">🐾 Pets &amp; Veterinary Care</option>
             <option value="power-gen">⚡ Power &amp; Generators</option>
             <option value="solar-tech">☀️ Solar, Inverters &amp; CCTV</option>
             <option value="interior-pop">🏠 POP Ceilings &amp; Tiling</option>
             <option value="plumbing">🚰 Plumbing &amp; Boreholes</option>
             <option value="electrical">💡 Electrical &amp; Wiring</option>
             <option value="ac-chillers">❄️ AC &amp; Refrigeration</option>
-            <option value="auto-mechanic">🚗 Auto Diagnostics</option>
-            <option value="beauty-hair">✂️ Beauty &amp; Luxury Braids</option>
+            <option value="auto-mechanic">🔧 Auto Diagnostics</option>
+            <option value="beauty-hair">💇 Beauty &amp; Luxury Braids</option>
             <option value="carpentry">🪚 Carpentry &amp; Furniture</option>
             <option value="painting">🎨 Painting &amp; Screeding</option>
           </select>

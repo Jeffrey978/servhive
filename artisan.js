@@ -988,6 +988,9 @@ function initProfileBuilder() {
 
   // Render services
   renderPbServicesList();
+
+  // Render proof of work photos
+  renderPbWorkPhotos();
 }
 
 function handlePbCategoryChange(val) {
@@ -1114,6 +1117,121 @@ function handleSaveProfileBuilder(e) {
 }
 
 // ============================================================================
+// PROOF OF WORK & COMPLETED JOB PHOTOS MANAGER
+// ============================================================================
+function renderPbWorkPhotos() {
+  const container = document.getElementById('pbWorkPhotosList');
+  if (!container) return;
+
+  const photos = (artisanState.provider && artisanState.provider.workPhotos) ? artisanState.provider.workPhotos : [];
+
+  if (photos.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; background: var(--bg-surface); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px; text-align: center; color: var(--muted-foreground); font-size: 0.86rem;">
+        No completed job photos uploaded yet. Click <strong>"+ Add Completed Job Photo"</strong> above to show prospective clients proof of your work in Port Harcourt.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = photos.map((p, idx) => `
+    <div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; position: relative; display: flex; flex-direction: column;">
+      <div style="position: relative; width: 100%; height: 130px; background: #000;">
+        <img src="${p.url}" alt="${p.caption}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/hero_tradesman.jpg'">
+        <button type="button" class="ed-button ed-button-black ed-btn-compact" style="position: absolute; top: 6px; right: 6px; padding: 2px 7px; font-size: 0.72rem; background: rgba(0,0,0,0.75); color: #fff; border: 1px solid rgba(255,255,255,0.3);" onclick="removeWorkPhoto(${idx})" title="Delete Photo">✕</button>
+      </div>
+      <div style="padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground); line-height: 1.35; margin-bottom: 6px;">${p.caption}</div>
+        <span class="badge" style="font-size: 0.68rem; align-self: flex-start; background: rgba(20,184,166,0.12); color: var(--teal); border: 1px solid var(--hairline-teal);">✓ Proof of Work</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openAddWorkPhotoModal() {
+  const modal = document.getElementById('addWorkPhotoModal');
+  if (!modal) return;
+  const captionInput = document.getElementById('newWorkPhotoCaption');
+  const urlInput = document.getElementById('newWorkPhotoUrl');
+  if (captionInput) captionInput.value = '';
+  if (urlInput) urlInput.value = '';
+  modal.classList.add('open');
+}
+
+function setWorkPhotoPreset(type) {
+  const presets = {
+    cleaning: {
+      url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
+      caption: 'Full House Deep Cleaning & Floor Scrub',
+      area: 'Peter Odili Road'
+    },
+    power: {
+      url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+      caption: '30kVA Soundproof Generator Overhaul & ATS',
+      area: 'Trans-Amadi'
+    },
+    solar: {
+      url: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+      caption: '5kVA Hybrid Solar Inverter & Wall Lithium Battery',
+      area: 'Old GRA'
+    },
+    tailor: {
+      url: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
+      caption: 'Custom Bespoke Senator Fit with Hand Stitching',
+      area: 'New GRA / Phase 2'
+    }
+  };
+
+  const choice = presets[type];
+  if (choice) {
+    const urlEl = document.getElementById('newWorkPhotoUrl');
+    const capEl = document.getElementById('newWorkPhotoCaption');
+    const areaEl = document.getElementById('newWorkPhotoArea');
+    if (urlEl) urlEl.value = choice.url;
+    if (capEl) capEl.value = choice.caption;
+    if (areaEl) areaEl.value = choice.area;
+  }
+}
+
+function saveNewWorkPhoto(e) {
+  e.preventDefault();
+  const url = document.getElementById('newWorkPhotoUrl').value.trim();
+  const caption = document.getElementById('newWorkPhotoCaption').value.trim();
+  const area = document.getElementById('newWorkPhotoArea').value;
+
+  if (!url || !caption) return;
+
+  if (!artisanState.provider.workPhotos) {
+    artisanState.provider.workPhotos = [];
+  }
+
+  artisanState.provider.workPhotos.push({
+    url: url,
+    caption: `${caption} (${area})`
+  });
+
+  persistProvider();
+  renderPbWorkPhotos();
+  initVerificationSection();
+  closeModal('addWorkPhotoModal');
+
+  showArtisanNotice(
+    'Proof of Work Photo Added!',
+    `Your completed job photograph <strong>"${caption}"</strong> has been added to your profile portfolio and marketplace listing.`,
+    '📷',
+    'PORTFOLIO UPDATED'
+  );
+}
+
+function removeWorkPhoto(index) {
+  if (!artisanState.provider || !artisanState.provider.workPhotos) return;
+  artisanState.provider.workPhotos.splice(index, 1);
+  persistProvider();
+  renderPbWorkPhotos();
+  initVerificationSection();
+}
+
+// ============================================================================
 // VERIFICATION SECTION (KYC, 3 PHOTOS, LICENCE)
 // ============================================================================
 function initVerificationSection() {
@@ -1128,17 +1246,23 @@ function initVerificationSection() {
     const photos = artisanState.provider.workPhotos || [];
     if (photos.length > 0) {
       photosGrid.innerHTML = photos.map((photo, i) => `
-        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;">
+        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; position: relative;">
           <img src="${photo.url || '/assets/hero_tradesman.jpg'}" alt="Work Photo ${i + 1}" style="width: 100%; height: 130px; object-fit: cover;">
           <div style="padding: 10px;">
             <div style="font-size: 0.82rem; font-weight: 700;">Photo ${i + 1}</div>
             <div style="font-size: 0.72rem; color: var(--muted-foreground);">${photo.caption || 'Completed job photo'}</div>
           </div>
         </div>
-      `).join('');
+      `).join('') + `
+        <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 18px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 130px; cursor: pointer;" onclick="openAddWorkPhotoModal()">
+          <div style="font-size: 1.4rem; margin-bottom: 4px; color: var(--amber);">📷</div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--foreground);">+ Add Another Photo</div>
+          <div style="font-size: 0.7rem; color: var(--muted-foreground);">Upload completed work evidence</div>
+        </div>
+      `;
     } else {
       photosGrid.innerHTML = [1, 2, 3].map(slot => `
-        <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="simulateReupload('Portfolio Photo')">
+        <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="openAddWorkPhotoModal()">
           <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
           <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo ${slot}</div>
           <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
@@ -1419,6 +1543,11 @@ window.simulateClientReleaseNow = simulateClientReleaseNow;
 window.showEscrowTermsModal = showEscrowTermsModal;
 window.addPbServiceItem = addPbServiceItem;
 window.removePbServiceItem = removePbServiceItem;
+window.renderPbWorkPhotos = renderPbWorkPhotos;
+window.openAddWorkPhotoModal = openAddWorkPhotoModal;
+window.setWorkPhotoPreset = setWorkPhotoPreset;
+window.saveNewWorkPhoto = saveNewWorkPhoto;
+window.removeWorkPhoto = removeWorkPhoto;
 window.handleSaveProfileBuilder = handleSaveProfileBuilder;
 window.handlePbCategoryChange = handlePbCategoryChange;
 window.simulateReupload = simulateReupload;

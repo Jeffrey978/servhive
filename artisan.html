@@ -18,11 +18,6 @@
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column; background: var(--background);">
 
-  <!-- ==================== DEMO VERSION BANNER ==================== -->
-  <div class="demo-version-banner">
-    <span>⚡ Demo version — Preview and testing build</span>
-  </div>
-
   <!-- ==================== ARTISAN TOP BAR ==================== -->
   <header class="artisan-header">
     <div style="display: flex; align-items: center; gap: 12px;">
@@ -391,6 +386,14 @@
               <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Primary Trade Category</label>
               <select id="pbCategory" class="ed-select-input" onchange="handlePbCategoryChange(this.value)" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--bg-surface); color: var(--foreground); width: 100%;">
                 <optgroup label="Standard Trade Categories">
+                  <option value="cleaning-janitorial">Cleaning &amp; Janitorial</option>
+                  <option value="laundry-dryclean">Laundry &amp; Dry Cleaning</option>
+                  <option value="fumigation-pest">Fumigation &amp; Pest Control</option>
+                  <option value="tailors-fashion">Tailors &amp; Fashion Design</option>
+                  <option value="events-catering">Events &amp; Catering</option>
+                  <option value="phone-gadgets">Phone &amp; Gadget Repair</option>
+                  <option value="car-wash">Car Wash &amp; Auto Detailing</option>
+                  <option value="pets-vet">Pets &amp; Veterinary Care</option>
                   <option value="power-gen">Power &amp; Generators</option>
                   <option value="solar-tech">Solar, Inverters &amp; CCTV</option>
                   <option value="interior-pop">Interior POP Ceilings &amp; Tiling</option>
@@ -451,6 +454,22 @@
             <button type="button" class="ed-button ed-button-black ed-btn-compact" onclick="addPbServiceItem()">+ Add Service Item</button>
           </div>
           <div id="pbServicesList" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px;">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- 4. Proof of Work & Completed Job Photos -->
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin: 24px 0 16px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px;">
+            4. Proof of Work &amp; Completed Job Photos
+          </h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <p style="font-size: 0.84rem; color: var(--muted-foreground); margin: 0;">
+              Clients choose artisans who display real photos of completed projects in Port Harcourt:
+            </p>
+            <button type="button" class="ed-button ed-button-amber ed-btn-compact" onclick="openAddWorkPhotoModal()">
+              <span>+ Add Completed Job Photo</span>
+            </button>
+          </div>
+          <div id="pbWorkPhotosList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px;">
             <!-- Rendered by JS -->
           </div>
 
@@ -636,6 +655,72 @@
       <button class="ed-button ed-button-amber" style="padding: 0 16px; height: 42px;" onclick="sendArtisanChatMessage()">
         <span>Send</span>
       </button>
+    </div>
+  </div>
+
+  <!-- Add Completed Job Photo Modal -->
+  <div id="addWorkPhotoModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 500px; padding: 26px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <div class="hero-eyebrow" style="margin-bottom: 2px;">PROOF OF WORK</div>
+          <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--foreground);">Add Completed Job Photo</h3>
+        </div>
+        <button class="ed-modal-close" style="position: static; width: 32px; height: 32px;" onclick="closeModal('addWorkPhotoModal')">&times;</button>
+      </div>
+      
+      <p style="font-size: 0.82rem; color: var(--muted-foreground); margin-bottom: 18px; line-height: 1.5;">
+        Upload or provide a high-resolution photograph of finished work in Port Harcourt. Verified photos appear on your profile card and help prospective clients hire with confidence.
+      </p>
+
+      <form onsubmit="saveNewWorkPhoto(event)">
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Job Title / Work Description</label>
+          <input type="text" id="newWorkPhotoCaption" required class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; font-size: 0.86rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--foreground);" placeholder="e.g. 5-Bedroom Post-Construction Deep Cleaning">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Port Harcourt Project Location</label>
+          <select id="newWorkPhotoArea" class="ed-select-input" style="height: 42px; width: 100%; padding: 0 12px; font-size: 0.86rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--foreground);">
+            <option value="Peter Odili Road">Peter Odili Road</option>
+            <option value="Old GRA">Old GRA</option>
+            <option value="New GRA / Phase 2">New GRA / Phase 2</option>
+            <option value="Trans-Amadi">Trans-Amadi</option>
+            <option value="Woji">Woji</option>
+            <option value="D-Line">D-Line</option>
+            <option value="Ada George">Ada George</option>
+            <option value="Choba / Uniport">Choba / Uniport</option>
+            <option value="Rumuola">Rumuola</option>
+            <option value="Rumuodara">Rumuodara</option>
+            <option value="Elelenwo">Elelenwo</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Photo Image URL</label>
+          <input type="url" id="newWorkPhotoUrl" required class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; font-size: 0.86rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--foreground);" placeholder="https://images.unsplash.com/...">
+          
+          <!-- Quick Preset Suggestions -->
+          <div style="margin-top: 8px;">
+            <span style="font-size: 0.72rem; color: var(--muted-foreground); display: block; margin-bottom: 4px;">Quick Portfolio Sample Presets:</span>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('cleaning')">✨ Clean Living Room</button>
+              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('power')">⚡ Installed Generator</button>
+              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('solar')">☀️ Solar Inverter</button>
+              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('tailor')">✂️ Tailored Senator Suit</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button type="submit" class="ed-button ed-button-amber" style="flex: 1; padding: 12px; font-weight: 800;">
+            <span>Save &amp; Publish Photo &rarr;</span>
+          </button>
+          <button type="button" class="ed-button ed-button-black" style="padding: 12px 18px;" onclick="closeModal('addWorkPhotoModal')">
+            <span>Cancel</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 

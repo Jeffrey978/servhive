@@ -2422,16 +2422,71 @@ button, input, select, textarea {
 }
 
 @media (max-width: 768px) {
+  .ed-nav-container {
+    padding: 0 12px !important;
+    gap: 8px !important;
+    height: 56px !important;
+  }
+  .ed-header-left {
+    gap: 6px !important;
+  }
+  .ed-logo {
+    font-size: 1.25rem !important;
+  }
+  .ed-logo strong {
+    font-size: 0.72rem !important;
+    padding: 1px 5px !important;
+  }
+  .ed-header-right {
+    gap: 6px !important;
+  }
+  .ed-theme-toggle {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.85rem !important;
+  }
+  .ed-mobile-menu-btn {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 6px !important;
+  }
+  .auth-user-btn {
+    padding: 3px 6px !important;
+    gap: 4px !important;
+    max-width: 120px !important;
+  }
+  .auth-role-tag {
+    display: none !important;
+  }
+  .auth-user-name {
+    max-width: 55px !important;
+    font-size: 0.75rem !important;
+  }
+  .auth-user-avatar {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 0.68rem !important;
+  }
   .ed-header-right button.ed-button-black {
     display: none; /* Accessible in mobile menu drawer */
   }
   .ed-search-bar-wrap {
     flex-direction: column;
-    padding: 12px;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+    gap: 8px !important;
   }
   .ed-search-field-group {
-    width: 100%;
+    width: 100% !important;
+    box-sizing: border-box !important;
     padding: 0;
+  }
+  .ed-search-input,
+  .ed-select-input {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important;
+    min-height: 42px !important;
   }
   .ed-search-divider {
     display: none;
@@ -2490,6 +2545,21 @@ button, input, select, textarea {
 }
 
 @media (max-width: 480px) {
+  .ed-nav-container {
+    padding: 0 8px !important;
+    gap: 5px !important;
+  }
+  .ed-logo {
+    font-size: 1.15rem !important;
+  }
+  .auth-user-btn {
+    max-width: 85px !important;
+    padding: 2px 4px !important;
+  }
+  .auth-user-name {
+    max-width: 42px !important;
+    font-size: 0.72rem !important;
+  }
   .ed-hero-title {
     font-size: 1.85rem;
   }
@@ -2501,6 +2571,101 @@ button, input, select, textarea {
     width: 100%;
     justify-content: space-between;
   }
+}
+
+@media (max-width: 360px) {
+  .auth-user-name {
+    display: none !important;
+  }
+  .auth-user-btn {
+    padding: 2px !important;
+    border-radius: 50% !important;
+  }
+}
+
+/* ==================== PROOF OF WORK / COMPLETED JOBS STRIP ==================== */
+.ed-proof-work-strip {
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  margin: 10px 0 14px;
+}
+
+.ed-proof-work-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+
+.ed-proof-work-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ed-proof-work-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--teal);
+  background: rgba(20, 184, 166, 0.12);
+  border: 1px solid rgba(20, 184, 166, 0.25);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+.ed-proof-thumbs-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.ed-proof-thumb {
+  position: relative;
+  height: 72px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: #000;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.ed-proof-thumb:hover {
+  transform: scale(1.02);
+  border-color: var(--amber);
+}
+
+.ed-proof-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ed-proof-thumb-area {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 /* ==================== SERVHIV E SYSTEM ENHANCEMENTS: BOOST, GALLERY, QUOTES, PRO PORTAL ==================== */
@@ -2554,10 +2719,10 @@ button, input, select, textarea {
 /* 10 Category Icons Responsive Grid */
 .categories-10-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 16px;
 }
-@media (max-width: 1080px) {
+@media (max-width: 1200px) {
   .categories-10-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -3742,27 +3907,6 @@ button, input, select, textarea {
   .pro-work-photo-card img {
     height: 150px;
   }
-}
-
-/* ==================== DEMO VERSION BANNER ==================== */
-.demo-version-banner {
-  background: #f59e0b;
-  color: #000;
-  text-align: center;
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  padding: 6px 16px;
-  position: relative;
-  z-index: 9999;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-[data-theme="dark"] .demo-version-banner {
-  background: #f59e0b;
-  color: #000;
 }
 
 /* Zero horizontal scrolling safety guarantee */

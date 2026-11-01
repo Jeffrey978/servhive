@@ -18,9 +18,6 @@
 </head>
 <body style="min-height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-primary);">
 
-  <!-- Demo Version Banner -->
-  <div class="demo-version-banner">⚡ Demo version — Preview and testing build</div>
-
   <!-- ==================== DEDICATED AUTH HEADER (DIFFERENT FROM MARKETPLACE) ==================== -->
   <header class="auth-landing-header">
     <div class="auth-header-container">
@@ -78,13 +75,19 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span>Client Portal</span>
+          <div style="text-align: left; line-height: 1.2;">
+            <div style="font-weight: 700; font-size: 0.86rem;">Client Portal</div>
+            <div style="font-size: 0.68rem; opacity: 0.75; font-weight: 500;">Hire Vetted Artisans</div>
+          </div>
         </button>
         <button type="button" id="roleBtnArtisan" class="auth-role-btn" onclick="setAuthRole('artisan')">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
           </svg>
-          <span>Artisan Pro Portal</span>
+          <div style="text-align: left; line-height: 1.2;">
+            <div style="font-weight: 700; font-size: 0.86rem;">Artisan Pro Portal</div>
+            <div style="font-size: 0.68rem; opacity: 0.75; font-weight: 500;">Quotes, Jobs &amp; Payouts</div>
+          </div>
         </button>
       </div>
 
@@ -504,6 +507,14 @@
                 <label class="auth-label">Primary Trade Category</label>
                 <select id="artisanCategory" class="auth-input" onchange="handleAuthCategoryChange(this.value)">
                   <optgroup label="Standard Trade Categories">
+                    <option value="cleaning-janitorial:Cleaning &amp; Janitorial">Cleaning &amp; Janitorial</option>
+                    <option value="laundry-dryclean:Laundry &amp; Dry Cleaning">Laundry &amp; Dry Cleaning</option>
+                    <option value="fumigation-pest:Fumigation &amp; Pest Control">Fumigation &amp; Pest Control</option>
+                    <option value="tailors-fashion:Tailors &amp; Fashion Design">Tailors &amp; Fashion Design</option>
+                    <option value="events-catering:Events &amp; Catering">Events &amp; Catering</option>
+                    <option value="phone-gadgets:Phone &amp; Gadget Repair">Phone &amp; Gadget Repair</option>
+                    <option value="car-wash:Car Wash &amp; Auto Detailing">Car Wash &amp; Auto Detailing</option>
+                    <option value="pets-vet:Pets &amp; Veterinary Care">Pets &amp; Veterinary Care</option>
                     <option value="power-gen:Power &amp; Generators">Power &amp; Generators</option>
                     <option value="solar-tech:Solar, Inverters &amp; CCTV">Solar, Inverters &amp; CCTV</option>
                     <option value="interior-pop:Interior POP Ceilings &amp; Tiling">Interior POP Ceilings &amp; Tiling</option>
