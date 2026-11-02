@@ -95,23 +95,38 @@ function loadStoredData() {
     artisanState.currentUser = null;
   }
 
-  // If not logged in as artisan, attempt to check registered users
-  if (!artisanState.currentUser || artisanState.currentUser.role !== 'artisan') {
+  // Authentication & Role check
+  if (!artisanState.currentUser) {
+    // Unauthenticated user -> redirect to dedicated artisan login
+    window.location.href = '/login.html#login-artisan';
+    return false;
+  }
+
+  // If user is currently in client role, switch session seamlessly to their own Artisan Pro profile
+  if (artisanState.currentUser.role !== 'artisan') {
+    artisanState.currentUser.role = 'artisan';
+    if (!artisanState.currentUser.businessName) {
+      artisanState.currentUser.businessName = `${(artisanState.currentUser.name || 'Master').replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`;
+    }
+    if (!artisanState.currentUser.trade) {
+      artisanState.currentUser.trade = 'Power & Generators';
+      artisanState.currentUser.category = 'power-gen';
+    }
+    if (!artisanState.currentUser.area) {
+      artisanState.currentUser.area = 'Trans-Amadi';
+    }
+    localStorage.setItem('servhive_current_user', JSON.stringify(artisanState.currentUser));
+
     try {
       const allUsers = JSON.parse(localStorage.getItem('servhive_users')) || [];
-      const realArtisan = allUsers.find(u => u.role === 'artisan' && !dummyNames.has(u.name));
-      if (realArtisan) {
-        artisanState.currentUser = realArtisan;
-        localStorage.setItem('servhive_current_user', JSON.stringify(realArtisan));
+      const idx = allUsers.findIndex(u => u.id === artisanState.currentUser.id || (u.email && u.email === artisanState.currentUser.email));
+      if (idx !== -1) {
+        allUsers[idx] = artisanState.currentUser;
       } else {
-        // Redirect unauthenticated user to artisan login
-        window.location.href = '/login.html#login-artisan';
-        return false;
+        allUsers.push(artisanState.currentUser);
       }
-    } catch (e) {
-      window.location.href = '/login.html#login-artisan';
-      return false;
-    }
+      localStorage.setItem('servhive_users', JSON.stringify(allUsers));
+    } catch (e) {}
   }
 
   // Providers list

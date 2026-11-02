@@ -3180,40 +3180,157 @@ window.handleLoginSubmit = function(e) {
   e.preventDefault();
   const contact = document.getElementById('loginContact').value.trim();
   const password = document.getElementById('loginPassword').value;
+  const targetRole = state.authRole || 'hirer';
 
-  const role = state.authRole;
-  // Look for registered user or match demo
-  let matchedUser = state.users.find(u => 
-    (u.email.toLowerCase() === contact.toLowerCase() || u.phone.includes(contact) || contact.includes(u.phone)) &&
-    u.role === role
-  );
+  const cleanContact = contact.replace(/\s+/g, '').toLowerCase();
 
-  if (!matchedUser) {
-    const isArt = (role === 'artisan');
-    const defaultName = isArt ? (contact.includes('@') ? contact.split('@')[0] : 'Artisan ' + contact.slice(-4)) : 'Tonye Briggs';
-    matchedUser = {
-      id: 'usr-' + Date.now(),
-      name: defaultName,
-      businessName: isArt ? `${defaultName} Workshop` : null,
-      email: contact.includes('@') ? contact : `${role}@servhive.ng`,
-      phone: contact.includes('@') ? '08034567890' : contact,
-      role: role,
-      area: isArt ? 'Trans-Amadi' : 'Peter Odili Road',
-      verified: isArt ? false : true
-    };
-    state.users.push(matchedUser);
+  // Find in state.users
+  let matchedUser = state.users.find(u => {
+    const uEmail = (u.email || '').toLowerCase();
+    const uPhone = (u.phone || '').replace(/\s+/g, '');
+    return uEmail === cleanContact || (uPhone && (uPhone.includes(cleanContact) || cleanContact.includes(uPhone)));
+  });
+
+  // Find in state.providers
+  let matchedProvider = state.providers.find(p => {
+    const pEmail = (p.email || '').toLowerCase();
+    const pPhone = (p.phone || '').replace(/\s+/g, '');
+    const pName = (p.name || '').toLowerCase();
+    return (pEmail && pEmail === cleanContact) ||
+           (pPhone && (pPhone.includes(cleanContact) || cleanContact.includes(pPhone))) ||
+           (cleanContact.length > 3 && pName.includes(cleanContact));
+  });
+
+  let isArtisan = false;
+
+  if (targetRole === 'artisan') {
+    // Explicit artisan login
+    isArtisan = true;
+
+    if (matchedUser && matchedUser.role === 'artisan') {
+      // Already artisan
+    } else if (matchedUser && matchedUser.role !== 'artisan') {
+      // Client account logging into artisan profile -> activate artisan profile directly
+      matchedUser.role = 'artisan';
+      if (!matchedUser.businessName) {
+        matchedUser.businessName = matchedProvider ? matchedProvider.businessName : `${matchedUser.name.replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`;
+      }
+      if (!matchedUser.trade) {
+        matchedUser.trade = matchedProvider ? matchedProvider.categoryName : 'Power & Generators';
+        matchedUser.category = matchedProvider ? matchedProvider.category : 'power-gen';
+      }
+      if (!matchedUser.area) {
+        matchedUser.area = matchedProvider ? matchedProvider.area : 'Trans-Amadi';
+      }
+    } else if (!matchedUser && matchedProvider) {
+      matchedUser = {
+        id: 'usr-' + String(matchedProvider.id).replace('pro-', ''),
+        name: matchedProvider.name,
+        businessName: matchedProvider.businessName,
+        email: matchedProvider.email || (cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng'),
+        phone: matchedProvider.phone || cleanContact,
+        role: 'artisan',
+        trade: matchedProvider.categoryName || 'Power & Generators',
+        category: matchedProvider.category || 'power-gen',
+        area: matchedProvider.area || 'Trans-Amadi',
+        verified: matchedProvider.verified || false
+      };
+      state.users.push(matchedUser);
+    } else {
+      const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Artisan ' + cleanContact.slice(-4);
+      matchedUser = {
+        id: 'usr-' + Date.now(),
+        name: defaultName,
+        businessName: `${defaultName} Workshop`,
+        email: cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng',
+        phone: cleanContact.includes('@') ? '08023456789' : cleanContact,
+        role: 'artisan',
+        trade: 'Power & Generators',
+        category: 'power-gen',
+        area: 'Trans-Amadi',
+        verified: false
+      };
+      state.users.push(matchedUser);
+    }
+
+    // Ensure provider entry exists
+    const provExists = state.providers.some(p => 
+      p.id === matchedUser.id || 
+      p.id === 'pro-' + String(matchedUser.id).replace('usr-', '') ||
+      (p.businessName && p.businessName === matchedUser.businessName) ||
+      p.name === matchedUser.name
+    );
+    if (!provExists) {
+      state.providers.unshift({
+        id: 'pro-' + String(matchedUser.id).replace('usr-', ''),
+        name: matchedUser.name,
+        businessName: matchedUser.businessName || `${matchedUser.name} Workshop`,
+        category: matchedUser.category || 'power-gen',
+        categoryName: matchedUser.trade || 'Power & Generators',
+        subSpecialty: `${matchedUser.trade || 'Power & Generators'} Specialist`,
+        area: matchedUser.area || 'Trans-Amadi',
+        rating: 0,
+        reviewCount: 0,
+        reviews: [],
+        verified: false,
+        status: 'under_review',
+        image: '/assets/hero_tradesman.jpg',
+        startingPrice: 10000,
+        responseTime: '~15 mins',
+        bio: `${matchedUser.businessName || matchedUser.name} provides verified artisan services across Port Harcourt.`,
+        workPhotos: [],
+        services: [],
+        areasCovered: [matchedUser.area || 'Trans-Amadi', 'Peter Odili Road', 'Woji', 'Old GRA']
+      });
+    }
+
+  } else {
+    // Hirer login
+    if (matchedUser && matchedUser.role === 'artisan') {
+      isArtisan = true;
+    } else if (!matchedUser && matchedProvider) {
+      isArtisan = true;
+      matchedUser = {
+        id: 'usr-' + String(matchedProvider.id).replace('pro-', ''),
+        name: matchedProvider.name,
+        businessName: matchedProvider.businessName,
+        email: matchedProvider.email || (cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng'),
+        phone: matchedProvider.phone || cleanContact,
+        role: 'artisan',
+        trade: matchedProvider.categoryName || 'Power & Generators',
+        category: matchedProvider.category || 'power-gen',
+        area: matchedProvider.area || 'Trans-Amadi',
+        verified: matchedProvider.verified || false
+      };
+      state.users.push(matchedUser);
+    } else {
+      isArtisan = false;
+      if (!matchedUser) {
+        const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Tonye Briggs';
+        matchedUser = {
+          id: 'usr-' + Date.now(),
+          name: defaultName,
+          email: cleanContact.includes('@') ? cleanContact : 'client@servhive.ng',
+          phone: cleanContact.includes('@') ? '08034567890' : cleanContact,
+          role: 'hirer',
+          area: 'Peter Odili Road',
+          verified: true
+        };
+        state.users.push(matchedUser);
+      }
+    }
   }
 
   state.currentUser = matchedUser;
   persistState();
   updateAuthUI();
 
-  if (role === 'artisan') {
+  if (isArtisan) {
     showAppNotice({
       icon: '🔨',
       eyebrow: 'ARTISAN PORTAL ACCESS',
       title: `Welcome, ${matchedUser.name}!`,
-      message: `Redirecting you directly to your <strong>Artisan Pro Dashboard</strong>...`,
+      message: `Entering your <strong>Artisan Pro Dashboard</strong> directly...`,
       confirmText: 'Go to Dashboard',
       onConfirm: () => {
         window.location.href = '/artisan.html';
@@ -3221,7 +3338,7 @@ window.handleLoginSubmit = function(e) {
     });
     setTimeout(() => {
       window.location.href = '/artisan.html';
-    }, 700);
+    }, 500);
     return;
   }
 

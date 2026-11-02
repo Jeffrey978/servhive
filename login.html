@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Log In & Sign Up — Servhive Port Harcourt | Verified Marketplace</title>
-  <meta name="description" content="Access verified Port Harcourt artisans with 100% Escrow payment security, phone number privacy, and standardized rate cards.">
+  <meta name="description"
+    content="Access verified Port Harcourt artisans with 100% Escrow payment security, phone number privacy, and standardized rate cards.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <script>
-    (function() {
+    (function () {
       const savedTheme = localStorage.getItem('servhive_theme') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
     })();
   </script>
 </head>
+
 <body style="min-height: 100vh; display: flex; flex-direction: column; background-color: var(--bg-primary);">
 
   <!-- ==================== DEDICATED AUTH HEADER (DIFFERENT FROM MARKETPLACE) ==================== -->
@@ -28,7 +33,8 @@
 
       <!-- Center: Security Assurance Pill (Responsive in CSS) -->
       <div class="auth-security-pill" id="headerSecurityPill">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
         <span>Payment Protection via Paystack · Port Harcourt Verified Gateway</span>
@@ -37,7 +43,8 @@
       <!-- Right: Action Controls -->
       <div style="display: flex; align-items: center; gap: 10px;">
         <!-- Theme Toggle -->
-        <button id="themeToggleBtn" class="ed-theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark Mode" aria-label="Toggle Theme">
+        <button id="themeToggleBtn" class="ed-theme-toggle" onclick="toggleTheme()" title="Switch Light/Dark Mode"
+          aria-label="Toggle Theme">
           <span id="themeToggleIcon">🌙</span>
         </button>
       </div>
@@ -46,23 +53,26 @@
 
   <!-- ==================== AUTH HERO BANNER ==================== -->
   <section class="auth-hero-banner">
-    <h1 style="font-size: 2.15rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; color: var(--canvas);">
+    <h1
+      style="font-size: 2.15rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; color: var(--canvas);">
       One Account. Payment Protection via Paystack.
     </h1>
     <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.55; max-width: 620px; margin: 0 auto;">
-      Connect directly with vetted Port Harcourt artisans, protect your funds safely until you confirm the job is done, and experience zero roadside price gouging.
+      Connect directly with vetted Port Harcourt artisans, protect your funds safely until you confirm the job is done,
+      and experience zero roadside price gouging.
     </p>
   </section>
 
   <!-- ==================== MAIN AUTH CARD & TRUST CONTAINER ==================== -->
   <main class="auth-container" style="margin-top: 10px; margin-bottom: 40px;">
-    
+
     <!-- Left Column: Interactive Auth Suite Card -->
     <div class="auth-card">
-      
+
       <!-- Top Card Breadcrumb -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
-        <a href="/index.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.84rem; color: var(--text-muted); font-weight: 600; text-decoration: none;">
+        <a href="/index.html"
+          style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.84rem; color: var(--text-muted); font-weight: 600; text-decoration: none;">
           <span>&larr; Explore Marketplace as Guest</span>
         </a>
         <span class="badge badge-secondary" id="authNavEyebrow" style="font-size: 0.72rem;">Client Portal</span>
@@ -71,7 +81,8 @@
       <!-- Dual Role Selection Control -->
       <div class="auth-role-tabs">
         <button type="button" id="roleBtnHirer" class="auth-role-btn active" onclick="setAuthRole('hirer')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
@@ -81,8 +92,11 @@
           </div>
         </button>
         <button type="button" id="roleBtnArtisan" class="auth-role-btn" onclick="setAuthRole('artisan')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+            </path>
           </svg>
           <div style="text-align: left; line-height: 1.2;">
             <div style="font-weight: 700; font-size: 0.86rem;">Artisan Pro Portal</div>
@@ -112,7 +126,9 @@
       </div>
 
       <!-- Inline Alert / Notice Container -->
-      <div id="authNotice" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.88rem; font-weight: 700; line-height: 1.45;"></div>
+      <div id="authNotice"
+        style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 18px; font-size: 0.88rem; font-weight: 700; line-height: 1.45;">
+      </div>
 
       <!-- Dynamic Form Container -->
       <div id="authFormContainer">
@@ -132,32 +148,39 @@
   <section class="auth-trust-strip" id="trustStrip">
     <div class="auth-trust-box">
       <div class="auth-trust-box-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
       </div>
-      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Payment Protection</h3>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Payment Protection
+      </h3>
       <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
-        You pay in the app, the money is held safely by licensed payment provider Paystack (not in our own account), and it is released to the provider only after you confirm the job is done.
+        You pay in the app, the money is held safely by licensed payment provider Paystack (not in our own account), and
+        it is released to the provider only after you confirm the job is done.
       </p>
     </div>
 
     <div class="auth-trust-box">
       <div class="auth-trust-box-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
           <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
         </svg>
       </div>
-      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Masked Number Privacy</h3>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">Masked Number Privacy
+      </h3>
       <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
-        Never worry about roadside harassment or spam. Calls and direct messaging are routed through encrypted masked relays to keep phone numbers confidential.
+        Never worry about roadside harassment or spam. Calls and direct messaging are routed through encrypted masked
+        relays to keep phone numbers confidential.
       </p>
     </div>
 
     <div class="auth-trust-box">
       <div class="auth-trust-box-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <line x1="3" y1="21" x2="21" y2="21"></line>
           <line x1="3" y1="10" x2="21" y2="10"></line>
           <polygon points="12 3 2 10 22 10 12 3"></polygon>
@@ -167,9 +190,11 @@
           <line x1="18" y1="10" x2="18" y2="21"></line>
         </svg>
       </div>
-      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">ID Checked by Servhive</h3>
+      <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: var(--canvas);">ID Checked by Servhive
+      </h3>
       <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
-        Every pro undergoes identity validation and verification. Regulated trades must upload a verified licence before approval.
+        Every pro undergoes identity validation and verification. Regulated trades must upload a verified licence before
+        approval.
       </p>
     </div>
   </section>
@@ -186,7 +211,9 @@
         <span class="auth-faq-icon">▾</span>
       </button>
       <div class="auth-faq-answer">
-        The customer pays in the app, the money is held by licensed payment provider Paystack and not in our own account, and it is released to the provider only after the customer confirms the job is done. If quality standards aren't met, funds remain protected while the Servhive support team helps resolve the issue.
+        The customer pays in the app, the money is held by licensed payment provider Paystack and not in our own
+        account, and it is released to the provider only after the customer confirms the job is done. If quality
+        standards aren't met, funds remain protected while the Servhive support team helps resolve the issue.
       </div>
     </div>
 
@@ -196,7 +223,8 @@
         <span class="auth-faq-icon">▾</span>
       </button>
       <div class="auth-faq-answer">
-        Yes! While accounts have a primary mode, you can easily toggle between Client Portal and Artisan directly from your user menu in the top navigation bar at any time without needing separate logins.
+        Yes! While accounts have a primary mode, you can easily toggle between Client Portal and Artisan directly from
+        your user menu in the top navigation bar at any time without needing separate logins.
       </div>
     </div>
 
@@ -206,7 +234,9 @@
         <span class="auth-faq-icon">▾</span>
       </button>
       <div class="auth-faq-answer">
-        Every new provider receives a 1 month free trial. After that, it is ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made. A 5% commission applies to jobs paid through the app.
+        Every new provider receives a 1 month free trial. After that, it is ₦2,000 per month for ALL providers, paid
+        before the month ends. If unpaid, the profile is hidden until payment is made. A 5% commission applies to jobs
+        paid through the app.
       </div>
     </div>
 
@@ -216,23 +246,28 @@
         <span class="auth-faq-icon">▾</span>
       </button>
       <div class="auth-faq-answer">
-        Servhive covers all major Port Harcourt zones including Trans-Amadi, Peter Odili Road, Woji, Old GRA, New GRA, Choba / Uniport, D-Line, Ada George, Rumuola, Artillery, and Elelenwo.
+        Servhive covers all major Port Harcourt zones including Trans-Amadi, Peter Odili Road, Woji, Old GRA, New GRA,
+        Choba / Uniport, D-Line, Ada George, Rumuola, Artillery, and Elelenwo.
       </div>
     </div>
   </section>
 
   <!-- ==================== MINIMAL AUTH FOOTER ==================== -->
   <footer class="auth-landing-footer">
-    <div style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+    <div
+      style="max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 14px;">
       <a href="/index.html" class="ed-logo" style="text-decoration: none;">
         <span>servhive<strong>PH</strong></span>
       </a>
       <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 520px; line-height: 1.5;">
-        Port Harcourt's verified trade &amp; talent infrastructure. ID checked by Servhive, masked contact privacy, and payment protection via Paystack.
+        Port Harcourt's verified trade &amp; talent infrastructure. ID checked by Servhive, masked contact privacy, and
+        payment protection via Paystack.
       </p>
-      <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; font-size: 0.84rem; font-weight: 600;">
+      <div
+        style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; font-size: 0.84rem; font-weight: 600;">
         <a href="/index.html" style="color: var(--canvas); text-decoration: none;">Explore Marketplace</a>
-        <a href="#trustStrip" style="color: var(--text-muted); text-decoration: none;">Payment Protection &amp; Privacy Protocol</a>
+        <a href="#trustStrip" style="color: var(--text-muted); text-decoration: none;">Payment Protection &amp; Privacy
+          Protocol</a>
         <a href="#faqSection" style="color: var(--text-muted); text-decoration: none;">Help &amp; FAQs</a>
       </div>
       <div style="font-size: 0.76rem; color: var(--text-faint); margin-top: 6px;">
@@ -244,21 +279,55 @@
   <!-- ==================== AUTH SCRIPT ENGINE ==================== -->
   <script>
     // Local State for Auth Landing Page
+    const defaultSeedUsers = [
+      {
+        id: 'usr-1',
+        name: 'Tonye Briggs',
+        email: 'tonye@example.com',
+        phone: '08034567890',
+        role: 'hirer',
+        area: 'Peter Odili Road',
+        password: 'password123',
+        createdAt: '2026-09-15'
+      },
+      {
+        id: 'usr-artisan-1',
+        name: 'Tamuno George',
+        businessName: 'Tamuno Precision Power Works',
+        email: 'tamuno@workshop.ng',
+        phone: '08023456789',
+        role: 'artisan',
+        trade: 'Power & Generators',
+        category: 'power-gen',
+        area: 'Trans-Amadi',
+        password: 'password123',
+        verified: true,
+        createdAt: '2026-09-15'
+      }
+    ];
+
+    let storedUsers = [];
+    try {
+      storedUsers = JSON.parse(localStorage.getItem('servhive_users')) || [];
+    } catch (e) {
+      storedUsers = [];
+    }
+    if (!storedUsers || storedUsers.length === 0) {
+      storedUsers = defaultSeedUsers;
+      localStorage.setItem('servhive_users', JSON.stringify(storedUsers));
+    } else {
+      // Ensure seed artisan exists for demo & pro access
+      const hasArtisan = storedUsers.some(u => u.role === 'artisan');
+      if (!hasArtisan) {
+        storedUsers.push(defaultSeedUsers[1]);
+        localStorage.setItem('servhive_users', JSON.stringify(storedUsers));
+      }
+    }
+
     const authState = {
       role: 'hirer', // 'hirer' | 'artisan'
       mode: 'login', // 'login' | 'signup'
-      users: JSON.parse(localStorage.getItem('servhive_users')) || [
-        {
-          id: 'usr-1',
-          name: 'Tonye Briggs',
-          email: 'tonye@example.com',
-          phone: '08034567890',
-          role: 'hirer',
-          area: 'Peter Odili Road',
-          password: 'password123',
-          createdAt: '2026-09-15'
-        }
-      ]
+      users: storedUsers
     };
 
     // Initialize from URL Hash or Params
@@ -783,18 +852,48 @@
 
       if (role === 'hirer') {
         const hirer = authState.users.find(u => u.role === 'hirer');
-        if (contactInput) contactInput.value = hirer ? hirer.email : 'tonye@example.com';
-        if (passwordInput) passwordInput.value = hirer ? hirer.password : 'password123';
+        if (contactInput) contactInput.value = hirer ? (hirer.email || hirer.phone) : 'tonye@example.com';
+        if (passwordInput) passwordInput.value = hirer ? (hirer.password || 'password123') : 'password123';
       } else {
-        const artisan = authState.users.find(u => u.role === 'artisan');
-        if (artisan) {
-          if (contactInput) contactInput.value = artisan.email || artisan.phone;
-          if (passwordInput) passwordInput.value = artisan.password || 'password123';
-        } else {
-          switchAuthTab('signup', 'artisan');
-          showInlineNotice('No dummy artisan accounts exist. Register your real artisan workshop with 1 month free!', 'info');
-          return;
+        let artisan = authState.users.find(u => u.role === 'artisan');
+        if (!artisan) {
+          try {
+            const providers = JSON.parse(localStorage.getItem('servhive_providers')) || [];
+            if (providers.length > 0) {
+              const p = providers[0];
+              artisan = {
+                id: 'usr-' + String(p.id).replace('pro-', ''),
+                name: p.name || 'Tamuno George',
+                businessName: p.businessName || 'Tamuno Precision Power Works',
+                email: p.email || 'tamuno@workshop.ng',
+                phone: p.phone || '08023456789',
+                role: 'artisan',
+                password: 'password123'
+              };
+              authState.users.push(artisan);
+              localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+            }
+          } catch (e) {}
         }
+        if (!artisan) {
+          artisan = {
+            id: 'usr-artisan-1',
+            name: 'Tamuno George',
+            businessName: 'Tamuno Precision Power Works',
+            email: 'tamuno@workshop.ng',
+            phone: '08023456789',
+            role: 'artisan',
+            trade: 'Power & Generators',
+            category: 'power-gen',
+            area: 'Trans-Amadi',
+            password: 'password123',
+            verified: true
+          };
+          authState.users.push(artisan);
+          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+        }
+        if (contactInput) contactInput.value = artisan.email || artisan.phone;
+        if (passwordInput) passwordInput.value = artisan.password || 'password123';
       }
 
       if (contactInput) {
@@ -826,46 +925,180 @@
       e.preventDefault();
       const contact = document.getElementById('loginContact').value.trim();
       const password = document.getElementById('loginPassword').value;
-      const role = authState.role;
+      const targetRole = authState.role; // 'hirer' | 'artisan'
 
-      // Smart User Detection: Check if user exists in the registered users list by contact
       const cleanContact = contact.replace(/\s+/g, '').toLowerCase();
+
+      // Look in registered users
       let matchedUser = authState.users.find(u => {
         const uEmail = (u.email || '').toLowerCase();
         const uPhone = (u.phone || '').replace(/\s+/g, '');
         return uEmail === cleanContact || (uPhone && (uPhone.includes(cleanContact) || cleanContact.includes(uPhone)));
       });
 
+      // Look in providers
+      let matchedProvider = null;
+      try {
+        const storedProviders = JSON.parse(localStorage.getItem('servhive_providers')) || [];
+        matchedProvider = storedProviders.find(p => {
+          const pEmail = (p.email || '').toLowerCase();
+          const pPhone = (p.phone || '').replace(/\s+/g, '');
+          const pName = (p.name || '').toLowerCase();
+          return (pEmail && pEmail === cleanContact) ||
+                 (pPhone && (pPhone.includes(cleanContact) || cleanContact.includes(pPhone))) ||
+                 (cleanContact.length > 3 && pName.includes(cleanContact));
+        });
+      } catch (err) {}
+
       let isArtisan = false;
-      if (matchedUser) {
-        // User exists: respect their registered role
-        isArtisan = matchedUser.role === 'artisan';
+
+      if (targetRole === 'artisan') {
+        // User explicitly logging into the Artisan Profile!
+        // ALWAYS log into artisan mode and route directly to artisan.html
+        isArtisan = true;
+
+        if (matchedUser && matchedUser.role === 'artisan') {
+          // Already an artisan user
+        } else if (matchedUser && matchedUser.role !== 'artisan') {
+          // Client account logging into Artisan profile -> elevate/activate Artisan profile directly
+          matchedUser.role = 'artisan';
+          if (!matchedUser.businessName) {
+            matchedUser.businessName = matchedProvider ? matchedProvider.businessName : `${matchedUser.name.replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`;
+          }
+          if (!matchedUser.trade) {
+            matchedUser.trade = matchedProvider ? matchedProvider.categoryName : 'Power & Generators';
+            matchedUser.category = matchedProvider ? matchedProvider.category : 'power-gen';
+          }
+          if (!matchedUser.area) {
+            matchedUser.area = matchedProvider ? matchedProvider.area : 'Trans-Amadi';
+          }
+          const idx = authState.users.findIndex(u => u.id === matchedUser.id);
+          if (idx !== -1) authState.users[idx] = matchedUser;
+          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+        } else if (!matchedUser && matchedProvider) {
+          matchedUser = {
+            id: 'usr-' + String(matchedProvider.id).replace('pro-', ''),
+            name: matchedProvider.name,
+            businessName: matchedProvider.businessName,
+            email: matchedProvider.email || (cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng'),
+            phone: matchedProvider.phone || cleanContact,
+            role: 'artisan',
+            trade: matchedProvider.categoryName || 'Power & Generators',
+            category: matchedProvider.category || 'power-gen',
+            area: matchedProvider.area || 'Trans-Amadi',
+            verified: matchedProvider.verified || false
+          };
+          authState.users.push(matchedUser);
+          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+        } else {
+          // Brand new artisan account on the fly
+          const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Artisan ' + cleanContact.slice(-4);
+          matchedUser = {
+            id: 'usr-' + Date.now(),
+            name: defaultName,
+            businessName: `${defaultName} Workshop`,
+            email: cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng',
+            phone: cleanContact.includes('@') ? '08023456789' : cleanContact,
+            role: 'artisan',
+            trade: 'Power & Generators',
+            category: 'power-gen',
+            area: 'Trans-Amadi',
+            verified: false
+          };
+          authState.users.push(matchedUser);
+          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+        }
+
+        // Guarantee corresponding provider profile in servhive_providers
+        try {
+          const storedProviders = JSON.parse(localStorage.getItem('servhive_providers')) || [];
+          const exists = storedProviders.some(p => 
+            p.id === matchedUser.id || 
+            p.id === 'pro-' + String(matchedUser.id).replace('usr-', '') ||
+            (p.businessName && p.businessName === matchedUser.businessName) ||
+            p.name === matchedUser.name
+          );
+          if (!exists) {
+            storedProviders.unshift({
+              id: 'pro-' + String(matchedUser.id).replace('usr-', ''),
+              name: matchedUser.name,
+              businessName: matchedUser.businessName || `${matchedUser.name} Workshop`,
+              category: matchedUser.category || 'power-gen',
+              categoryName: matchedUser.trade || 'Power & Generators',
+              subSpecialty: `${matchedUser.trade || 'Power & Generators'} Specialist`,
+              area: matchedUser.area || 'Trans-Amadi',
+              rating: 0,
+              reviewCount: 0,
+              reviews: [],
+              verified: false,
+              status: 'under_review',
+              image: '/assets/hero_tradesman.jpg',
+              startingPrice: 10000,
+              responseTime: '~15 mins',
+              bio: `${matchedUser.businessName || matchedUser.name} provides verified artisan services across Port Harcourt.`,
+              workPhotos: [],
+              services: [],
+              areasCovered: [matchedUser.area || 'Trans-Amadi', 'Peter Odili Road', 'Woji', 'Old GRA']
+            });
+            localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
+          }
+        } catch (err) {}
+
       } else {
-        // New account on the fly
-        isArtisan = (role === 'artisan');
-        const defaultName = isArtisan ? (contact.includes('@') ? contact.split('@')[0] : 'Artisan ' + contact.slice(-4)) : 'Tonye Briggs';
-        matchedUser = {
-          id: 'usr-' + Date.now(),
-          name: defaultName,
-          businessName: isArtisan ? `${defaultName} Workshop` : null,
-          email: contact.includes('@') ? contact : `${isArtisan ? 'artisan' : 'client'}@servhive.ng`,
-          phone: contact.includes('@') ? '08034567890' : contact,
-          role: isArtisan ? 'artisan' : 'hirer',
-          area: isArtisan ? 'Trans-Amadi' : 'Peter Odili Road',
-          verified: isArtisan ? false : true
-        };
-        authState.users.push(matchedUser);
-        localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+        // Logging in on Client tab (targetRole === 'hirer')
+        if (matchedUser && matchedUser.role === 'artisan') {
+          // Pure Artisan account detected -> log directly into Artisan account!
+          isArtisan = true;
+        } else if (!matchedUser && matchedProvider) {
+          // Exists in provider records -> log directly into Artisan account!
+          isArtisan = true;
+          matchedUser = {
+            id: 'usr-' + String(matchedProvider.id).replace('pro-', ''),
+            name: matchedProvider.name,
+            businessName: matchedProvider.businessName,
+            email: matchedProvider.email || (cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng'),
+            phone: matchedProvider.phone || cleanContact,
+            role: 'artisan',
+            trade: matchedProvider.categoryName || 'Power & Generators',
+            category: matchedProvider.category || 'power-gen',
+            area: matchedProvider.area || 'Trans-Amadi',
+            verified: matchedProvider.verified || false
+          };
+          authState.users.push(matchedUser);
+          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+        } else {
+          // Hirer login
+          isArtisan = false;
+          if (!matchedUser) {
+            const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Tonye Briggs';
+            matchedUser = {
+              id: 'usr-' + Date.now(),
+              name: defaultName,
+              email: cleanContact.includes('@') ? cleanContact : 'client@servhive.ng',
+              phone: cleanContact.includes('@') ? '08034567890' : cleanContact,
+              role: 'hirer',
+              area: 'Peter Odili Road',
+              verified: true
+            };
+            authState.users.push(matchedUser);
+            localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+          }
+        }
       }
 
       localStorage.setItem('servhive_current_user', JSON.stringify(matchedUser));
 
-      showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Redirecting you to ${isArtisan ? 'your Artisan Pro Dashboard' : 'the client marketplace'}...`, 'success');
-
-      // Auto redirect: Artisans ALWAYS land on Artisan Dashboard; Clients land on marketplace
-      setTimeout(() => {
-        window.location.href = isArtisan ? '/artisan.html' : '/index.html';
-      }, 700);
+      if (isArtisan) {
+        showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Entering your <strong>Artisan Pro Dashboard</strong> directly...`, 'success');
+        setTimeout(() => {
+          window.location.href = '/artisan.html';
+        }, 600);
+      } else {
+        showInlineNotice(`✓ Welcome, <strong>${matchedUser.name}</strong>! Entering the client marketplace directly...`, 'success');
+        setTimeout(() => {
+          window.location.href = '/index.html';
+        }, 600);
+      }
     }
 
     function handleHirerSignupSubmit(e) {
@@ -912,10 +1145,8 @@
       const catVal = document.getElementById('artisanCategory').value;
       const area = document.getElementById('artisanArea').value;
       const phone = document.getElementById('artisanPhone').value.trim();
-      const expEl = document.getElementById('artisanExp');
-      const exp = expEl ? expEl.value : '3+ years';
-      const emailEl = document.getElementById('artisanEmail');
-      const email = (emailEl && emailEl.value.trim()) || `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
+      const exp = document.getElementById('artisanExp').value;
+      const email = document.getElementById('artisanEmail').value.trim() || `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
       const startingPrice = Number(document.getElementById('artisanStartingPrice').value) || 10000;
       const password = document.getElementById('artisanPassword').value;
       const confirmEl = document.getElementById('artisanConfirmPassword');
@@ -974,7 +1205,7 @@
         };
         storedProviders.unshift(newPro);
         localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
-      } catch (err) {}
+      } catch (err) { }
 
       showInlineNotice(`✨ Welcome, <strong>${bizName}</strong>! Your provider account is registered and currently <strong>Under review</strong>. Verified badges will appear after admin review. Redirecting to Pro Dashboard...`, 'success');
 
@@ -1126,23 +1357,33 @@
 
   <!-- Legal Modal Dialog -->
   <div id="legalModal" class="modal-backdrop">
-    <div class="ed-modal-box" style="max-width: 720px; padding: 28px; max-height: 85vh; display: flex; flex-direction: column;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 14px;">
+    <div class="ed-modal-box"
+      style="max-width: 720px; padding: 28px; max-height: 85vh; display: flex; flex-direction: column;">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 14px;">
         <div>
           <div class="hero-eyebrow" style="margin-bottom: 2px;">LEGAL &amp; COMPLIANCE</div>
-          <h3 id="legalModalTitle" style="font-size: 1.3rem; font-weight: 800; margin: 0; color: var(--foreground);">Servhive Terms &amp; Policies</h3>
+          <h3 id="legalModalTitle" style="font-size: 1.3rem; font-weight: 800; margin: 0; color: var(--foreground);">
+            Servhive Terms &amp; Policies</h3>
         </div>
-        <button class="ed-modal-close" style="position: static; width: 32px; height: 32px;" onclick="closeLegalModal()">&times;</button>
+        <button class="ed-modal-close" style="position: static; width: 32px; height: 32px;"
+          onclick="closeLegalModal()">&times;</button>
       </div>
 
-      <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 16px; overflow-x: auto;">
-        <button type="button" class="ed-button ed-button-black ed-btn-compact active" id="legalTabBtn-terms" onclick="switchLegalTab('terms')">Terms of Use</button>
-        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-provider" onclick="switchLegalTab('provider')">Provider Agreement</button>
-        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-protection" onclick="switchLegalTab('protection')">Payment Protection Terms</button>
-        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-privacy" onclick="switchLegalTab('privacy')">Privacy Policy</button>
+      <div
+        style="display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 16px; overflow-x: auto;">
+        <button type="button" class="ed-button ed-button-black ed-btn-compact active" id="legalTabBtn-terms"
+          onclick="switchLegalTab('terms')">Terms of Use</button>
+        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-provider"
+          onclick="switchLegalTab('provider')">Provider Agreement</button>
+        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-protection"
+          onclick="switchLegalTab('protection')">Payment Protection Terms</button>
+        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-privacy"
+          onclick="switchLegalTab('privacy')">Privacy Policy</button>
       </div>
 
-      <div id="legalModalContent" style="flex: 1; overflow-y: auto; padding-right: 8px; font-size: 0.88rem; line-height: 1.6; color: var(--muted-foreground);">
+      <div id="legalModalContent"
+        style="flex: 1; overflow-y: auto; padding-right: 8px; font-size: 0.88rem; line-height: 1.6; color: var(--muted-foreground);">
       </div>
 
       <div style="margin-top: 18px; border-top: 1px solid var(--border); padding-top: 14px; text-align: right;">
@@ -1151,4 +1392,5 @@
     </div>
   </div>
 </body>
+
 </html>
