@@ -77,7 +77,7 @@ function loadStoredData() {
   // Purge any legacy dummy mock artisans from localStorage
   const dummyProIds = new Set(['pro-1', 'pro-2', 'pro-3', 'pro-4', 'pro-5', 'pro-6', 'pro-7', 'pro-8', 'pro-9', 'pro-10', 'pro-11']);
   const dummyNames = new Set([
-    'Engr. Emeka Obi', 'Blessing Amadi', 'Tamuno George', 'Chidi Okonkwo',
+    'Engr. Emeka Obi', 'Blessing Amadi', 'Chidi Okonkwo',
     'Franklyn Eke', 'Tari Princewill', 'Victor Nnamdi', 'Idowu Alabi',
     'Samuel Dike', 'Kenneth Jumbo', 'Somto Okon', 'Tari Davies', 'Engr. Franklyn Nnamdi',
     'PowerVolt Generator & Electrical Works', 'Precision Mobile Auto Diagnostics'

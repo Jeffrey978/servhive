@@ -40,7 +40,7 @@
 
       <!-- Center: Clean Corporate Navigation (Short Labels, Non-Wrapping) -->
       <nav class="ed-nav-links" aria-label="Main Navigation">
-        <a href="#directory" class="ed-nav-link">Find Artisans</a>
+        <a href="#directory" class="ed-nav-link" onclick="return handleFindArtisansClick(event)">Find Artisans</a>
         <a href="javascript:void(0)" onclick="openMyAccountModal()" class="ed-nav-link" id="headerMyAccountLink">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
           <span>My Account</span>
@@ -85,7 +85,7 @@
     <!-- Mobile Navigation Drawer -->
     <div id="edMobileMenu" class="ed-mobile-drawer">
       <div class="ed-mobile-drawer-inner">
-        <a href="#directory" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">Find Artisans</a>
+        <a href="#directory" class="ed-mobile-nav-link" onclick="toggleMobileMenu(); return handleFindArtisansClick(event);">Find Artisans</a>
         <a href="javascript:void(0)" onclick="openMyAccountModal(); toggleMobileMenu();" class="ed-mobile-nav-link" style="color: var(--teal); font-weight: 700;">
           👤 My Account (Past Jobs &amp; Saved)
         </a>
@@ -168,7 +168,7 @@
           <span class="geo-btn-text">Near Me</span>
         </button>
 
-        <button class="ed-button ed-button-amber" style="height: 48px; padding: 0 24px;" onclick="renderProviders(); location.href='#directory';">
+        <button class="ed-button ed-button-amber" style="height: 48px; padding: 0 24px;" onclick="return handleFindArtisansClick(event);">
           <span>Find Artisans</span>
         </button>
       </div>
@@ -195,7 +195,7 @@
           <h2 class="ed-section-title">Browse Port Harcourt's 18 Launch Service Sectors</h2>
           <p class="ed-section-sub">Standardized rate cards in ₦ with zero roadside price renegotiation.</p>
         </div>
-        <a href="#directory" class="ed-button ed-button-black" onclick="resetFilters()">
+        <a href="#directory" class="ed-button ed-button-black" onclick="return handleFindArtisansClick(event)">
           <span>View All Verified Pros &rarr;</span>
         </a>
       </div>
@@ -1441,7 +1441,24 @@
 
   <!-- Quick helper scripts -->
   <script>
+    function handleFindArtisansClick(e) {
+      if (window.handleFindArtisansClick && window.handleFindArtisansClick !== handleFindArtisansClick) {
+        return window.handleFindArtisansClick(e);
+      }
+      if (window.state && !window.state.currentUser) {
+        if (e && e.preventDefault) e.preventDefault();
+        window.location.href = '/login.html#signup';
+        return false;
+      }
+      const dirEl = document.getElementById('directory');
+      if (dirEl) dirEl.scrollIntoView({ behavior: 'smooth' });
+      return false;
+    }
+
     function quickSearch(query) {
+      if (window.state && !window.state.currentUser) {
+        return handleFindArtisansClick();
+      }
       const input = document.getElementById('heroSearchInput');
       if (input) {
         input.value = query;
@@ -1451,6 +1468,9 @@
     }
 
     function filterByArea(area) {
+      if (window.state && !window.state.currentUser) {
+        return handleFindArtisansClick();
+      }
       if (window.state) {
         window.state.selectedArea = area;
         const select = document.getElementById('heroAreaSelect');

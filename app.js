@@ -272,7 +272,7 @@ const PH_LANDMARKS = [
   const dummyJobIds = new Set(['esc-101']);
   const dummyRepIds = new Set(['rep-1']);
   const dummyNames = new Set([
-    'Engr. Emeka Obi', 'Blessing Amadi', 'Tamuno George', 'Chidi Okonkwo',
+    'Engr. Emeka Obi', 'Blessing Amadi', 'Chidi Okonkwo',
     'Franklyn Eke', 'Tari Princewill', 'Victor Nnamdi', 'Idowu Alabi',
     'Samuel Dike', 'Kenneth Jumbo', 'Somto Okon', 'Tari Davies', 'Engr. Franklyn Nnamdi',
     'PowerVolt Generator & Electrical Works', 'Precision Mobile Auto Diagnostics'
@@ -884,6 +884,270 @@ const INITIAL_PROVIDERS = [
       { name: 'HD Lace Frontal Install & Styling', price: 15000, type: 'Fixed Price' },
       { name: 'Scalp Detox & Deep Conditioning Spa', price: 7000, type: 'Fixed Price' }
     ]
+  },
+  {
+    id: 'pro-ph-plumbing-1',
+    name: 'Engr. Nnamdi Amadi',
+    businessName: 'Amadi Borehole & Industrial Plumbing Works',
+    category: 'plumbing',
+    categoryName: 'Plumbing & Pumps',
+    subSpecialty: 'Submersible Borehole Pumps & PPR Piping Repairs',
+    area: 'Trans-Amadi',
+    rating: 4.9,
+    reviewCount: 38,
+    verified: true,
+    status: 'approved',
+    boosted: false,
+    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=500&q=80',
+    startingPrice: 10000,
+    responseTime: '~20 mins',
+    bio: 'Registered commercial and residential plumber in Trans-Amadi. Specialized in submersible borehole pumps, automatic float switches, booster pumps, and leak-free PPR pipe installations.',
+    areasCovered: ['Trans-Amadi', 'Peter Odili Road', 'Old GRA', 'Woji'],
+    workPhotos: [
+      {
+        url: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: 2HP Sumoto borehole pump replacement with control box in Trans-Amadi',
+        area: 'Trans-Amadi',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Industrial PPR water distribution manifold for 6 flats in Peter Odili',
+        area: 'Peter Odili Road',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Overhead 2000L GeePee tank pipe rigging & booster pump installation in Old GRA',
+        area: 'Old GRA',
+        date: 'Sep 2026'
+      }
+    ],
+    services: [
+      { name: 'Borehole Submersible Pump Servicing & Wiring', price: 15000, type: 'Fixed Price' },
+      { name: 'PPR High-Pressure Pipe Leak Repair', price: 10000, type: 'Fixed Price' },
+      { name: 'Automatic Water Float Switch Installation', price: 8000, type: 'Fixed Price' }
+    ]
+  },
+  {
+    id: 'pro-ph-electrical-1',
+    name: 'Emmanuel Dan-Jumbo',
+    businessName: 'Apex Conduit Electrical & Fault Diagnostics PH',
+    category: 'electrical',
+    categoryName: 'Electrical & Wiring',
+    subSpecialty: 'Conduit Piping, Distribution Boards & Fault Detection',
+    area: 'Old GRA',
+    rating: 4.9,
+    reviewCount: 47,
+    verified: true,
+    status: 'approved',
+    boosted: false,
+    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=500&q=80',
+    startingPrice: 7000,
+    responseTime: '~10 mins',
+    bio: 'Licensed electrical engineer handling residential distribution boards (DB), conduit rewiring, surge protectors, earth pit grounding, and emergency short-circuit fault finding across Port Harcourt.',
+    areasCovered: ['Old GRA', 'New GRA / Phase 2', 'D-Line', 'Rumuola'],
+    workPhotos: [
+      {
+        url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: 3-Phase Schneider distribution board re-termination & labeling in Old GRA',
+        area: 'Old GRA',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Concealed ceiling conduit LED track lighting in New GRA',
+        area: 'New GRA / Phase 2',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1509390144018-eeaf65052242?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Heavy copper earth rod grounding & surge arrester setup in D-Line',
+        area: 'D-Line',
+        date: 'Sep 2026'
+      }
+    ],
+    services: [
+      { name: 'Single/3-Phase Distribution Board Wiring & Breakers', price: 18000, type: 'Fixed Price' },
+      { name: 'Emergency Short-Circuit Fault Detection', price: 7000, type: 'Fixed Price' },
+      { name: 'Whole-Home Copper Earth Rod Grounding', price: 22000, type: 'Fixed Price' }
+    ]
+  },
+  {
+    id: 'pro-ph-ac-1',
+    name: 'Chidi Ogar',
+    businessName: 'ArcticCool HVAC & Industrial Refrigeration PH',
+    category: 'ac-chillers',
+    categoryName: 'AC & Refrigeration',
+    subSpecialty: 'Inverter AC Chemical Servicing & Compressor Overhaul',
+    area: 'D-Line',
+    rating: 4.8,
+    reviewCount: 39,
+    verified: true,
+    status: 'approved',
+    boosted: false,
+    image: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=500&q=80',
+    startingPrice: 8000,
+    responseTime: '~15 mins',
+    bio: 'Certified HVAC master technician specializing in R410a/R32 gas charging, chemical deep pressure washing of coils, compressor diagnostics, and inverter board micro-repairs in D-Line and surrounding estates.',
+    areasCovered: ['D-Line', 'Old GRA', 'Trans-Amadi', 'Peter Odili Road'],
+    workPhotos: [
+      {
+        url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Complete chemical dismantling & coil pressure wash on 2HP LG Inverter in D-Line',
+        area: 'D-Line',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: R410a refrigerant leak vacuuming & recharge in Peter Odili Road',
+        area: 'Peter Odili Road',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Panasonic ceiling cassette AC repair & blower fan replacement in Old GRA',
+        area: 'Old GRA',
+        date: 'Sep 2026'
+      }
+    ],
+    services: [
+      { name: 'Full Unit Chemical Pressure Servicing (Split AC)', price: 8000, type: 'Per Unit' },
+      { name: 'R410a / R22 Pure Refrigerant Gas Top-Up', price: 12000, type: 'Fixed Price' },
+      { name: 'Inverter AC Motherboard & Sensor Diagnostics', price: 10000, type: 'Fixed Price' }
+    ]
+  },
+  {
+    id: 'pro-ph-mechanic-1',
+    name: 'Engr. Kenneth Lawson',
+    businessName: 'Precision Auto Diagnostics & Mobile Workshop',
+    category: 'auto-mechanic',
+    categoryName: 'Auto Diagnostics',
+    subSpecialty: 'OBD-2 Scanning, Japanese/German Transmissions & Brakes',
+    area: 'Ada George',
+    rating: 4.9,
+    reviewCount: 42,
+    verified: true,
+    status: 'approved',
+    boosted: false,
+    image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=500&q=80',
+    startingPrice: 6000,
+    responseTime: '~20 mins',
+    bio: 'Modern computerized automobile technician with mobile dispatch van. Specializing in Autel MaxiSys ECU scanning, transmission fluid flushing, brake caliper rebuilds, and electrical wiring troubleshooting across Port Harcourt.',
+    areasCovered: ['Ada George', 'Rumuola', 'Old GRA', 'Trans-Amadi'],
+    workPhotos: [
+      {
+        url: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Toyota Camry check-engine light OBD-2 scan & O2 sensor replacement in Ada George',
+        area: 'Ada George',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Mercedes C300 complete ceramic brake disc & pad replacement in Old GRA',
+        area: 'Old GRA',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Lexus RX350 alternator overhaul & battery charging test in Rumuola',
+        area: 'Rumuola',
+        date: 'Sep 2026'
+      }
+    ],
+    services: [
+      { name: 'Comprehensive OBD-2 Computer Diagnostic Scan & Report', price: 6000, type: 'Fixed Price' },
+      { name: 'Front & Rear Brake Pads Installation & Fluid Bleed', price: 8000, type: 'Fixed Price' },
+      { name: 'Mobile Roadside Breakdown Inspection & Battery Jump', price: 7000, type: 'Fixed Price' }
+    ]
+  },
+  {
+    id: 'pro-ph-carpentry-1',
+    name: 'Felix Ibiwari',
+    businessName: 'Heritage Cabinetry & Custom Woodworks PH',
+    category: 'carpentry',
+    categoryName: 'Carpentry & Furniture',
+    subSpecialty: 'Modern Kitchen Cabinets, Wardrobes & Wood Restoration',
+    area: 'Woji',
+    rating: 4.8,
+    reviewCount: 31,
+    verified: true,
+    status: 'approved',
+    boosted: false,
+    image: 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=500&q=80',
+    startingPrice: 10000,
+    responseTime: '~25 mins',
+    bio: 'Master carpenter and joiner in Woji. Specialized in HDF and marine board kitchen cabinets, soft-close sliding wardrobes, wooden door hanging, and luxury furniture restoration with polyurethane finish.',
+    areasCovered: ['Woji', 'Peter Odili Road', 'Trans-Amadi', 'Old GRA'],
+    workPhotos: [
+      {
+        url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: High-gloss grey acrylic kitchen cabinet with hydraulic hinges in Woji',
+        area: 'Woji',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: 4-Door floor-to-ceiling master bedroom wardrobe in Peter Odili',
+        area: 'Peter Odili Road',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Solid hardwood panel door trimming, lock installation & polish in Old GRA',
+        area: 'Old GRA',
+        date: 'Sep 2026'
+      }
+    ],
+    services: [
+      { name: 'Custom Modular Kitchen Cabinet Design & Installation', price: 35000, type: 'Milestone' },
+      { name: 'Internal Wooden Door Hanging & Lock Fitting', price: 10000, type: 'Per Door' },
+      { name: 'Wardrobe Drawer Slide & Hinge Repair / Realignment', price: 7000, type: 'Fixed Price' }
+    ]
+  },
+  {
+    id: 'pro-ph-painting-1',
+    name: 'Donald Briggs',
+    businessName: 'PrimeShield Painting & Luxury Screeding PH',
+    category: 'painting',
+    categoryName: 'Painting & Screeding',
+    subSpecialty: 'Weather-Shield Exterior Paint, Stucco & Smooth Screeding',
+    area: 'Peter Odili Road',
+    rating: 4.9,
+    reviewCount: 36,
+    verified: true,
+    status: 'approved',
+    boosted: false,
+    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=500&q=80',
+    startingPrice: 12000,
+    responseTime: '~15 mins',
+    bio: 'Professional painting contractor in Peter Odili Road. Expert in water-resistant exterior texture coatings, POP wall putty screeding, marble effect stucco, and Dulux/Berger premium interior painting.',
+    areasCovered: ['Peter Odili Road', 'Old GRA', 'New GRA / Phase 2', 'Woji'],
+    workPhotos: [
+      {
+        url: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: 2-Storey duplex exterior weather-shield silicone painting in Peter Odili',
+        area: 'Peter Odili Road',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Silk emulsion interior screeding & geometric accent wall in New GRA',
+        area: 'New GRA / Phase 2',
+        date: 'Oct 2026'
+      },
+      {
+        url: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80',
+        caption: '✔ Completed: Italian stucco marble effect feature wall in living room in Old GRA',
+        area: 'Old GRA',
+        date: 'Sep 2026'
+      }
+    ],
+    services: [
+      { name: 'Interior Room Painting (Walls & Ceiling - 2 Coats)', price: 15000, type: 'Per Room' },
+      { name: 'Full Wall Putty Screeding & Sanding (Mirror Finish)', price: 12000, type: 'Fixed Price' },
+      { name: 'Exterior Weather-Proof Texture Coating', price: 25000, type: 'Milestone' }
+    ]
   }
 ];
 
@@ -891,15 +1155,31 @@ const INITIAL_PROVIDERS = [
 function hydrateProvidersWithCoordinates(providers) {
   const dummyProIds = new Set(['pro-1', 'pro-2', 'pro-3', 'pro-4', 'pro-5', 'pro-6', 'pro-7', 'pro-8', 'pro-9', 'pro-10', 'pro-11']);
   const dummyNames = new Set([
-    'Engr. Emeka Obi', 'Blessing Amadi', 'Tamuno George', 'Chidi Okonkwo',
+    'Engr. Emeka Obi', 'Blessing Amadi', 'Chidi Okonkwo',
     'Franklyn Eke', 'Tari Princewill', 'Victor Nnamdi', 'Idowu Alabi',
     'Samuel Dike', 'Kenneth Jumbo', 'Somto Okon', 'Tari Davies', 'Engr. Franklyn Nnamdi',
     'Precision Mobile Auto Diagnostics'
   ]);
 
-  let targetList = Array.isArray(providers) && providers.length > 0 ? providers : INITIAL_PROVIDERS;
+  const map = new Map();
+  // Guarantee all 18 authentic verified providers are always present
+  if (Array.isArray(INITIAL_PROVIDERS)) {
+    INITIAL_PROVIDERS.forEach(p => {
+      if (p && p.id) map.set(p.id, { ...p });
+    });
+  }
 
-  const realProviders = targetList.filter(p => {
+  // Merge any stored providers from localStorage (e.g. newly registered providers or status updates)
+  if (Array.isArray(providers) && providers.length > 0) {
+    providers.forEach(p => {
+      if (p && p.id) {
+        const existing = map.get(p.id) || {};
+        map.set(p.id, { ...existing, ...p });
+      }
+    });
+  }
+
+  const realProviders = Array.from(map.values()).filter(p => {
     if (!p) return false;
     if (dummyProIds.has(p.id)) return false;
     if (dummyNames.has(p.name)) return false;
@@ -1007,6 +1287,9 @@ function getDistanceKm(lat1, lon1, lat2, lon2) {
 
 // Geolocation Auto-Detection Engine
 window.detectClientLocation = function() {
+  if (!state.currentUser) {
+    return window.handleFindArtisansClick();
+  }
   const geoBtn = document.getElementById('geoDetectBtn');
   const btnText = geoBtn ? geoBtn.querySelector('.geo-btn-text') : null;
 
@@ -1126,6 +1409,9 @@ window.clearLocationFilter = function() {
 
 // Direct Landmark Filtering (Footer, Chips & Dropdown)
 window.filterByLandmark = function(landmarkName) {
+  if (!state.currentUser) {
+    return window.handleFindArtisansClick();
+  }
   const landmark = PH_LANDMARKS.find(l => 
     l.name.toLowerCase() === landmarkName.toLowerCase() ||
     l.shortName.toLowerCase() === landmarkName.toLowerCase() ||
@@ -1165,8 +1451,42 @@ window.filterByLandmark = function(landmarkName) {
   if (dirEl) dirEl.scrollIntoView({ behavior: 'smooth' });
 };
 
+// Unified "Find Artisans" Gate Handler: Guests must create a client account before finding artisans
+window.handleFindArtisansClick = function(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  
+  if (!state.currentUser) {
+    if (typeof showAppNotice === 'function') {
+      showAppNotice({
+        icon: '🔒',
+        eyebrow: 'CLIENT ACCOUNT REQUIRED',
+        title: 'Create an Account to Find Artisans',
+        message: 'To protect vetted Port Harcourt technicians and guarantee 100% Escrow security, artisan directories, rate cards, and on-site proof of work are available exclusively to registered clients.\n\nCreate your free client account in 30 seconds or log in.',
+        confirmText: 'Create Free Account',
+        cancelText: 'Log In',
+        onConfirm: () => {
+          window.location.href = '/login.html#signup';
+        },
+        onCancel: () => {
+          window.location.href = '/login.html';
+        }
+      });
+    }
+    const dirEl = document.getElementById('directory');
+    if (dirEl) dirEl.scrollIntoView({ behavior: 'smooth' });
+    return false;
+  }
+
+  const dirEl = document.getElementById('directory');
+  if (dirEl) dirEl.scrollIntoView({ behavior: 'smooth' });
+  return false;
+};
+
 // Quick Search from Hero Chips
 window.quickSearch = function(query) {
+  if (!state.currentUser) {
+    return window.handleFindArtisansClick();
+  }
   state.searchQuery = query;
   const input = document.getElementById('heroSearchInput');
   if (input) input.value = query;
@@ -1208,12 +1528,17 @@ function renderFilterPills() {
 }
 
 window.selectCategory = function(catId) {
+  if (!state.currentUser) {
+    return window.handleFindArtisansClick();
+  }
   state.selectedCategory = catId || 'all';
   const select = document.getElementById('categoryFilterSelect');
   if (select && select.value !== state.selectedCategory) {
     select.value = state.selectedCategory;
   }
   renderProviders();
+  const dirEl = document.getElementById('directory');
+  if (dirEl) dirEl.scrollIntoView({ behavior: 'smooth' });
 };
 
 // Dynamic Spotlight on Homepage
@@ -1269,6 +1594,67 @@ function renderProviders() {
   if (!grid) return;
 
   renderSpotlight();
+
+  // AUTHENTICATION GATE: Clients must have created an account to search or browse artisans
+  if (!state.currentUser) {
+    const filterRow = document.querySelector('.ed-filter-row');
+    if (filterRow) filterRow.style.display = 'none';
+
+    const ribbonEl = document.getElementById('boostedTopRibbon');
+    if (ribbonEl) ribbonEl.style.display = 'none';
+
+    if (countEl) {
+      countEl.innerHTML = '<span style="color: var(--teal); font-weight: 700;">🔒 Client Account Required</span> — Create a free client account to search, view rate cards & hire verified artisans across Port Harcourt.';
+    }
+
+    grid.innerHTML = `
+      <div class="ed-client-gate-card" style="grid-column: 1 / -1; background: var(--card); border: 2px solid var(--hairline-amber); border-radius: var(--radius-lg); padding: 56px 28px; text-align: center; box-shadow: var(--shadow-md); position: relative; overflow: hidden;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(242, 169, 0, 0.12); color: var(--amber-dark); border: 1px solid var(--amber); border-radius: var(--radius-full); padding: 6px 16px; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px;">
+          <span>🔒 Exclusive Client Access</span>
+        </div>
+        <h3 style="font-size: 1.85rem; font-weight: 800; color: var(--foreground); margin-bottom: 12px; letter-spacing: -0.5px;">
+          Create a Free Client Account to Find Artisans
+        </h3>
+        <p style="color: var(--muted-foreground); max-width: 620px; margin: 0 auto 28px; font-size: 0.98rem; line-height: 1.6;">
+          Servhive PH connects verified Port Harcourt homeowners and businesses with vetted master craftsmen. Sign up or log in to view artisan profiles, real proof of work photos, transparent rate cards, and book with 100% Escrow payment protection.
+        </p>
+
+        <!-- Value Perks Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; max-width: 820px; margin: 0 auto 36px; text-align: left;">
+          <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px;">
+            <div style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 700; color: var(--foreground);">🛡️ 100% Escrow Safe Pay</div>
+            <div style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.45;">Funds held safely with Paystack until you inspect and approve the completed job.</div>
+          </div>
+          <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px;">
+            <div style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 700; color: var(--foreground);">🛠️ 18 Launch Sectors</div>
+            <div style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.45;">Mikano generators, solar inverters, plumbing, tiling, tailoring & more across Port Harcourt.</div>
+          </div>
+          <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px;">
+            <div style="font-size: 1.05rem; margin-bottom: 6px; font-weight: 700; color: var(--foreground);">📸 Real Proof of Work</div>
+            <div style="font-size: 0.82rem; color: var(--muted-foreground); line-height: 1.45;">Actual on-site project photos & standardized rates with zero roadside haggling.</div>
+          </div>
+        </div>
+
+        <!-- Action CTAs -->
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px;">
+          <a href="/login.html#signup" class="ed-button ed-button-amber" style="padding: 14px 32px; font-size: 0.95rem; font-weight: 800; text-decoration: none;">
+            <span>Create Free Client Account &rarr;</span>
+          </a>
+          <a href="/login.html" class="ed-button ed-button-black" style="padding: 14px 28px; font-size: 0.95rem; font-weight: 700; text-decoration: none;">
+            <span>Log In to Existing Account</span>
+          </a>
+        </div>
+        <div style="font-size: 0.82rem; color: var(--muted-foreground);">
+          ⚡ Takes 30 seconds · No credit card required · Free forever for clients
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // Restore filter row when client is logged in
+  const filterRow = document.querySelector('.ed-filter-row');
+  if (filterRow) filterRow.style.display = 'flex';
 
   let filtered = state.providers.filter(p => p.status === 'approved');
 
@@ -1638,6 +2024,21 @@ window.resetFilters = function() {
 
 // Toggle Save / Bookmark Provider
 window.toggleSaveProvider = function(proId) {
+  if (!state.currentUser) {
+    if (typeof showAppNotice === 'function') {
+      showAppNotice({
+        icon: '🔒',
+        eyebrow: 'CLIENT ACCOUNT REQUIRED',
+        title: 'Sign In to Save Providers',
+        message: 'Create a free client account to bookmark your preferred Port Harcourt technicians and view them in your account anytime.',
+        confirmText: 'Create Client Account',
+        cancelText: 'Log In',
+        onConfirm: () => { window.location.href = '/login.html#signup'; },
+        onCancel: () => { window.location.href = '/login.html'; }
+      });
+    }
+    return;
+  }
   if (!state.savedProviderIds) state.savedProviderIds = [];
   const idx = state.savedProviderIds.indexOf(proId);
   const pro = state.providers.find(p => p.id === proId);
@@ -1680,6 +2081,21 @@ window.openPhotoZoom = function(url, caption) {
 
 // Profile Modal with Photos of Past Work, Rate Cards, Reviews, Chat or Book
 window.openProfileModal = function(proId) {
+  if (!state.currentUser) {
+    if (typeof showAppNotice === 'function') {
+      showAppNotice({
+        icon: '🔒',
+        eyebrow: 'CLIENT ACCOUNT REQUIRED',
+        title: 'Create an Account to View Profiles & Rates',
+        message: 'To view artisan rate cards, proof of past work photos, and direct quotes, please create a free client account or log in.',
+        confirmText: 'Create Client Account',
+        cancelText: 'Log In',
+        onConfirm: () => { window.location.href = '/login.html#signup'; },
+        onCancel: () => { window.location.href = '/login.html'; }
+      });
+    }
+    return;
+  }
   const pro = state.providers.find(p => p.id === proId);
   if (!pro) return;
 
@@ -1972,6 +2388,21 @@ window.handleReviewSubmit = function(e) {
 
 // Chat Drawer & Job Quote Engine
 window.openChatDrawer = function(proId, quoteMode = false) {
+  if (!state.currentUser) {
+    if (typeof showAppNotice === 'function') {
+      showAppNotice({
+        icon: '🔒',
+        eyebrow: 'CLIENT ACCOUNT REQUIRED',
+        title: 'Sign In to Chat with Artisans',
+        message: 'To request quotes and communicate directly with vetted Port Harcourt artisans, please create a free client account or log in.',
+        confirmText: 'Create Client Account',
+        cancelText: 'Log In',
+        onConfirm: () => { window.location.href = '/login.html#signup'; },
+        onCancel: () => { window.location.href = '/login.html'; }
+      });
+    }
+    return;
+  }
   const pro = state.providers.find(p => p.id === proId);
   if (!pro) return;
 
@@ -2416,6 +2847,21 @@ window.handleRegStep4 = function(e) {
 
 // ==================== ESCROW VAULT & BOOKINGS ENGINE ====================
 window.openEscrowBookingModal = function(proId, serviceName, price) {
+  if (!state.currentUser) {
+    if (typeof showAppNotice === 'function') {
+      showAppNotice({
+        icon: '🔒',
+        eyebrow: 'CLIENT ACCOUNT REQUIRED',
+        title: 'Sign In to Book an Artisan',
+        message: 'To book a verified artisan and fund an Escrow milestone, please create a free client account or log in.',
+        confirmText: 'Create Client Account',
+        cancelText: 'Log In',
+        onConfirm: () => { window.location.href = '/login.html#signup'; },
+        onCancel: () => { window.location.href = '/login.html'; }
+      });
+    }
+    return;
+  }
   const pro = state.providers.find(p => p.id === proId);
   if (!pro) return;
 
@@ -4585,8 +5031,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
+      if (!state.currentUser) {
+        e.target.value = '';
+        state.searchQuery = '';
+        window.handleFindArtisansClick();
+        return;
+      }
       state.searchQuery = e.target.value;
       renderProviders();
+    });
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        window.handleFindArtisansClick();
+      }
     });
   }
 
@@ -4602,6 +5060,11 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     areaSelect.addEventListener('change', (e) => {
+      if (!state.currentUser) {
+        areaSelect.value = 'All Port Harcourt';
+        window.handleFindArtisansClick();
+        return;
+      }
       const val = e.target.value;
       if (val === 'All Port Harcourt') {
         state.selectedLandmark = null;
@@ -4623,6 +5086,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (sortSelect) {
     sortSelect.addEventListener('change', (e) => {
+      if (!state.currentUser) {
+        sortSelect.value = 'featured';
+        window.handleFindArtisansClick();
+        return;
+      }
       state.sortBy = e.target.value;
       if (state.sortBy === 'distance' && !state.userCoords) {
         detectClientLocation();
@@ -4636,6 +5104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Global window exposure for inline onclick attributes
 window.state = state;
 window.PH_LANDMARKS = PH_LANDMARKS;
+window.handleFindArtisansClick = handleFindArtisansClick;
 window.renderProviders = renderProviders;
 window.detectClientLocation = detectClientLocation;
 window.clearLocationFilter = clearLocationFilter;
