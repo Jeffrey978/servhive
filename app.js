@@ -2482,15 +2482,44 @@ window.openEscrowHub = function() {
 };
 
 window.updateEscrowBadge = function() {
+  const activeCount = state.escrowJobs.filter(j => j.status !== 'completed').length;
   const badge = document.getElementById('navEscrowBadge');
   if (badge) {
-    const activeCount = state.escrowJobs.filter(j => j.status !== 'completed').length;
     badge.textContent = activeCount;
     badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
+  }
+  const mobileBadge = document.getElementById('mobileEscrowVaultBadge');
+  if (mobileBadge) {
+    mobileBadge.textContent = activeCount;
+    mobileBadge.style.display = activeCount > 0 ? 'inline-block' : 'none';
+  }
+};
+
+window.checkAutoReleaseEscrowJobs = function() {
+  const now = Date.now();
+  const FORTY_EIGHT_HOURS_MS = 48 * 60 * 60 * 1000;
+  let changed = false;
+
+  state.escrowJobs.forEach(job => {
+    if (job.status === 'awaiting_release' && job.markedCompletedAt) {
+      const completedTime = new Date(job.markedCompletedAt).getTime();
+      if (now - completedTime >= FORTY_EIGHT_HOURS_MS) {
+        job.status = 'completed';
+        job.autoReleased = true;
+        job.autoReleasedAt = new Date().toISOString();
+        changed = true;
+      }
+    }
+  });
+
+  if (changed) {
+    persistState();
+    updateEscrowBadge();
   }
 };
 
 window.renderEscrowJobs = function() {
+  checkAutoReleaseEscrowJobs();
   const container = document.getElementById('escrowJobsContainer');
   if (!container) return;
 
@@ -2502,8 +2531,8 @@ window.renderEscrowJobs = function() {
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg>
         </div>
-        <h4 style="font-size: 1.2rem; font-weight: 800;">No active escrow bookings</h4>
-        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 6px 0 16px;">Browse verified artisans in Port Harcourt and book with 100% money-back escrow protection.</p>
+        <h4 style="font-size: 1.2rem; font-weight: 800;">No active payment protected bookings</h4>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 6px 0 16px;">Browse verified artisans in Port Harcourt and book with payment protection held safely by Paystack.</p>
         <button class="ed-button ed-button-amber" onclick="closeModal('escrowHubModal'); location.href='#directory';">
           <span>Find Artisans Now</span>
         </button>
@@ -2532,10 +2561,16 @@ window.renderEscrowJobs = function() {
           <div style="text-align: right;">
             <div style="font-size: 1.35rem; font-weight: 900; color: var(--amber);">${formatNaira(job.amount)}</div>
             <div style="font-size: 0.75rem; font-weight: 700; color: ${isDone ? '#10B981' : isAwaiting ? '#FFA726' : 'var(--teal-bright)'};">
-              ${isDone ? '✓ Paid to Artisan' : '🔒 Held in Escrow'}
+              ${isDone ? (job.autoReleased ? '✓ Auto-Released (48h)' : '✓ Paid to Provider') : isAwaiting ? '⏳ Awaiting Client Approval' : '🔒 Held by Paystack'}
             </div>
           </div>
         </div>
+
+        ${isAwaiting ? `
+          <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 12px; font-size: 0.82rem; color: var(--amber-dark); line-height: 1.45;">
+            ⏱️ <strong>48-Hour Auto-Release Active:</strong> Work has been marked complete. If you do not approve or report a problem within 48 hours, payment is automatically released to the provider.
+          </div>
+        ` : ''}
 
         <!-- 4 Step Escrow Tracker (Monochrome Vector Logos) -->
         <div class="ed-escrow-steps">
@@ -2544,40 +2579,40 @@ window.renderEscrowJobs = function() {
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
               <line x1="1" y1="10" x2="23" y2="10"></line>
             </svg>
-            <span>1. Funded</span>
+            <span>1. Funded via Paystack</span>
           </div>
           <div class="ed-escrow-step ${isInProgress ? 'active' : 'done'}">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
             </svg>
-            <span>2. Artisan Active</span>
+            <span>2. Provider Active</span>
           </div>
           <div class="ed-escrow-step ${isAwaiting ? 'active' : isDone ? 'done' : ''}">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <span>3. Job Inspected</span>
+            <span>3. Client Inspection</span>
           </div>
           <div class="ed-escrow-step ${isDone ? 'done' : ''}">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="1" x2="12" y2="23"></line>
               <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
             </svg>
-            <span>4. Payout</span>
+            <span>4. Disbursed</span>
           </div>
         </div>
 
         <!-- Escrow Actions -->
         <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--hairline); flex-wrap: wrap; gap: 10px;">
           <div style="font-size: 0.78rem; color: var(--text-muted);">
-            Servhive Safety Fee: <strong>₦0</strong> • Platform Commission: <strong>${job.commissionPct}% (${formatNaira(job.commissionAmount)})</strong>
+            No extra fee for you. Payment protection is included. (Provider fee: 5%)
           </div>
 
           <div style="display: flex; align-items: center; gap: 8px;">
             ${isInProgress ? `
               <button class="ed-button ed-button-black" style="padding: 6px 14px; font-size: 0.78rem;" onclick="simulateArtisanDone('${job.id}')">
-                <span>Simulate: Artisan Finished Work &rarr;</span>
+                <span>Simulate: Provider Finished Work &rarr;</span>
               </button>
             ` : ''}
 
@@ -2593,7 +2628,7 @@ window.renderEscrowJobs = function() {
               </span>
             ` : `
               <button class="ed-button ed-button-black" style="padding: 6px 14px; font-size: 0.78rem; color: #EF5350;" onclick="openReportModal('${job.proId}', '${job.proName}'); closeModal('escrowHubModal');">
-                <span>Dispute / Hold Funds</span>
+                <span>Report a Problem / Hold Funds</span>
               </button>
             `}
           </div>
@@ -2607,13 +2642,14 @@ window.simulateArtisanDone = function(jobId) {
   const job = state.escrowJobs.find(j => j.id === jobId);
   if (job) {
     job.status = 'awaiting_release';
+    job.markedCompletedAt = new Date().toISOString();
     persistState();
     renderEscrowJobs();
     showAppNotice({
       icon: '🔨',
-      eyebrow: 'ARTISAN JOB UPDATE',
+      eyebrow: 'PROVIDER JOB UPDATE',
       title: 'Work Marked as Completed',
-      message: `<strong>${job.proName}</strong> has indicated that the job at <strong>${job.address}</strong> is finished.\n\nPlease inspect the quality of work. If satisfied, click "Approve & Release ${formatNaira(job.amount)}" in the Escrow Hub to release their payment.`,
+      message: `<strong>${job.proName}</strong> has indicated that the job at <strong>${job.address}</strong> is finished.\n\nPlease inspect the quality of work. If satisfied, click "Approve & Release ${formatNaira(job.amount)}" in the Payment Protection Hub.\n\n<strong>Note:</strong> If no problem is reported within 48 hours, the funds will be automatically released to the provider.`,
       confirmText: 'Understood'
     });
   }
@@ -2629,8 +2665,8 @@ window.releaseEscrowPayment = function(jobId) {
   showAppNotice({
     icon: '🔒',
     eyebrow: 'PAYMENT DISBURSEMENT CONFIRMATION',
-    title: `Release ${formatNaira(job.amount)} to Artisan?`,
-    message: `Are you satisfied with the work done by <strong>${job.proName}</strong>?\n\nThis will instantly release <strong>${formatNaira(payout)}</strong> directly to the artisan's Nigerian bank account (Servhive platform commission: 5% / ${formatNaira(commission)}).`,
+    title: `Release ${formatNaira(job.amount)} to Provider?`,
+    message: `Are you satisfied with the work done by <strong>${job.proName}</strong>?\n\nThis will disburse <strong>${formatNaira(payout)}</strong> directly to the provider's verified Nigerian bank account via Paystack (Servhive fee: 5% / ${formatNaira(commission)}).`,
     confirmText: `Approve & Release ${formatNaira(payout)}`,
     cancelText: 'Cancel',
     onConfirm: () => {
@@ -2646,7 +2682,7 @@ window.releaseEscrowPayment = function(jobId) {
         icon: '🎉',
         eyebrow: 'PAYMENT COMPLETED',
         title: 'Payment Disbursed Successfully!',
-        message: `<strong>${formatNaira(payout)}</strong> has been credited to <strong>${job.proName}</strong>.\nServhive commission collected: ${formatNaira(commission)} (5%).\n\nPlease leave a quick review to help fellow Port Harcourt clients!`,
+        message: `<strong>${formatNaira(payout)}</strong> has been disbursed to <strong>${job.proName}</strong>.\n\nPlease leave a quick review to help fellow Port Harcourt clients!`,
         confirmText: 'Rate & Review Provider ★',
         onConfirm: () => {
           showAddReviewPrompt(job.proId);
@@ -2658,15 +2694,7 @@ window.releaseEscrowPayment = function(jobId) {
 
 // ==================== AUTHENTICATION & VIEW MANAGEMENT ====================
 window.switchToAdminView = function() {
-  state.currentView = 'admin';
-  const marketplace = document.getElementById('marketplaceView');
-  const authView = document.getElementById('authView');
-  const adminView = document.getElementById('adminView');
-
-  if (marketplace) marketplace.style.display = 'none';
-  if (authView) authView.classList.remove('active');
-  if (adminView) adminView.classList.add('active');
-  renderAdminDashboard();
+  window.location.href = '/admin.html';
 };
 
 window.switchToMarketplaceView = function() {
@@ -4531,5 +4559,106 @@ window.handleSaveProfileBuilder = handleSaveProfileBuilder;
 window.switchChatTab = switchChatTab;
 window.submitJobQuoteRequest = submitJobQuoteRequest;
 window.acceptQuoteAndPayEscrow = acceptQuoteAndPayEscrow;
+// ==================== LEGAL & COMPLIANCE MODAL ENGINE ====================
+const LEGAL_DOCS = {
+  terms: {
+    title: 'Terms of Use',
+    content: `
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Agreement to Terms</h4>
+      <p style="margin-bottom: 12px;">By accessing or using the Servhive platform, whether as a customer seeking services or as a registered provider, you agree to comply with and be bound by these Terms of Use.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. Port Harcourt Service Marketplace</h4>
+      <p style="margin-bottom: 12px;">Servhive connects residents and commercial facilities across Port Harcourt with verified, independent artisans and technicians. We provide transparent rate discovery, communication privacy, and licensed payment protection via Paystack.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Agree Price in the App Before Work</h4>
+      <p style="margin-bottom: 12px;">All project scopes, diagnostics, and final prices must be agreed between the customer and provider within the app before the job starts. Arbitrary roadside or on-site price changes after arrival are prohibited.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">4. Payment Protection &amp; Release</h4>
+      <p style="margin-bottom: 12px;">Payment is held safely by our licensed payment partner Paystack and released only after you confirm the job is done, or automatically 48 hours after completion if no problem is reported.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">5. Dispute Resolution &amp; Support</h4>
+      <p style="margin-bottom: 12px;">Problems must be reported within 48 hours of work completion. Servhive support will review the submitted evidence, quote details, and chat records, and issue a fair decision within 5 working days.</p>
+    `
+  },
+  provider: {
+    title: 'Provider Agreement',
+    content: `
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Provider Eligibility &amp; Review</h4>
+      <p style="margin-bottom: 12px;">All newly registered providers enter the directory under "Under review" status. Verified badges appear on public listings only after approval in the admin console following identity checks.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. Subscription Fees &amp; 1-Month Free Trial</h4>
+      <p style="margin-bottom: 12px;">Every new provider receives a 1-month free trial. After that, an ongoing membership fee of ₦2,000 per month applies to ALL providers, paid before the month ends. If unpaid, the profile is hidden from Port Harcourt search until payment is made. Payment reminder notices are sent 7 days and 3 days before renewal.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Platform Commission (5%)</h4>
+      <p style="margin-bottom: 12px;">A 5% commission applies to jobs paid through the app. The customer pays no extra fee for payment protection (the 5% is deducted from the provider's payout upon job confirmation).</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">4. Profile Boost (₦1,500 / Week)</h4>
+      <p style="margin-bottom: 12px;">Providers may optionally boost their profile visibility to appear at the top of Port Harcourt search results and category listings at a flat rate of ₦1,500 per week.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">5. Authentic Proof of Work &amp; Customer Reviews</h4>
+      <p style="margin-bottom: 12px;">Providers must only upload genuine photographs of completed work performed by their own team. Providers cannot review themselves; reviews and ratings come only from confirmed completed customer jobs.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">6. Mandatory Licences for Regulated Trades</h4>
+      <p style="margin-bottom: 12px;">Providers operating in regulated sectors (health, laser aesthetics, tattooing, and mortuary services) must upload valid professional licences before account approval.</p>
+    `
+  },
+  protection: {
+    title: 'Payment Protection Terms',
+    content: `
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Paystack Escrow Holding</h4>
+      <p style="margin-bottom: 12px;">Payment is held safely by our licensed payment partner Paystack and released after you confirm the job is done. Funds are not deposited into personal accounts.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. 48-Hour Auto-Release</h4>
+      <p style="margin-bottom: 12px;">If the customer does not tap "Approve &amp; Release" or "Report a Problem" within 48 hours of the provider marking the job complete, the held payment is released to the provider automatically.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. No Extra Fee for Customers</h4>
+      <p style="margin-bottom: 12px;">No extra fee for you. Payment protection is fully included. The 5% platform fee is paid by the provider.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">4. Dispute Protocol &amp; Timelines</h4>
+      <p style="margin-bottom: 12px;">If work is unsatisfactory or incomplete, the customer must report the problem within 48 hours to freeze disbursement. Servhive support will review the case and communicate a binding decision within 5 working days.</p>
+    `
+  },
+  privacy: {
+    title: 'Privacy Policy',
+    content: `
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Contact &amp; Identity Privacy</h4>
+      <p style="margin-bottom: 12px;">Servhive masks direct telephone numbers in search results and initial inquiries to protect customers and artisans from unsolicited spam and harassment.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. Private Document Storage</h4>
+      <p style="margin-bottom: 12px;">Government ID documents (NIN slips, voter cards, driver's licences) and trade practice licences uploaded by providers are stored privately for internal compliance and safety verification. They are never published as public links.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Payment Data Security</h4>
+      <p style="margin-bottom: 12px;">All card payments and bank transfers are processed directly through Paystack's PCI-DSS compliant infrastructure. Servhive does not store debit card details, CVVs, or banking PINs.</p>
+    `
+  }
+};
+
+window.openLegalModal = function(tabKey = 'terms') {
+  window.switchLegalTab(tabKey);
+  const modal = document.getElementById('legalModal');
+  if (modal) modal.classList.add('open');
+};
+
+window.switchLegalTab = function(tabKey) {
+  const doc = LEGAL_DOCS[tabKey] || LEGAL_DOCS.terms;
+  const contentEl = document.getElementById('legalModalContent');
+  const titleEl = document.getElementById('legalModalTitle');
+  if (titleEl) titleEl.textContent = doc.title;
+  if (contentEl) contentEl.innerHTML = doc.content;
+
+  ['terms', 'provider', 'protection', 'privacy'].forEach(k => {
+    const btn = document.getElementById(`legalTabBtn-${k}`);
+    if (btn) {
+      if (k === tabKey) {
+        btn.classList.add('ed-button-amber');
+        btn.classList.remove('ed-button-black');
+      } else {
+        btn.classList.remove('ed-button-amber');
+        btn.classList.add('ed-button-black');
+      }
+    }
+  });
+};
+
 window.openPhotoZoom = openPhotoZoom;
 window.toggleSaveProvider = toggleSaveProvider;

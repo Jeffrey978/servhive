@@ -236,7 +236,7 @@
         <a href="#faqSection" style="color: var(--text-muted); text-decoration: none;">Help &amp; FAQs</a>
       </div>
       <div style="font-size: 0.76rem; color: var(--text-faint); margin-top: 6px;">
-        &copy; 2026 Servhive Technologies Limited. All rights reserved. Port Harcourt, Nigeria.
+        &copy; 2026 Servhive. All rights reserved. Port Harcourt, Nigeria.
       </div>
     </div>
   </footer>
@@ -339,7 +339,7 @@
         } else {
           titleEl.textContent = isHirer ? 'Create Client Account' : 'Register as Verified Pro';
           subtitleEl.textContent = isHirer
-            ? 'Hire vetted Port Harcourt artisans with 100% Escrow payment security.'
+            ? 'Hire vetted Port Harcourt artisans with payment protection held safely by Paystack.'
             : 'Join Port Harcourt’s premier trades network with First 1 Month Free.';
         }
       }
@@ -451,7 +451,7 @@
 
             <label class="auth-checkbox-label">
               <input type="checkbox" id="hirerTerms" required checked />
-              <span>I agree to Servhive's <a href="#trustStrip" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Payment Protection &amp; Privacy Protocol</a>.</span>
+              <span>I accept the <a href="javascript:void(0)" onclick="openLegalModal('terms')" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Terms of Use</a> and <a href="javascript:void(0)" onclick="openLegalModal('privacy')" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Privacy Policy</a>.</span>
             </label>
 
             <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
@@ -482,8 +482,8 @@
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
-                <label class="auth-label">Your Name</label>
-                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Master Craftsman Full Name" />
+                <label class="auth-label">Full Legal Name</label>
+                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Tonye Briggs" />
               </div>
               <div class="auth-input-group">
                 <label class="auth-label">Business Name</label>
@@ -544,7 +544,7 @@
               </div>
 
               <div class="auth-input-group">
-                <label class="auth-label">Workshop Base Area (Port Harcourt)</label>
+                <label class="auth-label">Operating Base Area (Port Harcourt)</label>
                 <select id="artisanArea" class="auth-input">
                   <option value="Trans-Amadi">Trans-Amadi / Slaughter</option>
                   <option value="Peter Odili Road">Peter Odili Road</option>
@@ -575,7 +575,7 @@
 
             <label class="auth-checkbox-label">
               <input type="checkbox" id="artisanTerms" required checked />
-              <span>I confirm our workshop adheres to Port Harcourt trade quality standards and 5% commission on jobs paid through the app.</span>
+              <span>I accept the <a href="javascript:void(0)" onclick="openLegalModal('provider')" style="color: var(--amber-dark); font-weight: 700; text-decoration: underline;">Provider Agreement</a> and <a href="javascript:void(0)" onclick="openLegalModal('privacy')" style="color: var(--amber-dark); font-weight: 700; text-decoration: underline;">Privacy Policy</a>.</span>
             </label>
 
             <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
@@ -875,9 +875,10 @@
       const phone = document.getElementById('hirerPhone').value.trim();
       const area = document.getElementById('hirerArea').value;
       const password = document.getElementById('hirerPassword').value;
-      const confirmPassword = document.getElementById('hirerConfirmPassword').value;
+      const confirmEl = document.getElementById('hirerConfirmPassword');
+      const confirmPassword = confirmEl ? confirmEl.value : password;
 
-      if (password !== confirmPassword) {
+      if (confirmEl && password !== confirmPassword) {
         showInlineNotice('⚠️ <strong>Passwords do not match</strong>. Please make sure both fields are identical.', 'error');
         return;
       }
@@ -911,13 +912,16 @@
       const catVal = document.getElementById('artisanCategory').value;
       const area = document.getElementById('artisanArea').value;
       const phone = document.getElementById('artisanPhone').value.trim();
-      const exp = document.getElementById('artisanExp').value;
-      const email = document.getElementById('artisanEmail').value.trim() || `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
+      const expEl = document.getElementById('artisanExp');
+      const exp = expEl ? expEl.value : '3+ years';
+      const emailEl = document.getElementById('artisanEmail');
+      const email = (emailEl && emailEl.value.trim()) || `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
       const startingPrice = Number(document.getElementById('artisanStartingPrice').value) || 10000;
       const password = document.getElementById('artisanPassword').value;
-      const confirmPassword = document.getElementById('artisanConfirmPassword').value;
+      const confirmEl = document.getElementById('artisanConfirmPassword');
+      const confirmPassword = confirmEl ? confirmEl.value : password;
 
-      if (password !== confirmPassword) {
+      if (confirmEl && password !== confirmPassword) {
         showInlineNotice('⚠️ <strong>Passwords do not match</strong>. Please make sure both fields are identical.', 'error');
         return;
       }
@@ -1028,6 +1032,123 @@
       if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
       if (btn) btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
     }
+
+    // ==================== LEGAL MODAL HELPER ====================
+    const LEGAL_DOCS = {
+      terms: {
+        title: 'Terms of Use',
+        content: `
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Agreement to Terms</h4>
+          <p style="margin-bottom: 12px;">By accessing or using the Servhive platform, whether as a customer seeking services or as a registered provider, you agree to comply with and be bound by these Terms of Use.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. Port Harcourt Service Marketplace</h4>
+          <p style="margin-bottom: 12px;">Servhive connects residents and commercial facilities across Port Harcourt with verified artisans and technicians. We provide transparent rate discovery, communication privacy, and licensed payment protection via Paystack.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Scope and Price Agreement</h4>
+          <p style="margin-bottom: 12px;">Agree the price in the app before the job. Arbitrary on-site price changes after arrival are prohibited.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">4. Payment Protection</h4>
+          <p style="margin-bottom: 12px;">Payment is held safely by our licensed payment partner Paystack and released after you confirm the job is done, or automatically after 48 hours if no problem is reported.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">5. Dispute Resolution</h4>
+          <p style="margin-bottom: 12px;">Problems must be reported within 48 hours of work completion. Servhive support will review the case and communicate a fair decision within 5 working days.</p>
+        `
+      },
+      provider: {
+        title: 'Provider Agreement',
+        content: `
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Provider Eligibility &amp; Review</h4>
+          <p style="margin-bottom: 12px;">All newly registered providers enter the directory under "Under review" status. Verified badges appear on public listings only after approval in the admin console following identity checks.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. Subscription Fees &amp; 1-Month Free Trial</h4>
+          <p style="margin-bottom: 12px;">Every new provider receives a 1-month free trial. After that, an ongoing membership fee of ₦2,000 per month applies to ALL providers, paid before the month ends. If unpaid, the profile is hidden from Port Harcourt search until payment is made. Payment reminder notices are sent 7 days and 3 days before renewal.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Platform Commission (5%)</h4>
+          <p style="margin-bottom: 12px;">A 5% commission applies to jobs paid through the app. The customer pays no extra fee for payment protection; the 5% is deducted from the provider payout upon job confirmation.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">4. Profile Boost (₦1,500 / Week)</h4>
+          <p style="margin-bottom: 12px;">Providers may optionally boost their profile visibility to appear at the top of Port Harcourt search results and category listings at a flat rate of ₦1,500 per week.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">5. Proof of Work &amp; Reviews</h4>
+          <p style="margin-bottom: 12px;">Providers must only upload authentic photographs of completed work performed by their own team. Providers cannot review themselves; reviews and ratings come only from confirmed completed customer jobs.</p>
+        `
+      },
+      protection: {
+        title: 'Payment Protection Terms',
+        content: `
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Paystack Escrow Holding</h4>
+          <p style="margin-bottom: 12px;">Payment is held safely by our licensed payment partner Paystack and released after you confirm the job is done. Funds are not held in Servhive's personal accounts.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. 48-Hour Auto-Release</h4>
+          <p style="margin-bottom: 12px;">If the customer does not tap "Approve &amp; Release" or "Report a Problem" within 48 hours of the provider marking the job complete, the held payment is released to the provider automatically.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. No Extra Fee for Customers</h4>
+          <p style="margin-bottom: 12px;">No extra fee for you. Payment protection is fully included. The 5% fee is paid by the provider.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">4. Disputes &amp; Resolution SLA</h4>
+          <p style="margin-bottom: 12px;">If work is unsatisfactory or incomplete, report the problem within 48 hours. Servhive support will review the case and communicate a binding decision within 5 working days.</p>
+        `
+      },
+      privacy: {
+        title: 'Privacy Policy',
+        content: `
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Contact Privacy</h4>
+          <p style="margin-bottom: 12px;">Servhive masks direct telephone numbers in search results and initial inquiries to protect customers and artisans from unsolicited spam and harassment.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. Private Document Storage</h4>
+          <p style="margin-bottom: 12px;">Government ID documents and trade practice licences uploaded by providers are stored privately for compliance and safety verification only. They are never published as public links.</p>
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Paystack Security</h4>
+          <p style="margin-bottom: 12px;">All card payments and bank transfers are processed directly through Paystack's PCI-DSS compliant infrastructure.</p>
+        `
+      }
+    };
+
+    function openLegalModal(tabKey = 'terms') {
+      switchLegalTab(tabKey);
+      const modal = document.getElementById('legalModal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function switchLegalTab(tabKey) {
+      const doc = LEGAL_DOCS[tabKey] || LEGAL_DOCS.terms;
+      const contentEl = document.getElementById('legalModalContent');
+      const titleEl = document.getElementById('legalModalTitle');
+      if (titleEl) titleEl.textContent = doc.title;
+      if (contentEl) contentEl.innerHTML = doc.content;
+
+      ['terms', 'provider', 'protection', 'privacy'].forEach(k => {
+        const btn = document.getElementById(`legalTabBtn-${k}`);
+        if (btn) {
+          if (k === tabKey) {
+            btn.classList.add('ed-button-amber');
+            btn.classList.remove('ed-button-black');
+          } else {
+            btn.classList.remove('ed-button-amber');
+            btn.classList.add('ed-button-black');
+          }
+        }
+      });
+    }
+
+    function closeLegalModal() {
+      const modal = document.getElementById('legalModal');
+      if (modal) modal.classList.remove('open');
+    }
   </script>
+
+  <!-- Legal Modal Dialog -->
+  <div id="legalModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 720px; padding: 28px; max-height: 85vh; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 14px;">
+        <div>
+          <div class="hero-eyebrow" style="margin-bottom: 2px;">LEGAL &amp; COMPLIANCE</div>
+          <h3 id="legalModalTitle" style="font-size: 1.3rem; font-weight: 800; margin: 0; color: var(--foreground);">Servhive Terms &amp; Policies</h3>
+        </div>
+        <button class="ed-modal-close" style="position: static; width: 32px; height: 32px;" onclick="closeLegalModal()">&times;</button>
+      </div>
+
+      <div style="display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 16px; overflow-x: auto;">
+        <button type="button" class="ed-button ed-button-black ed-btn-compact active" id="legalTabBtn-terms" onclick="switchLegalTab('terms')">Terms of Use</button>
+        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-provider" onclick="switchLegalTab('provider')">Provider Agreement</button>
+        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-protection" onclick="switchLegalTab('protection')">Payment Protection Terms</button>
+        <button type="button" class="ed-button ed-button-black ed-btn-compact" id="legalTabBtn-privacy" onclick="switchLegalTab('privacy')">Privacy Policy</button>
+      </div>
+
+      <div id="legalModalContent" style="flex: 1; overflow-y: auto; padding-right: 8px; font-size: 0.88rem; line-height: 1.6; color: var(--muted-foreground);">
+      </div>
+
+      <div style="margin-top: 18px; border-top: 1px solid var(--border); padding-top: 14px; text-align: right;">
+        <button class="ed-button ed-button-amber" style="padding: 10px 24px;" onclick="closeLegalModal()">Close</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

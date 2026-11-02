@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Artisan Pro Portal — Servhive Port Harcourt</title>
-  <meta name="description" content="Dedicated Artisan Portal for verified Port Harcourt tradesmen. Manage quotes, active jobs, 100% Escrow payouts, profile builder, and KYC verification.">
+  <meta name="description" content="Dedicated Artisan Portal for verified Port Harcourt tradesmen. Manage quotes, active jobs, payment protection, profile builder, and KYC verification.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -70,6 +70,14 @@
           <a href="#verification" class="pro-dropdown-item" onclick="selectDropdownNav('verification', event)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
             <span>KYC &amp; Licences</span>
+          </a>
+          <a href="#payout" class="pro-dropdown-item" onclick="selectDropdownNav('payout', event)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            <span>Payout Account</span>
+          </a>
+          <a href="#billing" class="pro-dropdown-item" onclick="selectDropdownNav('billing', event)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Billing &amp; Subscription</span>
           </a>
           <a href="#complaints" class="pro-dropdown-item" onclick="selectDropdownNav('complaints', event)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -145,7 +153,17 @@
       <a href="#verification" class="artisan-nav-item" id="navItem-verification" onclick="switchArtisanSection('verification')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
         <span>KYC &amp; Licences</span>
-        <span id="badgeKycStatus" class="artisan-sidebar-badge badge-teal" style="margin-left: auto; font-size: 0.65rem;">✓ Pass</span>
+        <span id="badgeKycStatus" class="artisan-sidebar-badge badge-amber" style="margin-left: auto; font-size: 0.65rem;">⏳ Under review</span>
+      </a>
+
+      <a href="#payout" class="artisan-nav-item" id="navItem-payout" onclick="switchArtisanSection('payout')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        <span>Payout Account</span>
+      </a>
+
+      <a href="#billing" class="artisan-nav-item" id="navItem-billing" onclick="switchArtisanSection('billing')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span>Billing &amp; Plan</span>
       </a>
 
       <a href="#complaints" class="artisan-nav-item" id="navItem-complaints" onclick="switchArtisanSection('complaints')">
@@ -192,7 +210,7 @@
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
           <div>
             <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-dark); margin-bottom: 4px;">DASHBOARD</div>
-            <h1 style="font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 6px; color: var(--foreground);" id="proHomeWelcomeTitle">Welcome Back, Craftsman</h1>
+            <h1 style="font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 6px; color: var(--foreground);" id="proHomeWelcomeTitle">Welcome Back</h1>
             <p style="font-size: 0.88rem; color: var(--muted-foreground); margin: 0; line-height: 1.5;">
               Monitor client leads, payment protected deposits, and search visibility across Port Harcourt.
             </p>
@@ -368,11 +386,11 @@
 
           <div class="artisan-form-grid-2">
             <div>
-              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Master Craftsman Full Name</label>
+              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Full Legal Name</label>
               <input type="text" id="pbName" required class="ed-search-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--bg-surface); color: var(--foreground); width: 100%;">
             </div>
             <div>
-              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Workshop / Business Name</label>
+              <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Business Name</label>
               <input type="text" id="pbBizName" required class="ed-search-input" style="height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; background: var(--bg-surface); color: var(--foreground); width: 100%;">
             </div>
           </div>
@@ -485,80 +503,153 @@
           <div class="hero-eyebrow" style="margin-bottom: 4px;">IDENTITY &amp; VERIFICATION</div>
           <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0; color: var(--foreground);">Verification &amp; Credentials</h2>
           <p style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">
-            Port Harcourt clients require validated government ID, 3 work portfolio photos, and licences for regulated trades.
+            Port Harcourt clients require validated government ID, 3 work portfolio photos, and licences for regulated trades. Verified badges appear only after approval in the admin console.
           </p>
         </div>
 
         <div class="artisan-card-box" style="display: flex; flex-direction: column; gap: 24px;">
           
-          <!-- 1. Government ID -->
-          <div style="border-bottom: 1px solid var(--border); padding-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">1. Upload Government ID</h3>
-                <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">National Identification Number (NIN Slip), Voter's Card, or Driver's License.</p>
-              </div>
-              <span id="verificationIdBadge" class="badge ed-badge-verified">✓ ID checked by Servhive</span>
-            </div>
-            <div style="border: 1px dashed var(--teal-bright); background: var(--bg-surface-subtle); padding: 14px 18px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 10px;">
-              <span style="font-size: 0.85rem; color: var(--teal); font-weight: 700;">📄 Government_ID_NIN_Document.pdf (Attached)</span>
-              <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.74rem;" onclick="simulateReupload('ID')">Re-upload New File</button>
-            </div>
+          <!-- Hidden Native File Inputs (Stored Privately, Never Public) -->
+          <input type="file" id="idFileInput" accept="image/*,.pdf" style="display: none;" onchange="handleIdFileSelect(event)">
+          <input type="file" id="licenceFileInput" accept="image/*,.pdf" style="display: none;" onchange="handleLicenceFileSelect(event)">
+
+          <!-- 1. Government ID (4 States: Not uploaded -> Submitted -> Checked by Servhive / Rejected) -->
+          <div style="border-bottom: 1px solid var(--border); padding-bottom: 20px;" id="verificationIdContainer">
+            <!-- Rendered dynamically by artisan.js -->
           </div>
 
-          <!-- 2. Work Portfolio Photos -->
-          <div style="border-bottom: 1px solid var(--border); padding-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">2. Past Work Portfolio Photos (Minimum 3 Photos)</h3>
-                <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">High resolution photographs of past completed installations or repairs in Port Harcourt.</p>
-              </div>
-              <span class="badge ed-badge-verified">✓ 3 Photos Uploaded</span>
-            </div>
-
-            <div class="verification-work-photos-grid" id="verificationWorkPhotosGrid">
-              <div class="verification-upload-card" onclick="simulateReupload('Portfolio Photo 1')">
-                <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
-                <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 1</div>
-                <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
-              </div>
-              <div class="verification-upload-card" onclick="simulateReupload('Portfolio Photo 2')">
-                <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
-                <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 2</div>
-                <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
-              </div>
-              <div class="verification-upload-card" onclick="simulateReupload('Portfolio Photo 3')">
-                <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
-                <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo 3</div>
-                <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
-              </div>
-            </div>
+          <!-- 2. Work Portfolio Photos (3 Completed Job Photos) -->
+          <div style="border-bottom: 1px solid var(--border); padding-bottom: 20px;" id="verificationPhotosContainer">
+            <!-- Rendered dynamically by artisan.js -->
           </div>
 
           <!-- 3. Licence for Regulated Trades -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-              <div>
-                <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">3. Licence for Regulated Trades</h3>
-                <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Mandatory for regulated trades (health, tattoo, laser, funeral, high voltage electrical, etc.) before approval.</p>
-              </div>
-              <span id="verificationLicenceBadge" class="badge ed-badge-verified">✓ Licence checked by Servhive</span>
-            </div>
-
-            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-top: 10px;">
-              <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Registration Certificate / Body Number</label>
-              <input type="text" id="verificationLicenceInput" class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--foreground);" placeholder="e.g. Professional Practice Licence #..." value="">
-              <span style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 6px; display: block;">Required for regulated trades before verification approval.</span>
-            </div>
+          <div id="verificationLicenceContainer">
+            <!-- Rendered dynamically by artisan.js -->
           </div>
 
-          <button class="ed-button ed-button-amber" style="align-self: flex-start; padding: 12px 24px;" onclick="saveVerificationDocs()">
-            <span>Update Credentials Verification</span>
-          </button>
+          <div style="display: flex; gap: 10px; align-items: center; border-top: 1px solid var(--border); padding-top: 18px;">
+            <button class="ed-button ed-button-amber" style="padding: 12px 24px; font-weight: 800;" onclick="saveVerificationDocs()">
+              <span>Submit Verification Update &rarr;</span>
+            </button>
+            <span style="font-size: 0.78rem; color: var(--muted-foreground);">Documents are stored securely and reviewed by Servhive admin before approval.</span>
+          </div>
         </div>
       </section>
 
-      <!-- ==================== SECTION 6: DISPUTE & COMPLAINTS HUB ==================== -->
+      <!-- ==================== SECTION 6: PAYOUT ACCOUNT ==================== -->
+      <section id="sec-payout" class="artisan-section">
+        <div style="margin-bottom: 22px;">
+          <div class="hero-eyebrow" style="margin-bottom: 4px;">BANKING &amp; DISBURSEMENTS</div>
+          <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0; color: var(--foreground);">Payout Bank Account</h2>
+          <p style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">
+            Funds from completed jobs released by clients are disbursed directly to this Nigerian bank account via Paystack. Account name must match your legal ID name.
+          </p>
+        </div>
+
+        <div class="artisan-card-box">
+          <div id="payoutAccountDisplay" style="margin-bottom: 20px;">
+            <!-- Rendered by artisan.js -->
+          </div>
+
+          <form onsubmit="handleSavePayoutAccount(event)" id="payoutAccountForm" style="border-top: 1px solid var(--border); padding-top: 18px;">
+            <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0 0 14px 0; color: var(--foreground);">Link / Update Bank Details</h3>
+            
+            <div class="artisan-form-grid-2">
+              <div>
+                <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">Select Nigerian Bank</label>
+                <select id="payoutBankSelect" required class="ed-select-input" style="height: 42px; width: 100%; padding: 0 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--foreground);">
+                  <option value="">-- Choose your bank --</option>
+                  <option value="access">Access Bank</option>
+                  <option value="gtbank">Guaranty Trust Bank (GTBank)</option>
+                  <option value="zenith">Zenith Bank</option>
+                  <option value="firstbank">First Bank of Nigeria</option>
+                  <option value="uba">United Bank for Africa (UBA)</option>
+                  <option value="kuda">Kuda Microfinance Bank</option>
+                  <option value="moniepoint">Moniepoint MFB</option>
+                  <option value="opay">OPay Digital Services</option>
+                  <option value="stanbic">Stanbic IBTC Bank</option>
+                  <option value="fcmb">First City Monument Bank (FCMB)</option>
+                  <option value="fidelity">Fidelity Bank</option>
+                  <option value="sterling">Sterling Bank</option>
+                  <option value="union">Union Bank</option>
+                  <option value="wema">Wema Bank / ALAT</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-size: 0.82rem; font-weight: 700; display: block; margin-bottom: 6px;">10-Digit NUBAN Account Number</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="payoutAccountNumber" required maxlength="10" pattern="[0-9]{10}" class="ed-search-input" style="height: 42px; flex: 1; padding: 0 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 700; letter-spacing: 1px; color: var(--foreground);" placeholder="0123456789">
+                  <button type="button" class="ed-button ed-button-black ed-btn-compact" onclick="verifyPayoutAccountName()" style="white-space: nowrap; padding: 0 14px;">
+                    <span>Verify Name</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div id="payoutVerificationFeedback" style="display: none; padding: 12px 14px; border-radius: var(--radius-sm); margin-top: 14px; font-size: 0.84rem; line-height: 1.45;"></div>
+
+            <div style="margin-top: 18px;">
+              <button type="submit" id="savePayoutAccountBtn" class="ed-button ed-button-amber" style="padding: 12px 24px; font-weight: 800;" disabled>
+                <span>Save Verified Payout Account</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 7: BILLING & SUBSCRIPTION ==================== -->
+      <section id="sec-billing" class="artisan-section">
+        <div style="margin-bottom: 22px;">
+          <div class="hero-eyebrow" style="margin-bottom: 4px;">MEMBERSHIP &amp; BILLING</div>
+          <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0; color: var(--foreground);">Monthly Subscription &amp; Billing</h2>
+          <p style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">
+            1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made.
+          </p>
+        </div>
+
+        <div class="artisan-card-box" style="margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 18px;">
+            <div>
+              <span class="badge" style="background: rgba(20, 184, 166, 0.12); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.25); font-weight: 800; font-size: 0.76rem; margin-bottom: 8px; display: inline-block;">PRO PLAN: 1 MONTH FREE TRIAL</span>
+              <h3 style="font-size: 1.6rem; font-weight: 900; margin: 0 0 6px 0; color: var(--foreground);">₦2,000 <small style="font-size: 0.9rem; font-weight: 500; color: var(--muted-foreground);">/ month</small></h3>
+              <p style="font-size: 0.84rem; color: var(--muted-foreground); margin: 0;">Standard monthly subscription fee for all verified Port Harcourt service providers.</p>
+            </div>
+            
+            <div style="text-align: right;">
+              <div id="billingDaysLeftDisplay" style="font-size: 1.35rem; font-weight: 900; color: var(--teal);">28 Days Left</div>
+              <div style="font-size: 0.74rem; color: var(--muted-foreground);">in your 1-month free trial</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px;">
+            <div style="font-weight: 800; font-size: 0.86rem; color: var(--amber-dark); margin-bottom: 4px;">
+              ⚠️ Profile Visibility &amp; Reminder Rule:
+            </div>
+            <p style="font-size: 0.82rem; color: var(--foreground); line-height: 1.5; margin: 0;">
+              Subscriptions must be paid before the current month ends. If unpaid, the profile is automatically hidden from public Port Harcourt search until payment is made. Automated renewal reminders are sent to your phone and email <strong>7 days</strong> and <strong>3 days</strong> before renewal.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <button class="ed-button ed-button-amber" style="padding: 12px 24px; font-weight: 800;" onclick="payMonthlySubscription()">
+              <span>Pay ₦2,000 Monthly Fee (via Paystack)</span>
+            </button>
+            <span style="font-size: 0.78rem; color: var(--muted-foreground);">🔒 Secured by Paystack. Instant activation upon payment.</span>
+          </div>
+        </div>
+
+        <!-- Receipts & Invoices Table -->
+        <div class="artisan-card-box">
+          <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 14px 0; color: var(--foreground);">Payment Receipts &amp; Invoices</h3>
+          <div id="billingReceiptsContainer">
+            <!-- Rendered by artisan.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SECTION 8: DISPUTE & COMPLAINTS HUB ==================== -->
       <section id="sec-complaints" class="artisan-section">
         <div style="margin-bottom: 22px;">
           <div class="hero-eyebrow" style="margin-bottom: 4px;">CLIENT INQUIRIES &amp; SUPPORT</div>
@@ -566,6 +657,13 @@
           <p style="font-size: 0.86rem; color: var(--muted-foreground); margin-top: 2px;">
             View and respond to client inquiries, quality concerns, or mediation cases handled by the Servhive support team.
           </p>
+        </div>
+
+        <!-- Dispute Rules & SLA Notice -->
+        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 18px; font-size: 0.84rem; line-height: 1.55;">
+          <strong>Dispute Rules &amp; SLA:</strong>
+          Clients can report problems within <strong>48 hours</strong> of work completion. When a dispute is logged, funds remain safely held by Paystack. The Servhive support team reviews quotes, work evidence photos, and chat transcripts to arbitrate fairly within <strong>5 working days</strong>.
+          <a href="javascript:void(0)" onclick="openArtisanLegalModal('protection')" style="color: var(--amber-dark); font-weight: 700; text-decoration: underline; margin-left: 6px;">View Payment Protection Terms &rarr;</a>
         </div>
 
         <div id="artisanComplaintsContainer">
@@ -697,23 +795,22 @@
         </div>
 
         <div style="margin-bottom: 16px;">
-          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Photo Image URL</label>
-          <input type="url" id="newWorkPhotoUrl" required class="ed-search-input" style="height: 42px; width: 100%; padding: 0 12px; font-size: 0.86rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--foreground);" placeholder="https://images.unsplash.com/...">
-          
-          <!-- Quick Preset Suggestions -->
-          <div style="margin-top: 8px;">
-            <span style="font-size: 0.72rem; color: var(--muted-foreground); display: block; margin-bottom: 4px;">Quick Portfolio Sample Presets:</span>
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('cleaning')">✨ Clean Living Room</button>
-              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('power')">⚡ Installed Generator</button>
-              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('solar')">☀️ Solar Inverter</button>
-              <button type="button" class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.72rem; padding: 2px 8px;" onclick="setWorkPhotoPreset('tailor')">✂️ Tailored Senator Suit</button>
-            </div>
+          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Completed Job Photo (Camera or Gallery)</label>
+          <input type="file" id="newWorkPhotoFileInput" accept="image/*" style="display: none;" onchange="handleWorkPhotoFileInput(event)">
+          <div id="newWorkPhotoUploadBox" onclick="document.getElementById('newWorkPhotoFileInput').click()" style="border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 20px; text-align: center; cursor: pointer; background: var(--bg-surface-subtle); transition: all 0.2s ease;">
+            <div style="font-size: 1.8rem; margin-bottom: 4px;">📷</div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: var(--foreground);">Tap to Choose Photo from Device</div>
+            <div style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 3px;">Snap from phone camera or select from photo library</div>
           </div>
+          <div id="newWorkPhotoPreviewBox" style="display: none; margin-top: 10px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); text-align: center; background: #000; position: relative;">
+            <img id="newWorkPhotoPreviewImg" src="" alt="Work Photo Preview" style="max-height: 180px; width: 100%; object-fit: contain;">
+            <button type="button" class="ed-button ed-button-black ed-btn-compact" style="position: absolute; top: 6px; right: 6px; font-size: 0.7rem; background: rgba(0,0,0,0.7); color: #fff;" onclick="clearWorkPhotoSelection()">Change Photo</button>
+          </div>
+          <input type="hidden" id="newWorkPhotoDataUrl" value="">
         </div>
 
         <div style="display: flex; gap: 10px;">
-          <button type="submit" class="ed-button ed-button-amber" style="flex: 1; padding: 12px; font-weight: 800;">
+          <button type="submit" id="saveWorkPhotoBtn" class="ed-button ed-button-amber" style="flex: 1; padding: 12px; font-weight: 800;">
             <span>Save &amp; Publish Photo &rarr;</span>
           </button>
           <button type="button" class="ed-button ed-button-black" style="padding: 12px 18px;" onclick="closeModal('addWorkPhotoModal')">
@@ -721,6 +818,46 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Job Completed Confirmation Modal -->
+  <div id="artisanJobCompleteModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 480px; padding: 26px;">
+      <button class="ed-modal-close" onclick="closeModal('artisanJobCompleteModal')">&times;</button>
+      <div class="hero-eyebrow" style="margin-bottom: 4px;">JOB COMPLETION &amp; RELEASE</div>
+      <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--foreground); margin-bottom: 10px;">Mark Job as Completed</h3>
+      <p style="font-size: 0.86rem; color: var(--muted-foreground); line-height: 1.55; margin-bottom: 16px;">
+        Money is held safely by licensed payment partner Paystack. It will be released directly to your verified payout account after the customer confirms the job is done, or automatically within <strong>48 hours</strong> if no problem is reported.
+      </p>
+      <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 20px; font-size: 0.84rem;">
+        <div>Service: <strong id="completeModalServiceName">Service</strong></div>
+        <div>Customer: <strong id="completeModalCustomerName">Customer</strong></div>
+        <div style="margin-top: 6px; color: var(--teal); font-weight: 800; font-size: 0.95rem;">Your Net Payout (Paystack Protection): <span id="completeModalPayoutAmount">₦0</span></div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="ed-button ed-button-amber" style="flex: 1; padding: 12px; font-weight: 800;" onclick="confirmMarkJobCompleted()">
+          <span>Mark Completed &amp; Notify Client &rarr;</span>
+        </button>
+        <button type="button" class="ed-button ed-button-black" style="padding: 12px 18px;" onclick="closeModal('artisanJobCompleteModal')">
+          <span>Cancel</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Artisan Legal Terms Modal -->
+  <div id="artisanLegalModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 700px; padding: 28px; max-height: 85vh; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+        <h3 id="artisanLegalModalTitle" style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--foreground);">Servhive Policies</h3>
+        <button class="ed-modal-close" style="position: static; width: 32px; height: 32px;" onclick="closeModal('artisanLegalModal')">&times;</button>
+      </div>
+      <div id="artisanLegalModalContent" style="flex: 1; overflow-y: auto; padding-right: 6px; font-size: 0.88rem; line-height: 1.6; color: var(--muted-foreground);">
+      </div>
+      <div style="margin-top: 16px; border-top: 1px solid var(--border); padding-top: 12px; text-align: right;">
+        <button class="ed-button ed-button-amber" style="padding: 10px 24px;" onclick="closeModal('artisanLegalModal')">Close</button>
+      </div>
     </div>
   </div>
 

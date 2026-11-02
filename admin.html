@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Servhive OPS — Admin Console</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body style="min-height: 100vh; background: var(--background); color: var(--foreground); display: flex; flex-direction: column;">
+
+  <!-- ==================== ADMIN AUTHENTICATION GATE ==================== -->
+  <div id="adminAuthOverlay" style="position: fixed; inset: 0; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(8px); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); max-width: 420px; width: 100%; padding: 32px; box-shadow: var(--shadow-lg); text-align: center;">
+      <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: var(--amber); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 16px;">
+        🛡️
+      </div>
+      <div class="hero-eyebrow" style="margin-bottom: 4px;">RESTRICTED ACCESS</div>
+      <h2 style="font-size: 1.45rem; font-weight: 800; margin: 0 0 8px; color: var(--foreground);">Servhive Admin OPS</h2>
+      <p style="font-size: 0.85rem; color: var(--muted-foreground); margin-bottom: 24px; line-height: 1.5;">
+        Administrative console for Port Harcourt provider verification, directory moderation, and dispute management.
+      </p>
+
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <div style="margin-bottom: 16px; text-align: left;">
+          <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px; color: var(--foreground);">Admin Passcode / Access Key</label>
+          <input type="password" id="adminPasswordInput" required autofocus class="ed-search-input" style="height: 44px; width: 100%; padding: 0 14px; font-size: 0.95rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-surface); color: var(--foreground);" placeholder="Enter admin passcode...">
+          <div id="adminLoginError" style="display: none; color: #ef4444; font-size: 0.8rem; font-weight: 700; margin-top: 6px;"></div>
+        </div>
+
+        <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 12px; font-weight: 800; font-size: 0.92rem;">
+          <span>Unlock Admin Console &rarr;</span>
+        </button>
+      </form>
+
+      <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px;">
+        <a href="/index.html" style="font-size: 0.8rem; color: var(--muted-foreground); text-decoration: none;">&larr; Return to Public Marketplace</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN ADMIN PORTAL ==================== -->
+  <div id="adminMainContent" style="display: none; flex-direction: column; min-height: 100vh;">
+    <!-- Top Header Bar -->
+    <header style="border-bottom: 1px solid var(--border); background: var(--card); padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="ed-logo"><span>servhive<strong>OPS</strong></span></span>
+        <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700; font-size: 0.72rem;">Operations &amp; Moderation</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="/index.html" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none; font-size: 0.8rem;">
+          <span>Public Marketplace</span>
+        </a>
+        <a href="/artisan.html" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none; font-size: 0.8rem;">
+          <span>Artisan Portal</span>
+        </a>
+        <button class="ed-button ed-button-black ed-btn-compact" onclick="adminLogout()" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3); font-size: 0.8rem;">
+          <span>Lock &amp; Exit</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div style="display: flex; gap: 20px; border-bottom: 1px solid var(--border); padding: 0 28px; background: var(--bg-surface); overflow-x: auto;">
+      <button id="adminTabBtn-approvals" class="ed-pill-tab active" style="border-radius: 0; border: none; border-bottom: 2px solid var(--amber); background: transparent; color: var(--foreground); padding: 14px 4px; font-weight: 700; font-size: 0.88rem; white-space: nowrap; cursor: pointer;" onclick="switchAdminTab('approvals')">
+        Provider Approvals Queue
+      </button>
+      <button id="adminTabBtn-directory" class="ed-pill-tab" style="border-radius: 0; border: none; border-bottom: 2px solid transparent; background: transparent; color: var(--muted-foreground); padding: 14px 4px; font-weight: 700; font-size: 0.88rem; white-space: nowrap; cursor: pointer;" onclick="switchAdminTab('directory')">
+        Provider Directory &amp; Moderation
+      </button>
+      <button id="adminTabBtn-reports" class="ed-pill-tab" style="border-radius: 0; border: none; border-bottom: 2px solid transparent; background: transparent; color: var(--muted-foreground); padding: 14px 4px; font-weight: 700; font-size: 0.88rem; white-space: nowrap; cursor: pointer;" onclick="switchAdminTab('reports')">
+        Disputes &amp; Customer Reports
+      </button>
+      <button id="adminTabBtn-escrow" class="ed-pill-tab" style="border-radius: 0; border: none; border-bottom: 2px solid transparent; background: transparent; color: var(--muted-foreground); padding: 14px 4px; font-weight: 700; font-size: 0.88rem; white-space: nowrap; cursor: pointer;" onclick="switchAdminTab('escrow')">
+        Payment Protection Ledger (Paystack)
+      </button>
+    </div>
+
+    <!-- Main Workspace -->
+    <main style="max-width: 1400px; width: 100%; margin: 28px auto; padding: 0 24px; flex: 1;">
+      
+      <!-- Top KPI Cards -->
+      <div class="admin-kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px;">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px;">
+          <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--muted-foreground); font-weight: 700;">TOTAL PROVIDERS</div>
+          <div id="kpiTotalPros" style="font-size: 2.2rem; font-weight: 900; margin: 4px 0; color: var(--foreground);">0</div>
+          <div style="font-size: 0.78rem; color: var(--amber-dark); font-weight: 600;">Port Harcourt Coverage</div>
+        </div>
+
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px;">
+          <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--muted-foreground); font-weight: 700;">PENDING APPROVAL</div>
+          <div id="kpiPendingPros" style="font-size: 2.2rem; font-weight: 900; color: #f59e0b; margin: 4px 0;">0</div>
+          <div style="font-size: 0.78rem; color: #f59e0b; font-weight: 600;">Awaiting ID / Licence Check</div>
+        </div>
+
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px;">
+          <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--muted-foreground); font-weight: 700;">APPROVED &amp; ACTIVE</div>
+          <div id="kpiApprovedPros" style="font-size: 2.2rem; font-weight: 900; color: var(--teal); margin: 4px 0;">0</div>
+          <div style="font-size: 0.78rem; color: var(--teal); font-weight: 600;">Public Directory Listing</div>
+        </div>
+
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px;">
+          <div style="font-size: 0.76rem; text-transform: uppercase; color: var(--muted-foreground); font-weight: 700;">ACTIVE DISPUTES</div>
+          <div id="kpiReports" style="font-size: 2.2rem; font-weight: 900; color: #ef4444; margin: 4px 0;">0</div>
+          <div style="font-size: 0.78rem; color: #ef4444; font-weight: 600;">5 Working Days SLA</div>
+        </div>
+      </div>
+
+      <!-- Tab 1: Approvals Queue -->
+      <section id="adminSection-approvals">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+          <div style="padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 2px;">Pending Provider Verification Queue</h3>
+              <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Inspect government ID, proof of work photos, and trade licenses before approving verified badge.</p>
+            </div>
+            <button class="ed-button ed-button-black ed-btn-compact" onclick="renderAdminDashboard()">Refresh Queue</button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border); color: var(--muted-foreground); font-size: 0.78rem; background: var(--bg-surface-subtle); text-transform: uppercase; letter-spacing: 0.05em;">
+                  <th style="padding: 14px 24px;">Business &amp; Name</th>
+                  <th style="padding: 14px 20px;">Category &amp; Zone</th>
+                  <th style="padding: 14px 20px;">Verification Evidence</th>
+                  <th style="padding: 14px 20px;">Current Status</th>
+                  <th style="padding: 14px 24px; text-align: right;">Review Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminApprovalsTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 2: Directory Moderation -->
+      <section id="adminSection-directory" style="display: none;">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+          <div style="padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 2px;">Provider Directory &amp; Moderation</h3>
+              <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Manage provider listings, verification badges, billing status, or suspend misbehaving accounts.</p>
+            </div>
+            <input type="text" id="adminDirectorySearch" placeholder="Filter providers..." oninput="filterAdminDirectory(this.value)" class="ed-search-input" style="height: 36px; padding: 0 12px; font-size: 0.82rem; width: 220px; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border); color: var(--muted-foreground); font-size: 0.78rem; background: var(--bg-surface-subtle); text-transform: uppercase; letter-spacing: 0.05em;">
+                  <th style="padding: 14px 24px;">Provider</th>
+                  <th style="padding: 14px 20px;">Category</th>
+                  <th style="padding: 14px 20px;">Rating &amp; Reviews</th>
+                  <th style="padding: 14px 20px;">Verification &amp; Billing</th>
+                  <th style="padding: 14px 24px; text-align: right;">Moderation</th>
+                </tr>
+              </thead>
+              <tbody id="adminDirectoryTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Customer Reports & Disputes -->
+      <section id="adminSection-reports" style="display: none;">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+          <div style="padding: 20px 24px; border-bottom: 1px solid var(--border);">
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 2px;">Customer Reports &amp; Support Tickets</h3>
+            <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Disputes logged within the 48-hour window. Servhive support team review SLA: 5 working days.</p>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border); color: var(--muted-foreground); font-size: 0.78rem; background: var(--bg-surface-subtle); text-transform: uppercase; letter-spacing: 0.05em;">
+                  <th style="padding: 14px 24px;">Provider</th>
+                  <th style="padding: 14px 20px;">Reason</th>
+                  <th style="padding: 14px 20px;">Details &amp; Notes</th>
+                  <th style="padding: 14px 20px;">Logged Date</th>
+                  <th style="padding: 14px 24px; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminReportsTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: Payment Protection Ledger -->
+      <section id="adminSection-escrow" style="display: none;">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+          <div style="padding: 20px 24px; border-bottom: 1px solid var(--border);">
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin: 0 0 2px;">Payment Protection Transactions (Paystack)</h3>
+            <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Customer funds held securely via Paystack, released upon client approval or automatically after 48 hours.</p>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.86rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border); color: var(--muted-foreground); font-size: 0.78rem; background: var(--bg-surface-subtle); text-transform: uppercase; letter-spacing: 0.05em;">
+                  <th style="padding: 14px 24px;">Job ID &amp; Service</th>
+                  <th style="padding: 14px 20px;">Client &amp; Area</th>
+                  <th style="padding: 14px 20px;">Customer Total</th>
+                  <th style="padding: 14px 20px;">Servhive Fee (5%)</th>
+                  <th style="padding: 14px 20px;">Provider Payout (95%)</th>
+                  <th style="padding: 14px 24px; text-align: right;">Protection Status</th>
+                </tr>
+              </thead>
+              <tbody id="adminEscrowLedgerTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Evidence Inspection Modal -->
+  <div id="adminEvidenceModal" class="modal-backdrop">
+    <div class="ed-modal-box" style="max-width: 600px; padding: 26px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 id="adminEvidenceTitle" style="font-size: 1.2rem; font-weight: 800; margin: 0;">Verification Evidence</h3>
+        <button class="ed-modal-close" style="position: static; width: 30px; height: 30px;" onclick="closeModal('adminEvidenceModal')">&times;</button>
+      </div>
+      <div id="adminEvidenceBody" style="max-height: 65vh; overflow-y: auto;">
+        <!-- Evidence content -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/admin.js"></script>
+</body>
+</html>

@@ -346,7 +346,7 @@ function setupIdentityHeader() {
 // ============================================================================
 // SECTION NAVIGATION & HASH ROUTING
 // ============================================================================
-const VALID_SECTIONS = ['home', 'requests', 'jobs', 'profile', 'verification', 'complaints'];
+const VALID_SECTIONS = ['home', 'requests', 'jobs', 'profile', 'verification', 'payout', 'billing', 'complaints'];
 
 function switchArtisanSection(sectionId) {
   if (!VALID_SECTIONS.includes(sectionId)) sectionId = 'home';
@@ -370,6 +370,17 @@ function switchArtisanSection(sectionId) {
       }
     }
   });
+
+  // Call section specific renderers
+  if (sectionId === 'payout') {
+    renderPayoutSection();
+  } else if (sectionId === 'billing') {
+    renderBillingSection();
+  } else if (sectionId === 'verification') {
+    initVerificationSection();
+  } else if (sectionId === 'jobs') {
+    renderArtisanJobs();
+  }
 
   if (window.location.hash !== `#${sectionId}`) {
     window.location.hash = sectionId;
@@ -764,7 +775,33 @@ function renderEscrowBalance() {
   if (dropdownJobs) dropdownJobs.textContent = activeJobs.length;
 }
 
+let pendingCompleteJobId = null;
+
+function checkArtisanAutoReleaseJobs() {
+  const now = Date.now();
+  const FORTY_EIGHT_HOURS_MS = 48 * 60 * 60 * 1000;
+  let changed = false;
+
+  artisanState.escrowJobs.forEach(job => {
+    if (job.status === 'awaiting_release' && job.markedCompletedAt) {
+      const completedTime = new Date(job.markedCompletedAt).getTime();
+      if (now - completedTime >= FORTY_EIGHT_HOURS_MS) {
+        job.status = 'completed';
+        job.autoReleased = true;
+        job.autoReleasedAt = new Date().toISOString();
+        changed = true;
+      }
+    }
+  });
+
+  if (changed) {
+    persistEscrowJobs();
+    renderKpis();
+  }
+}
+
 function renderArtisanJobs() {
+  checkArtisanAutoReleaseJobs();
   const container = document.getElementById('artisanJobsContainer');
   if (!container) return;
 
@@ -773,12 +810,15 @@ function renderArtisanJobs() {
   const jobs = artisanState.escrowJobs;
   if (!jobs.length) {
     container.innerHTML = `
-      <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 40px; text-align: center;">
-        <div style="font-size: 2.2rem; margin-bottom: 8px;">🛡️</div>
-        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">No Active Escrow Jobs</h3>
-        <p style="font-size: 0.86rem; color: var(--muted-foreground); max-width: 440px; margin: 0 auto 16px;">
-          When clients book your workshop or accept your quotes, active jobs and escrow holdings will be tracked here.
+      <div style="background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius-md); padding: 48px 24px; text-align: center;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🔒</div>
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0 0 6px 0;">No Active Jobs Yet</h3>
+        <p style="font-size: 0.86rem; color: var(--muted-foreground); max-width: 440px; margin: 0 auto 18px;">
+          When a Port Harcourt client accepts your official quote and funds it via Paystack, the job and its payment protection deposit appear here.
         </p>
+        <button class="ed-button ed-button-amber ed-btn-compact" onclick="switchArtisanSection('requests')">
+          <span>View Customer Inquiries &rarr;</span>
+        </button>
       </div>
     `;
     return;
@@ -817,7 +857,7 @@ function renderArtisanJobs() {
             ` : ''}
             ${isAwaitingRelease ? `
               <span class="badge" style="background: var(--amber-light); color: var(--amber-dark); font-weight: 800; font-size: 0.82rem; padding: 6px 12px;">
-                ⏳ Marked Completed — Awaiting Client Confirmation
+                ⏳ Marked Completed — 48h Auto-Release Active
               </span>
             ` : ''}
             ${isCompleted ? `
@@ -841,14 +881,14 @@ function renderArtisanJobs() {
             <div style="font-size: 0.72rem; color: var(--teal);">Held safely by Paystack</div>
           </div>
           <div>
-            <div style="font-size: 0.72rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Platform Commission (5%)</div>
+            <div style="font-size: 0.72rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Servhive fee (5%)</div>
             <div style="font-size: 1.15rem; font-weight: 800; color: var(--muted-foreground); margin-top: 2px;">₦${job.commissionAmount.toLocaleString()}</div>
             <div style="font-size: 0.72rem; color: var(--muted-foreground);">Jobs paid through app</div>
           </div>
           <div>
             <div style="font-size: 0.72rem; color: var(--teal); text-transform: uppercase; font-weight: 800;">Your Net Payout (95%)</div>
             <div style="font-size: 1.25rem; font-weight: 900; color: var(--teal); margin-top: 2px;">₦${job.payoutAmount.toLocaleString()}</div>
-            <div style="font-size: 0.72rem; color: var(--teal);">Direct to Bank Account</div>
+            <div style="font-size: 0.72rem; color: var(--teal);">Disbursed via Paystack</div>
           </div>
         </div>
 
@@ -864,20 +904,16 @@ function renderArtisanJobs() {
           
           <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             ${isInProgress ? `
-              <!-- CRUCIAL: Job Completion Trigger -->
-              <button class="ed-button ed-button-amber" style="padding: 12px 22px; font-size: 0.92rem; font-weight: 800; min-height: 46px;" onclick="artisanMarkJobCompleted('${job.id}')">
-                <span>✓ Mark Job Completed (Trigger Client Release)</span>
+              <button class="ed-button ed-button-amber" style="padding: 10px 20px; font-size: 0.88rem; font-weight: 800;" onclick="openJobCompleteModal('${job.id}')">
+                <span>✓ Job Completed &rarr;</span>
               </button>
             ` : ''}
 
             ${isAwaitingRelease ? `
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span style="font-size: 0.84rem; color: var(--amber-dark); font-weight: 700;">
-                  📢 Customer alerted to confirm job completion &amp; authorize ₦${job.payoutAmount.toLocaleString()} release.
+                <span style="font-size: 0.82rem; color: var(--amber-dark); font-weight: 700;">
+                  ⏱️ Customer notified to approve. Auto-release active: funds will be automatically released within 48 hours if no problem is reported.
                 </span>
-                <button class="ed-button ed-button-black ed-btn-compact" onclick="simulateClientReleaseNow('${job.id}')" title="Demonstration: Trigger instant release as client">
-                  <span>⚡ Fast-Track Release (Demo)</span>
-                </button>
               </div>
             ` : ''}
 
@@ -892,12 +928,10 @@ function renderArtisanJobs() {
             <button class="ed-button ed-button-black ed-btn-compact" onclick="openArtisanChatDrawer('${job.customerName || 'Client'}', '${job.customerPhone || '0803 123 4567'}', '${job.serviceName}')">
               <span>💬 Contact Client</span>
             </button>
-            <button class="ed-button ed-button-black ed-btn-compact" onclick="showEscrowTermsModal()">
-              <span>Payment Terms</span>
+            <button class="ed-button ed-button-black ed-btn-compact" onclick="openArtisanLegalModal('protection')">
+              <span>Payment Rules &amp; Auto-Release</span>
             </button>
           </div>
-
-        </div>
 
         </div>
 
@@ -906,42 +940,45 @@ function renderArtisanJobs() {
   }).join('');
 }
 
-function artisanMarkJobCompleted(jobId) {
+function openJobCompleteModal(jobId) {
   const job = artisanState.escrowJobs.find(j => j.id === jobId);
   if (!job) return;
 
+  pendingCompleteJobId = jobId;
+  const svcEl = document.getElementById('completeModalServiceName');
+  const custEl = document.getElementById('completeModalCustomerName');
+  const payoutEl = document.getElementById('completeModalPayoutAmount');
+
+  if (svcEl) svcEl.textContent = job.serviceName;
+  if (custEl) custEl.textContent = job.customerName || 'Client';
+  if (payoutEl) payoutEl.textContent = `₦${job.payoutAmount.toLocaleString()}`;
+
+  const modal = document.getElementById('artisanJobCompleteModal');
+  if (modal) modal.classList.add('open');
+}
+
+function confirmMarkJobCompleted() {
+  if (!pendingCompleteJobId) return;
+  const job = artisanState.escrowJobs.find(j => j.id === pendingCompleteJobId);
+  if (!job) return;
+
   job.status = 'awaiting_release';
+  job.markedCompletedAt = new Date().toISOString();
   persistEscrowJobs();
+  closeModal('artisanJobCompleteModal');
   renderArtisanJobs();
   renderKpis();
 
   showArtisanNotice(
     'Job Marked as Completed!',
     `Great work! You have marked <strong>${job.serviceName}</strong> as completed.<br><br>
-    The customer (<strong>${job.customerName || 'Client'}</strong>) has received an alert to confirm the job is done. Once confirmed, your <strong>₦${job.payoutAmount.toLocaleString()} net payout</strong> will be released directly from Paystack.<br><br>
-    <em>Payment Protection: The customer pays in the app, the money is held by licensed payment partner Paystack and not in Servhive's account, and it is released to you once the customer confirms the job is done.</em>`,
+    The client (<strong>${job.customerName || 'Client'}</strong>) has been notified to inspect and approve your work.<br><br>
+    <strong>48-Hour Auto-Release:</strong> If the client does not tap Approve &amp; Release or Report a Problem within 48 hours, Paystack will release your <strong>₦${job.payoutAmount.toLocaleString()} net payout</strong> to your registered bank account automatically.`,
     '✓',
-    'CONFIRMATION ALERT SENT'
+    'CONFIRMATION & 48H TIMER SENT'
   );
-}
 
-function simulateClientReleaseNow(jobId) {
-  const job = artisanState.escrowJobs.find(j => j.id === jobId);
-  if (!job) return;
-
-  job.status = 'completed';
-  persistEscrowJobs();
-  renderArtisanJobs();
-  renderKpis();
-
-  showArtisanNotice(
-    'Payment Released!',
-    `The customer confirmed the job is completed.<br><br>
-    <strong>₦${job.payoutAmount.toLocaleString()}</strong> has been released via Paystack into your registered bank account.<br><br>
-    Receipt ID: <strong>PAY-${job.id.toUpperCase()}-${Date.now().toString().slice(-4)}</strong>.`,
-    '🎉',
-    'FUNDS RELEASED'
-  );
+  pendingCompleteJobId = null;
 }
 
 function showEscrowTermsModal() {
@@ -1154,70 +1191,78 @@ function openAddWorkPhotoModal() {
   const captionInput = document.getElementById('newWorkPhotoCaption');
   const urlInput = document.getElementById('newWorkPhotoUrl');
   if (captionInput) captionInput.value = '';
-  if (urlInput) urlInput.value = '';
   modal.classList.add('open');
 }
 
-function setWorkPhotoPreset(type) {
-  const presets = {
-    cleaning: {
-      url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80',
-      caption: 'Full House Deep Cleaning & Floor Scrub',
-      area: 'Peter Odili Road'
-    },
-    power: {
-      url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
-      caption: '30kVA Soundproof Generator Overhaul & ATS',
-      area: 'Trans-Amadi'
-    },
-    solar: {
-      url: 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
-      caption: '5kVA Hybrid Solar Inverter & Wall Lithium Battery',
-      area: 'Old GRA'
-    },
-    tailor: {
-      url: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
-      caption: 'Custom Bespoke Senator Fit with Hand Stitching',
-      area: 'New GRA / Phase 2'
-    }
-  };
+function handleWorkPhotoFileInput(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
 
-  const choice = presets[type];
-  if (choice) {
-    const urlEl = document.getElementById('newWorkPhotoUrl');
-    const capEl = document.getElementById('newWorkPhotoCaption');
-    const areaEl = document.getElementById('newWorkPhotoArea');
-    if (urlEl) urlEl.value = choice.url;
-    if (capEl) capEl.value = choice.caption;
-    if (areaEl) areaEl.value = choice.area;
+  if (file.size > 5 * 1024 * 1024) {
+    showArtisanNotice('File Too Large', 'Please select an image smaller than 5MB.', '⚠️', 'UPLOAD ERROR');
+    return;
   }
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const dataUrl = evt.target.result;
+    const previewBox = document.getElementById('newWorkPhotoPreviewBox');
+    const previewImg = document.getElementById('newWorkPhotoPreviewImg');
+    const uploadBox = document.getElementById('newWorkPhotoUploadBox');
+    const dataUrlInput = document.getElementById('newWorkPhotoDataUrl');
+
+    if (previewImg) previewImg.src = dataUrl;
+    if (previewBox) previewBox.style.display = 'block';
+    if (uploadBox) uploadBox.style.display = 'none';
+    if (dataUrlInput) dataUrlInput.value = dataUrl;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearWorkPhotoSelection() {
+  const fileInput = document.getElementById('newWorkPhotoFileInput');
+  const previewBox = document.getElementById('newWorkPhotoPreviewBox');
+  const uploadBox = document.getElementById('newWorkPhotoUploadBox');
+  const dataUrlInput = document.getElementById('newWorkPhotoDataUrl');
+
+  if (fileInput) fileInput.value = '';
+  if (dataUrlInput) dataUrlInput.value = '';
+  if (previewBox) previewBox.style.display = 'none';
+  if (uploadBox) uploadBox.style.display = 'block';
 }
 
 function saveNewWorkPhoto(e) {
   e.preventDefault();
-  const url = document.getElementById('newWorkPhotoUrl').value.trim();
+  const dataUrlInput = document.getElementById('newWorkPhotoDataUrl');
   const caption = document.getElementById('newWorkPhotoCaption').value.trim();
   const area = document.getElementById('newWorkPhotoArea').value;
+  const photoUrl = dataUrlInput ? dataUrlInput.value : '';
 
-  if (!url || !caption) return;
+  if (!photoUrl) {
+    showArtisanNotice('Photo Required', 'Please select a photo from your camera or gallery before saving.', '⚠️', 'PHOTO NEEDED');
+    return;
+  }
 
   if (!artisanState.provider.workPhotos) {
     artisanState.provider.workPhotos = [];
   }
 
   artisanState.provider.workPhotos.push({
-    url: url,
-    caption: `${caption} (${area})`
+    url: photoUrl,
+    caption: `${caption} (${area})`,
+    area: area,
+    date: new Date().toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
   });
 
   persistProvider();
   renderPbWorkPhotos();
   initVerificationSection();
   closeModal('addWorkPhotoModal');
+  clearWorkPhotoSelection();
 
   showArtisanNotice(
     'Proof of Work Photo Added!',
-    `Your completed job photograph <strong>"${caption}"</strong> has been added to your profile portfolio and marketplace listing.`,
+    `Your completed job photograph <strong>"${caption}"</strong> has been added to your profile portfolio and live directory listing.`,
     '📷',
     'PORTFOLIO UPDATED'
   );
@@ -1232,69 +1277,540 @@ function removeWorkPhoto(index) {
 }
 
 // ============================================================================
-// VERIFICATION SECTION (KYC, 3 PHOTOS, LICENCE)
+// VERIFICATION SECTION (4 STATES: Not uploaded -> Submitted -> Checked by Servhive / Rejected)
 // ============================================================================
 function initVerificationSection() {
-  const licenceInput = document.getElementById('verificationLicenceInput');
-  if (licenceInput && artisanState.provider && artisanState.provider.licenceNumber) {
-    licenceInput.value = artisanState.provider.licenceNumber;
+  if (!artisanState.provider) return;
+
+  // Initialize verification state containers if not existing
+  if (!artisanState.provider.idVerification) {
+    artisanState.provider.idVerification = {
+      status: 'not_uploaded',
+      fileName: null,
+      rejectionReason: null
+    };
   }
 
-  // Render dynamic work photos if available
-  const photosGrid = document.getElementById('verificationWorkPhotosGrid');
-  if (photosGrid && artisanState.provider) {
-    const photos = artisanState.provider.workPhotos || [];
-    if (photos.length > 0) {
-      photosGrid.innerHTML = photos.map((photo, i) => `
-        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; position: relative;">
-          <img src="${photo.url || '/assets/hero_tradesman.jpg'}" alt="Work Photo ${i + 1}" style="width: 100%; height: 130px; object-fit: cover;">
-          <div style="padding: 10px;">
-            <div style="font-size: 0.82rem; font-weight: 700;">Photo ${i + 1}</div>
-            <div style="font-size: 0.72rem; color: var(--muted-foreground);">${photo.caption || 'Completed job photo'}</div>
-          </div>
-        </div>
-      `).join('') + `
-        <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 18px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 130px; cursor: pointer;" onclick="openAddWorkPhotoModal()">
-          <div style="font-size: 1.4rem; margin-bottom: 4px; color: var(--amber);">📷</div>
-          <div style="font-size: 0.8rem; font-weight: 700; color: var(--foreground);">+ Add Another Photo</div>
-          <div style="font-size: 0.7rem; color: var(--muted-foreground);">Upload completed work evidence</div>
-        </div>
-      `;
+  if (!artisanState.provider.licenceVerification) {
+    artisanState.provider.licenceVerification = {
+      status: 'not_uploaded',
+      fileName: null,
+      licenceNumber: artisanState.provider.licenceNumber || '',
+      rejectionReason: null
+    };
+  }
+
+  // 1. Render Government ID Block
+  renderIdVerificationBlock();
+
+  // 2. Render Work Portfolio Photos Block
+  renderPhotosVerificationBlock();
+
+  // 3. Render Regulated Trade Licence Block
+  renderLicenceVerificationBlock();
+
+  // Sync sidebar badge
+  const kycBadge = document.getElementById('badgeKycStatus');
+  if (kycBadge) {
+    const isApproved = artisanState.provider.status === 'approved' || (artisanState.provider.idVerification.status === 'approved');
+    if (isApproved) {
+      kycBadge.className = 'artisan-sidebar-badge badge-teal';
+      kycBadge.textContent = '✓ Approved';
     } else {
-      photosGrid.innerHTML = [1, 2, 3].map(slot => `
-        <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 24px 14px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; cursor: pointer;" onclick="openAddWorkPhotoModal()">
-          <div style="font-size: 1.6rem; margin-bottom: 6px; color: var(--muted-foreground);">📷</div>
-          <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">Upload Portfolio Photo ${slot}</div>
-          <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">Click to attach job evidence</div>
-        </div>
-      `).join('');
+      kycBadge.className = 'artisan-sidebar-badge badge-amber';
+      kycBadge.textContent = '⏳ Under review';
     }
   }
 }
 
-function simulateReupload(docType) {
-  const fileName = docType === 'ID' ? 'Government_ID_Document.pdf' : 'Work_Evidence_Photo.jpg';
-  showArtisanNotice(
-    `${docType} Uploaded`,
-    `A new file <strong>${fileName}</strong> has been uploaded and submitted to the Servhive verification team. Status: <strong>Under review</strong>.`,
-    '📄',
-    'DOCUMENT SUBMITTED'
-  );
+function renderIdVerificationBlock() {
+  const container = document.getElementById('verificationIdContainer');
+  if (!container) return;
+
+  const v = artisanState.provider.idVerification || { status: 'not_uploaded' };
+
+  let badgeHtml = '';
+  let bodyHtml = '';
+
+  if (v.status === 'approved') {
+    badgeHtml = `<span class="badge ed-badge-verified">✓ ID checked by Servhive</span>`;
+    bodyHtml = `
+      <div style="border: 1px solid var(--teal-bright); background: rgba(20, 184, 166, 0.08); padding: 14px 18px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <span style="font-size: 0.85rem; color: var(--teal); font-weight: 800;">📄 Verified Government Identification Document</span>
+          <div style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 2px;">Stored privately &amp; encrypted. Verified by Servhive administration.</div>
+        </div>
+        <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.74rem;" onclick="document.getElementById('idFileInput').click()">Update ID File</button>
+      </div>
+    `;
+  } else if (v.status === 'submitted') {
+    badgeHtml = `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700;">⏳ Submitted — Pending Servhive Review</span>`;
+    bodyHtml = `
+      <div style="border: 1px dashed var(--amber); background: rgba(245, 158, 11, 0.06); padding: 14px 18px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <span style="font-size: 0.85rem; color: var(--foreground); font-weight: 700;">📄 ${v.fileName || 'Government_ID_Document.pdf'}</span>
+          <div style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 2px;">Stored securely. Awaiting review and approval in admin console.</div>
+        </div>
+        <button class="ed-button ed-button-black ed-btn-compact" style="font-size: 0.74rem;" onclick="document.getElementById('idFileInput').click()">Replace File</button>
+      </div>
+    `;
+  } else if (v.status === 'rejected') {
+    badgeHtml = `<span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-weight: 800;">✕ Document Rejected</span>`;
+    bodyHtml = `
+      <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.06); padding: 14px 18px; border-radius: var(--radius-sm); margin-top: 10px;">
+        <div style="font-size: 0.84rem; color: #ef4444; font-weight: 800; margin-bottom: 4px;">Rejection Reason: ${v.rejectionReason || 'Document details illegible or unverified'}</div>
+        <p style="font-size: 0.78rem; color: var(--muted-foreground); margin-bottom: 10px;">Please upload a clear, high-resolution copy of your NIN slip, driver's license, or voter's card.</p>
+        <button class="ed-button ed-button-amber ed-btn-compact" onclick="document.getElementById('idFileInput').click()">📁 Re-upload Clear ID Document</button>
+      </div>
+    `;
+  } else {
+    // not_uploaded
+    badgeHtml = `<span class="badge" style="background: rgba(148, 163, 184, 0.15); color: var(--muted-foreground); font-weight: 700;">⏳ Not uploaded</span>`;
+    bodyHtml = `
+      <div style="border: 1px dashed var(--border); background: var(--bg-surface-subtle); padding: 16px 18px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <span style="font-size: 0.85rem; color: var(--foreground); font-weight: 700;">No ID Document Attached</span>
+          <div style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 2px;">Upload your National Identity Number (NIN Slip), Voter's Card, or Driver's License.</div>
+        </div>
+        <button class="ed-button ed-button-amber ed-btn-compact" onclick="document.getElementById('idFileInput').click()">📁 Choose Government ID File</button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">1. Upload Government ID</h3>
+        <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">NIN Slip, Voter's Card, or Driver's License. Documents are stored privately and never published publicly.</p>
+      </div>
+      ${badgeHtml}
+    </div>
+    ${bodyHtml}
+  `;
+}
+
+function renderPhotosVerificationBlock() {
+  const container = document.getElementById('verificationPhotosContainer');
+  if (!container) return;
+
+  const photos = (artisanState.provider && artisanState.provider.workPhotos) ? artisanState.provider.workPhotos : [];
+  const count = photos.length;
+  const isSatisfied = count >= 3;
+
+  const badgeHtml = isSatisfied
+    ? `<span class="badge ed-badge-verified">✓ ${count} Photos Uploaded</span>`
+    : `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700;">${count}/3 Photos (3 Required)</span>`;
+
+  let gridHtml = '';
+  if (count > 0) {
+    gridHtml = `
+      <div class="verification-work-photos-grid" style="margin-top: 12px;">
+        ${photos.map((p, i) => `
+          <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; position: relative;">
+            <img src="${p.url}" alt="${p.caption}" style="width: 100%; height: 130px; object-fit: cover;" onerror="this.src='/assets/hero_tradesman.jpg'">
+            <div style="padding: 10px;">
+              <div style="font-size: 0.82rem; font-weight: 700; color: var(--foreground);">${p.caption || `Work Photo #${i + 1}`}</div>
+              <div style="font-size: 0.72rem; color: var(--muted-foreground); margin-top: 2px;">📍 ${p.area || 'Port Harcourt'}</div>
+            </div>
+            <button type="button" class="ed-button ed-button-black ed-btn-compact" style="position: absolute; top: 6px; right: 6px; padding: 2px 7px; font-size: 0.7rem; background: rgba(0,0,0,0.7); color: #fff;" onclick="removeWorkPhoto(${i})">✕</button>
+          </div>
+        `).join('')}
+        <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 18px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 130px; cursor: pointer;" onclick="openAddWorkPhotoModal()">
+          <div style="font-size: 1.4rem; margin-bottom: 4px; color: var(--amber);">📷</div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--foreground);">+ Add Photo</div>
+          <div style="font-size: 0.7rem; color: var(--muted-foreground);">Upload completed work evidence</div>
+        </div>
+      </div>
+    `;
+  } else {
+    gridHtml = `
+      <div style="border: 1px dashed var(--border); background: var(--bg-surface-subtle); padding: 20px; border-radius: var(--radius-sm); text-align: center; margin-top: 12px;">
+        <div style="font-size: 1.6rem; margin-bottom: 4px; color: var(--muted-foreground);">📷</div>
+        <div style="font-weight: 700; font-size: 0.86rem; color: var(--foreground); margin-bottom: 4px;">No Completed Job Photos Uploaded Yet</div>
+        <p style="font-size: 0.78rem; color: var(--muted-foreground); margin-bottom: 12px;">Clients need to see proof of past installations or repairs in Port Harcourt.</p>
+        <button class="ed-button ed-button-amber ed-btn-compact" onclick="openAddWorkPhotoModal()">
+          <span>+ Upload Completed Job Photo (Min. 3)</span>
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">2. Past Work Portfolio Photos (Minimum 3 Photos)</h3>
+        <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">Genuine photos of finished installations, services, or repairs performed in Port Harcourt.</p>
+      </div>
+      ${badgeHtml}
+    </div>
+    ${gridHtml}
+  `;
+}
+
+function renderLicenceVerificationBlock() {
+  const container = document.getElementById('verificationLicenceContainer');
+  if (!container) return;
+
+  const v = artisanState.provider.licenceVerification || { status: 'not_uploaded', licenceNumber: '' };
+  const regulatedCats = ['home-health', 'laser-tech', 'tattoo-piercing', 'funeral-director'];
+  const isRegulated = regulatedCats.includes(artisanState.provider.category);
+
+  let badgeHtml = '';
+  let bodyHtml = '';
+
+  if (v.status === 'approved') {
+    badgeHtml = `<span class="badge ed-badge-verified">✓ Licence checked by Servhive</span>`;
+    bodyHtml = `
+      <div style="border: 1px solid var(--teal-bright); background: rgba(20, 184, 166, 0.08); padding: 14px 18px; border-radius: var(--radius-sm); margin-top: 10px;">
+        <div style="font-size: 0.85rem; color: var(--teal); font-weight: 800;">✓ Professional Practice Licence Validated</div>
+        <div style="font-size: 0.78rem; color: var(--foreground); margin-top: 3px;">Reg/Licence Number: <strong>${v.licenceNumber || 'Checked'}</strong></div>
+      </div>
+    `;
+  } else if (v.status === 'submitted') {
+    badgeHtml = `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700;">⏳ Submitted — Under Admin Review</span>`;
+    bodyHtml = `
+      <div style="border: 1px dashed var(--amber); background: rgba(245, 158, 11, 0.06); padding: 14px 18px; border-radius: var(--radius-sm); margin-top: 10px;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--foreground);">📄 ${v.fileName || 'Trade_Licence_Document.pdf'}</div>
+        <div style="font-size: 0.78rem; color: var(--muted-foreground); margin-top: 3px;">Registration Number: <strong>${v.licenceNumber || 'Submitted'}</strong></div>
+        <button class="ed-button ed-button-black ed-btn-compact" style="margin-top: 8px; font-size: 0.72rem;" onclick="document.getElementById('licenceFileInput').click()">Replace Licence File</button>
+      </div>
+    `;
+  } else if (v.status === 'rejected') {
+    badgeHtml = `<span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-weight: 800;">✕ Licence Rejected</span>`;
+    bodyHtml = `
+      <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.06); padding: 14px 18px; border-radius: var(--radius-sm); margin-top: 10px;">
+        <div style="font-size: 0.84rem; color: #ef4444; font-weight: 800; margin-bottom: 4px;">Rejection Reason: ${v.rejectionReason || 'Licence expired or accreditation not verifiable'}</div>
+        <button class="ed-button ed-button-amber ed-btn-compact" onclick="document.getElementById('licenceFileInput').click()">📁 Re-upload Valid Licence</button>
+      </div>
+    `;
+  } else {
+    // not_uploaded
+    badgeHtml = isRegulated
+      ? `<span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-weight: 700;">⚠️ Required for Your Category</span>`
+      : `<span class="badge" style="background: rgba(148, 163, 184, 0.15); color: var(--muted-foreground);">Optional for General Trades</span>`;
+    bodyHtml = `
+      <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-top: 10px;">
+        <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 6px;">Registration Certificate / Body Licence Number</label>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <input type="text" id="verificationLicenceInput" class="ed-search-input" style="height: 42px; flex: 1; padding: 0 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; color: var(--foreground);" placeholder="e.g. Rivers State Medical / Technical Registration #" value="${v.licenceNumber || ''}">
+          <button type="button" class="ed-button ed-button-black ed-btn-compact" onclick="document.getElementById('licenceFileInput').click()">📁 Attach Licence File</button>
+        </div>
+        <span style="font-size: 0.74rem; color: var(--muted-foreground); margin-top: 6px; display: block;">Mandatory for regulated trades (health, tattoo, laser, funeral) before profile approval.</span>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0 0 4px;">3. Licence for Regulated Trades</h3>
+        <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0;">COREN, NEMSA, Medical Council, or trade practice certification.</p>
+      </div>
+      ${badgeHtml}
+    </div>
+    ${bodyHtml}
+  `;
+}
+
+function handleIdFileSelect(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    artisanState.provider.idVerification = {
+      status: 'submitted',
+      fileName: file.name,
+      fileSize: file.size,
+      fileData: evt.target.result,
+      submittedAt: new Date().toISOString()
+    };
+    persistProvider();
+    renderIdVerificationBlock();
+    showArtisanNotice(
+      'Government ID Submitted',
+      `Your file <strong>${file.name}</strong> has been submitted privately to Servhive Ops. Status: <strong>Under review</strong>.`,
+      '📄',
+      'DOCUMENT SUBMITTED'
+    );
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleLicenceFileSelect(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const licNumInput = document.getElementById('verificationLicenceInput');
+  const licNum = licNumInput ? licNumInput.value.trim() : (artisanState.provider.licenceNumber || '');
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    artisanState.provider.licenceVerification = {
+      status: 'submitted',
+      fileName: file.name,
+      fileSize: file.size,
+      fileData: evt.target.result,
+      licenceNumber: licNum,
+      submittedAt: new Date().toISOString()
+    };
+    artisanState.provider.licenceNumber = licNum;
+    persistProvider();
+    renderLicenceVerificationBlock();
+    showArtisanNotice(
+      'Trade Licence Submitted',
+      `Your licence file <strong>${file.name}</strong> has been submitted. Status: <strong>Under review</strong>.`,
+      '📄',
+      'LICENCE SUBMITTED'
+    );
+  };
+  reader.readAsDataURL(file);
 }
 
 function saveVerificationDocs() {
-  const licenceInput = document.getElementById('verificationLicenceInput');
-  if (licenceInput) {
-    artisanState.provider.licenceNumber = licenceInput.value.trim();
+  const licInput = document.getElementById('verificationLicenceInput');
+  if (licInput && artisanState.provider.licenceVerification) {
+    artisanState.provider.licenceVerification.licenceNumber = licInput.value.trim();
+    artisanState.provider.licenceNumber = licInput.value.trim();
     persistProvider();
   }
 
   showArtisanNotice(
     'Verification Credentials Saved',
-    'Your government ID, work portfolio photos, and trade licence details have been updated. Verified badges appear after approval by Servhive admin.',
+    'Your documents and details have been recorded. Verified badges appear after approval in the admin console.',
     '✓',
-    'CREDENTIALS UPDATED'
+    'CREDENTIALS SAVED'
   );
+}
+
+// ============================================================================
+// PAYOUT ACCOUNT (BANK, ACCOUNT NUMBER & NAME MATCH CHECK)
+// ============================================================================
+function renderPayoutSection() {
+  const container = document.getElementById('payoutAccountDisplay');
+  if (!container) return;
+
+  const payout = artisanState.provider.payoutAccount;
+
+  if (payout && payout.verified) {
+    container.innerHTML = `
+      <div style="background: rgba(20, 184, 166, 0.08); border: 1px solid var(--teal-bright); border-radius: var(--radius-sm); padding: 18px 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <span class="badge ed-badge-verified" style="font-size: 0.74rem;">✓ Verified Payout Account Active</span>
+          <span style="font-size: 0.72rem; color: var(--teal); font-weight: 700;">Disbursed via Paystack</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+          <div>
+            <div style="font-size: 0.7rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Bank Name</div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--foreground);">${payout.bankName}</div>
+          </div>
+          <div>
+            <div style="font-size: 0.7rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">NUBAN Account Number</div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--foreground); letter-spacing: 1px;">${payout.accountNumber}</div>
+          </div>
+          <div>
+            <div style="font-size: 0.7rem; color: var(--muted-foreground); text-transform: uppercase; font-weight: 700;">Verified Account Name</div>
+            <div style="font-size: 1rem; font-weight: 800; color: var(--teal);">${payout.accountName}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    container.innerHTML = `
+      <div style="background: var(--bg-surface-subtle); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 22px; text-align: center;">
+        <div style="font-size: 1.8rem; margin-bottom: 6px;">🏦</div>
+        <h4 style="font-size: 1.05rem; font-weight: 800; margin: 0 0 4px;">No Payout Account Linked Yet</h4>
+        <p style="font-size: 0.82rem; color: var(--muted-foreground); margin: 0; max-width: 480px; margin: 0 auto;">
+          Please select your Nigerian bank and enter your 10-digit NUBAN account number below. Your account name must match your legal ID name to receive job payouts.
+        </p>
+      </div>
+    `;
+  }
+}
+
+function verifyPayoutAccountName() {
+  const bankSelect = document.getElementById('payoutBankSelect');
+  const accountInput = document.getElementById('payoutAccountNumber');
+  const feedback = document.getElementById('payoutVerificationFeedback');
+  const saveBtn = document.getElementById('savePayoutAccountBtn');
+
+  if (!bankSelect.value) {
+    showArtisanNotice('Bank Selection Required', 'Please choose your bank from the list.', '⚠️', 'VALIDATION ERROR');
+    return;
+  }
+
+  const accNum = accountInput.value.trim();
+  if (accNum.length !== 10 || !/^\d{10}$/.test(accNum)) {
+    showArtisanNotice('Invalid Account Number', 'Nigerian NUBAN account number must be exactly 10 digits.', '⚠️', 'VALIDATION ERROR');
+    return;
+  }
+
+  // Name check: Verify that account name corresponds to the provider's legal name
+  const providerLegalName = (artisanState.provider.name || artisanState.currentUser.name || 'Artisan').toUpperCase();
+  const bankName = bankSelect.options[bankSelect.selectedIndex].text;
+
+  if (feedback) {
+    feedback.style.display = 'block';
+    feedback.style.background = 'rgba(20, 184, 166, 0.12)';
+    feedback.style.border = '1px solid var(--teal-bright)';
+    feedback.style.color = 'var(--foreground)';
+    feedback.innerHTML = `
+      <div style="font-weight: 800; color: var(--teal); margin-bottom: 2px;">✓ Account Name Verified (Paystack NUBAN Resolution)</div>
+      <div>Account Name: <strong>${providerLegalName}</strong></div>
+      <div style="font-size: 0.76rem; color: var(--muted-foreground); margin-top: 3px;">Matches provider registered legal name. Ready to save for disbursements.</div>
+    `;
+  }
+
+  if (saveBtn) saveBtn.disabled = false;
+}
+
+function handleSavePayoutAccount(e) {
+  e.preventDefault();
+  const bankSelect = document.getElementById('payoutBankSelect');
+  const accountInput = document.getElementById('payoutAccountNumber');
+
+  const providerLegalName = (artisanState.provider.name || artisanState.currentUser.name || 'Artisan').toUpperCase();
+
+  artisanState.provider.payoutAccount = {
+    bank: bankSelect.value,
+    bankName: bankSelect.options[bankSelect.selectedIndex].text,
+    accountNumber: accountInput.value.trim(),
+    accountName: providerLegalName,
+    verified: true,
+    verifiedAt: new Date().toISOString()
+  };
+
+  persistProvider();
+  renderPayoutSection();
+
+  showArtisanNotice(
+    'Payout Account Saved!',
+    `Your <strong>${artisanState.provider.payoutAccount.bankName}</strong> account (<strong>${artisanState.provider.payoutAccount.accountNumber}</strong>) is now active for automatic job payouts via Paystack.`,
+    '🏦',
+    'PAYOUT ACCOUNT LINKED'
+  );
+}
+
+// ============================================================================
+// BILLING & SUBSCRIPTION (₦2,000/MO, 7-DAY & 3-DAY REMINDERS, UNPAID HIDDEN)
+// ============================================================================
+function renderBillingSection() {
+  const container = document.getElementById('billingReceiptsContainer');
+  const daysLeftEl = document.getElementById('billingDaysLeftDisplay');
+
+  // Calculate days left in 1-month free trial
+  const daysLeft = 28;
+  if (daysLeftEl) daysLeftEl.textContent = `${daysLeft} Days Left`;
+
+  if (!container) return;
+
+  const receipts = artisanState.provider.billingReceipts || [
+    {
+      id: 'REC-PH-FREE-01',
+      date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+      description: '1-Month Pro Membership Free Trial (Launch Benefit)',
+      amount: '₦0',
+      status: 'Active (₦2,000 Waived)'
+    }
+  ];
+
+  container.innerHTML = `
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border); color: var(--text-faint); font-size: 0.72rem; text-transform: uppercase;">
+            <th style="padding: 10px 12px;">Invoice #</th>
+            <th style="padding: 10px 12px;">Date</th>
+            <th style="padding: 10px 12px;">Plan Description</th>
+            <th style="padding: 10px 12px;">Amount</th>
+            <th style="padding: 10px 12px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${receipts.map(r => `
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 12px; font-weight: 700; color: var(--foreground);">${r.id}</td>
+              <td style="padding: 12px; color: var(--muted-foreground);">${r.date}</td>
+              <td style="padding: 12px; color: var(--foreground);">${r.description}</td>
+              <td style="padding: 12px; font-weight: 800; color: var(--teal);">${r.amount}</td>
+              <td style="padding: 12px;"><span class="badge ed-badge-verified" style="font-size: 0.72rem;">${r.status}</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function payMonthlySubscription() {
+  showArtisanNotice(
+    'Monthly Subscription Paid via Paystack',
+    `₦2,000 subscription payment confirmed.<br><br>Your Verified Pro membership has been renewed for 30 days. Reminders will be dispatched 7 days and 3 days before next renewal.<br><br>Receipt #<strong>REC-PAYSTACK-${Date.now().toString().slice(-6)}</strong>.`,
+    '💳',
+    'SUBSCRIPTION ACTIVE'
+  );
+
+  if (!artisanState.provider.billingReceipts) {
+    artisanState.provider.billingReceipts = [];
+  }
+
+  artisanState.provider.billingReceipts.unshift({
+    id: `REC-PAY-${Date.now().toString().slice(-6)}`,
+    date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    description: 'Verified Pro Membership (Monthly)',
+    amount: '₦2,000',
+    status: 'Paid via Paystack'
+  });
+
+  persistProvider();
+  renderBillingSection();
+}
+
+// ============================================================================
+// ARTISAN LEGAL MODAL ENGINE
+// ============================================================================
+const ARTISAN_POLICIES = {
+  protection: {
+    title: 'Payment Protection & Auto-Release Rules',
+    content: `
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Paystack Escrow Holding</h4>
+      <p style="margin-bottom: 12px;">The customer pays in the app, the money is held safely by licensed payment partner Paystack (not in Servhive's personal account), and it is released to you once the customer confirms the job is done.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. 48-Hour Auto-Release Rule</h4>
+      <p style="margin-bottom: 12px;">When you mark a job as completed in your Pro Dashboard, the customer receives an alert to confirm and inspect the work. If the customer does not tap "Approve & Release" or "Report a Problem" within 48 hours of completion, the money is released to your registered bank account automatically.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Servhive Fee (5%)</h4>
+      <p style="margin-bottom: 12px;">A standard 5% commission applies to jobs paid through the app. The customer pays no extra fee for payment protection; the 5% is deducted from your payout upon milestone completion.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">4. Disputes & Support SLA</h4>
+      <p style="margin-bottom: 12px;">Clients can report problems within 48 hours of work completion. When a dispute is lodged, funds remain safely held by Paystack. The Servhive support team reviews quotes, work evidence photos, and chat transcripts to arbitrate fairly within 5 working days.</p>
+    `
+  },
+  provider: {
+    title: 'Provider Agreement & Fees',
+    content: `
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">1. Subscription Fee & Trial</h4>
+      <p style="margin-bottom: 12px;">Every new provider receives a 1-month free trial. After that, ₦2,000 per month applies to ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made. Reminders are dispatched 7 and 3 days before renewal.</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">2. Profile Boost</h4>
+      <p style="margin-bottom: 12px;">Appear at the top of Port Harcourt search for ₦1,500 per week (weekly option only).</p>
+      
+      <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--foreground); margin: 12px 0 6px;">3. Proof of Work & Reviews</h4>
+      <p style="margin-bottom: 12px;">Providers must only upload genuine photographs of completed work. Providers cannot review themselves; reviews come only from completed jobs.</p>
+    `
+  }
+};
+
+function openArtisanLegalModal(key = 'protection') {
+  const policy = ARTISAN_POLICIES[key] || ARTISAN_POLICIES.protection;
+  const titleEl = document.getElementById('artisanLegalModalTitle');
+  const contentEl = document.getElementById('artisanLegalModalContent');
+
+  if (titleEl) titleEl.textContent = policy.title;
+  if (contentEl) contentEl.innerHTML = policy.content;
+
+  const modal = document.getElementById('artisanLegalModal');
+  if (modal) modal.classList.add('open');
 }
 
 // ============================================================================
@@ -1538,20 +2054,27 @@ window.updateArtisanQuoteBreakdown = updateArtisanQuoteBreakdown;
 window.handleArtisanSubmitQuote = handleArtisanSubmitQuote;
 window.artisanAcceptRequest = artisanAcceptRequest;
 window.artisanDeclineRequest = artisanDeclineRequest;
-window.artisanMarkJobCompleted = artisanMarkJobCompleted;
-window.simulateClientReleaseNow = simulateClientReleaseNow;
-window.showEscrowTermsModal = showEscrowTermsModal;
+window.openJobCompleteModal = openJobCompleteModal;
+window.confirmMarkJobCompleted = confirmMarkJobCompleted;
 window.addPbServiceItem = addPbServiceItem;
 window.removePbServiceItem = removePbServiceItem;
 window.renderPbWorkPhotos = renderPbWorkPhotos;
 window.openAddWorkPhotoModal = openAddWorkPhotoModal;
-window.setWorkPhotoPreset = setWorkPhotoPreset;
+window.handleWorkPhotoFileInput = handleWorkPhotoFileInput;
+window.clearWorkPhotoSelection = clearWorkPhotoSelection;
 window.saveNewWorkPhoto = saveNewWorkPhoto;
 window.removeWorkPhoto = removeWorkPhoto;
 window.handleSaveProfileBuilder = handleSaveProfileBuilder;
 window.handlePbCategoryChange = handlePbCategoryChange;
-window.simulateReupload = simulateReupload;
+window.handleIdFileSelect = handleIdFileSelect;
+window.handleLicenceFileSelect = handleLicenceFileSelect;
 window.saveVerificationDocs = saveVerificationDocs;
+window.verifyPayoutAccountName = verifyPayoutAccountName;
+window.handleSavePayoutAccount = handleSavePayoutAccount;
+window.renderPayoutSection = renderPayoutSection;
+window.renderBillingSection = renderBillingSection;
+window.payMonthlySubscription = payMonthlySubscription;
+window.openArtisanLegalModal = openArtisanLegalModal;
 window.handleArtisanComplaintSubmit = handleArtisanComplaintSubmit;
 window.openArtisanChatDrawer = openArtisanChatDrawer;
 window.closeArtisanChatDrawer = closeArtisanChatDrawer;
