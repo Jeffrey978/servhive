@@ -4027,15 +4027,12 @@ window.updateAuthUI = function() {
         <a href="/login.html" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none;">
           <span>Log In</span>
         </a>
-        <a href="/login.html#login-artisan" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; font-weight: 700;">
-          <span>🛠️ Pro Portal</span>
+        <a href="/login.html#signup" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; font-weight: 700;">
+          <span>Sign Up</span>
         </a>
       `;
       if (proCtaBtn) {
-        proCtaBtn.style.display = 'inline-flex';
-        proCtaBtn.innerHTML = '<span>🛠️ Pro Portal</span>';
-        proCtaBtn.setAttribute('href', '/login.html#login-artisan');
-        proCtaBtn.onclick = null;
+        proCtaBtn.style.display = 'none';
       }
     } else {
       const isHirer = user.role === 'hirer';
@@ -4047,20 +4044,14 @@ window.updateAuthUI = function() {
         .toUpperCase();
 
       desktopContainer.innerHTML = `
-        ${!isHirer ? `
-          <a href="/artisan.html" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; font-weight: 700; margin-right: 2px;">
-            <span>🛠️ Pro Dashboard &rarr;</span>
-          </a>
-        ` : ''}
-
         <div class="auth-user-menu">
           <button class="auth-user-btn" onclick="toggleUserMenu()">
             <div class="auth-user-avatar" style="background: var(--bg-surface-subtle); color: var(--canvas); border: 1px solid var(--hairline);">
               ${initials}
             </div>
             <span class="auth-user-name">${user.name.split(' ')[0]}</span>
-            <span class="auth-role-tag ${user.role}">
-              ${isHirer ? 'Client' : 'Pro'}
+            <span class="auth-role-tag client">
+              Client
             </span>
             <span style="font-size: 0.72rem; color: var(--text-muted); line-height: 1;">▾</span>
           </button>
@@ -4076,26 +4067,14 @@ window.updateAuthUI = function() {
               </div>
             </div>
 
-            ${!isHirer ? `
-              <a href="/artisan.html" class="auth-dropdown-item" style="text-decoration: none; font-weight: 700; color: var(--amber-dark);">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span>Artisan Pro Dashboard &rarr;</span>
-              </a>
-            ` : `
-              <a href="/login.html#login-artisan" class="auth-dropdown-item" style="text-decoration: none; color: var(--amber-dark); font-weight: 700;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                <span>Artisan Pro Portal / Sign Up</span>
-              </a>
-            `}
-
             <button class="auth-dropdown-item" onclick="toggleUserMenu(); openEscrowHub();">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              <span>Escrow Protection Vault</span>
+              <span>Payment Protection Vault</span>
             </button>
 
-            <button class="auth-dropdown-item" onclick="toggleUserMenu(); switchUserRole();">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 5h18"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 19H3"></path></svg>
-              <span>Switch to ${isHirer ? 'Artisan Pro' : 'Client Portal'} Mode</span>
+            <button class="auth-dropdown-item" onclick="toggleUserMenu(); openMyAccountModal();">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>My Account &amp; Past Jobs</span>
             </button>
 
             <div class="auth-dropdown-divider"></div>
@@ -4109,17 +4088,7 @@ window.updateAuthUI = function() {
       `;
 
       if (proCtaBtn) {
-        if (isHirer) {
-          proCtaBtn.style.display = 'inline-flex';
-          proCtaBtn.innerHTML = '<span>🛠️ Pro Portal</span>';
-          proCtaBtn.setAttribute('href', '/login.html#login-artisan');
-          proCtaBtn.onclick = null;
-        } else {
-          proCtaBtn.style.display = 'inline-flex';
-          proCtaBtn.innerHTML = '<span>🛠️ Pro Dashboard</span>';
-          proCtaBtn.setAttribute('href', '/artisan.html');
-          proCtaBtn.onclick = null;
-        }
+        proCtaBtn.style.display = 'none';
       }
     }
   }
@@ -4129,12 +4098,9 @@ window.updateAuthUI = function() {
       mobileContainer.innerHTML = `
         <div style="display: flex; flex-direction: column; gap: 8px;">
           <a href="/login.html" class="ed-button ed-button-black" style="width: 100%; padding: 11px; font-size: 0.88rem; text-decoration: none; text-align: center;">
-            <span>Log In (Client Portal)</span>
+            <span>Log In</span>
           </a>
-          <a href="/login.html#login-artisan" class="ed-button ed-button-amber" style="width: 100%; padding: 11px; font-size: 0.88rem; font-weight: 800; text-decoration: none; text-align: center;">
-            <span>🛠️ Artisan Pro Login / Register</span>
-          </a>
-          <a href="/login.html#signup" class="ed-button ed-button-black" style="width: 100%; padding: 11px; font-size: 0.88rem; text-decoration: none; text-align: center;">
+          <a href="/login.html#signup" class="ed-button ed-button-amber" style="width: 100%; padding: 11px; font-size: 0.88rem; font-weight: 800; text-decoration: none; text-align: center;">
             <span>Create Client Account</span>
           </a>
         </div>
@@ -4145,23 +4111,13 @@ window.updateAuthUI = function() {
         <div style="background: var(--bg-surface-subtle); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
             <div style="font-weight: 800; font-size: 0.92rem; color: var(--canvas);">${user.name}</div>
-            <span class="auth-role-tag ${user.role}">${isHirer ? 'Client' : 'Pro'}</span>
+            <span class="auth-role-tag client">Client</span>
           </div>
           <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             <span>${user.area || 'Port Harcourt'}</span>
           </div>
         </div>
-
-        ${!isHirer ? `
-          <a href="/artisan.html" class="ed-button ed-button-amber" style="width: 100%; padding: 11px; font-size: 0.88rem; font-weight: 800; text-decoration: none; text-align: center; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span>🛠️ Open Artisan Dashboard &rarr;</span>
-          </a>
-        ` : `
-          <a href="/login.html#login-artisan" class="ed-button ed-button-black" style="width: 100%; padding: 10px; font-size: 0.84rem; text-decoration: none; text-align: center; margin-bottom: 8px; border-color: var(--amber); color: var(--amber-dark); display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span>🛠️ Artisan Pro Portal / Login</span>
-          </a>
-        `}
 
         <button class="ed-button ed-button-black" style="width: 100%; padding: 10px; font-size: 0.84rem; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="handleLogout(); toggleMobileMenu();">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -4993,10 +4949,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Automatic Role-Based Landing: Artisans land directly on their Artisan Dashboard
   const user = state.currentUser;
   if (user && user.role === 'artisan') {
-    if (!window.location.search.includes('view=client')) {
-      window.location.replace('/artisan.html');
-      return;
-    }
+    window.location.replace('/artisan.html');
+    return;
   }
 
   renderFilterPills();

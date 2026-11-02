@@ -18,7 +18,7 @@
         // Automatic Role-Based Landing:
         // If an artisan visits the client marketplace, automatically redirect them to their dedicated Artisan Dashboard
         const user = JSON.parse(localStorage.getItem('servhive_current_user'));
-        if (user && user.role === 'artisan' && !window.location.search.includes('view=client')) {
+        if (user && user.role === 'artisan') {
           window.location.replace('/artisan.html');
         }
       } catch (e) {}
@@ -46,9 +46,6 @@
           <span>My Account</span>
           <span id="navSavedBadge" class="ed-nav-escrow-badge" style="background: var(--teal); display: none;">0</span>
         </a>
-        <a href="/artisan.html" class="ed-nav-link" id="headerProHomeLink" style="color: var(--amber-dark); font-weight: 700;">
-          <span>Artisan Portal</span>
-        </a>
         <a href="javascript:void(0)" onclick="openEscrowHub()" class="ed-nav-link ed-nav-escrow" id="headerEscrowLink">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           <span>Payment Protection</span>
@@ -68,8 +65,8 @@
           <a href="/login.html" class="ed-button ed-button-black ed-btn-compact" style="text-decoration: none;">
             <span>Log In</span>
           </a>
-          <a href="/login.html#login-artisan" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; font-weight: 700;">
-            <span>🛠️ Pro Portal</span>
+          <a href="/login.html#signup" class="ed-button ed-button-amber ed-btn-compact" style="text-decoration: none; font-weight: 700;">
+            <span>Sign Up</span>
           </a>
         </div>
 
@@ -89,9 +86,6 @@
         <a href="javascript:void(0)" onclick="openMyAccountModal(); toggleMobileMenu();" class="ed-mobile-nav-link" style="color: var(--teal); font-weight: 700;">
           👤 My Account (Past Jobs &amp; Saved)
         </a>
-        <a href="/artisan.html" class="ed-mobile-nav-link" style="color: var(--amber-dark); font-weight: 700;">
-          ⚡ Artisan Portal (Dashboard &amp; Payouts)
-        </a>
         <a href="#escrow-how" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">How Payment Protection Works</a>
         <a href="#safety" class="ed-mobile-nav-link" onclick="toggleMobileMenu()">Trust &amp; Verification</a>
         <a href="javascript:void(0)" onclick="openEscrowHub(); toggleMobileMenu();" class="ed-mobile-nav-link" style="color: var(--teal); display: flex; align-items: center; justify-content: space-between;">
@@ -106,9 +100,6 @@
         <div id="mobileAuthArea" style="margin-top: 14px; border-top: 1px solid var(--hairline); padding-top: 14px; display: flex; flex-direction: column; gap: 8px;">
           <a href="/login.html" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; text-decoration: none; text-align: center;">
             <span>Log In (Client Portal)</span>
-          </a>
-          <a href="/login.html#login-artisan" class="ed-button ed-button-amber" style="width: 100%; padding: 12px; font-size: 0.88rem; font-weight: 800; text-decoration: none; text-align: center;">
-            <span>🛠️ Artisan Pro Login / Register</span>
           </a>
           <a href="/login.html#signup" class="ed-button ed-button-black" style="width: 100%; padding: 12px; font-size: 0.88rem; text-decoration: none; text-align: center;">
             <span>Create Client Account</span>
@@ -913,8 +904,7 @@
           <div>
             <h4 class="footer-col-title">Trust &amp; Governance</h4>
             <ul class="footer-links">
-              <li><a href="javascript:void(0)" onclick="openEscrowHub()">Payment Protection Vault</a></li>
-              <li><a href="/artisan.html#verification">Pro Verification Portal</a></li>
+              <li><a href="javascript:void(0)" onclick="openEscrowHub()">Payment Protection Vault</a></li><li><a href="#safety">Verified Artisans Standards</a></li>
               <li><a href="#safety">Trust &amp; Safety Standards</a></li>
               <li><a href="javascript:void(0)" onclick="openLegalModal('privacy')">Masked Contact Privacy</a></li>
             </ul>

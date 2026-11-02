@@ -95,38 +95,17 @@ function loadStoredData() {
     artisanState.currentUser = null;
   }
 
-  // Authentication & Role check
+  // Authentication & Role check: STRICT SEPARATION
   if (!artisanState.currentUser) {
     // Unauthenticated user -> redirect to dedicated artisan login
-    window.location.href = '/login.html#login-artisan';
+    window.location.replace('/login.html#login-artisan');
     return false;
   }
 
-  // If user is currently in client role, switch session seamlessly to their own Artisan Pro profile
+  // Clients DO NOT have access to the Artisan Portal
   if (artisanState.currentUser.role !== 'artisan') {
-    artisanState.currentUser.role = 'artisan';
-    if (!artisanState.currentUser.businessName) {
-      artisanState.currentUser.businessName = `${(artisanState.currentUser.name || 'Master').replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`;
-    }
-    if (!artisanState.currentUser.trade) {
-      artisanState.currentUser.trade = 'Power & Generators';
-      artisanState.currentUser.category = 'power-gen';
-    }
-    if (!artisanState.currentUser.area) {
-      artisanState.currentUser.area = 'Trans-Amadi';
-    }
-    localStorage.setItem('servhive_current_user', JSON.stringify(artisanState.currentUser));
-
-    try {
-      const allUsers = JSON.parse(localStorage.getItem('servhive_users')) || [];
-      const idx = allUsers.findIndex(u => u.id === artisanState.currentUser.id || (u.email && u.email === artisanState.currentUser.email));
-      if (idx !== -1) {
-        allUsers[idx] = artisanState.currentUser;
-      } else {
-        allUsers.push(artisanState.currentUser);
-      }
-      localStorage.setItem('servhive_users', JSON.stringify(allUsers));
-    } catch (e) {}
+    window.location.replace('/index.html');
+    return false;
   }
 
   // Providers list
