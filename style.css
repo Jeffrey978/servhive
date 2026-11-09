@@ -431,6 +431,417 @@ button, input, select, textarea {
   line-height: 1.5;
 }
 
+/* ==================== SHADCN AUTHENTICATION & INPUT-OTP STYLES ==================== */
+.shadcn-auth-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl, 16px);
+  padding: 36px 32px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 20px 25px -5px rgb(0 0 0 / 0.04), 0 8px 10px -6px rgb(0 0 0 / 0.02);
+  transition: var(--transition);
+}
+
+.shadcn-tabs-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: var(--muted);
+  border-radius: var(--radius-lg, 12px);
+  padding: 4px;
+  border: 1px solid var(--border);
+  margin-bottom: 22px;
+}
+
+.shadcn-tab-trigger {
+  padding: 10px 14px;
+  border-radius: calc(var(--radius-lg, 12px) - 3px);
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.shadcn-tab-trigger:hover {
+  color: var(--foreground);
+}
+
+.shadcn-tab-trigger.active {
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  font-weight: 600;
+}
+
+.shadcn-subtabs {
+  display: inline-flex;
+  gap: 6px;
+  padding: 3px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+  margin-bottom: 22px;
+}
+
+.shadcn-subtab-btn {
+  padding: 6px 14px;
+  border-radius: calc(var(--radius-md, 8px) - 2px);
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-main);
+}
+
+.shadcn-subtab-btn:hover {
+  color: var(--foreground);
+}
+
+.shadcn-subtab-btn.active {
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+/* Integrated Phone Input with Nigeria Prefix & Inside-Input Button */
+.shadcn-phone-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md, 8px);
+  background: var(--card);
+  transition: all 0.15s ease;
+  overflow: hidden;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.shadcn-phone-wrap:focus-within {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring-offset);
+}
+
+.shadcn-phone-prefix {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  height: 100%;
+  background: var(--muted);
+  border-right: 1px solid var(--border);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--foreground);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.shadcn-phone-input {
+  flex: 1;
+  border: none !important;
+  outline: none !important;
+  height: 100% !important;
+  padding: 0 12px !important;
+  font-size: 0.9rem !important;
+  font-family: var(--font-body) !important;
+  background: transparent !important;
+  color: var(--foreground) !important;
+  box-shadow: none !important;
+}
+
+.shadcn-phone-action-btn {
+  margin-right: 6px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--font-main);
+  border: 1px solid var(--hairline-amber);
+  background: var(--amber-light);
+  color: var(--amber-dark);
+  border-radius: calc(var(--radius-md, 8px) - 2px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.shadcn-phone-action-btn:hover:not(:disabled) {
+  background: var(--amber);
+  color: #09090b;
+  border-color: var(--amber);
+  transform: translateY(-1px);
+}
+
+.shadcn-phone-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Accessible shadcn Input-OTP Slot Component */
+.shadcn-otp-cardlet {
+  margin-top: 12px;
+  padding: 16px 18px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 12px);
+  animation: shadcnFadeDown 0.22s ease-out;
+}
+
+@keyframes shadcnFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shadcn-otp-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.shadcn-otp-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.shadcn-otp-timer {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--amber-dark);
+  font-family: var(--font-mono, monospace);
+}
+
+.shadcn-otp-slots-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.shadcn-otp-group {
+  display: flex;
+  gap: 6px;
+}
+
+.shadcn-otp-slot {
+  width: 44px;
+  height: 50px;
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-family: var(--font-main);
+  background: var(--card);
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md, 8px);
+  color: var(--foreground);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.shadcn-otp-slot:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring-offset);
+  outline: none;
+  transform: scale(1.04);
+}
+
+.shadcn-otp-slot.filled {
+  border-color: var(--foreground);
+  background: var(--bg-card-hover, var(--card));
+}
+
+.shadcn-otp-dash {
+  font-size: 1.15rem;
+  color: var(--muted-foreground);
+  font-weight: 300;
+  user-select: none;
+}
+
+.shadcn-otp-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+  padding-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .shadcn-otp-actions {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.shadcn-resend-link {
+  background: none;
+  border: none;
+  color: var(--amber-dark);
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.shadcn-resend-link:hover:not(:disabled) {
+  color: var(--primary);
+}
+
+.shadcn-resend-link:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Enhanced Inputs with Icons */
+.shadcn-input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.shadcn-input-leading-icon {
+  position: absolute;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+.shadcn-input-with-icon {
+  padding-left: 38px !important;
+}
+
+.shadcn-field-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 4px;
+}
+
+/* Primary Button with Elevation */
+.shadcn-btn-primary {
+  width: 100%;
+  height: 46px;
+  border-radius: var(--radius-md, 8px);
+  background: var(--amber);
+  color: #09090b;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  font-family: var(--font-main);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  margin-top: 8px;
+}
+
+.shadcn-btn-primary:hover:not(:disabled) {
+  background: var(--amber-dark);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.35);
+}
+
+.shadcn-btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.shadcn-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Verified Artisan Showcase Card in Right Column */
+.shadcn-artisan-hero-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl, 16px);
+  padding: 24px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 10px 15px -3px rgb(0 0 0 / 0.03);
+  margin-bottom: 20px;
+}
+
+.shadcn-artisan-profile-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.shadcn-artisan-avatar-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--amber);
+  flex-shrink: 0;
+}
+
+.shadcn-artisan-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shadcn-verified-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(15, 118, 110, 0.12);
+  color: var(--teal);
+  border: 1px solid var(--hairline-teal);
+}
+
+.shadcn-escrow-pill-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg, 12px);
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--foreground);
+  line-height: 1.45;
+}
+
 .card-content {
   padding: 24px;
   padding-top: 0;
@@ -2049,6 +2460,417 @@ button, input, select, textarea {
   font-size: 0.8125rem;
   color: var(--muted-foreground);
   line-height: 1.5;
+}
+
+/* ==================== SHADCN AUTHENTICATION & INPUT-OTP STYLES ==================== */
+.shadcn-auth-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl, 16px);
+  padding: 36px 32px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 20px 25px -5px rgb(0 0 0 / 0.04), 0 8px 10px -6px rgb(0 0 0 / 0.02);
+  transition: var(--transition);
+}
+
+.shadcn-tabs-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: var(--muted);
+  border-radius: var(--radius-lg, 12px);
+  padding: 4px;
+  border: 1px solid var(--border);
+  margin-bottom: 22px;
+}
+
+.shadcn-tab-trigger {
+  padding: 10px 14px;
+  border-radius: calc(var(--radius-lg, 12px) - 3px);
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.shadcn-tab-trigger:hover {
+  color: var(--foreground);
+}
+
+.shadcn-tab-trigger.active {
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  font-weight: 600;
+}
+
+.shadcn-subtabs {
+  display: inline-flex;
+  gap: 6px;
+  padding: 3px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+  margin-bottom: 22px;
+}
+
+.shadcn-subtab-btn {
+  padding: 6px 14px;
+  border-radius: calc(var(--radius-md, 8px) - 2px);
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-main);
+}
+
+.shadcn-subtab-btn:hover {
+  color: var(--foreground);
+}
+
+.shadcn-subtab-btn.active {
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+/* Integrated Phone Input with Nigeria Prefix & Inside-Input Button */
+.shadcn-phone-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md, 8px);
+  background: var(--card);
+  transition: all 0.15s ease;
+  overflow: hidden;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.shadcn-phone-wrap:focus-within {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring-offset);
+}
+
+.shadcn-phone-prefix {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  height: 100%;
+  background: var(--muted);
+  border-right: 1px solid var(--border);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--foreground);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.shadcn-phone-input {
+  flex: 1;
+  border: none !important;
+  outline: none !important;
+  height: 100% !important;
+  padding: 0 12px !important;
+  font-size: 0.9rem !important;
+  font-family: var(--font-body) !important;
+  background: transparent !important;
+  color: var(--foreground) !important;
+  box-shadow: none !important;
+}
+
+.shadcn-phone-action-btn {
+  margin-right: 6px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--font-main);
+  border: 1px solid var(--hairline-amber);
+  background: var(--amber-light);
+  color: var(--amber-dark);
+  border-radius: calc(var(--radius-md, 8px) - 2px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.shadcn-phone-action-btn:hover:not(:disabled) {
+  background: var(--amber);
+  color: #09090b;
+  border-color: var(--amber);
+  transform: translateY(-1px);
+}
+
+.shadcn-phone-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Accessible shadcn Input-OTP Slot Component */
+.shadcn-otp-cardlet {
+  margin-top: 12px;
+  padding: 16px 18px;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 12px);
+  animation: shadcnFadeDown 0.22s ease-out;
+}
+
+@keyframes shadcnFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shadcn-otp-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.shadcn-otp-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.shadcn-otp-timer {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--amber-dark);
+  font-family: var(--font-mono, monospace);
+}
+
+.shadcn-otp-slots-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.shadcn-otp-group {
+  display: flex;
+  gap: 6px;
+}
+
+.shadcn-otp-slot {
+  width: 44px;
+  height: 50px;
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-family: var(--font-main);
+  background: var(--card);
+  border: 1px solid var(--input);
+  border-radius: var(--radius-md, 8px);
+  color: var(--foreground);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.shadcn-otp-slot:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px var(--ring-offset);
+  outline: none;
+  transform: scale(1.04);
+}
+
+.shadcn-otp-slot.filled {
+  border-color: var(--foreground);
+  background: var(--bg-card-hover, var(--card));
+}
+
+.shadcn-otp-dash {
+  font-size: 1.15rem;
+  color: var(--muted-foreground);
+  font-weight: 300;
+  user-select: none;
+}
+
+.shadcn-otp-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+  padding-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .shadcn-otp-actions {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.shadcn-resend-link {
+  background: none;
+  border: none;
+  color: var(--amber-dark);
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.shadcn-resend-link:hover:not(:disabled) {
+  color: var(--primary);
+}
+
+.shadcn-resend-link:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Enhanced Inputs with Icons */
+.shadcn-input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.shadcn-input-leading-icon {
+  position: absolute;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+.shadcn-input-with-icon {
+  padding-left: 38px !important;
+}
+
+.shadcn-field-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 4px;
+}
+
+/* Primary Button with Elevation */
+.shadcn-btn-primary {
+  width: 100%;
+  height: 46px;
+  border-radius: var(--radius-md, 8px);
+  background: var(--amber);
+  color: #09090b;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  font-family: var(--font-main);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  margin-top: 8px;
+}
+
+.shadcn-btn-primary:hover:not(:disabled) {
+  background: var(--amber-dark);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.35);
+}
+
+.shadcn-btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.shadcn-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Verified Artisan Showcase Card in Right Column */
+.shadcn-artisan-hero-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl, 16px);
+  padding: 24px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 10px 15px -3px rgb(0 0 0 / 0.03);
+  margin-bottom: 20px;
+}
+
+.shadcn-artisan-profile-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.shadcn-artisan-avatar-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--amber);
+  flex-shrink: 0;
+}
+
+.shadcn-artisan-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shadcn-verified-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(15, 118, 110, 0.12);
+  color: var(--teal);
+  border: 1px solid var(--hairline-teal);
+}
+
+.shadcn-escrow-pill-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg, 12px);
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--foreground);
+  line-height: 1.45;
 }
 
 /* User Profile Badge & Dropdown in Header */

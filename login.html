@@ -70,7 +70,7 @@
   <main class="auth-container" style="margin-top: 10px; margin-bottom: 40px;">
 
     <!-- Left Column: Interactive Auth Suite Card -->
-    <div class="auth-card" style="opacity: 1 !important; visibility: visible !important;">
+    <div class="auth-card shadcn-auth-card" style="opacity: 1 !important; visibility: visible !important;">
 
       <!-- Top Card Breadcrumb -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
@@ -81,39 +81,30 @@
         <span class="badge badge-secondary" id="authNavEyebrow" style="font-size: 0.72rem;">Client Portal</span>
       </div>
 
-      <!-- Dual Role Selection Control -->
-      <div class="auth-role-tabs">
-        <button type="button" id="roleBtnHirer" class="auth-role-btn active" onclick="setAuthRole('hirer')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
+      <!-- Dual Role Selection Control (shadcn Segmented Tabs) -->
+      <div class="shadcn-tabs-list">
+        <button type="button" id="roleBtnHirer" class="shadcn-tab-trigger active" onclick="setAuthRole('hirer')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <div style="text-align: left; line-height: 1.2;">
-            <div style="font-weight: 700; font-size: 0.86rem;">Client Portal</div>
-            <div style="font-size: 0.68rem; opacity: 0.75; font-weight: 500;">Hire Vetted Artisans</div>
-          </div>
+          <span>Client (Hirer)</span>
         </button>
-        <button type="button" id="roleBtnArtisan" class="auth-role-btn" onclick="setAuthRole('artisan')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path
-              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
-            </path>
+        <button type="button" id="roleBtnArtisan" class="shadcn-tab-trigger" onclick="setAuthRole('artisan')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
           </svg>
-          <div style="text-align: left; line-height: 1.2;">
-            <div style="font-weight: 700; font-size: 0.86rem;">Artisan Pro Portal</div>
-            <div style="font-size: 0.68rem; opacity: 0.75; font-weight: 500;">Quotes, Jobs &amp; Payouts</div>
-          </div>
+          <span>Artisan Pro Portal</span>
         </button>
       </div>
 
-      <!-- Mode Selection Tabs: Log In vs Sign Up -->
-      <div class="auth-mode-tabs">
-        <button type="button" id="authModeTabLogin" class="auth-mode-tab active" onclick="setAuthMode('login')">
-          Log In
+      <!-- Mode Switcher: Sign In vs Create Account -->
+      <div class="shadcn-subtabs">
+        <button type="button" id="authModeTabLogin" class="shadcn-subtab-btn active" onclick="setAuthMode('login')">
+          Sign In
         </button>
-        <button type="button" id="authModeTabSignup" class="auth-mode-tab" onclick="setAuthMode('signup')">
+        <button type="button" id="authModeTabSignup" class="shadcn-subtab-btn" onclick="setAuthMode('signup')">
           Create Account
         </button>
       </div>
@@ -345,9 +336,11 @@
 
     async function requestFirebaseOtp(role) {
       const phoneInput = document.getElementById(role + 'Phone');
-      const codeInput = document.getElementById(role + 'Code');
       const btn = document.getElementById(role + 'OtpBtn');
       const timerSpan = document.getElementById(role + 'OtpTimer');
+      const resendBtn = document.getElementById(role + 'ResendBtn');
+      const otpSection = document.getElementById(role + 'OtpSection');
+      const targetSpan = document.getElementById(role + 'OtpTarget');
 
       if (!phoneInput || !phoneInput.value.trim()) {
         showInlineNotice('⚠️ Please enter your Nigerian phone number first before requesting an SMS code.', 'error');
@@ -379,16 +372,25 @@
           throw new Error('reCAPTCHA could not be initialized. Please refresh the page and try again.');
         }
 
-        showInlineNotice(`📲 Dispatching real SMS code to <strong>${formattedPhone}</strong> via Firebase...`, 'info');
+        showInlineNotice(`📲 Dispatching 6-digit SMS code to <strong>${formattedPhone}</strong> via Firebase...`, 'info');
 
         const confirmationResult = await firebase.auth().signInWithPhoneNumber(formattedPhone, verifier);
         window.phoneConfirmationResult = confirmationResult;
 
-        if (codeInput) {
-          codeInput.disabled = false;
-          codeInput.value = '';
-          codeInput.placeholder = '• • • • • •';
-          codeInput.focus();
+        // Reveal the shadcn Input-OTP slot component
+        if (otpSection) {
+          otpSection.style.display = 'block';
+        }
+        if (targetSpan) {
+          targetSpan.textContent = `Sent to ${formattedPhone}`;
+        }
+        setupOtpSlotInputs(role);
+
+        // Focus the first slot immediately
+        const firstSlot = document.querySelector(`.shadcn-otp-slot[data-role="${role}"][data-index="0"]`);
+        if (firstSlot) {
+          firstSlot.focus();
+          firstSlot.select();
         }
 
         showInlineNotice(`✓ Verification code sent! Please enter the 6-digit SMS code delivered to <strong>${formattedPhone}</strong>.`, 'success');
@@ -396,22 +398,24 @@
         let secondsLeft = 60;
         if (btn) {
           btn.disabled = true;
-          btn.innerHTML = `Sent ✓`;
+          btn.innerHTML = `Code Sent ✓`;
         }
-        if (timerSpan) timerSpan.textContent = `Resend in ${secondsLeft}s`;
+        if (resendBtn) resendBtn.disabled = true;
+        if (timerSpan) timerSpan.textContent = `(${secondsLeft}s)`;
 
         if (otpCountdownTimer) clearInterval(otpCountdownTimer);
         otpCountdownTimer = setInterval(() => {
           secondsLeft--;
           if (secondsLeft > 0) {
-            if (timerSpan) timerSpan.textContent = `Resend in ${secondsLeft}s`;
+            if (timerSpan) timerSpan.textContent = `(${secondsLeft}s)`;
           } else {
             clearInterval(otpCountdownTimer);
             otpCountdownTimer = null;
             if (timerSpan) timerSpan.textContent = '';
+            if (resendBtn) resendBtn.disabled = false;
             if (btn) {
               btn.disabled = false;
-              btn.innerHTML = `Resend OTP`;
+              btn.innerHTML = `<span>Resend</span>`;
             }
           }
         }, 1000);
@@ -420,7 +424,7 @@
         console.error('Firebase signInWithPhoneNumber error:', error);
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = `Send OTP`;
+          btn.innerHTML = `Send Code`;
         }
         if (recaptchaVerifier) {
           try { recaptchaVerifier.clear(); } catch(e) {}
@@ -440,6 +444,75 @@
 
         showInlineNotice(`⚠️ <strong>SMS Error:</strong> ${errorMsg}`, 'error');
       }
+    }
+
+    // Accessible shadcn Input-OTP Slot Input Interaction Manager
+    function setupOtpSlotInputs(role) {
+      const container = document.getElementById(role + 'OtpSlotsRow');
+      if (!container) return;
+      const slots = container.querySelectorAll('.shadcn-otp-slot');
+      const hiddenInput = document.getElementById(role + 'Code');
+
+      function syncOtpValue() {
+        let code = '';
+        slots.forEach(s => {
+          code += (s.value || '').trim();
+          s.classList.toggle('filled', s.value.length > 0);
+        });
+        if (hiddenInput) {
+          hiddenInput.value = code;
+        }
+      }
+
+      slots.forEach((slot, idx) => {
+        // Prevent duplicate listener attachments
+        if (slot.dataset.bound) return;
+        slot.dataset.bound = 'true';
+
+        slot.addEventListener('input', (e) => {
+          const raw = e.target.value.replace(/[^0-9]/g, '');
+          slot.value = raw ? raw[raw.length - 1] : '';
+          syncOtpValue();
+          if (slot.value && idx < slots.length - 1) {
+            slots[idx + 1].focus();
+            slots[idx + 1].select();
+          }
+        });
+
+        slot.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace') {
+            if (!slot.value && idx > 0) {
+              slots[idx - 1].focus();
+              slots[idx - 1].value = '';
+              syncOtpValue();
+              e.preventDefault();
+            } else {
+              slot.value = '';
+              syncOtpValue();
+            }
+          } else if (e.key === 'ArrowLeft' && idx > 0) {
+            slots[idx - 1].focus();
+            e.preventDefault();
+          } else if (e.key === 'ArrowRight' && idx < slots.length - 1) {
+            slots[idx + 1].focus();
+            e.preventDefault();
+          }
+        });
+
+        slot.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasteText = (e.clipboardData || window.clipboardData).getData('text') || '';
+          const digits = pasteText.replace(/[^0-9]/g, '').slice(0, 6);
+          if (digits) {
+            digits.split('').forEach((d, dIdx) => {
+              if (slots[dIdx]) slots[dIdx].value = d;
+            });
+            syncOtpValue();
+            const targetIdx = Math.min(digits.length, slots.length - 1);
+            slots[targetIdx].focus();
+          }
+        });
+      });
     }
 
     // Local State for Auth Landing Page
@@ -590,10 +663,16 @@
 
       if (isLogin) {
         container.innerHTML = `
-          <form onsubmit="handleLoginSubmit(event)">
+          <form onsubmit="handleLoginSubmit(event)" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="auth-input-group">
               <label class="auth-label">Email or Phone Number</label>
-              <input type="text" id="loginContact" required class="auth-input" placeholder="e.g. 0803 123 4567 or email@domain.com" />
+              <div class="shadcn-input-icon-wrap">
+                <svg class="shadcn-input-leading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <input type="text" id="loginContact" required class="auth-input shadcn-input-with-icon" placeholder="0803 123 4567 or email@domain.com" autocomplete="username" />
+              </div>
             </div>
 
             <div class="auth-input-group">
@@ -603,62 +682,117 @@
                   Forgot password?
                 </a>
               </div>
-              <input type="password" id="loginPassword" required class="auth-input" placeholder="Enter your password" />
-              <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-              </button>
+              <div class="shadcn-input-icon-wrap">
+                <svg class="shadcn-input-leading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input type="password" id="loginPassword" required class="auth-input shadcn-input-with-icon" placeholder="Enter your password" autocomplete="current-password" />
+                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 6px;">
               <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-muted); cursor: pointer;">
-                <input type="checkbox" checked style="accent-color: var(--amber-dark);">
+                <input type="checkbox" checked style="accent-color: var(--amber-dark); width: 16px; height: 16px; border-radius: 4px;">
                 <span>Remember this device</span>
               </label>
               <span style="font-size: 0.76rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                Payment Protection (Paystack)
+                Paystack Escrow
               </span>
             </div>
 
-            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 13px; font-size: 0.95rem;">
-              <span>${isHirer ? 'Sign In to Client Portal &rarr;' : 'Access Artisan Pro Portal &rarr;'}</span>
+            <button type="submit" class="shadcn-btn-primary">
+              <span>${isHirer ? 'Sign In to Client Portal' : 'Access Artisan Pro Portal'}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
 
-            <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
+            <!-- Fast Demo Account Pill Buttons -->
+            <div style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--text-muted);">⚡ Instant Demo Sign-In</span>
+                <span style="font-size: 0.7rem; color: var(--amber-dark); font-weight: 600;">Click to autofill</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button type="button" onclick="quickFillDemo('hirer')" class="btn btn-outline" style="font-size: 0.78rem; padding: 7px 10px; justify-content: center; height: auto;">
+                  👤 Demo Client (Tonye)
+                </button>
+                <button type="button" onclick="quickFillDemo('artisan')" class="btn btn-outline" style="font-size: 0.78rem; padding: 7px 10px; justify-content: center; height: auto;">
+                  ⚡ Demo Pro (Tamuno)
+                </button>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 10px; font-size: 0.86rem; color: var(--text-muted);">
               ${isHirer ? "Don't have a Client account?" : "New to Servhive PH Artisan Pro?"}
-              <a href="javascript:void(0)" onclick="setAuthMode('signup')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
+              <a href="javascript:void(0)" onclick="setAuthMode('signup')" style="color: var(--amber-dark); font-weight: 700; text-decoration: none; margin-left: 4px;">
                 Create an Account &rarr;
               </a>
             </div>
           </form>
         `;
       } else if (isHirer) {
-        // Hirer Signup Form: Phone number + Code (easier than email)
+        // Hirer Signup: Full Name + Shadcn Unified Phone Input + Input-OTP component
         container.innerHTML = `
-          <form onsubmit="handleHirerSignupSubmit(event)">
+          <form onsubmit="handleHirerSignupSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
             <div class="auth-input-group">
               <label class="auth-label">Full Name</label>
-              <input type="text" id="hirerFullName" required class="auth-input" placeholder="e.g. Tonye Briggs" />
+              <div class="shadcn-input-icon-wrap">
+                <svg class="shadcn-input-leading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <input type="text" id="hirerFullName" required class="auth-input shadcn-input-with-icon" placeholder="e.g. Tonye Briggs" autocomplete="name" />
+              </div>
             </div>
 
-            <div class="auth-field-grid">
-              <div class="auth-input-group">
-                <label class="auth-label">Phone Number (+234)</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" style="flex: 1;" />
-                  <button type="button" id="hirerOtpBtn" class="ed-button ed-button-amber" onclick="requestFirebaseOtp('hirer')" style="padding: 0 16px; height: 40px; font-size: 0.82rem; font-weight: 700; white-space: nowrap; border-radius: var(--radius-sm); border: none; cursor: pointer;">
-                    Send OTP
-                  </button>
+            <!-- Integrated Shadcn Phone Input with Nigerian +234 flag & Send Code button inside -->
+            <div class="auth-input-group">
+              <label class="auth-label">Nigerian Phone Number (SMS Verification)</label>
+              <div class="shadcn-phone-wrap">
+                <div class="shadcn-phone-prefix">
+                  <span style="font-size: 1.15rem; line-height: 1;">🇳🇬</span>
+                  <span>+234</span>
+                </div>
+                <input type="tel" id="hirerPhone" required class="shadcn-phone-input" placeholder="0803 123 4567" autocomplete="tel" />
+                <button type="button" id="hirerOtpBtn" class="shadcn-phone-action-btn" onclick="requestFirebaseOtp('hirer')">
+                  Send Code
+                </button>
+              </div>
+              <span class="shadcn-field-hint">We'll text a 6-digit confirmation code via Firebase Auth.</span>
+            </div>
+
+            <!-- Shadcn Input-OTP Slot Component (Revealed when Send Code is clicked) -->
+            <div id="hirerOtpSection" class="shadcn-otp-cardlet" style="display: none;">
+              <div class="shadcn-otp-meta">
+                <span class="shadcn-otp-title">Enter 6-Digit SMS Code</span>
+                <span id="hirerOtpTimer" class="shadcn-otp-timer"></span>
+              </div>
+              <div class="shadcn-otp-slots-row" id="hirerOtpSlotsRow">
+                <div class="shadcn-otp-group">
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="hirer" data-index="0" autofocus />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="hirer" data-index="1" />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="hirer" data-index="2" />
+                </div>
+                <span class="shadcn-otp-dash">&ndash;</span>
+                <div class="shadcn-otp-group">
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="hirer" data-index="3" />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="hirer" data-index="4" />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="hirer" data-index="5" />
                 </div>
               </div>
-              <div class="auth-input-group">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <label class="auth-label" style="margin-bottom: 0;">SMS Verification Code</label>
-                  <span id="hirerOtpTimer" style="font-size: 0.75rem; color: var(--amber-dark); font-weight: 700;"></span>
-                </div>
-                <input type="text" id="hirerCode" required maxlength="6" disabled class="auth-input" placeholder="Click 'Send OTP' first" style="letter-spacing: 4px; font-weight: 800; text-align: center; margin-top: 6px;" />
+              <div class="shadcn-otp-actions">
+                <span id="hirerOtpTarget">Sent via SMS</span>
+                <button type="button" id="hirerResendBtn" class="shadcn-resend-link" onclick="requestFirebaseOtp('hirer')">
+                  Resend Code
+                </button>
               </div>
             </div>
+            <!-- Hidden input holding current full 6-digit string for standard validation -->
+            <input type="hidden" id="hirerCode" value="" />
 
             <div class="auth-input-group">
               <label class="auth-label">Primary Port Harcourt Location / Estate</label>
@@ -679,93 +813,119 @@
             <div class="auth-field-grid">
               <div class="auth-input-group">
                 <label class="auth-label">Password</label>
-                <input type="password" id="hirerPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
-                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('hirerPassword', this)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                </button>
+                <div class="shadcn-input-icon-wrap">
+                  <svg class="shadcn-input-leading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <input type="password" id="hirerPassword" required minlength="6" class="auth-input shadcn-input-with-icon" placeholder="Min. 6 chars" />
+                  <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('hirerPassword', this)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
               </div>
               <div class="auth-input-group">
                 <label class="auth-label">Email (Optional)</label>
-                <input type="email" id="hirerEmail" class="auth-input" placeholder="tonye@example.com" />
+                <div class="shadcn-input-icon-wrap">
+                  <svg class="shadcn-input-leading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <input type="email" id="hirerEmail" class="auth-input shadcn-input-with-icon" placeholder="tonye@example.com" />
+                </div>
               </div>
             </div>
 
             <label class="auth-checkbox-label">
-              <input type="checkbox" id="hirerTerms" required checked />
+              <input type="checkbox" id="hirerTerms" required checked style="accent-color: var(--amber-dark); width: 16px; height: 16px; border-radius: 4px;" />
               <span>I accept the <a href="javascript:void(0)" onclick="openLegalModal('terms')" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Terms of Use</a> and <a href="javascript:void(0)" onclick="openLegalModal('privacy')" style="color: var(--teal); font-weight: 700; text-decoration: underline;">Privacy Policy</a>.</span>
             </label>
 
-            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
-              <span>Register for Client Portal &rarr;</span>
+            <button type="submit" class="shadcn-btn-primary">
+              <span>Register for Client Portal</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
 
-            <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
+            <div style="text-align: center; margin-top: 10px; font-size: 0.86rem; color: var(--text-muted);">
               Already have an account? 
-              <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
+              <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 700; text-decoration: none; margin-left: 4px;">
                 Log in here &rarr;
               </a>
             </div>
           </form>
         `;
       } else {
-        // Artisan / Pro Signup Form
+        // Artisan / Pro Signup: 1-Month Free Banner + Business Name + Phone + Input-OTP + Category
         container.innerHTML = `
-          <form onsubmit="handleArtisanSignupSubmit(event)">
-            <!-- 1-Month Free Promo Callout Banner -->
-            <div style="background: var(--amber-light); border: 1px solid var(--hairline-amber); padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 18px;">
-              <div style="font-weight: 800; font-size: 0.9rem; color: var(--amber-dark); margin-bottom: 2px;">
-                🎁 1 Month Free Trial for New Providers
-              </div>
-              <div style="font-size: 0.8rem; color: var(--canvas-muted); line-height: 1.45;">
-                1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, the profile is hidden until payment is made. 5% commission applies to jobs paid through the app.
+          <form onsubmit="handleArtisanSignupSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
+            <!-- 1-Month Free Promo Callout Banner (shadcn Alert Style) -->
+            <div style="background: var(--secondary); border: 1px solid var(--border); padding: 14px 16px; border-radius: var(--radius-lg); display: flex; gap: 12px; align-items: flex-start;">
+              <span style="font-size: 1.35rem; line-height: 1;">🎁</span>
+              <div>
+                <div style="font-weight: 700; font-size: 0.88rem; color: var(--foreground); margin-bottom: 2px;">
+                  First 1 Month Free for All New Providers
+                </div>
+                <div style="font-size: 0.79rem; color: var(--muted-foreground); line-height: 1.45;">
+                  Experience verified Port Harcourt bookings risk-free. After month 1, simple ₦2,000/mo flat subscription and 5% commission on jobs completed through the app.
+                </div>
               </div>
             </div>
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
                 <label class="auth-label">Full Legal Name</label>
-                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Tonye Briggs" />
+                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Tamuno George" />
               </div>
               <div class="auth-input-group">
-                <label class="auth-label">Business Name</label>
-                <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Precision Engineering & Repair" />
+                <label class="auth-label">Business / Workshop Name</label>
+                <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Tamuno Precision Power" />
               </div>
             </div>
 
-            <div class="auth-field-grid">
-              <div class="auth-input-group">
-                <label class="auth-label">Phone Number (+234)</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" style="flex: 1;" />
-                  <button type="button" id="artisanOtpBtn" class="ed-button ed-button-amber" onclick="requestFirebaseOtp('artisan')" style="padding: 0 16px; height: 40px; font-size: 0.82rem; font-weight: 700; white-space: nowrap; border-radius: var(--radius-sm); border: none; cursor: pointer;">
-                    Send OTP
-                  </button>
+            <!-- Integrated Shadcn Phone Input with Nigerian +234 flag & Send Code button inside -->
+            <div class="auth-input-group">
+              <label class="auth-label">Nigerian Phone Number (SMS Verification)</label>
+              <div class="shadcn-phone-wrap">
+                <div class="shadcn-phone-prefix">
+                  <span style="font-size: 1.15rem; line-height: 1;">🇳🇬</span>
+                  <span>+234</span>
                 </div>
+                <input type="tel" id="artisanPhone" required class="shadcn-phone-input" placeholder="0802 345 6789" autocomplete="tel" />
+                <button type="button" id="artisanOtpBtn" class="shadcn-phone-action-btn" onclick="requestFirebaseOtp('artisan')">
+                  Send Code
+                </button>
               </div>
-              <div class="auth-input-group">
-                <label class="auth-label">Email Address</label>
-                <input type="email" id="artisanEmail" class="auth-input" placeholder="e.g. workshop@servhive.ng" />
-              </div>
+              <span class="shadcn-field-hint">We will text a 6-digit confirmation code via Firebase Auth.</span>
             </div>
 
-            <div class="auth-field-grid">
-              <div class="auth-input-group">
-                <label class="auth-label">Years of Experience</label>
-                <select id="artisanExp" class="auth-input">
-                  <option value="1-3 years">1 – 3 years (Junior Pro)</option>
-                  <option value="3-5 years" selected>3 – 5 years (Established)</option>
-                  <option value="5-10 years">5 – 10 years (Senior Craftsman)</option>
-                  <option value="10+ years">10+ years (Master Technician)</option>
-                </select>
+            <!-- Shadcn Input-OTP Slot Component (Revealed when Send Code is clicked) -->
+            <div id="artisanOtpSection" class="shadcn-otp-cardlet" style="display: none;">
+              <div class="shadcn-otp-meta">
+                <span class="shadcn-otp-title">Enter 6-Digit SMS Code</span>
+                <span id="artisanOtpTimer" class="shadcn-otp-timer"></span>
               </div>
-              <div class="auth-input-group">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <label class="auth-label" style="margin-bottom: 0;">SMS Verification Code</label>
-                  <span id="artisanOtpTimer" style="font-size: 0.75rem; color: var(--amber-dark); font-weight: 700;"></span>
+              <div class="shadcn-otp-slots-row" id="artisanOtpSlotsRow">
+                <div class="shadcn-otp-group">
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="artisan" data-index="0" autofocus />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="artisan" data-index="1" />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="artisan" data-index="2" />
                 </div>
-                <input type="text" id="artisanCode" required maxlength="6" disabled class="auth-input" placeholder="Click 'Send OTP' first" style="letter-spacing: 4px; font-weight: 800; text-align: center; margin-top: 6px;" />
+                <span class="shadcn-otp-dash">&ndash;</span>
+                <div class="shadcn-otp-group">
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="artisan" data-index="3" />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="artisan" data-index="4" />
+                  <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-role="artisan" data-index="5" />
+                </div>
+              </div>
+              <div class="shadcn-otp-actions">
+                <span id="artisanOtpTarget">Sent via SMS</span>
+                <button type="button" id="artisanResendBtn" class="shadcn-resend-link" onclick="requestFirebaseOtp('artisan')">
+                  Resend Code
+                </button>
               </div>
             </div>
+            <!-- Hidden input holding current full 6-digit string for standard validation -->
+            <input type="hidden" id="artisanCode" value="" />
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
@@ -780,7 +940,7 @@
                     <option value="phone-gadgets:Phone &amp; Gadget Repair">Phone &amp; Gadget Repair</option>
                     <option value="car-wash:Car Wash &amp; Auto Detailing">Car Wash &amp; Auto Detailing</option>
                     <option value="pets-vet:Pets &amp; Veterinary Care">Pets &amp; Veterinary Care</option>
-                    <option value="power-gen:Power &amp; Generators">Power &amp; Generators</option>
+                    <option value="power-gen:Power &amp; Generators" selected>Power &amp; Generators</option>
                     <option value="solar-tech:Solar, Inverters &amp; CCTV">Solar, Inverters &amp; CCTV</option>
                     <option value="interior-pop:Interior POP Ceilings &amp; Tiling">Interior POP Ceilings &amp; Tiling</option>
                     <option value="plumbing:Plumbing &amp; Water Pumps">Plumbing &amp; Water Pumps</option>
@@ -809,7 +969,7 @@
               </div>
 
               <div class="auth-input-group">
-                <label class="auth-label">Operating Base Area (Port Harcourt)</label>
+                <label class="auth-label">Operating Base (Port Harcourt)</label>
                 <select id="artisanArea" class="auth-input">
                   <option value="Trans-Amadi">Trans-Amadi / Slaughter</option>
                   <option value="Peter Odili Road">Peter Odili Road</option>
@@ -826,11 +986,13 @@
 
             <div class="auth-field-grid">
               <div class="auth-input-group">
-                <label class="auth-label">Password</label>
-                <input type="password" id="artisanPassword" required minlength="6" class="auth-input" placeholder="Min. 6 characters" />
-                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                </button>
+                <label class="auth-label">Years of Experience</label>
+                <select id="artisanExp" class="auth-input">
+                  <option value="1-3 years">1 – 3 years (Junior Pro)</option>
+                  <option value="3-5 years" selected>3 – 5 years (Established)</option>
+                  <option value="5-10 years">5 – 10 years (Senior Craftsman)</option>
+                  <option value="10+ years">10+ years (Master Technician)</option>
+                </select>
               </div>
               <div class="auth-input-group">
                 <label class="auth-label">Starting Base Rate (₦)</label>
@@ -838,18 +1000,39 @@
               </div>
             </div>
 
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Password</label>
+                <div class="shadcn-input-icon-wrap">
+                  <svg class="shadcn-input-leading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <input type="password" id="artisanPassword" required minlength="6" class="auth-input shadcn-input-with-icon" placeholder="Min. 6 chars" />
+                  <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('artisanPassword', this)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="auth-input-group">
+                <label class="auth-label">Email (Optional)</label>
+                <input type="email" id="artisanEmail" class="auth-input" placeholder="e.g. workshop@servhive.ng" />
+              </div>
+            </div>
+
             <label class="auth-checkbox-label">
-              <input type="checkbox" id="artisanTerms" required checked />
+              <input type="checkbox" id="artisanTerms" required checked style="accent-color: var(--amber-dark); width: 16px; height: 16px; border-radius: 4px;" />
               <span>I accept the <a href="javascript:void(0)" onclick="openLegalModal('provider')" style="color: var(--amber-dark); font-weight: 700; text-decoration: underline;">Provider Agreement</a> and <a href="javascript:void(0)" onclick="openLegalModal('privacy')" style="color: var(--amber-dark); font-weight: 700; text-decoration: underline;">Privacy Policy</a>.</span>
             </label>
 
-            <button type="submit" class="ed-button ed-button-amber" style="width: 100%; padding: 14px; font-size: 0.95rem;">
-              <span>Register as Provider &rarr;</span>
+            <button type="submit" class="shadcn-btn-primary">
+              <span>Register as Verified Provider</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
 
-            <div style="text-align: center; margin-top: 20px; font-size: 0.86rem; color: var(--text-muted);">
+            <div style="text-align: center; margin-top: 10px; font-size: 0.86rem; color: var(--text-muted);">
               Already registered as a Provider? 
-              <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 800; text-decoration: none; margin-left: 4px;">
+              <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 700; text-decoration: none; margin-left: 4px;">
                 Log in here &rarr;
               </a>
             </div>
@@ -875,56 +1058,62 @@
 
       if (isHirer) {
         container.innerHTML = `
-          <div class="auth-trust-card">
-            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 18px; color: var(--canvas);">
-              Why Use Servhive Client Portal?
-            </h3>
+          <!-- Verified PH Artisan Social Proof Card -->
+          <div class="shadcn-artisan-hero-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--muted-foreground);">
+                Verified Port Harcourt Craftsman
+              </span>
+              <span class="shadcn-verified-badge-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                ID Checked
+              </span>
+            </div>
 
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
+            <div class="shadcn-artisan-profile-row">
+              <div class="shadcn-artisan-avatar-wrap">
+                <img src="/assets/hero_tradesman.jpg" alt="Tamuno George" />
+              </div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <h4 style="font-size: 0.98rem; font-weight: 800; color: var(--foreground); margin: 0;">Tamuno George</h4>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--muted-foreground); margin-top: 1px;">
+                  Tamuno Precision Power Works &bull; Trans-Amadi
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 0.76rem;">
+                  <span style="color: #f59e0b; font-weight: 800; display: inline-flex; align-items: center; gap: 2px;">
+                    ★ 4.95
+                  </span>
+                  <span style="color: var(--muted-foreground);">(48 jobs completed)</span>
+                  <span style="color: var(--teal); font-weight: 700;">&bull; Available Today</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Client Review Quote -->
+            <div style="background: var(--muted); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px;">
+              <p style="font-size: 0.8125rem; color: var(--foreground); line-height: 1.5; margin: 0; font-style: italic;">
+                "Servhive resolved our generator fault in Trans-Amadi within 40 minutes. The Paystack escrow gave us total peace of mind—he only got paid after our 25kVA generator test run succeeded."
+              </p>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.72rem; color: var(--muted-foreground); font-style: normal;">
+                <span style="font-weight: 700; color: var(--foreground);">&mdash; Engr. Davies B., Peter Odili Road</span>
+                <span>Verified Client</span>
+              </div>
+            </div>
+
+            <!-- Escrow Trust Box -->
+            <div class="shadcn-escrow-pill-box">
+              <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(15, 118, 110, 0.12); color: var(--teal); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
               </div>
               <div>
-                <div class="auth-feature-title">Payment Protection</div>
-                <div class="auth-feature-desc">Customer pays in the app, the money is held safely by licensed provider Paystack (not in our own account), and released to the provider only after you confirm the job is done.</div>
-              </div>
-            </div>
-
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-              </div>
-              <div>
-                <div class="auth-feature-title">Real PH Proximity</div>
-                <div class="auth-feature-desc">Artisans located in your neighborhood — Trans-Amadi, Peter Odili, Woji, Old GRA, and Choba.</div>
-              </div>
-            </div>
-
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-              </div>
-              <div>
-                <div class="auth-feature-title">Masked Number Privacy</div>
-                <div class="auth-feature-desc">Your real phone number remains shielded from unsolicited marketing, off-platform harassment, or scams.</div>
-              </div>
-            </div>
-
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
-                <span style="font-weight: 800; font-size: 1.05rem; font-family: var(--font-main); color: var(--canvas);">₦</span>
-              </div>
-              <div>
-                <div class="auth-feature-title">Standardized Rate Cards</div>
-                <div class="auth-feature-desc">Clear fixed rate cards in Naira so you never deal with unexpected roadside price inflation on arrival.</div>
+                <strong style="color: var(--foreground); display: block; font-size: 0.82rem;">100% Payment Protection via Paystack</strong>
+                <span style="font-size: 0.75rem; color: var(--muted-foreground);">Funds are held safely in escrow and only released after you confirm the job is done.</span>
               </div>
             </div>
           </div>
@@ -933,7 +1122,7 @@
           <div class="auth-stats-grid">
             <div class="auth-stat-card">
               <div class="auth-stat-value">100%</div>
-              <div class="auth-stat-label">Payment Protection</div>
+              <div class="auth-stat-label">Paystack Escrow</div>
             </div>
             <div class="auth-stat-card">
               <div class="auth-stat-value">ID</div>
@@ -951,64 +1140,48 @@
         `;
       } else {
         container.innerHTML = `
-          <div class="auth-trust-card">
-            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 18px; color: var(--canvas);">
-              Grow Your Trade in Port Harcourt
-            </h3>
+          <!-- Pro Earnings & Growth Spotlight Card -->
+          <div class="shadcn-artisan-hero-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--muted-foreground);">
+                Port Harcourt Pro Network
+              </span>
+              <span class="badge badge-secondary" style="font-size: 0.72rem;">
+                🎁 1 Month Free
+              </span>
+            </div>
 
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                  <line x1="1" y1="10" x2="23" y2="10"></line>
-                </svg>
+            <div style="padding: 16px; background: var(--muted); border-radius: var(--radius-md); margin-bottom: 16px;">
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--muted-foreground); margin-bottom: 4px;">
+                Average PH Pro Monthly Volume
               </div>
-              <div>
-                <div class="auth-feature-title">Guaranteed Payment Protection</div>
-                <div class="auth-feature-desc">Customer pays in the app, money is held by Paystack (not Servhive), and released directly to your account after completion is confirmed.</div>
+              <div style="font-size: 1.85rem; font-weight: 900; color: var(--amber-dark); letter-spacing: -0.5px;">
+                ₦385,000+
+              </div>
+              <div style="font-size: 0.76rem; color: var(--muted-foreground); margin-top: 4px;">
+                Direct job payouts processed securely through Paystack without roadside payment delays.
               </div>
             </div>
 
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                  <rect x="2" y="7" width="20" height="5"></rect>
-                  <line x1="12" y1="22" x2="12" y2="7"></line>
-                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-                </svg>
-              </div>
-              <div>
-                <div class="auth-feature-title">1 Month Free Trial</div>
-                <div class="auth-feature-desc">1 month free trial for every new provider. After that, ₦2,000 per month for ALL providers, paid before the month ends. If unpaid, profile is hidden until payment is made.</div>
+            <!-- Verified Pro Testimonial -->
+            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px;">
+              <p style="font-size: 0.8125rem; color: var(--foreground); line-height: 1.5; margin: 0; font-style: italic;">
+                "Joining Servhive gave my workshop steady residential and corporate clients in Peter Odili & Old GRA. Clients trust the escrow, so there's never a delay in payment when work is finished."
+              </p>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.72rem; color: var(--muted-foreground); font-style: normal;">
+                <span style="font-weight: 700; color: var(--foreground);">&mdash; Chidi E., Auto Diagnostic Pro</span>
+                <span style="color: var(--teal); font-weight: 700;">★ 4.9 (62 bookings)</span>
               </div>
             </div>
 
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 15l-2 5l9-13h-6l2-5l-9 13h6v0z"></path>
-                </svg>
+            <!-- Direct Escrow Settlement Box -->
+            <div class="shadcn-escrow-pill-box">
+              <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: var(--amber-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <span style="font-weight: 900; font-size: 1.1rem;">₦</span>
               </div>
               <div>
-                <div class="auth-feature-title">ID Checked by Servhive</div>
-                <div class="auth-feature-desc">New providers start as Under review. Verified badges appear after approval in admin console. Regulated trades upload licences before approval.</div>
-              </div>
-            </div>
-
-            <div class="auth-feature-row">
-              <div class="auth-feature-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-              </div>
-              <div>
-                <div class="auth-feature-title">Servhive Support Team</div>
-                <div class="auth-feature-desc">Dedicated Port Harcourt support team to assist with client inquiries, dispute mediation, and fast resolutions.</div>
+                <strong style="color: var(--foreground); display: block; font-size: 0.82rem;">Guaranteed Direct Payouts</strong>
+                <span style="font-size: 0.75rem; color: var(--muted-foreground);">Customer pays into Paystack escrow before you commence work. Released instantly upon digital sign-off.</span>
               </div>
             </div>
           </div>
@@ -1021,11 +1194,11 @@
             </div>
             <div class="auth-stat-card">
               <div class="auth-stat-value">₦2,000</div>
-              <div class="auth-stat-label">Per Month</div>
+              <div class="auth-stat-label">Per Month Flat</div>
             </div>
             <div class="auth-stat-card">
               <div class="auth-stat-value">5%</div>
-              <div class="auth-stat-label">Commission</div>
+              <div class="auth-stat-label">Low Commission</div>
             </div>
             <div class="auth-stat-card">
               <div class="auth-stat-value">₦1,500</div>
