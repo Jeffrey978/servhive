@@ -3,6 +3,9 @@
    Fonts: Montserrat • Brand Colors: Amber #F2A900, Teal #0F5C5C, Ink #1B1B1B
    =================================================================== */
 
+import { gsap } from 'gsap';
+window.gsap = gsap;
+
 const INITIAL_CATEGORIES = [
   { id: 'all', name: 'All Trades', icon: 'grid', proCount: '380+' },
   { id: 'cleaning-janitorial', name: 'Cleaning & Janitorial', icon: 'sparkles', proCount: '48+ Verified Pros', rateFrom: '₦8,000', desc: 'Deep home scrubbing, post-construction cleaning, office janitorial & upholstery stain wash.' },
@@ -1983,6 +1986,19 @@ function renderProviders() {
       </article>
     `;
   }).join('');
+
+  if (window.gsap) {
+    try {
+      gsap.from('.ed-pro-card', {
+        opacity: 0,
+        y: 25,
+        duration: 0.5,
+        stagger: 0.05,
+        ease: 'power2.out',
+        clearProps: 'all'
+      });
+    } catch (e) {}
+  }
 }
 
 window.resetFilters = function() {
@@ -3082,6 +3098,19 @@ window.renderEscrowJobs = function() {
       </div>
     `;
   }).join('');
+
+  if (window.gsap) {
+    try {
+      gsap.from('.ed-pro-card', {
+        opacity: 0,
+        y: 25,
+        duration: 0.5,
+        stagger: 0.05,
+        ease: 'power2.out',
+        clearProps: 'all'
+      });
+    } catch (e) {}
+  }
 };
 
 window.simulateArtisanDone = function(jobId) {
@@ -3654,9 +3683,15 @@ window.handleLoginSubmit = function(e) {
     isArtisan = true;
 
     if (matchedUser && matchedUser.role === 'artisan') {
-      // Already artisan
+      if (matchedUser.password && password && matchedUser.password !== password) {
+        showAppNotice({ icon: '⚠️', eyebrow: 'AUTH ERROR', title: 'Incorrect Password', message: 'The password entered does not match this artisan account.' });
+        return;
+      }
     } else if (matchedUser && matchedUser.role !== 'artisan') {
-      // Client account logging into artisan profile -> activate artisan profile directly
+      if (matchedUser.password && password && matchedUser.password !== password) {
+        showAppNotice({ icon: '⚠️', eyebrow: 'AUTH ERROR', title: 'Incorrect Password', message: 'The password entered does not match this account.' });
+        return;
+      }
       matchedUser.role = 'artisan';
       if (!matchedUser.businessName) {
         matchedUser.businessName = matchedProvider ? matchedProvider.businessName : `${matchedUser.name.replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`;
@@ -3679,7 +3714,8 @@ window.handleLoginSubmit = function(e) {
         trade: matchedProvider.categoryName || 'Power & Generators',
         category: matchedProvider.category || 'power-gen',
         area: matchedProvider.area || 'Trans-Amadi',
-        verified: matchedProvider.verified || false
+        verified: matchedProvider.verified || false,
+        password: password || 'password123'
       };
       state.users.push(matchedUser);
     } else {
@@ -3694,7 +3730,8 @@ window.handleLoginSubmit = function(e) {
         trade: 'Power & Generators',
         category: 'power-gen',
         area: 'Trans-Amadi',
-        verified: false
+        verified: false,
+        password: password || 'password123'
       };
       state.users.push(matchedUser);
     }
@@ -3733,6 +3770,10 @@ window.handleLoginSubmit = function(e) {
   } else {
     // Hirer login
     if (matchedUser && matchedUser.role === 'artisan') {
+      if (matchedUser.password && password && matchedUser.password !== password) {
+        showAppNotice({ icon: '⚠️', eyebrow: 'AUTH ERROR', title: 'Incorrect Password', message: 'The password entered does not match this account.' });
+        return;
+      }
       isArtisan = true;
     } else if (!matchedUser && matchedProvider) {
       isArtisan = true;
@@ -3746,12 +3787,18 @@ window.handleLoginSubmit = function(e) {
         trade: matchedProvider.categoryName || 'Power & Generators',
         category: matchedProvider.category || 'power-gen',
         area: matchedProvider.area || 'Trans-Amadi',
-        verified: matchedProvider.verified || false
+        verified: matchedProvider.verified || false,
+        password: password || 'password123'
       };
       state.users.push(matchedUser);
     } else {
       isArtisan = false;
-      if (!matchedUser) {
+      if (matchedUser) {
+        if (matchedUser.password && password && matchedUser.password !== password) {
+          showAppNotice({ icon: '⚠️', eyebrow: 'AUTH ERROR', title: 'Incorrect Password', message: 'The password entered does not match this client account.' });
+          return;
+        }
+      } else {
         const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Tonye Briggs';
         matchedUser = {
           id: 'usr-' + Date.now(),
@@ -3760,7 +3807,8 @@ window.handleLoginSubmit = function(e) {
           phone: cleanContact.includes('@') ? '08034567890' : cleanContact,
           role: 'hirer',
           area: 'Peter Odili Road',
-          verified: true
+          verified: true,
+          password: password || 'password123'
         };
         state.users.push(matchedUser);
       }
@@ -5052,6 +5100,29 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProviders();
       }
     });
+  }
+
+  // GSAP Entrance Animations
+  if (window.gsap) {
+    try {
+      gsap.from('.ed-header', { y: -20, opacity: 0, duration: 0.6, ease: 'power2.out' });
+      gsap.from('.hero-eyebrow', { opacity: 0, y: 10, duration: 0.5, delay: 0.1, ease: 'power2.out' });
+      gsap.from('.ed-hero-title', { opacity: 0, y: 20, duration: 0.7, delay: 0.2, ease: 'power3.out' });
+      gsap.from('.ed-hero-desc', { opacity: 0, y: 15, duration: 0.6, delay: 0.35, ease: 'power2.out' });
+      gsap.from('.ed-search-bar-wrap', { opacity: 0, scale: 0.96, y: 20, duration: 0.7, delay: 0.45, ease: 'power3.out' });
+      gsap.from('.hero-quick-chips', { opacity: 0, y: 10, duration: 0.5, delay: 0.6, ease: 'power2.out' });
+      gsap.from('.category-icon-tile', {
+        opacity: 0,
+        y: 20,
+        scale: 0.95,
+        duration: 0.5,
+        stagger: 0.04,
+        delay: 0.5,
+        ease: 'power2.out'
+      });
+    } catch (err) {
+      console.warn('GSAP animation skipped:', err);
+    }
   }
 });
 

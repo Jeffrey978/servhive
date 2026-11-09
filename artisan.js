@@ -3,6 +3,9 @@
 // Dedicated Dashboard for Verified Artisans: Quotes, Escrow, Profile, Verification, Complaints
 // ============================================================================
 
+import { gsap } from 'gsap';
+window.gsap = gsap;
+
 // Clean template generator for a new artisan account
 function createInitialArtisanProfile(user) {
   const name = (user && user.name) ? user.name.replace(/\s*\(Pro\)/gi, '').trim() : 'Master Craftsman';
@@ -71,6 +74,16 @@ function initArtisanPortal() {
 
   // Listen to hash changes for smooth sidebar navigation
   window.addEventListener('hashchange', handleHashChange);
+
+  // GSAP entrance animation for Artisan Portal
+  if (window.gsap) {
+    try {
+      gsap.from('.artisan-header', { y: -20, opacity: 0, duration: 0.5, ease: 'power2.out' });
+      gsap.from('.artisan-sidebar', { x: -25, opacity: 0, duration: 0.6, ease: 'power2.out' });
+      gsap.from('.artisan-kpi-card', { opacity: 0, y: 20, duration: 0.5, stagger: 0.08, delay: 0.2, ease: 'power2.out' });
+      gsap.from('.artisan-card', { opacity: 0, y: 15, duration: 0.6, delay: 0.35, ease: 'power2.out' });
+    } catch (e) {}
+  }
 }
 
 function loadStoredData() {

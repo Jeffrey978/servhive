@@ -13,6 +13,9 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <!-- Google Firebase SDK (Compat v10 for browser phone auth) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script>
     (function () {
       const savedTheme = localStorage.getItem('servhive_theme') || 'light';
@@ -134,6 +137,9 @@
       <div id="authFormContainer">
         <!-- Rendered by renderAuthForm() -->
       </div>
+
+      <!-- Invisible Google Firebase reCAPTCHA Container -->
+      <div id="recaptcha-container"></div>
 
     </div>
 
@@ -278,6 +284,163 @@
 
   <!-- ==================== AUTH SCRIPT ENGINE ==================== -->
   <script>
+    // ==================== GOOGLE FIREBASE PHONE AUTH SETUP ====================
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIKy5Lt_EIH_eyvcDjbTVKXkd-8ubr2_A",
+      authDomain: "servhive-1b46c.firebaseapp.com",
+      projectId: "servhive-1b46c",
+      storageBucket: "servhive-1b46c.firebasestorage.app",
+      messagingSenderId: "873548322268",
+      appId: "1:873548322268:web:9050957b795ed3eb78ab19",
+      measurementId: "G-HJC4G2WLMF"
+    };
+
+    let firebaseApp = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps.length) {
+          firebaseApp = firebase.initializeApp(firebaseConfig);
+        } else {
+          firebaseApp = firebase.app();
+        }
+      }
+    } catch (err) {
+      console.warn('Firebase initialisation status:', err);
+    }
+
+    let phoneConfirmationResult = null;
+    let otpCountdownTimer = null;
+    let recaptchaVerifier = null;
+
+    function formatNigerianPhoneNumber(phoneStr) {
+      let cleaned = (phoneStr || '').replace(/[\s\-\(\)]/g, '');
+      if (!cleaned) return '';
+      if (cleaned.startsWith('+234')) return cleaned;
+      if (cleaned.startsWith('234')) return '+' + cleaned;
+      if (cleaned.startsWith('0')) return '+234' + cleaned.substring(1);
+      if (cleaned.length === 10 && /^[789]/.test(cleaned)) return '+234' + cleaned;
+      return cleaned.startsWith('+') ? cleaned : ('+' + cleaned);
+    }
+
+    function initRecaptchaVerifier() {
+      if (recaptchaVerifier) {
+        try { recaptchaVerifier.clear(); } catch(e) {}
+        recaptchaVerifier = null;
+      }
+      try {
+        recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+          size: 'invisible',
+          callback: () => {},
+          'expired-callback': () => {
+            showInlineNotice('⚠️ reCAPTCHA verification expired. Please click "Send OTP" again.', 'error');
+          }
+        });
+        return recaptchaVerifier;
+      } catch (err) {
+        console.error('reCAPTCHA init error:', err);
+        return null;
+      }
+    }
+
+    async function requestFirebaseOtp(role) {
+      const phoneInput = document.getElementById(role + 'Phone');
+      const codeInput = document.getElementById(role + 'Code');
+      const btn = document.getElementById(role + 'OtpBtn');
+      const timerSpan = document.getElementById(role + 'OtpTimer');
+
+      if (!phoneInput || !phoneInput.value.trim()) {
+        showInlineNotice('⚠️ Please enter your Nigerian phone number first before requesting an SMS code.', 'error');
+        if (phoneInput) phoneInput.focus();
+        return;
+      }
+
+      const rawPhone = phoneInput.value.trim();
+      const formattedPhone = formatNigerianPhoneNumber(rawPhone);
+
+      if (!formattedPhone || formattedPhone.length < 11) {
+        showInlineNotice('⚠️ Please enter a valid Nigerian phone number (e.g. 0803 123 4567).', 'error');
+        phoneInput.focus();
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span style="display:inline-block;animation:spin 1s infinite linear;">⏳</span> Sending...`;
+      }
+
+      try {
+        if (typeof firebase === 'undefined' || !firebase.auth) {
+          throw new Error('Firebase Auth library failed to load. Please verify your internet connection.');
+        }
+
+        const verifier = initRecaptchaVerifier();
+        if (!verifier) {
+          throw new Error('reCAPTCHA could not be initialized. Please refresh the page and try again.');
+        }
+
+        showInlineNotice(`📲 Dispatching real SMS code to <strong>${formattedPhone}</strong> via Firebase...`, 'info');
+
+        const confirmationResult = await firebase.auth().signInWithPhoneNumber(formattedPhone, verifier);
+        window.phoneConfirmationResult = confirmationResult;
+
+        if (codeInput) {
+          codeInput.disabled = false;
+          codeInput.value = '';
+          codeInput.placeholder = '• • • • • •';
+          codeInput.focus();
+        }
+
+        showInlineNotice(`✓ Verification code sent! Please enter the 6-digit SMS code delivered to <strong>${formattedPhone}</strong>.`, 'success');
+
+        let secondsLeft = 60;
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = `Sent ✓`;
+        }
+        if (timerSpan) timerSpan.textContent = `Resend in ${secondsLeft}s`;
+
+        if (otpCountdownTimer) clearInterval(otpCountdownTimer);
+        otpCountdownTimer = setInterval(() => {
+          secondsLeft--;
+          if (secondsLeft > 0) {
+            if (timerSpan) timerSpan.textContent = `Resend in ${secondsLeft}s`;
+          } else {
+            clearInterval(otpCountdownTimer);
+            otpCountdownTimer = null;
+            if (timerSpan) timerSpan.textContent = '';
+            if (btn) {
+              btn.disabled = false;
+              btn.innerHTML = `Resend OTP`;
+            }
+          }
+        }, 1000);
+
+      } catch (error) {
+        console.error('Firebase signInWithPhoneNumber error:', error);
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `Send OTP`;
+        }
+        if (recaptchaVerifier) {
+          try { recaptchaVerifier.clear(); } catch(e) {}
+          recaptchaVerifier = null;
+        }
+
+        let errorMsg = error.message || 'Failed to send SMS code.';
+        if (error.code === 'auth/invalid-phone-number') {
+          errorMsg = 'Invalid phone number format. Please ensure it begins with 080, 081, 090, 070 or +234.';
+        } else if (error.code === 'auth/quota-exceeded') {
+          errorMsg = 'Daily SMS quota exceeded. Please try again later or add test numbers in Firebase Console.';
+        } else if (error.code === 'auth/too-many-requests') {
+          errorMsg = 'Too many requests. Please wait a minute before requesting another SMS code.';
+        } else if (error.code === 'auth/operation-not-allowed') {
+          errorMsg = 'Phone authentication is not yet enabled in your Firebase console. Please go to Firebase Authentication > Sign-in method and toggle Phone to Enable.';
+        }
+
+        showInlineNotice(`⚠️ <strong>SMS Error:</strong> ${errorMsg}`, 'error');
+      }
+    }
+
     // Local State for Auth Landing Page
     const defaultSeedUsers = [
       {
@@ -480,11 +643,19 @@
             <div class="auth-field-grid">
               <div class="auth-input-group">
                 <label class="auth-label">Phone Number (+234)</label>
-                <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" />
+                <div style="display: flex; gap: 8px;">
+                  <input type="tel" id="hirerPhone" required class="auth-input" placeholder="0803 123 4567" style="flex: 1;" />
+                  <button type="button" id="hirerOtpBtn" class="ed-button ed-button-amber" onclick="requestFirebaseOtp('hirer')" style="padding: 0 16px; height: 40px; font-size: 0.82rem; font-weight: 700; white-space: nowrap; border-radius: var(--radius-sm); border: none; cursor: pointer;">
+                    Send OTP
+                  </button>
+                </div>
               </div>
               <div class="auth-input-group">
-                <label class="auth-label">SMS Verification Code</label>
-                <input type="text" id="hirerCode" required maxlength="4" class="auth-input" value="1234" placeholder="1234" style="letter-spacing: 4px; font-weight: 800; text-align: center;" />
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <label class="auth-label" style="margin-bottom: 0;">SMS Verification Code</label>
+                  <span id="hirerOtpTimer" style="font-size: 0.75rem; color: var(--amber-dark); font-weight: 700;"></span>
+                </div>
+                <input type="text" id="hirerCode" required maxlength="6" disabled class="auth-input" placeholder="Click 'Send OTP' first" style="letter-spacing: 4px; font-weight: 800; text-align: center; margin-top: 6px;" />
               </div>
             </div>
 
@@ -563,11 +734,35 @@
             <div class="auth-field-grid">
               <div class="auth-input-group">
                 <label class="auth-label">Phone Number (+234)</label>
-                <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" />
+                <div style="display: flex; gap: 8px;">
+                  <input type="tel" id="artisanPhone" required class="auth-input" placeholder="0802 345 6789" style="flex: 1;" />
+                  <button type="button" id="artisanOtpBtn" class="ed-button ed-button-amber" onclick="requestFirebaseOtp('artisan')" style="padding: 0 16px; height: 40px; font-size: 0.82rem; font-weight: 700; white-space: nowrap; border-radius: var(--radius-sm); border: none; cursor: pointer;">
+                    Send OTP
+                  </button>
+                </div>
               </div>
               <div class="auth-input-group">
-                <label class="auth-label">SMS Verification Code</label>
-                <input type="text" id="artisanCode" required maxlength="4" class="auth-input" value="1234" placeholder="1234" style="letter-spacing: 4px; font-weight: 800; text-align: center;" />
+                <label class="auth-label">Email Address</label>
+                <input type="email" id="artisanEmail" class="auth-input" placeholder="e.g. workshop@servhive.ng" />
+              </div>
+            </div>
+
+            <div class="auth-field-grid">
+              <div class="auth-input-group">
+                <label class="auth-label">Years of Experience</label>
+                <select id="artisanExp" class="auth-input">
+                  <option value="1-3 years">1 – 3 years (Junior Pro)</option>
+                  <option value="3-5 years" selected>3 – 5 years (Established)</option>
+                  <option value="5-10 years">5 – 10 years (Senior Craftsman)</option>
+                  <option value="10+ years">10+ years (Master Technician)</option>
+                </select>
+              </div>
+              <div class="auth-input-group">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <label class="auth-label" style="margin-bottom: 0;">SMS Verification Code</label>
+                  <span id="artisanOtpTimer" style="font-size: 0.75rem; color: var(--amber-dark); font-weight: 700;"></span>
+                </div>
+                <input type="text" id="artisanCode" required maxlength="6" disabled class="auth-input" placeholder="Click 'Send OTP' first" style="letter-spacing: 4px; font-weight: 800; text-align: center; margin-top: 6px;" />
               </div>
             </div>
 
@@ -953,14 +1148,22 @@
       let isArtisan = false;
 
       if (targetRole === 'artisan') {
-        // User explicitly logging into the Artisan Profile!
-        // ALWAYS log into artisan mode and route directly to artisan.html
+        // User explicitly logging in via the Artisan Pro tab
         isArtisan = true;
 
         if (matchedUser && matchedUser.role === 'artisan') {
-          // Already an artisan user
+          // Verify password if one was set during registration
+          if (matchedUser.password && password && matchedUser.password !== password) {
+            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
+            return;
+          }
         } else if (matchedUser && matchedUser.role !== 'artisan') {
-          // Client account logging into Artisan profile -> elevate/activate Artisan profile directly
+          // Verify password
+          if (matchedUser.password && password && matchedUser.password !== password) {
+            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
+            return;
+          }
+          // Elevate/activate artisan profile for this user
           matchedUser.role = 'artisan';
           if (!matchedUser.businessName) {
             matchedUser.businessName = matchedProvider ? matchedProvider.businessName : `${matchedUser.name.replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`;
@@ -986,12 +1189,13 @@
             trade: matchedProvider.categoryName || 'Power & Generators',
             category: matchedProvider.category || 'power-gen',
             area: matchedProvider.area || 'Trans-Amadi',
-            verified: matchedProvider.verified || false
+            verified: matchedProvider.verified || false,
+            password: password || 'password123'
           };
           authState.users.push(matchedUser);
           localStorage.setItem('servhive_users', JSON.stringify(authState.users));
         } else {
-          // Brand new artisan account on the fly
+          // No user found, create new artisan account
           const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Artisan ' + cleanContact.slice(-4);
           matchedUser = {
             id: 'usr-' + Date.now(),
@@ -1003,7 +1207,8 @@
             trade: 'Power & Generators',
             category: 'power-gen',
             area: 'Trans-Amadi',
-            verified: false
+            verified: false,
+            password: password || 'password123'
           };
           authState.users.push(matchedUser);
           localStorage.setItem('servhive_users', JSON.stringify(authState.users));
@@ -1047,10 +1252,14 @@
       } else {
         // Logging in on Client tab (targetRole === 'hirer')
         if (matchedUser && matchedUser.role === 'artisan') {
-          // Pure Artisan account detected -> log directly into Artisan account!
+          // Pure Artisan account detected -> check password if set, then route to artisan
+          if (matchedUser.password && password && matchedUser.password !== password) {
+            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
+            return;
+          }
           isArtisan = true;
         } else if (!matchedUser && matchedProvider) {
-          // Exists in provider records -> log directly into Artisan account!
+          // Exists in provider records -> route to artisan
           isArtisan = true;
           matchedUser = {
             id: 'usr-' + String(matchedProvider.id).replace('pro-', ''),
@@ -1062,14 +1271,20 @@
             trade: matchedProvider.categoryName || 'Power & Generators',
             category: matchedProvider.category || 'power-gen',
             area: matchedProvider.area || 'Trans-Amadi',
-            verified: matchedProvider.verified || false
+            verified: matchedProvider.verified || false,
+            password: password || 'password123'
           };
           authState.users.push(matchedUser);
           localStorage.setItem('servhive_users', JSON.stringify(authState.users));
         } else {
           // Hirer login
           isArtisan = false;
-          if (!matchedUser) {
+          if (matchedUser) {
+            if (matchedUser.password && password && matchedUser.password !== password) {
+              showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
+              return;
+            }
+          } else {
             const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Tonye Briggs';
             matchedUser = {
               id: 'usr-' + Date.now(),
@@ -1078,7 +1293,8 @@
               phone: cleanContact.includes('@') ? '08034567890' : cleanContact,
               role: 'hirer',
               area: 'Peter Odili Road',
-              verified: true
+              verified: true,
+              password: password || 'password123'
             };
             authState.users.push(matchedUser);
             localStorage.setItem('servhive_users', JSON.stringify(authState.users));
@@ -1101,7 +1317,7 @@
       }
     }
 
-    function handleHirerSignupSubmit(e) {
+    async function handleHirerSignupSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('hirerFullName').value.trim();
       const email = document.getElementById('hirerEmail').value.trim();
@@ -1110,9 +1326,43 @@
       const password = document.getElementById('hirerPassword').value;
       const confirmEl = document.getElementById('hirerConfirmPassword');
       const confirmPassword = confirmEl ? confirmEl.value : password;
+      const codeInput = document.getElementById('hirerCode');
+      const code = codeInput ? codeInput.value.trim() : '';
 
       if (confirmEl && password !== confirmPassword) {
         showInlineNotice('⚠️ <strong>Passwords do not match</strong>. Please make sure both fields are identical.', 'error');
+        return;
+      }
+
+      // Check if user clicked Send OTP
+      if (!window.phoneConfirmationResult) {
+        showInlineNotice('⚠️ Please click <strong>"Send OTP"</strong> to verify your Nigerian phone number via SMS first.', 'error');
+        if (codeInput) codeInput.focus();
+        return;
+      }
+
+      if (!code || code.length < 6) {
+        showInlineNotice('⚠️ Please enter the 6-digit SMS verification code delivered to your phone.', 'error');
+        if (codeInput) codeInput.focus();
+        return;
+      }
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Verifying SMS Code...</span>`;
+      }
+
+      try {
+        await window.phoneConfirmationResult.confirm(code);
+      } catch (err) {
+        console.error('OTP confirmation error:', err);
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+        showInlineNotice('⚠️ <strong>Invalid or expired SMS code</strong>. Please re-check the text on your phone or click "Resend OTP".', 'error');
         return;
       }
 
@@ -1124,6 +1374,7 @@
         role: 'hirer',
         area: area,
         password: password,
+        phoneVerified: true,
         createdAt: new Date().toISOString()
       };
 
@@ -1131,29 +1382,66 @@
       localStorage.setItem('servhive_users', JSON.stringify(authState.users));
       localStorage.setItem('servhive_current_user', JSON.stringify(newUser));
 
-      showInlineNotice(`✓ Welcome to Servhive, <strong>${name}</strong>! Your Client Portal account is active. Redirecting to the verified marketplace...`, 'success');
+      showInlineNotice(`✓ Phone verified! Welcome to Servhive, <strong>${name}</strong>! Your Client Portal account is active. Redirecting to the verified marketplace...`, 'success');
 
       setTimeout(() => {
         window.location.href = '/index.html';
       }, 900);
     }
 
-    function handleArtisanSignupSubmit(e) {
+    async function handleArtisanSignupSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('artisanName').value.trim();
       const bizName = document.getElementById('artisanBizName').value.trim();
       const catVal = document.getElementById('artisanCategory').value;
       const area = document.getElementById('artisanArea').value;
       const phone = document.getElementById('artisanPhone').value.trim();
-      const exp = document.getElementById('artisanExp').value;
-      const email = document.getElementById('artisanEmail').value.trim() || `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
-      const startingPrice = Number(document.getElementById('artisanStartingPrice').value) || 10000;
+      const expEl = document.getElementById('artisanExp');
+      const exp = expEl ? expEl.value : '3-5 years';
+      const emailEl = document.getElementById('artisanEmail');
+      const email = (emailEl && emailEl.value.trim()) ? emailEl.value.trim() : `${bizName.toLowerCase().replace(/[^a-z0-9]/g, '')}@workshop.ng`;
+      const priceEl = document.getElementById('artisanStartingPrice');
+      const startingPrice = priceEl ? (Number(priceEl.value) || 10000) : 10000;
       const password = document.getElementById('artisanPassword').value;
       const confirmEl = document.getElementById('artisanConfirmPassword');
       const confirmPassword = confirmEl ? confirmEl.value : password;
+      const codeInput = document.getElementById('artisanCode');
+      const code = codeInput ? codeInput.value.trim() : '';
 
       if (confirmEl && password !== confirmPassword) {
         showInlineNotice('⚠️ <strong>Passwords do not match</strong>. Please make sure both fields are identical.', 'error');
+        return;
+      }
+
+      // Check if user clicked Send OTP
+      if (!window.phoneConfirmationResult) {
+        showInlineNotice('⚠️ Please click <strong>"Send OTP"</strong> to verify your Nigerian phone number via SMS first.', 'error');
+        if (codeInput) codeInput.focus();
+        return;
+      }
+
+      if (!code || code.length < 6) {
+        showInlineNotice('⚠️ Please enter the 6-digit SMS verification code delivered to your phone.', 'error');
+        if (codeInput) codeInput.focus();
+        return;
+      }
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Verifying SMS Code...</span>`;
+      }
+
+      try {
+        await window.phoneConfirmationResult.confirm(code);
+      } catch (err) {
+        console.error('OTP confirmation error:', err);
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+        showInlineNotice('⚠️ <strong>Invalid or expired SMS code</strong>. Please re-check the text on your phone or click "Resend OTP".', 'error');
         return;
       }
 
@@ -1172,6 +1460,7 @@
         experience: exp,
         startingPrice: startingPrice,
         password: password,
+        phoneVerified: true,
         createdAt: new Date().toISOString()
       };
 
@@ -1391,6 +1680,19 @@
       </div>
     </div>
   </div>
+
+  <!-- CDN fallback for GSAP Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.gsap) {
+        gsap.from('.auth-hero-banner', { opacity: 0, y: -24, duration: 0.7, ease: 'power2.out' });
+        gsap.from('.auth-card', { opacity: 0, y: 30, duration: 0.8, delay: 0.2, ease: 'power3.out' });
+        gsap.from('.auth-trust-column', { opacity: 0, x: 25, duration: 0.8, delay: 0.35, ease: 'power3.out' });
+        gsap.from('.auth-trust-box', { opacity: 0, y: 20, duration: 0.6, stagger: 0.15, delay: 0.5, ease: 'power2.out' });
+      }
+    });
+  </script>
 </body>
 
 </html>
