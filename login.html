@@ -438,8 +438,8 @@
           errorMsg = 'Daily SMS quota exceeded. Please try again later or add test numbers in Firebase Console.';
         } else if (error.code === 'auth/too-many-requests') {
           errorMsg = 'Too many requests. Please wait a minute before requesting another SMS code.';
-        } else if (error.code === 'auth/operation-not-allowed') {
-          errorMsg = 'Phone authentication is not yet enabled in your Firebase console. Please go to Firebase Authentication > Sign-in method and toggle Phone to Enable.';
+        } else if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/configuration-not-found') {
+          errorMsg = 'Phone authentication is not yet enabled in your Firebase Console. Please go to <strong>Firebase Console > Build > Authentication > Sign-in method</strong>, select <strong>Phone</strong>, and toggle it to <strong>Enable</strong>.';
         }
 
         showInlineNotice(`⚠️ <strong>SMS Error:</strong> ${errorMsg}`, 'error');
