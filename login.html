@@ -464,7 +464,7 @@
           errorMsg = 'Daily SMS quota exceeded (10 SMS/day limit reached). Please add your phone number under "Phone numbers for testing" in Firebase Console for unlimited testing.';
         } else if (error.code === 'auth/too-many-requests') {
           errorMsg = 'Too many requests. Please wait a minute before requesting another SMS code.';
-        } else if (error.code === 'auth/configuration-not-found' || error.code === 'auth/operation-not-allowed') {
+        } else if (error.code === 'auth/configuration-not-found' || error.code === 'auth/operation-not-allowed' || error.code === 'auth/billing-not-enabled') {
           window.phoneConfirmationResult = {
             isDevFallback: true,
             confirm: async (enteredCode) => {
@@ -479,10 +479,10 @@
             targetSpan.textContent = `Test Code: 123456`;
           }
 
-          errorMsg = `<strong>Google Free-Tier Policy (${error.code}):</strong> Firebase limits sending real carrier SMS to international (+234) numbers on the free Spark plan without a linked billing account.
+          errorMsg = `<strong>Firebase Billing Notice (${error.code}):</strong> Google requires upgrading to the Blaze plan (10,000 free SMS/month) to route real carrier SMS to Nigerian numbers.
           <div style="margin-top: 8px; padding: 10px 14px; background: rgba(245, 158, 11, 0.14); border: 1px solid var(--amber); border-radius: 8px; font-weight: normal; font-size: 0.82rem; line-height: 1.5; color: var(--foreground);">
-            <strong>⚡ Dev Mode Ready:</strong> The 6 input boxes below are ready. Enter test code <strong>123456</strong> and click <strong>Register</strong> to test immediately!
-            <br><span style="font-size: 0.76rem; color: var(--muted-foreground);">To receive real SMS or use your own number in Firebase: open Firebase Console &rarr; Authentication &rarr; Sign-in method &rarr; Phone &rarr; <em>Phone numbers for testing</em> and add <code>${formattedPhone}</code> with code <code>123456</code>.</span>
+            <strong>⚡ Instant Test Code:</strong> You can enter <strong>123456</strong> into the 6 boxes below and click <strong>Register</strong> to test immediately!
+            <br><span style="font-size: 0.76rem; color: var(--muted-foreground);">To receive real SMS on your phone: upgrade to Blaze in Firebase Console (bottom-left "Upgrade" button) OR add <code>${formattedPhone}</code> with code <code>123456</code> in Firebase Console &rarr; Authentication &rarr; Sign-in method &rarr; Phone &rarr; <em>Phone numbers for testing</em>.</span>
           </div>`;
         }
 
