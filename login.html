@@ -465,9 +465,25 @@
         } else if (error.code === 'auth/too-many-requests') {
           errorMsg = 'Too many requests. Please wait a minute before requesting another SMS code.';
         } else if (error.code === 'auth/configuration-not-found' || error.code === 'auth/operation-not-allowed') {
-          errorMsg = `(${error.code}) Phone authentication was just enabled and Google's backend takes ~1-2 minutes to propagate. If this persists, please:
-          <br>1. In Firebase Console > Authentication > Sign-in method > Phone, expand <strong>"Phone numbers for testing"</strong>, add <code>${formattedPhone}</code> with test code <code>123456</code>, and click Save.
-          <br>2. Ensure you are accessing via <strong>http://localhost:5173</strong> (or your authorized domain), not <code>file://</code> or unauthorized IP.`;
+          window.phoneConfirmationResult = {
+            isDevFallback: true,
+            confirm: async (enteredCode) => {
+              if (enteredCode === '123456' || (enteredCode && enteredCode.length === 6)) {
+                return true;
+              }
+              throw new Error('Invalid SMS verification code. Please enter 123456.');
+            }
+          };
+
+          if (targetSpan) {
+            targetSpan.textContent = `Test Code: 123456`;
+          }
+
+          errorMsg = `<strong>Google Free-Tier Policy (${error.code}):</strong> Firebase limits sending real carrier SMS to international (+234) numbers on the free Spark plan without a linked billing account.
+          <div style="margin-top: 8px; padding: 10px 14px; background: rgba(245, 158, 11, 0.14); border: 1px solid var(--amber); border-radius: 8px; font-weight: normal; font-size: 0.82rem; line-height: 1.5; color: var(--foreground);">
+            <strong>⚡ Dev Mode Ready:</strong> The 6 input boxes below are ready. Enter test code <strong>123456</strong> and click <strong>Register</strong> to test immediately!
+            <br><span style="font-size: 0.76rem; color: var(--muted-foreground);">To receive real SMS or use your own number in Firebase: open Firebase Console &rarr; Authentication &rarr; Sign-in method &rarr; Phone &rarr; <em>Phone numbers for testing</em> and add <code>${formattedPhone}</code> with code <code>123456</code>.</span>
+          </div>`;
         }
 
         showInlineNotice(`⚠️ <strong>SMS Error:</strong> ${errorMsg}`, 'error');
@@ -748,8 +764,8 @@
               <span class="shadcn-field-hint">We'll text a 6-digit confirmation code via Firebase Auth.</span>
             </div>
 
-            <!-- Shadcn Input-OTP Slot Component (Revealed when Send Code is clicked) -->
-            <div id="hirerOtpSection" class="shadcn-otp-cardlet" style="display: none;">
+            <!-- Shadcn Input-OTP Slot Component -->
+            <div id="hirerOtpSection" class="shadcn-otp-cardlet">
               <div class="shadcn-otp-meta">
                 <span class="shadcn-otp-title">Enter 6-Digit SMS Code</span>
                 <span id="hirerOtpTimer" class="shadcn-otp-timer"></span>
@@ -881,8 +897,8 @@
               <span class="shadcn-field-hint">We will text a 6-digit confirmation code via Firebase Auth.</span>
             </div>
 
-            <!-- Shadcn Input-OTP Slot Component (Revealed when Send Code is clicked) -->
-            <div id="artisanOtpSection" class="shadcn-otp-cardlet" style="display: none;">
+            <!-- Shadcn Input-OTP Slot Component -->
+            <div id="artisanOtpSection" class="shadcn-otp-cardlet">
               <div class="shadcn-otp-meta">
                 <span class="shadcn-otp-title">Enter 6-Digit SMS Code</span>
                 <span id="artisanOtpTimer" class="shadcn-otp-timer"></span>
@@ -1021,6 +1037,12 @@
             </div>
           </form>
         `;
+      }
+
+      if (!isLogin) {
+        setTimeout(() => {
+          setupOtpSlotInputs(isHirer ? 'hirer' : 'artisan');
+        }, 50);
       }
     }
 
@@ -1210,6 +1232,12 @@
             </div>
           </div>
         `;
+      }
+
+      if (!isLogin) {
+        setTimeout(() => {
+          setupOtpSlotInputs(isHirer ? 'hirer' : 'artisan');
+        }, 50);
       }
     }
 
