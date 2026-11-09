@@ -1234,18 +1234,14 @@ const state = {
   authMode: 'login', // 'login' | 'signup'
   authRole: 'hirer', // 'hirer' | 'artisan'
   currentUser: JSON.parse(localStorage.getItem('servhive_current_user')) || null,
-  users: JSON.parse(localStorage.getItem('servhive_users')) || [
-    {
-      id: 'usr-1',
-      name: 'Tonye Briggs',
-      email: 'tonye@example.com',
-      phone: '08034567890',
-      role: 'hirer',
-      area: 'Peter Odili Road',
-      password: 'password123',
-      createdAt: '2026-09-15'
+  users: (() => {
+    try {
+      const u = JSON.parse(localStorage.getItem('servhive_users')) || [];
+      return Array.isArray(u) ? u.filter(user => user && user.id !== 'usr-1' && user.id !== 'usr-artisan-1' && user.name !== 'Tamuno George' && user.name !== 'Tonye Briggs' && user.email !== 'tamuno@workshop.ng' && user.email !== 'tonye@example.com') : [];
+    } catch (e) {
+      return [];
     }
-  ]
+  })()
 };
 
 function persistState() {
@@ -3217,55 +3213,6 @@ window.setAuthMode = function(mode) {
   } catch (err) {}
 };
 
-window.quickFillDemo = function(role) {
-  state.authRole = role;
-  state.authMode = 'login';
-
-  const hirerBtn = document.getElementById('roleBtnHirer');
-  const artisanBtn = document.getElementById('roleBtnArtisan');
-  if (hirerBtn) hirerBtn.classList.toggle('active', role === 'hirer');
-  if (artisanBtn) artisanBtn.classList.toggle('active', role === 'artisan');
-
-  const loginTab = document.getElementById('authModeTabLogin');
-  const signupTab = document.getElementById('authModeTabSignup');
-  if (loginTab) loginTab.classList.add('active');
-  if (signupTab) signupTab.classList.remove('active');
-
-  renderAuthPage();
-
-  const contactInput = document.getElementById('loginContact');
-  const passwordInput = document.getElementById('loginPassword');
-
-  if (role === 'hirer') {
-    const hirer = state.users.find(u => u.role === 'hirer');
-    if (contactInput) contactInput.value = hirer ? hirer.email : 'tonye@example.com';
-    if (passwordInput) passwordInput.value = hirer ? hirer.password : 'password123';
-  } else {
-    const artisan = state.users.find(u => u.role === 'artisan');
-    if (artisan) {
-      if (contactInput) contactInput.value = artisan.email || artisan.phone;
-      if (passwordInput) passwordInput.value = artisan.password || 'password123';
-    } else {
-      switchAuthTab('signup', 'artisan');
-      showAppNotice({
-        icon: '🛠️',
-        eyebrow: 'REGISTER AS ARTISAN',
-        title: 'No Dummy Artisans Exist',
-        message: 'Register your real workshop on Servhive to access the Artisan Pro Portal with 1 month free!',
-        confirmText: 'Register Now'
-      });
-      return;
-    }
-  }
-
-  if (contactInput) {
-    contactInput.style.borderColor = 'var(--amber)';
-    setTimeout(() => {
-      contactInput.style.borderColor = 'var(--hairline)';
-    }, 1200);
-  }
-};
-
 window.togglePasswordVisibility = function(inputId, btnEl) {
   const input = document.getElementById(inputId);
   if (!input) return;
@@ -3719,52 +3666,8 @@ window.handleLoginSubmit = function(e) {
       };
       state.users.push(matchedUser);
     } else {
-      const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Artisan ' + cleanContact.slice(-4);
-      matchedUser = {
-        id: 'usr-' + Date.now(),
-        name: defaultName,
-        businessName: `${defaultName} Workshop`,
-        email: cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng',
-        phone: cleanContact.includes('@') ? '08023456789' : cleanContact,
-        role: 'artisan',
-        trade: 'Power & Generators',
-        category: 'power-gen',
-        area: 'Trans-Amadi',
-        verified: false,
-        password: password || 'password123'
-      };
-      state.users.push(matchedUser);
-    }
-
-    // Ensure provider entry exists
-    const provExists = state.providers.some(p => 
-      p.id === matchedUser.id || 
-      p.id === 'pro-' + String(matchedUser.id).replace('usr-', '') ||
-      (p.businessName && p.businessName === matchedUser.businessName) ||
-      p.name === matchedUser.name
-    );
-    if (!provExists) {
-      state.providers.unshift({
-        id: 'pro-' + String(matchedUser.id).replace('usr-', ''),
-        name: matchedUser.name,
-        businessName: matchedUser.businessName || `${matchedUser.name} Workshop`,
-        category: matchedUser.category || 'power-gen',
-        categoryName: matchedUser.trade || 'Power & Generators',
-        subSpecialty: `${matchedUser.trade || 'Power & Generators'} Specialist`,
-        area: matchedUser.area || 'Trans-Amadi',
-        rating: 0,
-        reviewCount: 0,
-        reviews: [],
-        verified: false,
-        status: 'under_review',
-        image: '/assets/hero_tradesman.jpg',
-        startingPrice: 10000,
-        responseTime: '~15 mins',
-        bio: `${matchedUser.businessName || matchedUser.name} provides verified artisan services across Port Harcourt.`,
-        workPhotos: [],
-        services: [],
-        areasCovered: [matchedUser.area || 'Trans-Amadi', 'Peter Odili Road', 'Woji', 'Old GRA']
-      });
+      showAppNotice({ icon: '⚠️', eyebrow: 'AUTH ERROR', title: 'Account Not Found', message: 'No registered artisan account found with these credentials. Please click Create Account to get started.' });
+      return;
     }
 
   } else {
@@ -3788,7 +3691,7 @@ window.handleLoginSubmit = function(e) {
         category: matchedProvider.category || 'power-gen',
         area: matchedProvider.area || 'Trans-Amadi',
         verified: matchedProvider.verified || false,
-        password: password || 'password123'
+        password: password
       };
       state.users.push(matchedUser);
     } else {
@@ -3799,18 +3702,8 @@ window.handleLoginSubmit = function(e) {
           return;
         }
       } else {
-        const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Tonye Briggs';
-        matchedUser = {
-          id: 'usr-' + Date.now(),
-          name: defaultName,
-          email: cleanContact.includes('@') ? cleanContact : 'client@servhive.ng',
-          phone: cleanContact.includes('@') ? '08034567890' : cleanContact,
-          role: 'hirer',
-          area: 'Peter Odili Road',
-          verified: true,
-          password: password || 'password123'
-        };
-        state.users.push(matchedUser);
+        showAppNotice({ icon: '⚠️', eyebrow: 'AUTH ERROR', title: 'Account Not Found', message: 'No registered client account found with these credentials. Please click Create Account to get started.' });
+        return;
       }
     }
   }
@@ -5139,7 +5032,6 @@ window.getDistanceKm = getDistanceKm;
 window.switchToAuthView = switchToAuthView;
 window.setAuthRole = setAuthRole;
 window.setAuthMode = setAuthMode;
-window.quickFillDemo = quickFillDemo;
 window.togglePasswordVisibility = togglePasswordVisibility;
 window.handleLoginSubmit = handleLoginSubmit;
 window.handleHirerSignupSubmit = handleHirerSignupSubmit;

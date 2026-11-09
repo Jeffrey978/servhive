@@ -736,6 +736,11 @@ button, input, select, textarea {
   padding-left: 38px !important;
 }
 
+.shadcn-input-icon-wrap input[type="password"],
+.shadcn-input-icon-wrap input[type="text"]:has(+ .auth-password-toggle) {
+  padding-right: 42px !important;
+}
+
 .shadcn-field-hint {
   display: block;
   font-size: 0.75rem;
@@ -2371,7 +2376,8 @@ button, input, select, textarea {
 .auth-password-toggle {
   position: absolute;
   right: 12px;
-  top: 33px;
+  top: 50%;
+  transform: translateY(-50%);
   background: transparent;
   border: none;
   color: var(--muted-foreground);
@@ -2379,6 +2385,11 @@ button, input, select, textarea {
   font-size: 0.95rem;
   padding: 4px;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: color 0.15s ease;
 }
 
 .auth-password-toggle:hover {
@@ -2765,6 +2776,11 @@ button, input, select, textarea {
 
 .shadcn-input-with-icon {
   padding-left: 38px !important;
+}
+
+.shadcn-input-icon-wrap input[type="password"],
+.shadcn-input-icon-wrap input[type="text"]:has(+ .auth-password-toggle) {
+  padding-right: 42px !important;
 }
 
 .shadcn-field-hint {

@@ -515,50 +515,19 @@
       });
     }
 
-    // Local State for Auth Landing Page
-    const defaultSeedUsers = [
-      {
-        id: 'usr-1',
-        name: 'Tonye Briggs',
-        email: 'tonye@example.com',
-        phone: '08034567890',
-        role: 'hirer',
-        area: 'Peter Odili Road',
-        password: 'password123',
-        createdAt: '2026-09-15'
-      },
-      {
-        id: 'usr-artisan-1',
-        name: 'Tamuno George',
-        businessName: 'Tamuno Precision Power Works',
-        email: 'tamuno@workshop.ng',
-        phone: '08023456789',
-        role: 'artisan',
-        trade: 'Power & Generators',
-        category: 'power-gen',
-        area: 'Trans-Amadi',
-        password: 'password123',
-        verified: true,
-        createdAt: '2026-09-15'
-      }
-    ];
-
+    // Local State for Auth Landing Page (Real Registered Users Only)
     let storedUsers = [];
     try {
       storedUsers = JSON.parse(localStorage.getItem('servhive_users')) || [];
+      if (Array.isArray(storedUsers)) {
+        // Permanently purge dummy/demo seed users
+        storedUsers = storedUsers.filter(u => u && u.id !== 'usr-1' && u.id !== 'usr-artisan-1' && u.name !== 'Tamuno George' && u.name !== 'Tonye Briggs' && u.email !== 'tamuno@workshop.ng' && u.email !== 'tonye@example.com');
+        localStorage.setItem('servhive_users', JSON.stringify(storedUsers));
+      } else {
+        storedUsers = [];
+      }
     } catch (e) {
       storedUsers = [];
-    }
-    if (!storedUsers || storedUsers.length === 0) {
-      storedUsers = defaultSeedUsers;
-      localStorage.setItem('servhive_users', JSON.stringify(storedUsers));
-    } else {
-      // Ensure seed artisan exists for demo & pro access
-      const hasArtisan = storedUsers.some(u => u.role === 'artisan');
-      if (!hasArtisan) {
-        storedUsers.push(defaultSeedUsers[1]);
-        localStorage.setItem('servhive_users', JSON.stringify(storedUsers));
-      }
     }
 
     const authState = {
@@ -710,21 +679,7 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
 
-            <!-- Fast Demo Account Pill Buttons -->
-            <div style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); display: flex; flex-direction: column; gap: 8px;">
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--text-muted);">⚡ Instant Demo Sign-In</span>
-                <span style="font-size: 0.7rem; color: var(--amber-dark); font-weight: 600;">Click to autofill</span>
-              </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <button type="button" onclick="quickFillDemo('hirer')" class="btn btn-outline" style="font-size: 0.78rem; padding: 7px 10px; justify-content: center; height: auto;">
-                  👤 Demo Client (Tonye)
-                </button>
-                <button type="button" onclick="quickFillDemo('artisan')" class="btn btn-outline" style="font-size: 0.78rem; padding: 7px 10px; justify-content: center; height: auto;">
-                  ⚡ Demo Pro (Tamuno)
-                </button>
-              </div>
-            </div>
+            
 
             <div style="text-align: center; margin-top: 10px; font-size: 0.86rem; color: var(--text-muted);">
               ${isHirer ? "Don't have a Client account?" : "New to Servhive PH Artisan Pro?"}
@@ -874,11 +829,11 @@
             <div class="auth-field-grid">
               <div class="auth-input-group">
                 <label class="auth-label">Full Legal Name</label>
-                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Tamuno George" />
+                <input type="text" id="artisanName" required class="auth-input" placeholder="e.g. Craftsman Full Name" />
               </div>
               <div class="auth-input-group">
                 <label class="auth-label">Business / Workshop Name</label>
-                <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Tamuno Precision Power" />
+                <input type="text" id="artisanBizName" required class="auth-input" placeholder="e.g. Precision Engineering & Works" />
               </div>
             </div>
 
@@ -1058,11 +1013,11 @@
 
       if (isHirer) {
         container.innerHTML = `
-          <!-- Verified PH Artisan Social Proof Card -->
+          <!-- Verified Client Trust & Guarantee Card -->
           <div class="shadcn-artisan-hero-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
               <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--muted-foreground);">
-                Verified Port Harcourt Craftsman
+                Port Harcourt Verified Guarantee
               </span>
               <span class="shadcn-verified-badge-pill">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1072,35 +1027,41 @@
               </span>
             </div>
 
-            <div class="shadcn-artisan-profile-row">
-              <div class="shadcn-artisan-avatar-wrap">
-                <img src="/assets/hero_tradesman.jpg" alt="Tamuno George" />
-              </div>
-              <div style="flex: 1; min-width: 0;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <h4 style="font-size: 0.98rem; font-weight: 800; color: var(--foreground); margin: 0;">Tamuno George</h4>
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px;">
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(15, 118, 110, 0.12); color: var(--teal); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 </div>
-                <div style="font-size: 0.78rem; color: var(--muted-foreground); margin-top: 1px;">
-                  Tamuno Precision Power Works &bull; Trans-Amadi
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 0.76rem;">
-                  <span style="color: #f59e0b; font-weight: 800; display: inline-flex; align-items: center; gap: 2px;">
-                    ★ 4.95
-                  </span>
-                  <span style="color: var(--muted-foreground);">(48 jobs completed)</span>
-                  <span style="color: var(--teal); font-weight: 700;">&bull; Available Today</span>
+                <div>
+                  <div style="font-size: 0.84rem; font-weight: 700; color: var(--foreground);">Paystack Escrow Protection</div>
+                  <div style="font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 2px;">
+                    Your payment is held securely in escrow and only released to the artisan after you personally inspect and confirm completion.
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Client Review Quote -->
-            <div style="background: var(--muted); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px;">
-              <p style="font-size: 0.8125rem; color: var(--foreground); line-height: 1.5; margin: 0; font-style: italic;">
-                "Servhive resolved our generator fault in Trans-Amadi within 40 minutes. The Paystack escrow gave us total peace of mind—he only got paid after our 25kVA generator test run succeeded."
-              </p>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.72rem; color: var(--muted-foreground); font-style: normal;">
-                <span style="font-weight: 700; color: var(--foreground);">&mdash; Engr. Davies B., Peter Odili Road</span>
-                <span>Verified Client</span>
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(245, 158, 11, 0.12); color: var(--amber-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.84rem; font-weight: 700; color: var(--foreground);">Masked Number Privacy</div>
+                  <div style="font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 2px;">
+                    Your personal phone number is shielded through encrypted relays to eliminate spam and unwanted off-platform calls.
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(15, 118, 110, 0.12); color: var(--teal); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
+                  <span style="font-weight: 900; font-size: 0.85rem;">₦</span>
+                </div>
+                <div>
+                  <div style="font-size: 0.84rem; font-weight: 700; color: var(--foreground);">Fixed Standardized Rate Cards</div>
+                  <div style="font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 2px;">
+                    Transparent starting rates and upfront pricing in Naira with zero sudden roadside markups on arrival.
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1113,7 +1074,7 @@
               </div>
               <div>
                 <strong style="color: var(--foreground); display: block; font-size: 0.82rem;">100% Payment Protection via Paystack</strong>
-                <span style="font-size: 0.75rem; color: var(--muted-foreground);">Funds are held safely in escrow and only released after you confirm the job is done.</span>
+                <span style="font-size: 0.75rem; color: var(--muted-foreground);">Funds are held safely in licensed escrow and released only after customer approval.</span>
               </div>
             </div>
           </div>
@@ -1140,37 +1101,52 @@
         `;
       } else {
         container.innerHTML = `
-          <!-- Pro Earnings & Growth Spotlight Card -->
+          <!-- Pro Benefits & Growth Spotlight Card -->
           <div class="shadcn-artisan-hero-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
               <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--muted-foreground);">
-                Port Harcourt Pro Network
+                Port Harcourt Artisan Pro Network
               </span>
               <span class="badge badge-secondary" style="font-size: 0.72rem;">
                 🎁 1 Month Free
               </span>
             </div>
 
-            <div style="padding: 16px; background: var(--muted); border-radius: var(--radius-md); margin-bottom: 16px;">
-              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--muted-foreground); margin-bottom: 4px;">
-                Average PH Pro Monthly Volume
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px;">
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: var(--amber-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
+                  <span style="font-weight: 900;">₦</span>
+                </div>
+                <div>
+                  <div style="font-size: 0.84rem; font-weight: 700; color: var(--foreground);">Guaranteed Direct Payouts</div>
+                  <div style="font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 2px;">
+                    Clients deposit funds before you commence work. Zero delayed payments, zero roadside disputes.
+                  </div>
+                </div>
               </div>
-              <div style="font-size: 1.85rem; font-weight: 900; color: var(--amber-dark); letter-spacing: -0.5px;">
-                ₦385,000+
-              </div>
-              <div style="font-size: 0.76rem; color: var(--muted-foreground); margin-top: 4px;">
-                Direct job payouts processed securely through Paystack without roadside payment delays.
-              </div>
-            </div>
 
-            <!-- Verified Pro Testimonial -->
-            <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px;">
-              <p style="font-size: 0.8125rem; color: var(--foreground); line-height: 1.5; margin: 0; font-style: italic;">
-                "Joining Servhive gave my workshop steady residential and corporate clients in Peter Odili & Old GRA. Clients trust the escrow, so there's never a delay in payment when work is finished."
-              </p>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.72rem; color: var(--muted-foreground); font-style: normal;">
-                <span style="font-weight: 700; color: var(--foreground);">&mdash; Chidi E., Auto Diagnostic Pro</span>
-                <span style="color: var(--teal); font-weight: 700;">★ 4.9 (62 bookings)</span>
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(15, 118, 110, 0.12); color: var(--teal); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.84rem; font-weight: 700; color: var(--foreground);">Neighborhood Client Demand</div>
+                  <div style="font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 2px;">
+                    Receive direct job bookings in your operating area: Trans-Amadi, Peter Odili, Old GRA, Woji, and Choba.
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: var(--amber-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.84rem; font-weight: 700; color: var(--foreground);">Simple Transparent Pricing</div>
+                  <div style="font-size: 0.78rem; color: var(--muted-foreground); line-height: 1.45; margin-top: 2px;">
+                    1 month free trial for every provider. After that, ₦2,000/mo flat subscription and 5% commission on jobs.
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1180,8 +1156,8 @@
                 <span style="font-weight: 900; font-size: 1.1rem;">₦</span>
               </div>
               <div>
-                <strong style="color: var(--foreground); display: block; font-size: 0.82rem;">Guaranteed Direct Payouts</strong>
-                <span style="font-size: 0.75rem; color: var(--muted-foreground);">Customer pays into Paystack escrow before you commence work. Released instantly upon digital sign-off.</span>
+                <strong style="color: var(--foreground); display: block; font-size: 0.82rem;">Direct Paystack Bank Payouts</strong>
+                <span style="font-size: 0.75rem; color: var(--muted-foreground);">Payouts are released directly into your verified Nigerian bank account upon client digital confirmation.</span>
               </div>
             </div>
           </div>
@@ -1206,86 +1182,6 @@
             </div>
           </div>
         `;
-      }
-    }
-
-    // 1-Click Fast Demo Profiling
-    function quickFillDemo(role) {
-      authState.role = role;
-      authState.mode = 'login';
-      syncTabs();
-      renderAuthPage();
-
-      const contactInput = document.getElementById('loginContact');
-      const passwordInput = document.getElementById('loginPassword');
-
-      if (role === 'hirer') {
-        const hirer = authState.users.find(u => u.role === 'hirer');
-        if (contactInput) contactInput.value = hirer ? (hirer.email || hirer.phone) : 'tonye@example.com';
-        if (passwordInput) passwordInput.value = hirer ? (hirer.password || 'password123') : 'password123';
-      } else {
-        let artisan = authState.users.find(u => u.role === 'artisan');
-        if (!artisan) {
-          try {
-            const providers = JSON.parse(localStorage.getItem('servhive_providers')) || [];
-            if (providers.length > 0) {
-              const p = providers[0];
-              artisan = {
-                id: 'usr-' + String(p.id).replace('pro-', ''),
-                name: p.name || 'Tamuno George',
-                businessName: p.businessName || 'Tamuno Precision Power Works',
-                email: p.email || 'tamuno@workshop.ng',
-                phone: p.phone || '08023456789',
-                role: 'artisan',
-                password: 'password123'
-              };
-              authState.users.push(artisan);
-              localStorage.setItem('servhive_users', JSON.stringify(authState.users));
-            }
-          } catch (e) {}
-        }
-        if (!artisan) {
-          artisan = {
-            id: 'usr-artisan-1',
-            name: 'Tamuno George',
-            businessName: 'Tamuno Precision Power Works',
-            email: 'tamuno@workshop.ng',
-            phone: '08023456789',
-            role: 'artisan',
-            trade: 'Power & Generators',
-            category: 'power-gen',
-            area: 'Trans-Amadi',
-            password: 'password123',
-            verified: true
-          };
-          authState.users.push(artisan);
-          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
-        }
-        if (contactInput) contactInput.value = artisan.email || artisan.phone;
-        if (passwordInput) passwordInput.value = artisan.password || 'password123';
-      }
-
-      if (contactInput) {
-        contactInput.style.borderColor = 'var(--amber)';
-        setTimeout(() => {
-          contactInput.style.borderColor = 'var(--hairline)';
-        }, 1200);
-      }
-    }
-
-    // Toggle Password Visibility
-    function togglePasswordVisibility(inputId, btnEl) {
-      const input = document.getElementById(inputId);
-      if (!input) return;
-      const eyeOpen = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-      const eyeOff = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
-
-      if (input.type === 'password') {
-        input.type = 'text';
-        if (btnEl) btnEl.innerHTML = eyeOff;
-      } else {
-        input.type = 'password';
-        if (btnEl) btnEl.innerHTML = eyeOpen;
       }
     }
 
@@ -1322,32 +1218,20 @@
       let isArtisan = false;
 
       if (targetRole === 'artisan') {
-        // User explicitly logging in via the Artisan Pro tab
         isArtisan = true;
-
         if (matchedUser && matchedUser.role === 'artisan') {
-          // Verify password if one was set during registration
           if (matchedUser.password && password && matchedUser.password !== password) {
-            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
+            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your credentials and try again.', 'error');
             return;
           }
         } else if (matchedUser && matchedUser.role !== 'artisan') {
-          // Verify password
           if (matchedUser.password && password && matchedUser.password !== password) {
-            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
+            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your credentials and try again.', 'error');
             return;
           }
-          // Elevate/activate artisan profile for this user
           matchedUser.role = 'artisan';
           if (!matchedUser.businessName) {
-            matchedUser.businessName = matchedProvider ? matchedProvider.businessName : `${matchedUser.name.replace(/\s*\(Pro\)/gi, '').split(' ')[0]} Master Services`;
-          }
-          if (!matchedUser.trade) {
-            matchedUser.trade = matchedProvider ? matchedProvider.categoryName : 'Power & Generators';
-            matchedUser.category = matchedProvider ? matchedProvider.category : 'power-gen';
-          }
-          if (!matchedUser.area) {
-            matchedUser.area = matchedProvider ? matchedProvider.area : 'Trans-Amadi';
+            matchedUser.businessName = matchedProvider ? matchedProvider.businessName : `${matchedUser.name} Workshop`;
           }
           const idx = authState.users.findIndex(u => u.id === matchedUser.id);
           if (idx !== -1) authState.users[idx] = matchedUser;
@@ -1364,115 +1248,25 @@
             category: matchedProvider.category || 'power-gen',
             area: matchedProvider.area || 'Trans-Amadi',
             verified: matchedProvider.verified || false,
-            password: password || 'password123'
+            password: password
           };
           authState.users.push(matchedUser);
           localStorage.setItem('servhive_users', JSON.stringify(authState.users));
         } else {
-          // No user found, create new artisan account
-          const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Artisan ' + cleanContact.slice(-4);
-          matchedUser = {
-            id: 'usr-' + Date.now(),
-            name: defaultName,
-            businessName: `${defaultName} Workshop`,
-            email: cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng',
-            phone: cleanContact.includes('@') ? '08023456789' : cleanContact,
-            role: 'artisan',
-            trade: 'Power & Generators',
-            category: 'power-gen',
-            area: 'Trans-Amadi',
-            verified: false,
-            password: password || 'password123'
-          };
-          authState.users.push(matchedUser);
-          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
+          showInlineNotice('⚠️ <strong>Account not found</strong>. No provider account exists with this email or phone number. Please click "Create Account" below to register.', 'error');
+          return;
         }
-
-        // Guarantee corresponding provider profile in servhive_providers
-        try {
-          const storedProviders = JSON.parse(localStorage.getItem('servhive_providers')) || [];
-          const exists = storedProviders.some(p => 
-            p.id === matchedUser.id || 
-            p.id === 'pro-' + String(matchedUser.id).replace('usr-', '') ||
-            (p.businessName && p.businessName === matchedUser.businessName) ||
-            p.name === matchedUser.name
-          );
-          if (!exists) {
-            storedProviders.unshift({
-              id: 'pro-' + String(matchedUser.id).replace('usr-', ''),
-              name: matchedUser.name,
-              businessName: matchedUser.businessName || `${matchedUser.name} Workshop`,
-              category: matchedUser.category || 'power-gen',
-              categoryName: matchedUser.trade || 'Power & Generators',
-              subSpecialty: `${matchedUser.trade || 'Power & Generators'} Specialist`,
-              area: matchedUser.area || 'Trans-Amadi',
-              rating: 0,
-              reviewCount: 0,
-              reviews: [],
-              verified: false,
-              status: 'under_review',
-              image: '/assets/hero_tradesman.jpg',
-              startingPrice: 10000,
-              responseTime: '~15 mins',
-              bio: `${matchedUser.businessName || matchedUser.name} provides verified artisan services across Port Harcourt.`,
-              workPhotos: [],
-              services: [],
-              areasCovered: [matchedUser.area || 'Trans-Amadi', 'Peter Odili Road', 'Woji', 'Old GRA']
-            });
-            localStorage.setItem('servhive_providers', JSON.stringify(storedProviders));
-          }
-        } catch (err) {}
-
       } else {
-        // Logging in on Client tab (targetRole === 'hirer')
-        if (matchedUser && matchedUser.role === 'artisan') {
-          // Pure Artisan account detected -> check password if set, then route to artisan
+        // Hirer login
+        isArtisan = false;
+        if (matchedUser) {
           if (matchedUser.password && password && matchedUser.password !== password) {
-            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
+            showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your credentials and try again.', 'error');
             return;
           }
-          isArtisan = true;
-        } else if (!matchedUser && matchedProvider) {
-          // Exists in provider records -> route to artisan
-          isArtisan = true;
-          matchedUser = {
-            id: 'usr-' + String(matchedProvider.id).replace('pro-', ''),
-            name: matchedProvider.name,
-            businessName: matchedProvider.businessName,
-            email: matchedProvider.email || (cleanContact.includes('@') ? cleanContact : 'artisan@servhive.ng'),
-            phone: matchedProvider.phone || cleanContact,
-            role: 'artisan',
-            trade: matchedProvider.categoryName || 'Power & Generators',
-            category: matchedProvider.category || 'power-gen',
-            area: matchedProvider.area || 'Trans-Amadi',
-            verified: matchedProvider.verified || false,
-            password: password || 'password123'
-          };
-          authState.users.push(matchedUser);
-          localStorage.setItem('servhive_users', JSON.stringify(authState.users));
         } else {
-          // Hirer login
-          isArtisan = false;
-          if (matchedUser) {
-            if (matchedUser.password && password && matchedUser.password !== password) {
-              showInlineNotice('⚠️ <strong>Incorrect password</strong>. Please double-check your password or try again.', 'error');
-              return;
-            }
-          } else {
-            const defaultName = cleanContact.includes('@') ? cleanContact.split('@')[0] : 'Tonye Briggs';
-            matchedUser = {
-              id: 'usr-' + Date.now(),
-              name: defaultName,
-              email: cleanContact.includes('@') ? cleanContact : 'client@servhive.ng',
-              phone: cleanContact.includes('@') ? '08034567890' : cleanContact,
-              role: 'hirer',
-              area: 'Peter Odili Road',
-              verified: true,
-              password: password || 'password123'
-            };
-            authState.users.push(matchedUser);
-            localStorage.setItem('servhive_users', JSON.stringify(authState.users));
-          }
+          showInlineNotice('⚠️ <strong>Account not found</strong>. No client account exists with this email or phone number. Please click "Create Account" below to register.', 'error');
+          return;
         }
       }
 
