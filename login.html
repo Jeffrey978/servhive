@@ -314,23 +314,47 @@
       return cleaned.startsWith('+') ? cleaned : ('+' + cleaned);
     }
 
-    function initRecaptchaVerifier() {
-      if (recaptchaVerifier) {
-        try { recaptchaVerifier.clear(); } catch(e) {}
-        recaptchaVerifier = null;
+    function getRecaptchaVerifier() {
+      if (window.recaptchaVerifier) {
+        return window.recaptchaVerifier;
+      }
+      const container = document.getElementById('recaptcha-container');
+      if (container) {
+        container.innerHTML = '';
       }
       try {
-        recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
           size: 'invisible',
           callback: () => {},
           'expired-callback': () => {
-            showInlineNotice('⚠️ reCAPTCHA verification expired. Please click "Send OTP" again.', 'error');
+            showInlineNotice('⚠️ Verification expired. Please click "Send Code" again.', 'error');
+            resetRecaptchaVerifier();
           }
         });
-        return recaptchaVerifier;
+        return window.recaptchaVerifier;
       } catch (err) {
         console.error('reCAPTCHA init error:', err);
-        return null;
+        if (container) container.innerHTML = '';
+        try {
+          window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            size: 'invisible'
+          });
+          return window.recaptchaVerifier;
+        } catch (e2) {
+          console.error('reCAPTCHA retry error:', e2);
+          return null;
+        }
+      }
+    }
+
+    function resetRecaptchaVerifier() {
+      if (window.recaptchaVerifier) {
+        try { window.recaptchaVerifier.clear(); } catch(e) {}
+        window.recaptchaVerifier = null;
+      }
+      const container = document.getElementById('recaptcha-container');
+      if (container) {
+        container.innerHTML = '';
       }
     }
 
@@ -372,7 +396,7 @@
           throw new Error('Firebase Auth library failed to load. Please verify your internet connection.');
         }
 
-        const verifier = initRecaptchaVerifier();
+        const verifier = getRecaptchaVerifier();
         if (!verifier) {
           throw new Error('reCAPTCHA could not be initialized. Please refresh the page and try again.');
         }
@@ -431,10 +455,7 @@
           btn.disabled = false;
           btn.innerHTML = `Send Code`;
         }
-        if (recaptchaVerifier) {
-          try { recaptchaVerifier.clear(); } catch(e) {}
-          recaptchaVerifier = null;
-        }
+        resetRecaptchaVerifier();
 
         let errorMsg = error.message || 'Failed to send SMS code.';
         if (error.code === 'auth/invalid-phone-number') {
