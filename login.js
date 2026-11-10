@@ -888,3 +888,4 @@ function closeLegalModal() {
   const modal = document.getElementById('legalModal');
   if (modal) modal.classList.remove('open');
 }
+
