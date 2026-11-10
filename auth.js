@@ -1,53 +1,117 @@
-import { Clerk } from '@clerk/clerk-js';
-
 const CLERK_PUBLISHABLE_KEY =
   (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) ||
   'pk_test_cG9zaXRpdmUtd2VyZXdvbGYtNzk3OC5jbGVyay5hY2NvdW50cy5kZXYk';
 
-let clerkInstance = null;
+// Development instance frontend API for Servhive
+const CLERK_SCRIPT_URL =
+  'https://positive-werewolf-7978.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js';
+const CLERK_FALLBACK_URL =
+  'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js';
+
 let clerkInitPromise = null;
 
 /**
- * Initializes and returns the shared Clerk instance.
+ * Loads the official standalone Clerk Browser script with full UI components.
+ */
+function loadClerkBrowserScript() {
+  if (window.Clerk) {
+    return Promise.resolve(window.Clerk);
+  }
+
+  return new Promise((resolve, reject) => {
+    // Check if script tag already exists in DOM
+    const existing = document.querySelector('script[data-clerk-script="true"]');
+    if (existing) {
+      existing.addEventListener('load', () => resolve(window.Clerk));
+      existing.addEventListener('error', () => reject(new Error('Failed to load Clerk script')));
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.setAttribute('data-clerk-publishable-key', CLERK_PUBLISHABLE_KEY);
+    script.setAttribute('data-clerk-script', 'true');
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.src = CLERK_SCRIPT_URL;
+
+    script.onload = () => {
+      if (window.Clerk) {
+        resolve(window.Clerk);
+      } else {
+        reject(new Error('Clerk script loaded but window.Clerk is undefined'));
+      }
+    };
+
+    script.onerror = () => {
+      console.warn('Primary Clerk script failed. Attempting fallback CDN...');
+      const fallback = document.createElement('script');
+      fallback.setAttribute('data-clerk-publishable-key', CLERK_PUBLISHABLE_KEY);
+      fallback.setAttribute('data-clerk-script', 'true');
+      fallback.async = true;
+      fallback.crossOrigin = 'anonymous';
+      fallback.src = CLERK_FALLBACK_URL;
+      fallback.onload = () => resolve(window.Clerk);
+      fallback.onerror = (e) => reject(new Error('Both Clerk script endpoints failed to load: ' + e));
+      document.head.appendChild(fallback);
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+/**
+ * Initializes and returns the shared Clerk instance with UI components ready.
  */
 export async function getClerk() {
-  if (clerkInstance) return clerkInstance;
-  if (clerkInitPromise) return clerkInitPromise;
+  if (window.Clerk && window.Clerk.loaded) {
+    return window.Clerk;
+  }
+
+  if (clerkInitPromise) {
+    return clerkInitPromise;
+  }
 
   clerkInitPromise = (async () => {
     try {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const clerk = new Clerk(CLERK_PUBLISHABLE_KEY);
+      await loadClerkBrowserScript();
 
-      await clerk.load({
-        appearance: {
-          variables: {
-            colorPrimary: '#f59e0b',
-            colorText: isDark ? '#f8fafc' : '#0f172a',
-            colorBackground: isDark ? '#18181b' : '#ffffff',
-            colorInputBackground: isDark ? '#09090b' : '#ffffff',
-            colorInputText: isDark ? '#f8fafc' : '#0f172a',
-            borderRadius: '0.625rem',
-            fontFamily: '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-          },
-          elements: {
-            card: 'shadcn-clerk-card',
-            headerTitle: 'shadcn-clerk-title',
-            headerSubtitle: 'shadcn-clerk-subtitle',
-            formButtonPrimary: 'shadcn-clerk-btn-primary',
-            footerActionLink: 'shadcn-clerk-link',
-            socialButtonsBlockButton: 'shadcn-clerk-social-btn',
-            formFieldInput: 'shadcn-clerk-input'
+      const clerk = window.Clerk;
+      if (!clerk) {
+        throw new Error('window.Clerk unavailable after script load');
+      }
+
+      if (!clerk.loaded) {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+        await clerk.load({
+          appearance: {
+            variables: {
+              colorPrimary: '#f59e0b',
+              colorText: isDark ? '#f8fafc' : '#0f172a',
+              colorBackground: isDark ? '#18181b' : '#ffffff',
+              colorInputBackground: isDark ? '#09090b' : '#ffffff',
+              colorInputText: isDark ? '#f8fafc' : '#0f172a',
+              borderRadius: '0.625rem',
+              fontFamily: '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            },
+            elements: {
+              card: 'shadcn-clerk-card',
+              headerTitle: 'shadcn-clerk-title',
+              headerSubtitle: 'shadcn-clerk-subtitle',
+              formButtonPrimary: 'shadcn-clerk-btn-primary',
+              footerActionLink: 'shadcn-clerk-link',
+              socialButtonsBlockButton: 'shadcn-clerk-social-btn',
+              formFieldInput: 'shadcn-clerk-input'
+            }
           }
-        }
-      });
+        });
+      }
 
-      clerkInstance = clerk;
       return clerk;
     } catch (err) {
       console.error('Failed to initialize Clerk SDK:', err);
       clerkInitPromise = null;
-      return null;
+      throw err;
     }
   })();
 
@@ -193,4 +257,3 @@ export async function signOutServhive() {
     console.warn('Error during Clerk signOut:', e);
   }
 }
-
