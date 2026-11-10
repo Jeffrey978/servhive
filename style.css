@@ -4752,3 +4752,122 @@ html, body {
   max-width: 100vw;
   overflow-x: hidden;
 }
+
+/* ===================================================================
+   CLERK AUTHENTICATION INTEGRATION STYLES (shadcn alignment)
+   =================================================================== */
+.cl-rootBox {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.cl-card {
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+.cl-headerTitle {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 800 !important;
+  color: var(--canvas) !important;
+  font-size: 1.25rem !important;
+}
+
+.cl-headerSubtitle {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  color: var(--text-muted) !important;
+  font-size: 0.85rem !important;
+}
+
+.cl-socialButtonsBlockButton {
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  color: var(--canvas) !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  border-radius: var(--radius-md) !important;
+  transition: all 0.2s ease !important;
+  min-height: 44px !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  background: var(--surface-hover) !important;
+  border-color: var(--border-hover) !important;
+}
+
+.cl-dividerLine {
+  background: var(--border) !important;
+}
+
+.cl-dividerText {
+  color: var(--text-muted) !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.cl-formFieldLabel {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: var(--canvas) !important;
+  margin-bottom: 4px !important;
+}
+
+.cl-formFieldInput {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--canvas) !important;
+  font-family: inherit !important;
+  font-size: 0.9rem !important;
+  border-radius: var(--radius-md) !important;
+  padding: 10px 14px !important;
+  min-height: 42px !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.cl-formFieldInput:focus {
+  border-color: var(--amber-dark) !important;
+  box-shadow: 0 0 0 3px var(--ring-offset) !important;
+  outline: none !important;
+}
+
+.cl-formButtonPrimary {
+  background: var(--primary) !important;
+  color: #000000 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 0.92rem !important;
+  border-radius: var(--radius-md) !important;
+  min-height: 44px !important;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: var(--primary-hover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3) !important;
+}
+
+.cl-footerActionLink {
+  color: var(--amber-dark) !important;
+  font-weight: 700 !important;
+}
+
+.cl-footerActionLink:hover {
+  text-decoration: underline !important;
+}
+
+.cl-userButtonPopoverCard {
+  border: 1px solid var(--border) !important;
+  background: var(--surface) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+

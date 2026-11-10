@@ -3863,10 +3863,17 @@ window.handleArtisanSignupSubmit = function(e) {
   }, 1200);
 };
 
-window.handleLogout = function() {
+window.handleLogout = async function() {
   state.currentUser = null;
   persistState();
   updateAuthUI();
+
+  try {
+    const { signOutServhive } = await import('./auth.js');
+    await signOutServhive();
+  } catch (e) {
+    console.warn('Sign out sync error:', e);
+  }
 
   showAppNotice({
     icon: '👋',

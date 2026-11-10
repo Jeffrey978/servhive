@@ -2034,8 +2034,14 @@ function updateThemeIcon(theme) {
   }
 }
 
-function artisanLogout() {
+async function artisanLogout() {
   localStorage.removeItem('servhive_current_user');
+  try {
+    const { signOutServhive } = await import('./auth.js');
+    await signOutServhive();
+  } catch (e) {
+    console.warn('Sign out sync error:', e);
+  }
   showArtisanNotice(
     'Signed Out',
     'You have signed out of your Artisan Pro portal. Redirecting to login...',
