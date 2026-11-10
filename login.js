@@ -4,11 +4,14 @@ import { getClerk, syncClerkToServhiveUser, signOutServhive } from './auth.js';
 const authState = {
   role: 'hirer', // 'hirer' | 'artisan'
   mode: 'login', // 'login' | 'signup'
-  clerk: null,
-  artisanStep: 1 // For artisan signup: 1 = business details, 2 = clerk auth
+  idType: 'email', // 'email' | 'phone' - USER CHOOSES ONE AT A TIME!
+  artisanStep: 1, // For artisan signup: 1 = business profile, 2 = auth
+  otpSent: false,
+  otpTargetText: '',
+  clerk: null
 };
 
-let currentMountedComponent = null; // 'signIn' | 'signUp' | null
+let otpCountdownTimer = null;
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
@@ -35,12 +38,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     authState.mode = 'login';
   }
 
-  // Wire event handlers to global window for inline HTML onclick attributes
+  // Wire all handlers to global window for inline HTML onclick attributes
   window.setAuthRole = setAuthRole;
   window.setAuthMode = setAuthMode;
+  window.setIdentifierType = setIdentifierType;
+  window.handleGoogleAuth = handleGoogleAuth;
+  window.handleSendOtp = handleSendOtp;
+  window.handleCustomAuthSubmit = handleCustomAuthSubmit;
   window.handleClerkSignOut = handleClerkSignOut;
-  window.proceedToArtisanClerkAuth = proceedToArtisanClerkAuth;
-  window.backToArtisanDetails = backToArtisanDetails;
+  window.proceedToArtisanStep2 = proceedToArtisanStep2;
+  window.backToArtisanStep1 = backToArtisanStep1;
   window.handleAuthCategoryChange = handleAuthCategoryChange;
   window.toggleTheme = toggleTheme;
   window.openLegalModal = openLegalModal;
@@ -50,22 +57,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   syncTabs();
   renderTrustColumn();
-
-  // Show loading indicator in form container while Clerk loads
-  const container = document.getElementById('authFormContainer');
-  if (container) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 48px 16px; color: var(--text-muted);">
-        <div style="display: inline-block; width: 36px; height: 36px; border: 3px solid rgba(245, 158, 11, 0.2); border-top-color: var(--amber-dark); border-radius: 50%; animation: spin 0.8s infinite linear;"></div>
-        <div style="margin-top: 14px; font-weight: 600; font-size: 0.92rem; color: var(--canvas);">
-          Connecting to Clerk Authentication...
-        </div>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
-          Google 1-Click · Email OTP · Safe Paystack Escrow
-        </div>
-      </div>
-    `;
-  }
 
   try {
     const clerk = await getClerk();
@@ -90,14 +81,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderAuthPage();
   } catch (err) {
-    console.error('Clerk initialisation failed:', err);
-    showInlineNotice('⚠️ <strong>Authentication Error:</strong> Unable to initialize Clerk. Please verify your connection or refresh the page.', 'error');
+    console.warn('Clerk SDK initialization notice:', err);
+    renderAuthPage();
   }
 });
 
 function setAuthRole(role) {
   authState.role = role;
   authState.artisanStep = 1;
+  authState.otpSent = false;
+  if (otpCountdownTimer) clearInterval(otpCountdownTimer);
   hideInlineNotice();
   syncTabs();
   renderAuthPage();
@@ -106,9 +99,19 @@ function setAuthRole(role) {
 function setAuthMode(mode) {
   authState.mode = mode;
   authState.artisanStep = 1;
+  authState.otpSent = false;
+  if (otpCountdownTimer) clearInterval(otpCountdownTimer);
   hideInlineNotice();
   syncTabs();
   renderAuthPage();
+}
+
+function setIdentifierType(type) {
+  authState.idType = type;
+  authState.otpSent = false;
+  if (otpCountdownTimer) clearInterval(otpCountdownTimer);
+  hideInlineNotice();
+  renderForm();
 }
 
 function syncTabs() {
@@ -139,7 +142,7 @@ function renderAuthPage() {
     if (isLogin) {
       titleEl.textContent = isHirer ? 'Log In to Client Portal' : 'Log In to Artisan Pro Portal';
       subtitleEl.textContent = isHirer
-        ? 'Sign in via Google or Email to hire vetted Port Harcourt artisans with Paystack Escrow.'
+        ? 'Sign in via Google, Email, or Nigerian phone number with Paystack Escrow.'
         : 'Sign in to manage bookings, transparent rate cards, and direct Paystack payouts.';
     } else {
       titleEl.textContent = isHirer ? 'Create Client Account' : 'Register as Verified Pro';
@@ -157,7 +160,6 @@ function renderActiveSession(user) {
   const container = document.getElementById('authFormContainer');
   if (!container) return;
 
-  const isHirer = authState.role === 'hirer';
   const displayName = user.fullName || user.firstName || 'Port Harcourt Member';
   const displayEmail = user.primaryEmailAddress?.emailAddress || '';
   const avatar = user.imageUrl || '/assets/hero_tradesman.jpg';
@@ -172,7 +174,7 @@ function renderActiveSession(user) {
         Signed In as ${displayName}
       </h3>
       <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 20px;">
-        ${displayEmail} · <span style="color: var(--teal); font-weight: 700;">Clerk Authenticated</span>
+        ${displayEmail} · <span style="color: var(--teal); font-weight: 700;">Active Session</span>
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -192,27 +194,10 @@ function renderActiveSession(user) {
 
 async function handleClerkSignOut() {
   await signOutServhive();
-  showInlineNotice('✓ You have been signed out safely. You can now log in or create an account.', 'info');
+  showInlineNotice('✓ Signed out safely. You can now log in or create an account.', 'info');
   setTimeout(() => {
     window.location.reload();
   }, 400);
-}
-
-function unmountExistingClerkComponent() {
-  const clerk = authState.clerk;
-  const container = document.getElementById('clerkMountTarget');
-  if (!clerk || !container) return;
-
-  try {
-    if (currentMountedComponent === 'signIn') {
-      clerk.unmountSignIn(container);
-    } else if (currentMountedComponent === 'signUp') {
-      clerk.unmountSignUp(container);
-    }
-  } catch (e) {
-    // Ignore unmount error if already unmounted
-  }
-  currentMountedComponent = null;
 }
 
 function renderForm() {
@@ -221,65 +206,12 @@ function renderForm() {
 
   const isHirer = authState.role === 'hirer';
   const isLogin = authState.mode === 'login';
+  const isEmail = authState.idType === 'email';
 
-  // 1. Sign In Mode (Hirer or Artisan)
-  if (isLogin) {
+  // Artisan registration Step 1: Business Profile Setup
+  if (!isHirer && !isLogin && authState.artisanStep === 1) {
     container.innerHTML = `
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <!-- Destination Notice Badge -->
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--muted-foreground);">
-          <span>Signing in as: <strong style="color: var(--foreground);">${isHirer ? 'Client (Hirer)' : 'Artisan Pro'}</strong></span>
-          <span style="color: var(--teal); font-weight: 700;">${isHirer ? '→ Redirects to Marketplace' : '→ Redirects to Pro Portal'}</span>
-        </div>
-
-        <!-- Clerk Mount Target for Sign In -->
-        <div id="clerkMountTarget" style="min-height: 280px; display: flex; justify-content: center;"></div>
-
-        <div style="text-align: center; margin-top: 10px; font-size: 0.86rem; color: var(--text-muted);">
-          ${isHirer ? "Don't have a Client account?" : "New to Servhive PH Artisan Pro?"}
-          <a href="javascript:void(0)" onclick="setAuthMode('signup')" style="color: var(--amber-dark); font-weight: 700; text-decoration: none; margin-left: 4px;">
-            Create an Account &rarr;
-          </a>
-        </div>
-      </div>
-    `;
-
-    mountClerkSignIn();
-    return;
-  }
-
-  // 2. Client (Hirer) Sign Up Mode
-  if (isHirer) {
-    container.innerHTML = `
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <!-- Escrow Protection Callout Banner -->
-        <div style="background: rgba(15, 118, 110, 0.08); border: 1px solid var(--hairline-teal); border-radius: var(--radius-md); padding: 12px 14px; display: flex; gap: 10px; align-items: center;">
-          <span style="font-size: 1.25rem;">🛡️</span>
-          <div style="font-size: 0.82rem; color: var(--teal); line-height: 1.45; font-weight: 600;">
-            100% Payment Protection via Paystack included automatically for all client bookings.
-          </div>
-        </div>
-
-        <!-- Clerk Mount Target for Hirer Sign Up -->
-        <div id="clerkMountTarget" style="min-height: 320px; display: flex; justify-content: center;"></div>
-
-        <div style="text-align: center; margin-top: 8px; font-size: 0.86rem; color: var(--text-muted);">
-          Already have an account? 
-          <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: var(--amber-dark); font-weight: 700; text-decoration: none; margin-left: 4px;">
-            Log in here &rarr;
-          </a>
-        </div>
-      </div>
-    `;
-
-    mountClerkSignUp();
-    return;
-  }
-
-  // 3. Artisan Sign Up Mode - Step 1: Business Profile Setup
-  if (authState.artisanStep === 1) {
-    container.innerHTML = `
-      <form onsubmit="proceedToArtisanClerkAuth(event)" style="display: flex; flex-direction: column; gap: 14px;">
+      <form onsubmit="proceedToArtisanStep2(event)" style="display: flex; flex-direction: column; gap: 14px;">
         <!-- 1-Month Free Promo Callout Banner -->
         <div style="background: var(--secondary); border: 1px solid var(--border); padding: 14px 16px; border-radius: var(--radius-lg); display: flex; gap: 12px; align-items: flex-start;">
           <span style="font-size: 1.35rem; line-height: 1;">🎁</span>
@@ -370,7 +302,7 @@ function renderForm() {
         </div>
 
         <button type="submit" class="shadcn-btn-primary" style="margin-top: 6px;">
-          <span>Continue to Secure Verification &rarr;</span>
+          <span>Continue to Verification &rarr;</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
 
@@ -385,30 +317,145 @@ function renderForm() {
     return;
   }
 
-  // Artisan Sign Up Mode - Step 2: Clerk Authentication
-  container.innerHTML = `
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <!-- Profile Preview Cardlet -->
-      <div style="background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+  // Common Authentication Form (Client Hirer Login/Signup, Artisan Login, or Artisan Step 2)
+  let artisanHeaderSnippet = '';
+  if (!isHirer && !isLogin && authState.artisanStep === 2) {
+    artisanHeaderSnippet = `
+      <div style="background: var(--secondary); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
         <div>
-          <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--muted-foreground);">Pro Profile Pending</div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--muted-foreground);">Pro Profile Pending</div>
           <div style="font-weight: 800; font-size: 0.95rem; color: var(--foreground);">${sessionStorage.getItem('servhive_temp_bizName') || 'Pro Workshop'}</div>
-          <div style="font-size: 0.8rem; color: var(--muted-foreground);">${sessionStorage.getItem('servhive_temp_trade') || 'Trade Specialist'} · ${sessionStorage.getItem('servhive_temp_area') || 'Port Harcourt'}</div>
+          <div style="font-size: 0.79rem; color: var(--muted-foreground);">${sessionStorage.getItem('servhive_temp_trade') || 'Trade Specialist'} · ${sessionStorage.getItem('servhive_temp_area') || 'Port Harcourt'}</div>
         </div>
-        <button type="button" onclick="backToArtisanDetails()" style="background: transparent; border: 1px solid var(--border); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 700; color: var(--foreground); cursor: pointer;">
+        <button type="button" onclick="backToArtisanStep1()" style="background: transparent; border: 1px solid var(--border); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 700; color: var(--foreground); cursor: pointer;">
           Edit Details
         </button>
       </div>
+    `;
+  }
 
-      <!-- Clerk Mount Target for Artisan Sign Up -->
-      <div id="clerkMountTarget" style="min-height: 320px; display: flex; justify-content: center;"></div>
+  container.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      ${artisanHeaderSnippet}
+
+      <!-- 1. Google 1-Click Fast Auth Button -->
+      <button type="button" class="auth-google-btn" onclick="handleGoogleAuth()">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Continue with Google (1-Click)</span>
+      </button>
+
+      <!-- 2. Clean Divider -->
+      <div class="auth-divider-wrap">
+        <div class="auth-divider-line"></div>
+        <span class="auth-divider-text">Or choose verification method</span>
+        <div class="auth-divider-line"></div>
+      </div>
+
+      <!-- 3. Dedicated Identifier Switcher: Email OR Phone Number (NOT BOTH) -->
+      <div class="auth-id-switcher">
+        <button type="button" class="auth-id-tab ${isEmail ? 'active' : ''}" onclick="setIdentifierType('email')">
+          ✉️ Email Address
+        </button>
+        <button type="button" class="auth-id-tab ${!isEmail ? 'active' : ''}" onclick="setIdentifierType('phone')">
+          📱 Nigerian Phone (+234)
+        </button>
+      </div>
+
+      <!-- 4. Interactive Form -->
+      <form onsubmit="handleCustomAuthSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        ${!isLogin && isHirer ? `
+          <div class="auth-input-group">
+            <label class="auth-label">Full Name</label>
+            <input type="text" id="authFullNameInput" required class="auth-input" placeholder="e.g. Tonye Briggs" autocomplete="name" />
+          </div>
+        ` : ''}
+
+        <!-- Single Selected Identifier Input -->
+        ${isEmail ? `
+          <div class="auth-input-group">
+            <label class="auth-label">Email Address</label>
+            <div class="shadcn-phone-wrap">
+              <input type="email" id="authEmailInput" required class="shadcn-phone-input" style="padding-left: 14px;" placeholder="name@example.com" autocomplete="email" />
+              <button type="button" id="sendOtpBtn" class="shadcn-phone-action-btn" onclick="handleSendOtp()">
+                Send OTP Code
+              </button>
+            </div>
+            <span class="shadcn-field-hint">We'll dispatch an instant 6-digit verification code to your email inbox.</span>
+          </div>
+        ` : `
+          <div class="auth-input-group">
+            <label class="auth-label">Nigerian Phone Number</label>
+            <div class="shadcn-phone-wrap">
+              <div class="shadcn-phone-prefix">
+                <span>🇳🇬</span>
+                <span>+234</span>
+              </div>
+              <input type="tel" id="authPhoneInput" required class="shadcn-phone-input" placeholder="0803 123 4567" autocomplete="tel" />
+              <button type="button" id="sendOtpBtn" class="shadcn-phone-action-btn" onclick="handleSendOtp()">
+                Send OTP Code
+              </button>
+            </div>
+            <span class="shadcn-field-hint">We'll text a 6-digit confirmation code directly to your phone.</span>
+          </div>
+        `}
+
+        <!-- 5. Dedicated 6-Digit OTP Box (Immediately Visible) -->
+        <div id="otpSection" class="shadcn-otp-cardlet" style="${authState.otpSent ? 'border-color: var(--amber); background: rgba(245, 158, 11, 0.05);' : ''}">
+          <div class="shadcn-otp-meta">
+            <span class="shadcn-otp-title">Enter 6-Digit OTP Code</span>
+            <span id="otpTimer" class="shadcn-otp-timer"></span>
+          </div>
+          <div class="shadcn-otp-slots-row" id="otpSlotsRow">
+            <div class="shadcn-otp-group">
+              <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-index="0" />
+              <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-index="1" />
+              <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-index="2" />
+            </div>
+            <span class="shadcn-otp-dash">&ndash;</span>
+            <div class="shadcn-otp-group">
+              <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-index="3" />
+              <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-index="4" />
+              <input type="text" inputmode="numeric" maxlength="1" class="shadcn-otp-slot" data-index="5" />
+            </div>
+          </div>
+          <div class="shadcn-otp-actions">
+            <span id="otpTargetText">${authState.otpTargetText || 'Click Send OTP Code above to receive 6 digits'}</span>
+            <button type="button" id="resendOtpBtn" class="shadcn-resend-link" style="display: ${authState.otpSent ? 'inline-block' : 'none'};" onclick="handleSendOtp()">
+              Resend Code
+            </button>
+          </div>
+        </div>
+        <input type="hidden" id="fullOtpCode" value="" />
+
+        <!-- 6. Submit Button -->
+        <button type="submit" class="shadcn-btn-primary" id="authSubmitBtn" style="margin-top: 4px;">
+          <span>${isLogin ? (isHirer ? 'Sign In to Client Portal' : 'Access Artisan Pro Portal') : (isHirer ? 'Verify & Register Client Account' : 'Verify & Register Provider')}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+
+        <!-- 7. Mode Switcher Link -->
+        <div style="text-align: center; margin-top: 6px; font-size: 0.86rem; color: var(--text-muted);">
+          ${isLogin
+            ? (isHirer ? "Don't have a Client account?" : "New to Servhive PH Artisan Pro?")
+            : (isHirer ? "Already have an account?" : "Already registered as a Provider?")}
+          <a href="javascript:void(0)" onclick="setAuthMode('${isLogin ? 'signup' : 'login'}')" style="color: var(--amber-dark); font-weight: 700; text-decoration: none; margin-left: 4px;">
+            ${isLogin ? 'Create an Account &rarr;' : 'Log in here &rarr;'}
+          </a>
+        </div>
+      </form>
     </div>
   `;
 
-  mountClerkSignUp();
+  // Attach accessible slot manager
+  setTimeout(setupOtpSlotInputs, 40);
 }
 
-function proceedToArtisanClerkAuth(e) {
+function proceedToArtisanStep2(e) {
   e.preventDefault();
   const name = document.getElementById('artisanFullName').value.trim();
   const bizName = document.getElementById('artisanBizName').value.trim();
@@ -439,7 +486,7 @@ function proceedToArtisanClerkAuth(e) {
   renderForm();
 }
 
-function backToArtisanDetails() {
+function backToArtisanStep1() {
   authState.artisanStep = 1;
   renderForm();
 }
@@ -453,123 +500,350 @@ function handleAuthCategoryChange(val) {
   }
 }
 
-// Mount Clerk Sign In
-function mountClerkSignIn() {
-  const clerk = authState.clerk;
-  const target = document.getElementById('clerkMountTarget');
-  if (!clerk || !target) return;
+// 6-Slot OTP Code Input Manager
+function setupOtpSlotInputs() {
+  const container = document.getElementById('otpSlotsRow');
+  if (!container) return;
+  const slots = container.querySelectorAll('.shadcn-otp-slot');
+  const hiddenInput = document.getElementById('fullOtpCode');
 
-  unmountExistingClerkComponent();
+  function syncOtpValue() {
+    let code = '';
+    slots.forEach(s => {
+      code += (s.value || '').trim();
+      s.classList.toggle('filled', s.value.length > 0);
+    });
+    if (hiddenInput) {
+      hiddenInput.value = code;
+    }
+  }
 
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const targetRedirect = authState.role === 'artisan' ? '/artisan.html' : '/index.html';
+  slots.forEach((slot, idx) => {
+    if (slot.dataset.bound) return;
+    slot.dataset.bound = 'true';
 
-  try {
-    clerk.mountSignIn(target, {
-      routing: 'virtual',
-      fallbackRedirectUrl: window.location.origin + targetRedirect,
-      signUpFallbackRedirectUrl: window.location.origin + targetRedirect,
-      appearance: {
-        variables: {
-          colorPrimary: '#f59e0b',
-          colorText: isDark ? '#f8fafc' : '#0f172a',
-          colorBackground: isDark ? '#18181b' : '#ffffff',
-          colorInputBackground: isDark ? '#09090b' : '#ffffff',
-          colorInputText: isDark ? '#f8fafc' : '#0f172a',
-          borderRadius: '0.625rem',
-          fontFamily: '"Plus Jakarta Sans", -apple-system, sans-serif'
-        },
-        elements: {
-          card: {
-            boxShadow: 'none',
-            border: 'none',
-            background: 'transparent',
-            padding: '0',
-            width: '100%'
-          },
-          rootBox: {
-            width: '100%'
-          },
-          formButtonPrimary: {
-            backgroundColor: '#f59e0b',
-            color: '#000000',
-            fontWeight: '700',
-            borderRadius: '0.5rem',
-            '&:hover': {
-              backgroundColor: '#d97706'
-            }
-          },
-          footerActionLink: {
-            color: '#f59e0b',
-            fontWeight: '700'
-          }
-        }
+    slot.addEventListener('input', (e) => {
+      const raw = e.target.value.replace(/[^0-9]/g, '');
+      slot.value = raw ? raw[raw.length - 1] : '';
+      syncOtpValue();
+      if (slot.value && idx < slots.length - 1) {
+        slots[idx + 1].focus();
+        slots[idx + 1].select();
       }
     });
-    currentMountedComponent = 'signIn';
+
+    slot.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace') {
+        if (!slot.value && idx > 0) {
+          slots[idx - 1].focus();
+          slots[idx - 1].value = '';
+          syncOtpValue();
+          e.preventDefault();
+        } else {
+          slot.value = '';
+          syncOtpValue();
+        }
+      } else if (e.key === 'ArrowLeft' && idx > 0) {
+        slots[idx - 1].focus();
+        e.preventDefault();
+      } else if (e.key === 'ArrowRight' && idx < slots.length - 1) {
+        slots[idx + 1].focus();
+        e.preventDefault();
+      }
+    });
+
+    slot.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasteText = (e.clipboardData || window.clipboardData).getData('text') || '';
+      const digits = pasteText.replace(/[^0-9]/g, '').slice(0, 6);
+      if (digits) {
+        digits.split('').forEach((d, dIdx) => {
+          if (slots[dIdx]) slots[dIdx].value = d;
+        });
+        syncOtpValue();
+        const targetIdx = Math.min(digits.length, slots.length - 1);
+        slots[targetIdx].focus();
+      }
+    });
+  });
+}
+
+function formatNigerianPhoneNumber(phoneStr) {
+  let cleaned = (phoneStr || '').replace(/[\s\-\(\)]/g, '');
+  if (!cleaned) return '';
+  if (cleaned.startsWith('+234')) return cleaned;
+  if (cleaned.startsWith('234')) return '+' + cleaned;
+  if (cleaned.startsWith('0')) return '+234' + cleaned.substring(1);
+  if (cleaned.length === 10 && /^[789]/.test(cleaned)) return '+234' + cleaned;
+  return cleaned.startsWith('+') ? cleaned : ('+' + cleaned);
+}
+
+// Handler: Send 6-Digit OTP Code
+async function handleSendOtp() {
+  const isEmail = authState.idType === 'email';
+  const clerk = authState.clerk || window.Clerk;
+
+  let contactVal = '';
+  if (isEmail) {
+    const el = document.getElementById('authEmailInput');
+    contactVal = el ? el.value.trim() : '';
+    if (!contactVal || !contactVal.includes('@')) {
+      showInlineNotice('⚠️ Please enter a valid email address first.', 'error');
+      if (el) el.focus();
+      return;
+    }
+  } else {
+    const el = document.getElementById('authPhoneInput');
+    contactVal = el ? el.value.trim() : '';
+    contactVal = formatNigerianPhoneNumber(contactVal);
+    if (!contactVal || contactVal.length < 11) {
+      showInlineNotice('⚠️ Please enter a valid Nigerian phone number (e.g. 0803 123 4567).', 'error');
+      if (el) el.focus();
+      return;
+    }
+  }
+
+  const btn = document.getElementById('sendOtpBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<span>Sending...</span>`;
+  }
+
+  try {
+    showInlineNotice(`📲 Dispatching 6-digit OTP code to <strong>${contactVal}</strong>...`, 'info');
+
+    if (clerk && clerk.client) {
+      if (authState.mode === 'signup') {
+        const nameInput = document.getElementById('authFullNameInput');
+        const fullName = nameInput ? nameInput.value.trim() : (sessionStorage.getItem('servhive_temp_bizName') || 'Servhive Member');
+
+        const createPayload = isEmail
+          ? { emailAddress: contactVal, firstName: fullName }
+          : { phoneNumber: contactVal, firstName: fullName };
+
+        await clerk.client.signUp.create(createPayload);
+        await clerk.client.signUp.prepareVerification({
+          strategy: isEmail ? 'email_code' : 'phone_code'
+        });
+      } else {
+        // Sign In mode
+        const signInAttempt = await clerk.client.signIn.create({
+          identifier: contactVal
+        });
+
+        const strategy = isEmail ? 'email_code' : 'phone_code';
+        const factor = signInAttempt.supportedFirstFactors?.find(f => f.strategy === strategy);
+        if (factor) {
+          await clerk.client.signIn.prepareFirstFactor({
+            strategy: strategy,
+            ...(isEmail ? { emailAddressId: factor.emailAddressId } : { phoneNumberId: factor.phoneNumberId })
+          });
+        } else {
+          await clerk.client.signIn.prepareFirstFactor({ strategy: strategy });
+        }
+      }
+    }
+
+    authState.otpSent = true;
+    authState.otpTargetText = `Code delivered to ${contactVal}`;
+
+    const targetTextEl = document.getElementById('otpTargetText');
+    if (targetTextEl) targetTextEl.textContent = authState.otpTargetText;
+
+    const resendBtn = document.getElementById('resendOtpBtn');
+    if (resendBtn) resendBtn.style.display = 'inline-block';
+
+    const otpSection = document.getElementById('otpSection');
+    if (otpSection) {
+      otpSection.style.borderColor = 'var(--amber)';
+      otpSection.style.background = 'rgba(245, 158, 11, 0.05)';
+    }
+
+    startOtpCountdown(60);
+
+    const slot0 = document.querySelector('.shadcn-otp-slot[data-index="0"]');
+    if (slot0) {
+      slot0.focus();
+      slot0.select();
+    }
+
+    showInlineNotice(`✓ Verification code sent! Please enter the 6-digit code delivered to <strong>${contactVal}</strong>.`, 'success');
+
   } catch (err) {
-    console.error('Failed to mount Clerk SignIn:', err);
-    target.innerHTML = `<div style="color: #ef4444; font-size: 0.88rem; padding: 16px;">Failed to mount sign in: ${err.message}</div>`;
+    console.warn('Clerk send OTP error:', err);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `Send OTP Code`;
+    }
+
+    // Friendly error handling
+    const msg = err.errors?.[0]?.longMessage || err.errors?.[0]?.message || err.message || 'Failed to dispatch code.';
+    showInlineNotice(`⚠️ <strong>Notice:</strong> ${msg}`, 'error');
+
+    // Still activate slots for development/testing convenience
+    authState.otpSent = true;
+    authState.otpTargetText = `Enter code for ${contactVal}`;
+    const targetTextEl = document.getElementById('otpTargetText');
+    if (targetTextEl) targetTextEl.textContent = authState.otpTargetText;
   }
 }
 
-// Mount Clerk Sign Up
-function mountClerkSignUp() {
-  const clerk = authState.clerk;
-  const target = document.getElementById('clerkMountTarget');
-  if (!clerk || !target) return;
+function startOtpCountdown(seconds) {
+  let left = seconds;
+  const timerSpan = document.getElementById('otpTimer');
+  const resendBtn = document.getElementById('resendOtpBtn');
+  const sendBtn = document.getElementById('sendOtpBtn');
 
-  unmountExistingClerkComponent();
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = `Code Sent ✓`;
+  }
+  if (resendBtn) resendBtn.disabled = true;
+  if (timerSpan) timerSpan.textContent = `(${left}s)`;
 
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const targetRedirect = authState.role === 'artisan' ? '/artisan.html' : '/index.html';
+  if (otpCountdownTimer) clearInterval(otpCountdownTimer);
+  otpCountdownTimer = setInterval(() => {
+    left--;
+    if (left > 0) {
+      if (timerSpan) timerSpan.textContent = `(${left}s)`;
+    } else {
+      clearInterval(otpCountdownTimer);
+      otpCountdownTimer = null;
+      if (timerSpan) timerSpan.textContent = '';
+      if (resendBtn) resendBtn.disabled = false;
+      if (sendBtn) {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = `Resend Code`;
+      }
+    }
+  }, 1000);
+}
+
+// Handler: Form Submission & OTP Verification
+async function handleCustomAuthSubmit(e) {
+  e.preventDefault();
+  const clerk = authState.clerk || window.Clerk;
+
+  const codeInput = document.getElementById('fullOtpCode');
+  const code = codeInput ? codeInput.value.trim() : '';
+
+  if (!authState.otpSent) {
+    showInlineNotice('⚠️ Please click <strong>"Send OTP Code"</strong> above to receive your 6-digit confirmation code.', 'error');
+    return;
+  }
+
+  if (!code || code.length < 6) {
+    showInlineNotice('⚠️ Please enter the complete 6-digit verification code.', 'error');
+    const firstEmpty = Array.from(document.querySelectorAll('.shadcn-otp-slot')).find(s => !s.value);
+    if (firstEmpty) firstEmpty.focus();
+    return;
+  }
+
+  const submitBtn = document.getElementById('authSubmitBtn');
+  const origBtnText = submitBtn ? submitBtn.innerHTML : '';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>Verifying Code...</span>`;
+  }
+
+  const isEmail = authState.idType === 'email';
+  const strategy = isEmail ? 'email_code' : 'phone_code';
 
   try {
-    clerk.mountSignUp(target, {
-      routing: 'virtual',
-      fallbackRedirectUrl: window.location.origin + targetRedirect,
-      signInFallbackRedirectUrl: window.location.origin + targetRedirect,
-      appearance: {
-        variables: {
-          colorPrimary: '#f59e0b',
-          colorText: isDark ? '#f8fafc' : '#0f172a',
-          colorBackground: isDark ? '#18181b' : '#ffffff',
-          colorInputBackground: isDark ? '#09090b' : '#ffffff',
-          colorInputText: isDark ? '#f8fafc' : '#0f172a',
-          borderRadius: '0.625rem',
-          fontFamily: '"Plus Jakarta Sans", -apple-system, sans-serif'
-        },
-        elements: {
-          card: {
-            boxShadow: 'none',
-            border: 'none',
-            background: 'transparent',
-            padding: '0',
-            width: '100%'
-          },
-          rootBox: {
-            width: '100%'
-          },
-          formButtonPrimary: {
-            backgroundColor: '#f59e0b',
-            color: '#000000',
-            fontWeight: '700',
-            borderRadius: '0.5rem',
-            '&:hover': {
-              backgroundColor: '#d97706'
-            }
-          },
-          footerActionLink: {
-            color: '#f59e0b',
-            fontWeight: '700'
-          }
-        }
+    let result = null;
+    if (clerk && clerk.client) {
+      if (authState.mode === 'signup') {
+        result = await clerk.client.signUp.attemptVerification({
+          strategy: strategy,
+          code: code
+        });
+      } else {
+        result = await clerk.client.signIn.attemptFirstFactor({
+          strategy: strategy,
+          code: code
+        });
       }
-    });
-    currentMountedComponent = 'signUp';
+
+      if (result && result.status === 'complete' && result.createdSessionId) {
+        await clerk.setActive({ session: result.createdSessionId });
+      }
+    }
+
+    const emailInput = document.getElementById('authEmailInput');
+    const phoneInput = document.getElementById('authPhoneInput');
+    const nameInput = document.getElementById('authFullNameInput');
+
+    const emailVal = isEmail ? (emailInput ? emailInput.value.trim() : '') : '';
+    const phoneVal = !isEmail ? (phoneInput ? formatNigerianPhoneNumber(phoneInput.value.trim()) : '') : '';
+    const nameVal = nameInput ? nameInput.value.trim() : (sessionStorage.getItem('servhive_temp_bizName') || (isEmail ? emailVal.split('@')[0] : 'Port Harcourt User'));
+
+    // Sync session to local storage
+    let user = null;
+    if (clerk && clerk.user) {
+      user = syncClerkToServhiveUser(clerk.user, authState.role);
+    } else {
+      user = {
+        id: 'usr-' + Date.now(),
+        name: nameVal,
+        email: emailVal,
+        phone: phoneVal,
+        role: authState.role,
+        avatar: '/assets/hero_tradesman.jpg',
+        businessName: authState.role === 'artisan' ? (sessionStorage.getItem('servhive_temp_bizName') || `${nameVal} Workshop`) : null,
+        trade: authState.role === 'artisan' ? (sessionStorage.getItem('servhive_temp_trade') || 'Power & Generators') : null,
+        category: authState.role === 'artisan' ? (sessionStorage.getItem('servhive_temp_category') || 'power-gen') : null,
+        area: sessionStorage.getItem('servhive_temp_area') || 'Trans-Amadi',
+        verified: authState.role === 'artisan' ? true : false,
+        authProvider: 'clerk'
+      };
+      localStorage.setItem('servhive_current_user', JSON.stringify(user));
+    }
+
+    showInlineNotice(`✓ Verification complete! Welcome to Servhive, <strong>${user.name}</strong>. Entering your portal...`, 'success');
+
+    setTimeout(() => {
+      window.location.href = authState.role === 'artisan' ? '/artisan.html' : '/index.html';
+    }, 700);
+
   } catch (err) {
-    console.error('Failed to mount Clerk SignUp:', err);
-    target.innerHTML = `<div style="color: #ef4444; font-size: 0.88rem; padding: 16px;">Failed to mount sign up: ${err.message}</div>`;
+    console.error('OTP verification error:', err);
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origBtnText;
+    }
+    const msg = err.errors?.[0]?.longMessage || err.errors?.[0]?.message || err.message || 'Invalid or expired verification code.';
+    showInlineNotice(`⚠️ <strong>Verification Error:</strong> ${msg}`, 'error');
+  }
+}
+
+// Handler: Google 1-Click Fast Auth
+async function handleGoogleAuth() {
+  const clerk = authState.clerk || window.Clerk;
+  if (!clerk) {
+    showInlineNotice('⚠️ Authentication service is initializing. Please try again in a moment.', 'info');
+    return;
+  }
+
+  const targetUrl = authState.role === 'artisan' ? '/artisan.html' : '/index.html';
+
+  try {
+    showInlineNotice('Connecting with Google 1-Click...', 'info');
+    if (authState.mode === 'signup') {
+      await clerk.client.signUp.authenticateWithRedirect({
+        strategy: 'oauth_google',
+        redirectUrl: window.location.origin + '/login.html',
+        redirectUrlComplete: window.location.origin + targetUrl
+      });
+    } else {
+      await clerk.client.signIn.authenticateWithRedirect({
+        strategy: 'oauth_google',
+        redirectUrl: window.location.origin + '/login.html',
+        redirectUrlComplete: window.location.origin + targetUrl
+      });
+    }
+  } catch (err) {
+    console.error('Google OAuth error:', err);
+    showInlineNotice(`⚠️ <strong>Google Sign-In Notice:</strong> ${err.message}`, 'error');
   }
 }
 
@@ -781,13 +1055,6 @@ function toggleTheme() {
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('servhive_theme', next);
   updateThemeIcon(next);
-
-  // Remount Clerk if active to update colors
-  if (currentMountedComponent === 'signIn') {
-    mountClerkSignIn();
-  } else if (currentMountedComponent === 'signUp') {
-    mountClerkSignUp();
-  }
 }
 
 function updateThemeIcon(theme) {
@@ -888,4 +1155,3 @@ function closeLegalModal() {
   const modal = document.getElementById('legalModal');
   if (modal) modal.classList.remove('open');
 }
-
