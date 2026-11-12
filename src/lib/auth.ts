@@ -23,7 +23,13 @@ export const getSessionUser = cache(async (): Promise<User | null> => {
   if (!userId) return null;
 
   const existing = await db.user.findUnique({ where: { clerkId: userId } });
-  if (existing) return existing;
+  if (existing) {
+    // Promote accounts added to ADMIN_EMAILS after they signed up.
+    if (existing.role !== "ADMIN" && existing.email && adminEmails().includes(existing.email.toLowerCase())) {
+      return db.user.update({ where: { id: existing.id }, data: { role: "ADMIN", onboarded: true } });
+    }
+    return existing;
+  }
 
   const cu = await currentUser();
   if (!cu) return null;
