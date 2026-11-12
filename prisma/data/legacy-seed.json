@@ -1,0 +1,1661 @@
+{
+  "INITIAL_CATEGORIES": [
+    {
+      "id": "all",
+      "name": "All Trades",
+      "icon": "grid",
+      "proCount": "380+"
+    },
+    {
+      "id": "cleaning-janitorial",
+      "name": "Cleaning & Janitorial",
+      "icon": "sparkles",
+      "proCount": "48+ Verified Pros",
+      "rateFrom": "₦8,000",
+      "desc": "Deep home scrubbing, post-construction cleaning, office janitorial & upholstery stain wash."
+    },
+    {
+      "id": "laundry-dryclean",
+      "name": "Laundry & Dry Cleaning",
+      "icon": "wind",
+      "proCount": "36+ Verified Pros",
+      "rateFrom": "₦4,000",
+      "desc": "Wash, dry & fold, corporate suit dry cleaning, curtain steaming & stain treatment."
+    },
+    {
+      "id": "fumigation-pest",
+      "name": "Fumigation & Pest Control",
+      "icon": "shield",
+      "proCount": "28+ Verified Pros",
+      "rateFrom": "₦15,000",
+      "desc": "Pest extermination, rodent fumigation, anti-termite wood treatment & snake repellents."
+    },
+    {
+      "id": "tailors-fashion",
+      "name": "Tailors & Fashion Design",
+      "icon": "scissors",
+      "proCount": "54+ Verified Pros",
+      "rateFrom": "₦10,000",
+      "desc": "Bespoke senator suits, native agbada, luxury dressmaking, alterations & zipper repairs."
+    },
+    {
+      "id": "events-catering",
+      "name": "Events & Catering",
+      "icon": "calendar",
+      "proCount": "32+ Verified Pros",
+      "rateFrom": "₦25,000",
+      "desc": "Outdoor canopy & chair decor, party catering, event sound systems, lighting & small chops."
+    },
+    {
+      "id": "phone-gadgets",
+      "name": "Phone & Gadget Repair",
+      "icon": "cpu",
+      "proCount": "44+ Verified Pros",
+      "rateFrom": "₦5,000",
+      "desc": "iPhone & Android screen replacement, charging port repair, micro-soldering & laptop fixes."
+    },
+    {
+      "id": "car-wash",
+      "name": "Car Wash & Auto Detailing",
+      "icon": "droplet",
+      "proCount": "30+ Verified Pros",
+      "rateFrom": "₦3,500",
+      "desc": "Mobile doorstep car wash, engine bay steam detailing, ceramic polish & interior seat extraction."
+    },
+    {
+      "id": "pets-vet",
+      "name": "Pets & Veterinary Care",
+      "icon": "heart",
+      "proCount": "22+ Verified Pros",
+      "rateFrom": "₦7,000",
+      "desc": "Dog grooming & tick dipping, routine vet vaccinations, deworming & professional dog training."
+    },
+    {
+      "id": "power-gen",
+      "name": "Power & Generators",
+      "icon": "zap",
+      "proCount": "46+ Verified Pros",
+      "rateFrom": "₦8,000",
+      "desc": "Generators, ATS changeover switches & industrial load balancing."
+    },
+    {
+      "id": "solar-tech",
+      "name": "Solar & Inverters",
+      "icon": "sun",
+      "proCount": "34+ Verified Pros",
+      "rateFrom": "₦12,000",
+      "desc": "Hybrid solar inverters, lithium batteries & CCTV networks."
+    },
+    {
+      "id": "interior-pop",
+      "name": "POP & Interior",
+      "icon": "home",
+      "proCount": "38+ Verified Pros",
+      "rateFrom": "₦15,000",
+      "desc": "Suspended POP ceilings, Italian tiling & luxury screeding."
+    },
+    {
+      "id": "plumbing",
+      "name": "Plumbing & Pumps",
+      "icon": "droplet",
+      "proCount": "29+ Verified Pros",
+      "rateFrom": "₦10,000",
+      "desc": "Submersible borehole pumps, piping repairs & water storage."
+    },
+    {
+      "id": "electrical",
+      "name": "Electrical & Wiring",
+      "icon": "cpu",
+      "proCount": "41+ Verified Pros",
+      "rateFrom": "₦7,000",
+      "desc": "Conduit piping, distribution boards & emergency fault finding."
+    },
+    {
+      "id": "ac-chillers",
+      "name": "AC & Refrigeration",
+      "icon": "wind",
+      "proCount": "32+ Verified Pros",
+      "rateFrom": "₦8,000",
+      "desc": "Split AC servicing, compressor replacements & cold rooms."
+    },
+    {
+      "id": "auto-mechanic",
+      "name": "Auto Diagnostics",
+      "icon": "tool",
+      "proCount": "31+ Verified Pros",
+      "rateFrom": "₦6,000",
+      "desc": "OBD-2 computerized scanning, brake overhauls & mobile mechanics."
+    },
+    {
+      "id": "beauty-hair",
+      "name": "Beauty & Grooming",
+      "icon": "scissors",
+      "proCount": "52+ Verified Pros",
+      "rateFrom": "₦7,000",
+      "desc": "Knotless box braids, wig customization & scalp therapy."
+    },
+    {
+      "id": "carpentry",
+      "name": "Carpentry & Furniture",
+      "icon": "box",
+      "proCount": "27+ Verified Pros",
+      "rateFrom": "₦10,000",
+      "desc": "Kitchen cabinetry, custom wardrobes & wooden furniture restoration."
+    },
+    {
+      "id": "painting",
+      "name": "Painting & Screeding",
+      "icon": "brush",
+      "proCount": "35+ Verified Pros",
+      "rateFrom": "₦12,000",
+      "desc": "Exterior weather-shield painting & luxury interior wall textures."
+    }
+  ],
+  "APPROVAL_REQUIRED_CATEGORIES": [
+    {
+      "id": "home-health",
+      "name": "Home Health Aide",
+      "reason": "Medical/health care liability. Requires verified Rivers State Nursing/Health Council license."
+    },
+    {
+      "id": "laser-tech",
+      "name": "Laser Tech & Electrologist",
+      "reason": "Invasive cosmetic procedures. Medical board certification required."
+    },
+    {
+      "id": "tattoo-piercing",
+      "name": "Tattoo & Body Piercer",
+      "reason": "Sanitation and bloodborne pathogen compliance required."
+    },
+    {
+      "id": "funeral-director",
+      "name": "Funeral Director",
+      "reason": "Regulated mortuary and logistics license required."
+    }
+  ],
+  "BLOCKED_CATEGORIES": [
+    {
+      "id": "nanny",
+      "name": "Nanny / Babysitter",
+      "reason": "Child safeguarding policy strictly prohibits independent nanny sign-ups at this prototype stage."
+    },
+    {
+      "id": "childcare",
+      "name": "Childcare / Daycare Provider",
+      "reason": "Child safeguarding and facility licensing policy."
+    },
+    {
+      "id": "tutor",
+      "name": "Private Tutor",
+      "reason": "Home education listings are blocked in the current marketplace scope."
+    }
+  ],
+  "AREAS": [
+    "All Port Harcourt",
+    "Old GRA",
+    "New GRA / Phase 2",
+    "Peter Odili Road",
+    "Trans-Amadi",
+    "Woji",
+    "D-Line",
+    "Ada George",
+    "Choba / Uniport",
+    "Rumuodara",
+    "Rumuola",
+    "Alakahia"
+  ],
+  "PH_LANDMARKS": [
+    {
+      "name": "Pleasure Park / Bori Camp",
+      "shortName": "Pleasure Park",
+      "zone": "Rumuola",
+      "lat": 4.832,
+      "lng": 7.0125,
+      "popular": true,
+      "keywords": [
+        "pleasure park",
+        "bori camp",
+        "aba road",
+        "airforce",
+        "rumuola flyover",
+        "recreation"
+      ]
+    },
+    {
+      "name": "Garrison Junction & D-Line",
+      "shortName": "Garrison",
+      "zone": "D-Line",
+      "lat": 4.8055,
+      "lng": 7.015,
+      "popular": true,
+      "keywords": [
+        "garrison",
+        "d-line",
+        "aba road",
+        "transit",
+        "junction",
+        "flyover"
+      ]
+    },
+    {
+      "name": "Hotel Presidential & Rumuola",
+      "shortName": "Hotel Presidential",
+      "zone": "Rumuola",
+      "lat": 4.821,
+      "lng": 7.009,
+      "popular": true,
+      "keywords": [
+        "hotel presidential",
+        "presidential",
+        "rumuola",
+        "aba road",
+        "gra phase 2"
+      ]
+    },
+    {
+      "name": "Waterlines / Aba Road",
+      "shortName": "Waterlines",
+      "zone": "D-Line",
+      "lat": 4.814,
+      "lng": 7.0115,
+      "popular": true,
+      "keywords": [
+        "waterlines",
+        "olu obasanjo",
+        "aba road",
+        "junction",
+        "telecoms"
+      ]
+    },
+    {
+      "name": "Peter Odili Road & Trans-Amadi Gardens",
+      "shortName": "Peter Odili Road",
+      "zone": "Peter Odili Road",
+      "lat": 4.808,
+      "lng": 7.045,
+      "popular": true,
+      "keywords": [
+        "peter odili",
+        "trans-amadi gardens",
+        "genesis",
+        "riverpark",
+        "odili road"
+      ]
+    },
+    {
+      "name": "Old GRA & Government House",
+      "shortName": "Old GRA",
+      "zone": "Old GRA",
+      "lat": 4.776,
+      "lng": 7.01,
+      "popular": true,
+      "keywords": [
+        "old gra",
+        "government house",
+        "harley street",
+        "forces avenue",
+        "secretariat"
+      ]
+    },
+    {
+      "name": "New GRA (Tombia / Birabi)",
+      "shortName": "New GRA",
+      "zone": "New GRA / Phase 2",
+      "lat": 4.818,
+      "lng": 6.998,
+      "popular": true,
+      "keywords": [
+        "new gra",
+        "tombia",
+        "birabi",
+        "gra phase 2",
+        "genesis deluxe",
+        "lounges"
+      ]
+    },
+    {
+      "name": "Trans-Amadi & Slaughter Bridge",
+      "shortName": "Trans-Amadi",
+      "zone": "Trans-Amadi",
+      "lat": 4.819,
+      "lng": 7.035,
+      "popular": true,
+      "keywords": [
+        "trans-amadi",
+        "slaughter bridge",
+        "industrial layout",
+        "ordnance",
+        "fabrication"
+      ]
+    },
+    {
+      "name": "Woji & Golf Estate Gate",
+      "shortName": "Woji & Golf Estate",
+      "zone": "Woji",
+      "lat": 4.825,
+      "lng": 7.058,
+      "popular": true,
+      "keywords": [
+        "woji",
+        "golf estate",
+        "woji junction",
+        "ykc",
+        "federal housing"
+      ]
+    },
+    {
+      "name": "Choba & Uniport Delta Park",
+      "shortName": "Choba & Uniport",
+      "zone": "Choba / Uniport",
+      "lat": 4.898,
+      "lng": 6.924,
+      "popular": true,
+      "keywords": [
+        "choba",
+        "uniport",
+        "delta park",
+        "abuja campus",
+        "university of port harcourt"
+      ]
+    },
+    {
+      "name": "UPTH Gate & Alakahia",
+      "shortName": "UPTH & Alakahia",
+      "zone": "Alakahia",
+      "lat": 4.8875,
+      "lng": 6.936,
+      "popular": true,
+      "keywords": [
+        "upth",
+        "teaching hospital",
+        "alakahia",
+        "east-west road",
+        "medical"
+      ]
+    },
+    {
+      "name": "RSU / UST Gate & Mile 3 Diobu",
+      "shortName": "RSU / UST",
+      "zone": "Mile 3 Diobu",
+      "lat": 4.8,
+      "lng": 6.985,
+      "popular": true,
+      "keywords": [
+        "rsu",
+        "ust",
+        "rivers state university",
+        "nkpolu",
+        "mile 3",
+        "diobu"
+      ]
+    },
+    {
+      "name": "Rumuokoro Flyover & Roundabout",
+      "shortName": "Rumuokoro",
+      "zone": "Rumuokoro",
+      "lat": 4.871,
+      "lng": 6.994,
+      "popular": true,
+      "keywords": [
+        "rumuokoro",
+        "roundabout",
+        "flyover",
+        "east-west road",
+        "okoro bus stop"
+      ]
+    },
+    {
+      "name": "Air Force Base & Eliozu Flyover",
+      "shortName": "Air Force / Eliozu",
+      "zone": "Eliozu",
+      "lat": 4.845,
+      "lng": 7.025,
+      "popular": true,
+      "keywords": [
+        "air force",
+        "air force base",
+        "eliozu",
+        "eliozu flyover",
+        "gu ake road"
+      ]
+    },
+    {
+      "name": "Artillery Junction & Okporo",
+      "shortName": "Artillery Junction",
+      "zone": "Rumuodara",
+      "lat": 4.838,
+      "lng": 7.032,
+      "popular": true,
+      "keywords": [
+        "artillery",
+        "okporo",
+        "aba road",
+        "first artillery",
+        "second artillery"
+      ]
+    },
+    {
+      "name": "Oil Mill Junction & Elelenwo",
+      "shortName": "Oil Mill Market",
+      "zone": "Elelenwo",
+      "lat": 4.856,
+      "lng": 7.081,
+      "popular": true,
+      "keywords": [
+        "oil mill",
+        "oil mill market",
+        "eleme junction",
+        "elelenwo",
+        "aba expressway"
+      ]
+    },
+    {
+      "name": "Ada George & Wimpey Junction",
+      "shortName": "Ada George / Wimpey",
+      "zone": "Ada George",
+      "lat": 4.842,
+      "lng": 6.975,
+      "popular": true,
+      "keywords": [
+        "ada george",
+        "wimpey",
+        "ikwerre road",
+        "location road",
+        "agip"
+      ]
+    },
+    {
+      "name": "Mile 1-3 Diobu & Education Bus Stop",
+      "shortName": "Diobu Markets",
+      "zone": "Diobu",
+      "lat": 4.789,
+      "lng": 6.998,
+      "popular": true,
+      "keywords": [
+        "diobu",
+        "mile 1",
+        "mile 2",
+        "mile 3",
+        "education bus stop",
+        "ikwerre road",
+        "timber market"
+      ]
+    },
+    {
+      "name": "Port Harcourt Mall / Spar",
+      "shortName": "Spar / PH Mall",
+      "zone": "Old GRA",
+      "lat": 4.7675,
+      "lng": 7.014,
+      "popular": true,
+      "keywords": [
+        "spar",
+        "port harcourt mall",
+        "ph mall",
+        "azikiwe road",
+        "cinema"
+      ]
+    },
+    {
+      "name": "Agip Roundabout & Ikwerre Road",
+      "shortName": "Agip Roundabout",
+      "zone": "Rumueme",
+      "lat": 4.829,
+      "lng": 6.984,
+      "popular": false,
+      "keywords": [
+        "agip",
+        "agip roundabout",
+        "rumueme",
+        "mile 4",
+        "ikwerre road"
+      ]
+    },
+    {
+      "name": "Borokiri & Port Harcourt Township",
+      "shortName": "Borokiri / Town",
+      "zone": "Township",
+      "lat": 4.752,
+      "lng": 7.028,
+      "popular": false,
+      "keywords": [
+        "borokiri",
+        "town",
+        "creek road",
+        "township",
+        "harbour road",
+        "wharf"
+      ]
+    },
+    {
+      "name": "Rukpokwu & Airport Road Roundabout",
+      "shortName": "Rukpokwu",
+      "zone": "Rukpokwu",
+      "lat": 4.899,
+      "lng": 7.022,
+      "popular": false,
+      "keywords": [
+        "rukpokwu",
+        "airport road",
+        "eneka",
+        "igwuruta",
+        "international airport"
+      ]
+    },
+    {
+      "name": "Rumuodara Junction",
+      "shortName": "Rumuodara",
+      "zone": "Rumuodara",
+      "lat": 4.851,
+      "lng": 7.042,
+      "popular": false,
+      "keywords": [
+        "rumuodara",
+        "rumuodara junction",
+        "east-west road",
+        "tanker park"
+      ]
+    }
+  ],
+  "INITIAL_PROVIDERS": [
+    {
+      "id": "pro-ph-clean-1",
+      "name": "Godwin Jumbo",
+      "businessName": "SparkleClean Facility & Deep Cleaning PH",
+      "category": "cleaning-janitorial",
+      "categoryName": "Cleaning & Janitorial",
+      "subSpecialty": "Post-Construction & Residential Deep Scrub",
+      "area": "Trans-Amadi",
+      "rating": 4.9,
+      "reviewCount": 38,
+      "verified": true,
+      "status": "approved",
+      "boosted": true,
+      "image": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 8000,
+      "responseTime": "~15 mins",
+      "bio": "Specialized deep industrial scrub, post-construction site cleanup, and residential sanitization across Trans-Amadi, Peter Odili, and Old GRA.",
+      "areasCovered": [
+        "Trans-Amadi",
+        "Peter Odili Road",
+        "Old GRA",
+        "Woji",
+        "New GRA / Phase 2"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Post-construction deep scrub & tile polish at Peter Odili residential duplex",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Industrial carpet extraction & upholstery steam wash at Trans-Amadi office",
+          "area": "Trans-Amadi",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Move-in sanitization and kitchen degreasing at Old GRA flat",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Standard 3-Bedroom Home Deep Scrub",
+          "price": 15000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Post-Construction Site Cleanup",
+          "price": 25000,
+          "type": "Milestone"
+        },
+        {
+          "name": "Upholstery & Luxury Rug Steam Wash",
+          "price": 8000,
+          "type": "Per Room"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-laundry-1",
+      "name": "Ibim West",
+      "businessName": "CleanPress Executive Laundry & Dry Cleaners",
+      "category": "laundry-dryclean",
+      "categoryName": "Laundry & Dry Cleaning",
+      "subSpecialty": "Corporate Suit Steaming & Express Wash",
+      "area": "Old GRA",
+      "rating": 4.8,
+      "reviewCount": 29,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1545173168-9f1947eebb7f?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 4000,
+      "responseTime": "~20 mins",
+      "bio": "Professional garment care, delicate fabric dry cleaning, corporate senator suit pressing, and same-day express doorstep laundry in Port Harcourt.",
+      "areasCovered": [
+        "Old GRA",
+        "New GRA / Phase 2",
+        "Peter Odili Road",
+        "Trans-Amadi"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Executive suit steaming, stain removal & crisp cuff starching",
+          "area": "Old GRA",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Residential wash, tumble dry & organized fold delivery",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1545173168-9f1947eebb7f?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Heavy velvet curtain dry cleaning & restoration",
+          "area": "New GRA / Phase 2",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Executive Suit & Agbada Dry Cleaning (2 Pieces)",
+          "price": 4000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Bulk Weekly Laundry (Up to 15kg Wash & Fold)",
+          "price": 9500,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Curtains & Heavy Bedding Steaming",
+          "price": 6000,
+          "type": "Per Set"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-fumigate-1",
+      "name": "Tamuno Pepple",
+      "businessName": "Apex Shield Pest Control & Fumigation Services",
+      "category": "fumigation-pest",
+      "categoryName": "Fumigation & Pest Control",
+      "subSpecialty": "Thermal Fogging & Anti-Termite Barriers",
+      "area": "Woji",
+      "rating": 4.9,
+      "reviewCount": 31,
+      "verified": true,
+      "status": "approved",
+      "boosted": true,
+      "image": "https://images.unsplash.com/photo-1632733711679-529326f6db12?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 15000,
+      "responseTime": "~10 mins",
+      "bio": "Government-compliant fumigation, odorless cockroach gel baits, rodent extermination, and wood-boring termite barriers with 6-month guarantees.",
+      "areasCovered": [
+        "Woji",
+        "Peter Odili Road",
+        "Trans-Amadi",
+        "Ada George"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1632733711679-529326f6db12?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Thermal fogging for mosquito & pest eradication at Woji Estate",
+          "area": "Woji",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1587393855524-087f83d95bc9?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Anti-termite foundation drill & chemical injection barrier",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Odorless perimeter rodent & crawling insect treatment",
+          "area": "Trans-Amadi",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Full 3-Bedroom Flat Fumigation & Gel Baits",
+          "price": 15000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Duplex & Compound Perimeter Fogging",
+          "price": 28000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Anti-Termite Pre/Post-Construction Soil Barrier",
+          "price": 45000,
+          "type": "Milestone"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-tailor-1",
+      "name": "Diepreye George",
+      "businessName": "De-Regal Bespoke Clothiers & Native Tailors",
+      "category": "tailors-fashion",
+      "categoryName": "Tailors & Fashion Design",
+      "subSpecialty": "Senator Native Attires & Bespoke Suits",
+      "area": "D-Line",
+      "rating": 4.9,
+      "reviewCount": 44,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 10000,
+      "responseTime": "~15 mins",
+      "bio": "Master tailor specializing in sharp, immaculate Senator suits, bespoke Agbada embroidery, wedding groom attires, and precision corporate alterations.",
+      "areasCovered": [
+        "D-Line",
+        "Old GRA",
+        "New GRA / Phase 2",
+        "Peter Odili Road"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Bespoke cashmere Senator suit with custom pocket piping",
+          "area": "D-Line",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Hand-embroidered 3-piece wedding Agbada completed for groom",
+          "area": "Old GRA",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Tailored trousers slimming & waist tapering completed in 24 hrs",
+          "area": "New GRA / Phase 2",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Custom Senator Native Attire (Top & Trousers)",
+          "price": 12000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Luxury Agbada with Computer Embroidery",
+          "price": 25000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Express Trousers & Shirt Alterations",
+          "price": 3500,
+          "type": "Per Garment"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-events-1",
+      "name": "Precious Hart",
+      "businessName": "GrandCelebrations Event Decor & Catering PH",
+      "category": "events-catering",
+      "categoryName": "Events & Catering",
+      "subSpecialty": "Canopy Decor, Sound & Wedding Banquets",
+      "area": "Peter Odili Road",
+      "rating": 4.9,
+      "reviewCount": 36,
+      "verified": true,
+      "status": "approved",
+      "boosted": true,
+      "image": "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 25000,
+      "responseTime": "~10 mins",
+      "bio": "High-end event styling, banquet table centerpieces, fairy lighting, authentic Rivers Native soup catering, and sound engineering for outdoor celebrations.",
+      "areasCovered": [
+        "Peter Odili Road",
+        "Old GRA",
+        "New GRA / Phase 2",
+        "Trans-Amadi"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Luxury indoor banquet hall lighting and floral backdrop setup",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Outdoor canopy wedding reception layout with Chiavari seating",
+          "area": "Old GRA",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Sound engineering, acoustic balancing and wireless mic setup",
+          "area": "Trans-Amadi",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Intimate Event Canopy & Table Styling (50 Guests)",
+          "price": 35000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Cocktail & Small Chops Buffet (Per 50 Guests)",
+          "price": 25000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Sound System + Generator & Operator (6 Hours)",
+          "price": 40000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-gadget-1",
+      "name": "Kelvin Alabo",
+      "businessName": "GadgetLab Precision Micro-Soldering & Phone Repair",
+      "category": "phone-gadgets",
+      "categoryName": "Phone & Gadget Repair",
+      "subSpecialty": "iPhone/Android Screen Swaps & Motherboard Fixes",
+      "area": "D-Line",
+      "rating": 4.8,
+      "reviewCount": 49,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 5000,
+      "responseTime": "~15 mins",
+      "bio": "Computerized logic board diagnosis, original OLED screen replacements, water damage recovery, and charging IC micro-soldering with warranty.",
+      "areasCovered": [
+        "D-Line",
+        "Old GRA",
+        "Woji",
+        "Ada George"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: iPhone motherboard micro-soldering & power IC bridge repair",
+          "area": "D-Line",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Samsung Super AMOLED display replacement with true-tone calibration",
+          "area": "Old GRA",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: MacBook battery swap & thermal paste cooling overhaul",
+          "area": "Woji",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Original Screen Replacement (iPhone/Samsung)",
+          "price": 18000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Charging Port & Speaker Flex Repair",
+          "price": 6500,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Motherboard IC Micro-Soldering & Dead Phone Revival",
+          "price": 15000,
+          "type": "Milestone"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-carwash-1",
+      "name": "Tamunotonye Fubara",
+      "businessName": "HydroShine Mobile Detailing & Doorstep Car Wash",
+      "category": "car-wash",
+      "categoryName": "Car Wash & Auto Detailing",
+      "subSpecialty": "Mobile Steam Cleaning & Engine Bay Detailing",
+      "area": "Peter Odili Road",
+      "rating": 4.8,
+      "reviewCount": 33,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 3500,
+      "responseTime": "~20 mins",
+      "bio": "Mobile doorstep vehicle spa. We bring high-pressure water, foam cannons, leather steam extractors, and ceramic wax directly to your home or office.",
+      "areasCovered": [
+        "Peter Odili Road",
+        "Trans-Amadi",
+        "Old GRA",
+        "Woji"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Doorstep snow-foam wash & hydrophobic hand wax for SUV",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Steam degreasing and silicone protective coat on engine bay",
+          "area": "Trans-Amadi",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Deep fabric seat extraction & leather interior conditioning",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Doorstep Exterior Snow Foam Wash & Tyre Shine",
+          "price": 3500,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Full Interior Deep Extraction + Steam Wash",
+          "price": 8000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Engine Bay Steam Detailing + Wax Polish",
+          "price": 7500,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-pets-1",
+      "name": "Dr. Ovie Dan-Jumbo",
+      "businessName": "Port Harcourt K9 & Pet Care Specialists",
+      "category": "pets-vet",
+      "categoryName": "Pets & Veterinary Care",
+      "subSpecialty": "Dog Grooming, Vet Checks & Vaccinations",
+      "area": "Trans-Amadi",
+      "rating": 4.9,
+      "reviewCount": 24,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 7000,
+      "responseTime": "~15 mins",
+      "bio": "Doorstep mobile pet grooming, medicated tick dipping, routine canine vaccinations, deworming, and professional puppy socialization across Port Harcourt.",
+      "areasCovered": [
+        "Trans-Amadi",
+        "Peter Odili Road",
+        "Old GRA",
+        "Woji"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Full coat de-matting, shampoo and nail trim for Caucasian dog",
+          "area": "Trans-Amadi",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Mobile DHPPi & Anti-Rabies vaccination with official health book",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: On-leash behavioral correction & obedience training session",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Doorstep Full Dog Grooming & Medicated Bath",
+          "price": 9000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Annual DHPPi + Anti-Rabies Vaccination Visit",
+          "price": 12000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Tick & Flea Deep Medicated Immersion Dip",
+          "price": 7000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-solar-1",
+      "name": "Sotonye Briggs",
+      "businessName": "SunVolt Solar & Hybrid Energy Solutions",
+      "category": "solar-tech",
+      "categoryName": "Solar & Inverters",
+      "subSpecialty": "Lithium Battery Banks & Rooftop Solar Arrays",
+      "area": "New GRA / Phase 2",
+      "rating": 4.9,
+      "reviewCount": 42,
+      "verified": true,
+      "status": "approved",
+      "boosted": true,
+      "image": "/assets/solar_tech.jpg",
+      "startingPrice": 12000,
+      "responseTime": "~10 mins",
+      "bio": "Turnkey 24/7 solar installations. We calculate heavy residential power loads, design surge-protected lithium battery systems, and install CCTV monitoring.",
+      "areasCovered": [
+        "New GRA / Phase 2",
+        "Old GRA",
+        "Peter Odili Road",
+        "Trans-Amadi"
+      ],
+      "workPhotos": [
+        {
+          "url": "/assets/solar_tech.jpg",
+          "caption": "✔ Completed: 5kVA Felicity hybrid inverter with 10kWh lithium wall battery",
+          "area": "New GRA / Phase 2",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: 16-panel tier-1 monocrystalline rooftop solar installation",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Commercial solar changeover and surge-arrestor panel wiring",
+          "area": "Trans-Amadi",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "5kVA Hybrid Solar Inverter Full Setup",
+          "price": 45000,
+          "type": "Milestone"
+        },
+        {
+          "name": "Solar Panel Array Maintenance & Cleaning",
+          "price": 12000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Inverter Battery Health Audit & Load Balancing",
+          "price": 8000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-pop-1",
+      "name": "Chukwuma Eze",
+      "businessName": "RoyalFinish POP Ceilings & Italian Porcelain Tiling",
+      "category": "interior-pop",
+      "categoryName": "POP & Interior",
+      "subSpecialty": "Suspended POP Ceilings & 60x120 Tiling",
+      "area": "Peter Odili Road",
+      "rating": 4.9,
+      "reviewCount": 35,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "/assets/interior_pop.jpg",
+      "startingPrice": 15000,
+      "responseTime": "~15 mins",
+      "bio": "Luxury interior finishes. We engineer seamless suspended POP ceilings with recessed LED channels, precision Italian porcelain floor tiling, and wall screeding.",
+      "areasCovered": [
+        "Peter Odili Road",
+        "Old GRA",
+        "Woji",
+        "Trans-Amadi"
+      ],
+      "workPhotos": [
+        {
+          "url": "/assets/interior_pop.jpg",
+          "caption": "✔ Completed: Suspended recessed POP ceiling with warm hidden LED channels",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: 60x120 Italian porcelain mirror-finish floor tiling in living hall",
+          "area": "Old GRA",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: 3-coat luxury wall screeding and Venetian marble plaster",
+          "area": "Woji",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Suspended POP Ceiling Installation (Per Room)",
+          "price": 35000,
+          "type": "Milestone"
+        },
+        {
+          "name": "Italian Porcelain Tile Laying (Per Sq Metre)",
+          "price": 2500,
+          "type": "Unit Rate"
+        },
+        {
+          "name": "Luxury Wall Screeding & Satin Touch Prep",
+          "price": 15000,
+          "type": "Per Room"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-power-1",
+      "name": "Tamuno Briggs",
+      "businessName": "PowerVolt Generator Engineering & Electrical Works",
+      "category": "power-gen",
+      "categoryName": "Power & Generators",
+      "subSpecialty": "Mikano, Perkins & Industrial ATS Panels",
+      "area": "Trans-Amadi",
+      "rating": 4.9,
+      "reviewCount": 46,
+      "verified": true,
+      "status": "approved",
+      "boosted": true,
+      "image": "/assets/hero_tradesman.jpg",
+      "startingPrice": 8000,
+      "responseTime": "~10 mins",
+      "bio": "Heavy diesel generator repairs, Perkins injector overhaul, automatic ATS changeover switchboard fabrication, and zero-flicker commercial electrical wiring.",
+      "areasCovered": [
+        "Trans-Amadi",
+        "Peter Odili Road",
+        "Old GRA",
+        "Woji"
+      ],
+      "workPhotos": [
+        {
+          "url": "/assets/hero_tradesman.jpg",
+          "caption": "✔ Completed: 60kVA Mikano soundproof generator full top-end overhaul",
+          "area": "Trans-Amadi",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Automatic Transfer Switch (ATS) installation with phase failure protection",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Heavy industrial load bank testing and governor calibration",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Diesel Generator Complete Routine Service",
+          "price": 18000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "ATS Automatic Changeover Switch Installation",
+          "price": 28000,
+          "type": "Milestone"
+        },
+        {
+          "name": "Emergency Generator Troubleshooting & Breakdown Repair",
+          "price": 8000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-beauty-1",
+      "name": "Blessing Dike",
+      "businessName": "GlamStudio Luxury Braids & Natural Hair Spa",
+      "category": "beauty-hair",
+      "categoryName": "Beauty & Grooming",
+      "subSpecialty": "Knotless Box Braids & Lace Frontal Customization",
+      "area": "Peter Odili Road",
+      "rating": 4.9,
+      "reviewCount": 52,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "/assets/hairstylist.jpg",
+      "startingPrice": 7000,
+      "responseTime": "~15 mins",
+      "bio": "Master braider with pain-free technique. Specializing in neat waist-length French curl braids, human hair wig revivals, and scalp steaming therapy.",
+      "areasCovered": [
+        "Peter Odili Road",
+        "New GRA / Phase 2",
+        "Old GRA",
+        "Woji"
+      ],
+      "workPhotos": [
+        {
+          "url": "/assets/hairstylist.jpg",
+          "caption": "✔ Completed: Waist-length butt-length knotless box braids with clean parts",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Human hair HD lace frontal customization, bleaching & styling",
+          "area": "New GRA / Phase 2",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Natural hair deep moisture therapy, scalp detox & silk press",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Medium Knotless Braids (Back Length)",
+          "price": 12000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "HD Lace Frontal Install & Styling",
+          "price": 15000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Scalp Detox & Deep Conditioning Spa",
+          "price": 7000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-plumbing-1",
+      "name": "Engr. Nnamdi Amadi",
+      "businessName": "Amadi Borehole & Industrial Plumbing Works",
+      "category": "plumbing",
+      "categoryName": "Plumbing & Pumps",
+      "subSpecialty": "Submersible Borehole Pumps & PPR Piping Repairs",
+      "area": "Trans-Amadi",
+      "rating": 4.9,
+      "reviewCount": 38,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 10000,
+      "responseTime": "~20 mins",
+      "bio": "Registered commercial and residential plumber in Trans-Amadi. Specialized in submersible borehole pumps, automatic float switches, booster pumps, and leak-free PPR pipe installations.",
+      "areasCovered": [
+        "Trans-Amadi",
+        "Peter Odili Road",
+        "Old GRA",
+        "Woji"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: 2HP Sumoto borehole pump replacement with control box in Trans-Amadi",
+          "area": "Trans-Amadi",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Industrial PPR water distribution manifold for 6 flats in Peter Odili",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Overhead 2000L GeePee tank pipe rigging & booster pump installation in Old GRA",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Borehole Submersible Pump Servicing & Wiring",
+          "price": 15000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "PPR High-Pressure Pipe Leak Repair",
+          "price": 10000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Automatic Water Float Switch Installation",
+          "price": 8000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-electrical-1",
+      "name": "Emmanuel Dan-Jumbo",
+      "businessName": "Apex Conduit Electrical & Fault Diagnostics PH",
+      "category": "electrical",
+      "categoryName": "Electrical & Wiring",
+      "subSpecialty": "Conduit Piping, Distribution Boards & Fault Detection",
+      "area": "Old GRA",
+      "rating": 4.9,
+      "reviewCount": 47,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 7000,
+      "responseTime": "~10 mins",
+      "bio": "Licensed electrical engineer handling residential distribution boards (DB), conduit rewiring, surge protectors, earth pit grounding, and emergency short-circuit fault finding across Port Harcourt.",
+      "areasCovered": [
+        "Old GRA",
+        "New GRA / Phase 2",
+        "D-Line",
+        "Rumuola"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: 3-Phase Schneider distribution board re-termination & labeling in Old GRA",
+          "area": "Old GRA",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Concealed ceiling conduit LED track lighting in New GRA",
+          "area": "New GRA / Phase 2",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1509390144018-eeaf65052242?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Heavy copper earth rod grounding & surge arrester setup in D-Line",
+          "area": "D-Line",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Single/3-Phase Distribution Board Wiring & Breakers",
+          "price": 18000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Emergency Short-Circuit Fault Detection",
+          "price": 7000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Whole-Home Copper Earth Rod Grounding",
+          "price": 22000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-ac-1",
+      "name": "Chidi Ogar",
+      "businessName": "ArcticCool HVAC & Industrial Refrigeration PH",
+      "category": "ac-chillers",
+      "categoryName": "AC & Refrigeration",
+      "subSpecialty": "Inverter AC Chemical Servicing & Compressor Overhaul",
+      "area": "D-Line",
+      "rating": 4.8,
+      "reviewCount": 39,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 8000,
+      "responseTime": "~15 mins",
+      "bio": "Certified HVAC master technician specializing in R410a/R32 gas charging, chemical deep pressure washing of coils, compressor diagnostics, and inverter board micro-repairs in D-Line and surrounding estates.",
+      "areasCovered": [
+        "D-Line",
+        "Old GRA",
+        "Trans-Amadi",
+        "Peter Odili Road"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Complete chemical dismantling & coil pressure wash on 2HP LG Inverter in D-Line",
+          "area": "D-Line",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: R410a refrigerant leak vacuuming & recharge in Peter Odili Road",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Panasonic ceiling cassette AC repair & blower fan replacement in Old GRA",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Full Unit Chemical Pressure Servicing (Split AC)",
+          "price": 8000,
+          "type": "Per Unit"
+        },
+        {
+          "name": "R410a / R22 Pure Refrigerant Gas Top-Up",
+          "price": 12000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Inverter AC Motherboard & Sensor Diagnostics",
+          "price": 10000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-mechanic-1",
+      "name": "Engr. Kenneth Lawson",
+      "businessName": "Precision Auto Diagnostics & Mobile Workshop",
+      "category": "auto-mechanic",
+      "categoryName": "Auto Diagnostics",
+      "subSpecialty": "OBD-2 Scanning, Japanese/German Transmissions & Brakes",
+      "area": "Ada George",
+      "rating": 4.9,
+      "reviewCount": 42,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 6000,
+      "responseTime": "~20 mins",
+      "bio": "Modern computerized automobile technician with mobile dispatch van. Specializing in Autel MaxiSys ECU scanning, transmission fluid flushing, brake caliper rebuilds, and electrical wiring troubleshooting across Port Harcourt.",
+      "areasCovered": [
+        "Ada George",
+        "Rumuola",
+        "Old GRA",
+        "Trans-Amadi"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Toyota Camry check-engine light OBD-2 scan & O2 sensor replacement in Ada George",
+          "area": "Ada George",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Mercedes C300 complete ceramic brake disc & pad replacement in Old GRA",
+          "area": "Old GRA",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Lexus RX350 alternator overhaul & battery charging test in Rumuola",
+          "area": "Rumuola",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Comprehensive OBD-2 Computer Diagnostic Scan & Report",
+          "price": 6000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Front & Rear Brake Pads Installation & Fluid Bleed",
+          "price": 8000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Mobile Roadside Breakdown Inspection & Battery Jump",
+          "price": 7000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-carpentry-1",
+      "name": "Felix Ibiwari",
+      "businessName": "Heritage Cabinetry & Custom Woodworks PH",
+      "category": "carpentry",
+      "categoryName": "Carpentry & Furniture",
+      "subSpecialty": "Modern Kitchen Cabinets, Wardrobes & Wood Restoration",
+      "area": "Woji",
+      "rating": 4.8,
+      "reviewCount": 31,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 10000,
+      "responseTime": "~25 mins",
+      "bio": "Master carpenter and joiner in Woji. Specialized in HDF and marine board kitchen cabinets, soft-close sliding wardrobes, wooden door hanging, and luxury furniture restoration with polyurethane finish.",
+      "areasCovered": [
+        "Woji",
+        "Peter Odili Road",
+        "Trans-Amadi",
+        "Old GRA"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: High-gloss grey acrylic kitchen cabinet with hydraulic hinges in Woji",
+          "area": "Woji",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: 4-Door floor-to-ceiling master bedroom wardrobe in Peter Odili",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Solid hardwood panel door trimming, lock installation & polish in Old GRA",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Custom Modular Kitchen Cabinet Design & Installation",
+          "price": 35000,
+          "type": "Milestone"
+        },
+        {
+          "name": "Internal Wooden Door Hanging & Lock Fitting",
+          "price": 10000,
+          "type": "Per Door"
+        },
+        {
+          "name": "Wardrobe Drawer Slide & Hinge Repair / Realignment",
+          "price": 7000,
+          "type": "Fixed Price"
+        }
+      ]
+    },
+    {
+      "id": "pro-ph-painting-1",
+      "name": "Donald Briggs",
+      "businessName": "PrimeShield Painting & Luxury Screeding PH",
+      "category": "painting",
+      "categoryName": "Painting & Screeding",
+      "subSpecialty": "Weather-Shield Exterior Paint, Stucco & Smooth Screeding",
+      "area": "Peter Odili Road",
+      "rating": 4.9,
+      "reviewCount": 36,
+      "verified": true,
+      "status": "approved",
+      "boosted": false,
+      "image": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=500&q=80",
+      "startingPrice": 12000,
+      "responseTime": "~15 mins",
+      "bio": "Professional painting contractor in Peter Odili Road. Expert in water-resistant exterior texture coatings, POP wall putty screeding, marble effect stucco, and Dulux/Berger premium interior painting.",
+      "areasCovered": [
+        "Peter Odili Road",
+        "Old GRA",
+        "New GRA / Phase 2",
+        "Woji"
+      ],
+      "workPhotos": [
+        {
+          "url": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: 2-Storey duplex exterior weather-shield silicone painting in Peter Odili",
+          "area": "Peter Odili Road",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Silk emulsion interior screeding & geometric accent wall in New GRA",
+          "area": "New GRA / Phase 2",
+          "date": "Oct 2026"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
+          "caption": "✔ Completed: Italian stucco marble effect feature wall in living room in Old GRA",
+          "area": "Old GRA",
+          "date": "Sep 2026"
+        }
+      ],
+      "services": [
+        {
+          "name": "Interior Room Painting (Walls & Ceiling - 2 Coats)",
+          "price": 15000,
+          "type": "Per Room"
+        },
+        {
+          "name": "Full Wall Putty Screeding & Sanding (Mirror Finish)",
+          "price": 12000,
+          "type": "Fixed Price"
+        },
+        {
+          "name": "Exterior Weather-Proof Texture Coating",
+          "price": 25000,
+          "type": "Milestone"
+        }
+      ]
+    }
+  ]
+}
