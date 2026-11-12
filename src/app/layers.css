@@ -1,0 +1,4 @@
+/* Cascade-layer order. Must load BEFORE globals.css (Tailwind's compiler drops this
+   statement if it sits above `@import "tailwindcss"`). Clerk's styles are emitted into
+   `clerk` (see cssLayerName in src/lib/clerk-appearance.ts), so Tailwind utilities win. */
+@layer properties, theme, base, clerk, components, utilities;

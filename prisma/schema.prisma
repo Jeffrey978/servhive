@@ -1,0 +1,337 @@
+// Servhive — Port Harcourt verified artisan marketplace.
+// Replaces the legacy localStorage keys (servhive_current_user, servhive_providers,
+// servhive_quote_requests, servhive_escrow_jobs, servhive_reports, servhive_saved_providers).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CLIENT
+  ARTISAN
+  ADMIN
+}
+
+enum ProviderStatus {
+  DRAFT // signed up, onboarding incomplete
+  UNDER_REVIEW // submitted for admin review
+  APPROVED // live in marketplace
+  REJECTED
+  SUSPENDED
+}
+
+enum DocStatus {
+  NOT_UPLOADED
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum DocKind {
+  GOVERNMENT_ID
+  TRADE_LICENCE
+}
+
+enum PriceType {
+  FIXED
+  STARTING_FROM
+  PER_UNIT // priced per room / garment / door etc. — see Service.unitLabel
+  MILESTONE
+}
+
+enum QuoteStatus {
+  PENDING // client requested, waiting on artisan
+  QUOTED // artisan sent a price
+  ACCEPTED // client accepted -> escrow job created
+  DECLINED
+  CANCELLED
+}
+
+enum JobStatus {
+  FUNDED // client paid into escrow, work in progress
+  AWAITING_RELEASE // artisan marked done; 48h auto-release window
+  RELEASED // paid out to artisan
+  DISPUTED
+  REFUNDED
+}
+
+enum ReportStatus {
+  OPEN
+  ARTISAN_RESPONDED
+  RESOLVED
+  DISMISSED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String?
+  phone     String?
+  name      String
+  avatarUrl String?
+  role      Role     @default(CLIENT)
+  area      String?
+  onboarded Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  provider      Provider?
+  quoteRequests QuoteRequest[] @relation("ClientQuotes")
+  jobs          EscrowJob[]    @relation("ClientJobs")
+  reviews       Review[]
+  reports       Report[]
+  savedProviders SavedProvider[]
+  messages      Message[]
+  conversations Conversation[] @relation("ClientConversations")
+}
+
+model Category {
+  id          String   @id // slug, e.g. "power-gen"
+  name        String
+  icon        String // lucide icon name
+  description String
+  rateFrom    Int // NGN
+  requiresLicence Boolean @default(false)
+  sortOrder   Int      @default(0)
+  imageUrl    String?
+
+  providers Provider[]
+}
+
+model Provider {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  userId         String?        @unique
+  user           User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  businessName   String
+  ownerName      String
+  categoryId     String
+  category       Category       @relation(fields: [categoryId], references: [id])
+  subSpecialty   String?
+  bio            String         @default("")
+  area           String
+  areasCovered   String[]
+  phone          String?
+  imageUrl       String?
+  startingPrice  Int            @default(0)
+  responseTime   String         @default("~30 mins")
+  yearsExperience Int?
+  status         ProviderStatus @default(DRAFT)
+  rejectionReason String?
+  ratingAvg      Float          @default(0)
+  reviewCount    Int            @default(0)
+  boostedUntil   DateTime?
+  lat            Float?
+  lng            Float?
+  trialEndsAt    DateTime?
+  subscriptionPaidUntil DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  services       Service[]
+  workPhotos     WorkPhoto[]
+  documents      VerificationDocument[]
+  payoutAccount  PayoutAccount?
+  quoteRequests  QuoteRequest[]
+  jobs           EscrowJob[]
+  reviews        Review[]
+  reports        Report[]
+  savedBy        SavedProvider[]
+  receipts       BillingReceipt[]
+  conversations  Conversation[]
+
+  @@index([status, categoryId])
+  @@index([area])
+}
+
+model Service {
+  id         String    @id @default(cuid())
+  providerId String
+  provider   Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  name       String
+  price      Int
+  priceType  PriceType @default(FIXED)
+  unitLabel  String? // e.g. "room", "garment" when priceType = PER_UNIT
+  sortOrder  Int       @default(0)
+}
+
+model WorkPhoto {
+  id         String   @id @default(cuid())
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  url        String
+  caption    String
+  area       String?
+  createdAt  DateTime @default(now())
+}
+
+model VerificationDocument {
+  id              String    @id @default(cuid())
+  providerId      String
+  provider        Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  kind            DocKind
+  status          DocStatus @default(SUBMITTED)
+  fileName        String
+  fileUrl         String // object storage URL (data URLs only in dev)
+  licenceNumber   String?
+  rejectionReason String?
+  submittedAt     DateTime  @default(now())
+  reviewedAt      DateTime?
+
+  @@unique([providerId, kind])
+}
+
+model PayoutAccount {
+  id            String   @id @default(cuid())
+  providerId    String   @unique
+  provider      Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  bankCode      String
+  bankName      String
+  accountNumber String
+  accountName   String
+  verified      Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+}
+
+model QuoteRequest {
+  id            String      @id @default(cuid())
+  clientId      String
+  client        User        @relation("ClientQuotes", fields: [clientId], references: [id], onDelete: Cascade)
+  providerId    String
+  provider      Provider    @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  title         String
+  details       String
+  area          String
+  address       String
+  preferredDate DateTime?
+  status        QuoteStatus @default(PENDING)
+  quoteAmount   Int?
+  quoteDuration String?
+  quoteNotes    String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  job EscrowJob?
+
+  @@index([providerId, status])
+  @@index([clientId])
+}
+
+model EscrowJob {
+  id               String    @id @default(cuid())
+  ref              String    @unique // human ref e.g. ESC-4821
+  clientId         String
+  client           User      @relation("ClientJobs", fields: [clientId], references: [id], onDelete: Cascade)
+  providerId       String
+  provider         Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  quoteRequestId   String?   @unique
+  quoteRequest     QuoteRequest? @relation(fields: [quoteRequestId], references: [id], onDelete: SetNull)
+  serviceName      String
+  amount           Int
+  commissionPct    Int       @default(5)
+  commissionAmount Int
+  payoutAmount     Int
+  area             String
+  address          String
+  scheduledFor     DateTime?
+  status           JobStatus @default(FUNDED)
+  markedCompleteAt DateTime?
+  releasedAt       DateTime?
+  autoReleased     Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  review  Review?
+  reports Report[]
+
+  @@index([providerId, status])
+  @@index([clientId, status])
+}
+
+model Review {
+  id         String    @id @default(cuid())
+  providerId String
+  provider   Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  authorId   String?
+  author     User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorName String
+  jobId      String?   @unique
+  job        EscrowJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  rating     Int
+  text       String
+  area       String?
+  createdAt  DateTime  @default(now())
+
+  @@index([providerId])
+}
+
+model Report {
+  id              String       @id @default(cuid())
+  reporterId      String
+  reporter        User         @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  providerId      String
+  provider        Provider     @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  jobId           String?
+  job             EscrowJob?   @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  reason          String
+  notes           String
+  status          ReportStatus @default(OPEN)
+  artisanResponse String?
+  resolutionNote  String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([status])
+}
+
+model SavedProvider {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([userId, providerId])
+}
+
+model BillingReceipt {
+  id          String   @id @default(cuid())
+  providerId  String
+  provider    Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  ref         String   @unique
+  description String
+  amount      Int
+  status      String   @default("PAID")
+  createdAt   DateTime @default(now())
+}
+
+// Client <-> provider messaging (legacy chat was in-memory only)
+model Conversation {
+  id         String    @id @default(cuid())
+  clientId   String
+  client     User      @relation("ClientConversations", fields: [clientId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   Provider  @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now())
+  messages   Message[]
+
+  @@unique([clientId, providerId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  body           String
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
