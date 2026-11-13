@@ -24,7 +24,7 @@ export default async function ProBillingPage() {
       <PageHeader
         eyebrow="Billing"
         title="Plan & receipts"
-        description={`${RULES.freeTrialMonths} months free, then ${formatNaira(RULES.monthlySubscription)} a month. Payments here are in test mode, so no card is charged.`}
+        description={`${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"} free, then ${formatNaira(RULES.monthlySubscription)} a month. Payments here are in test mode, so no card is charged.`}
       />
 
       <div className="grid gap-3 md:grid-cols-2">

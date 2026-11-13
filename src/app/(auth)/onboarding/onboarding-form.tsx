@@ -57,7 +57,7 @@ export function OnboardingForm({
           {(
             [
               ["CLIENT", Search, "I want to hire", "Find verified artisans and pay safely through escrow."],
-              ["ARTISAN", Hammer, "I'm an artisan", `List your services. ${RULES.freeTrialMonths} months free, then ₦${RULES.monthlySubscription.toLocaleString()}/month.`],
+              ["ARTISAN", Hammer, "I'm an artisan", `List your services. ${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"} free, then ₦${RULES.monthlySubscription.toLocaleString()}/month.`],
             ] as const
           ).map(([r, Icon, title, body]) => (
             <button

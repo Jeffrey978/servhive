@@ -15,14 +15,14 @@ import { formatNaira } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "For pros",
-  description: `Join Servhive as a verified artisan in ${CITY}. ${RULES.freeTrialMonths} months free, then ${formatNaira(RULES.monthlySubscription)}/month. ${RULES.commissionPct}% only on completed jobs.`,
+  description: `Join Servhive as a verified artisan in ${CITY}. ${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"} free, then ${formatNaira(RULES.monthlySubscription)}/month. ${RULES.commissionPct}% only on completed jobs.`,
 };
 
 const EXAMPLE = 50000;
 const fee = Math.round((EXAMPLE * RULES.commissionPct) / 100);
 
 const PRICING = [
-  { k: "Free trial", v: `${RULES.freeTrialMonths} months`, note: "Full access from the day you're approved. No card needed." },
+  { k: "Free trial", v: `${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"}`, note: "Full access from the day you're approved. No card needed." },
   {
     k: "Membership",
     v: `${formatNaira(RULES.monthlySubscription)}/mo`,
@@ -77,7 +77,7 @@ export default function ForProsPage() {
               as="ul"
               className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/20 pt-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/75"
             >
-              <li>{RULES.freeTrialMonths} months free</li>
+              <li>{RULES.freeTrialMonths} {RULES.freeTrialMonths === 1 ? "month" : "months"} free</li>
               <li aria-hidden>·</li>
               <li>{RULES.commissionPct}% on completed jobs only</li>
               <li aria-hidden>·</li>

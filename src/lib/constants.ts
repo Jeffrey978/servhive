@@ -106,7 +106,7 @@ export const REPORT_REASONS = [
 export const RULES = {
   commissionPct: 5,
   monthlySubscription: 2000, // NGN
-  freeTrialMonths: 3,
+  freeTrialMonths: 1,
   boostPricePerWeek: 1500, // NGN
   autoReleaseHours: 48,
   disputeWindowHours: 48,
