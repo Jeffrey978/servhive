@@ -160,11 +160,11 @@ export default function SafetyPage() {
         <p className="mt-16 text-sm text-muted">
           Questions about safety? Read the{" "}
           <Link href="/legal/protection" className="text-fg underline underline-offset-4">
-            hirer protection terms
+            Payment Protection Terms
           </Link>{" "}
           or the{" "}
           <Link href="/legal/privacy" className="text-fg underline underline-offset-4">
-            privacy policy
+            Privacy Policy
           </Link>
           .
         </p>
