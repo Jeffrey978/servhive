@@ -20,7 +20,7 @@ export function ProCta() {
     <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
       <ParallaxImage
         src={PHOTOS.hair}
-        alt="A hairstylist working in her Port Harcourt salon"
+        alt="A hairstylist working in her salon"
         className="aspect-[4/5] rounded-card bg-surface-2 sm:aspect-[5/4] lg:col-span-6 lg:aspect-[4/5]"
         sizes="(min-width:1024px) 50vw, 100vw"
       />

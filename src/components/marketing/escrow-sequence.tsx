@@ -106,7 +106,8 @@ export function EscrowSequence() {
             {/* Sparse job ticket: title, one meta line, one number. */}
             <div className="absolute inset-x-6 bottom-6 flex items-end justify-between gap-4 rounded-card bg-surface p-5 text-fg">
               <div className="min-w-0">
-                <p className="truncate font-medium">Your job</p>
+                <p className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-muted">Example</p>
+                <p className="mt-1 truncate font-medium">Your job</p>
                 <p className="mt-1 text-sm text-muted">Fixed quote · Woji</p>
               </div>
               <div className="shrink-0 text-right">

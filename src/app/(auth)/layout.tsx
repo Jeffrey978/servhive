@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
           <Logo className="text-white" />
           <div>
             <SplitHeading as="p" trigger="load" className="max-w-lg text-h1 font-medium">
-              Good work, <em className="font-serif font-normal">guaranteed</em> by escrow.
+              Good work, <em className="font-serif font-normal">protected</em> by escrow.
             </SplitHeading>
             <p className="mt-6 max-w-md text-white/75">
               Every artisan is ID-verified. Your money stays protected until you confirm the job is done.
