@@ -141,6 +141,12 @@ export default async function ArtisanProfilePage({
                     <BadgeCheck className="size-4 text-accent" /> ID-verified
                   </span>
                 ) : null}
+                {p.category.requiresLicence ? (
+                  <span className="inline-flex items-center gap-1.5 font-medium text-white">
+                    <BadgeCheck className="size-4 text-accent" />{" "}
+                    {isLive ? "Licence verified" : "Licence required"}
+                  </span>
+                ) : null}
                 <span className="inline-flex items-center gap-1.5">
                   <Stars value={p.ratingAvg} className="text-white" />
                   <span className="text-white/70">

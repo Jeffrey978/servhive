@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Hammer, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Select } from "@/components/ui/field";
@@ -8,6 +9,15 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/utils";
 import { RULES } from "@/lib/constants";
 import { completeOnboarding } from "./actions";
+
+/** Legal link that opens in a new tab so the half-filled form isn't lost. */
+function LegalLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} target="_blank" rel="noopener noreferrer" className="text-fg underline underline-offset-2 hover:text-accent">
+      {children}
+    </Link>
+  );
+}
 
 type Role = "CLIENT" | "ARTISAN";
 
@@ -141,6 +151,29 @@ export function OnboardingForm({
               </div>
             </>
           ) : null}
+
+          <label className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4 text-sm leading-relaxed text-muted">
+            <input
+              type="checkbox"
+              name="consent"
+              value="yes"
+              required
+              className="mt-0.5 size-4 shrink-0 rounded border-border accent-accent"
+            />
+            {role === "ARTISAN" ? (
+              <span>
+                I am 18 or over and I accept the <LegalLink href="/legal/provider">Provider Agreement</LegalLink>, the{" "}
+                <LegalLink href="/legal/protection">Payment Protection Terms</LegalLink> and the{" "}
+                <LegalLink href="/legal/privacy">Privacy Policy</LegalLink>.
+              </span>
+            ) : (
+              <span>
+                I am 18 or over and I accept the <LegalLink href="/legal/terms">Terms of Use</LegalLink>, the{" "}
+                <LegalLink href="/legal/protection">Payment Protection Terms</LegalLink> and the{" "}
+                <LegalLink href="/legal/privacy">Privacy Policy</LegalLink>.
+              </span>
+            )}
+          </label>
 
           {state && !state.ok ? (
             <p role="alert" className="rounded-xl bg-danger-soft px-4 py-3 text-sm text-danger">

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LEGAL_DOCS, LEGAL_SLUGS, isLegalSlug } from "@/components/marketing/legal-content";
+import { LEGAL_DOCS, LEGAL_SLUGS, PILOT_NOTICE, TEST_MODE, isLegalSlug } from "@/components/marketing/legal-content";
 import { LegalToc } from "@/components/marketing/legal-toc";
 import { Reveal } from "@/components/motion/reveal";
 import { SplitHeading } from "@/components/motion/split-heading";
@@ -18,10 +18,21 @@ export async function generateMetadata({ params }: PageProps<"/legal/[doc]">): P
   return { title: d.title, description: d.summary };
 }
 
+/**
+ * When real payments go live, set PAYMENTS_LIVE=true (or "1") in the environment and
+ * the "payments run in test mode" sentence is dropped from the legal pages (A.11).
+ */
+const PAYMENTS_LIVE = process.env.PAYMENTS_LIVE === "true" || process.env.PAYMENTS_LIVE === "1";
+
 export default async function LegalPage({ params }: PageProps<"/legal/[doc]">) {
   const { doc } = await params;
   if (!isLegalSlug(doc)) notFound();
   const d = LEGAL_DOCS[doc];
+
+  // Drop the test-mode sentence once real payments are live; nothing else changes.
+  const sections = PAYMENTS_LIVE
+    ? d.sections.map((s) => ({ ...s, body: s.body.filter((p) => p !== TEST_MODE) })).filter((s) => s.body.length > 0)
+    : d.sections;
 
   return (
     <article className="container-x pb-24 pt-36 md:pb-36 md:pt-48">
@@ -55,17 +66,25 @@ export default async function LegalPage({ params }: PageProps<"/legal/[doc]">) {
           <p className="max-w-xl text-lg text-muted">{d.summary}</p>
           <p className="eyebrow shrink-0">Updated {formatDate(d.updated)}</p>
         </Reveal>
+        <Reveal
+          trigger="load"
+          delay={0.4}
+          role="note"
+          className="mt-6 rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-muted"
+        >
+          {PILOT_NOTICE}
+        </Reveal>
       </header>
 
       <div className="mt-16 grid gap-12 md:mt-24 lg:grid-cols-12 lg:gap-8">
         <aside className="hidden lg:col-span-3 lg:block">
           <div className="sticky top-28">
-            <LegalToc items={d.sections.map((s) => ({ id: s.id, label: s.heading }))} />
+            <LegalToc items={sections.map((s) => ({ id: s.id, label: s.heading }))} />
           </div>
         </aside>
 
         <div className="lg:col-span-7 lg:col-start-5">
-          {d.sections.map((s, i) => (
+          {sections.map((s, i) => (
             <section key={s.id} id={s.id} className="scroll-mt-28 border-t border-border py-10 first:border-t-0 first:pt-0">
               <p className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</p>
               <h2 className="mt-3 text-h3 font-medium">{s.heading}</h2>

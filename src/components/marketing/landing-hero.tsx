@@ -8,7 +8,7 @@ import { HeroSearch } from "./hero-search";
 export function LandingHero({ categories }: { categories: { id: string; name: string }[] }) {
   return (
     <section className="relative isolate flex min-h-svh flex-col overflow-hidden text-white">
-      <HeroBackdrop src="/assets/hero_tradesman.jpg" alt="An artisan at work on a site in Port Harcourt" />
+      <HeroBackdrop src="/assets/hero_tradesman.jpg" alt="An artisan at work on a site" />
 
       <div className="container-x relative flex flex-1 flex-col pb-8 pt-28 md:pb-10 md:pt-32">
         <Reveal trigger="load" delay={0.5} className="flex items-center justify-between font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/75">

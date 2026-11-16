@@ -26,10 +26,10 @@ export const FOOTER_NAV = [
   {
     title: "Legal",
     links: [
-      { href: "/legal/terms", label: "Terms of service" },
-      { href: "/legal/provider", label: "Provider agreement" },
-      { href: "/legal/protection", label: "Hirer protection" },
-      { href: "/legal/privacy", label: "Privacy policy" },
+      { href: "/legal/terms", label: "Terms of Use" },
+      { href: "/legal/provider", label: "Provider Agreement" },
+      { href: "/legal/protection", label: "Payment Protection Terms" },
+      { href: "/legal/privacy", label: "Privacy Policy" },
     ],
   },
 ] as const;

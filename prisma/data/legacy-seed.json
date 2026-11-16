@@ -64,11 +64,11 @@
     },
     {
       "id": "pets-vet",
-      "name": "Pets & Veterinary Care",
+      "name": "Pet grooming & sitting",
       "icon": "heart",
       "proCount": "22+ Verified Pros",
       "rateFrom": "₦7,000",
-      "desc": "Dog grooming & tick dipping, routine vet vaccinations, deworming & professional dog training."
+      "desc": "Dog washing & grooming, nail trims, home pet sitting, dog walking & basic obedience training."
     },
     {
       "id": "power-gen",

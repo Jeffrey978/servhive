@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SignUp } from "@clerk/nextjs";
+import { SignupConsentGate } from "@/components/client/signup-consent-gate";
 
 export const metadata: Metadata = { title: "Create your account" };
 
@@ -9,8 +10,11 @@ export default async function SignUpPage({ searchParams }: PageProps<"/sign-up/[
   return (
     <div>
       <p className="eyebrow mb-4 text-center">{pro ? "Join as a pro" : "Hire with confidence"}</p>
-      {/* Role is chosen on /onboarding and stored in our DB — never in Clerk metadata. */}
-      <SignUp path="/sign-up" signInUrl="/sign-in" fallbackRedirectUrl={pro ? "/onboarding?as=pro" : "/onboarding"} />
+      {/* Legal consent is confirmed first (A.2); only then is Clerk's sign-up form shown.
+          Role is chosen on /onboarding and stored in our DB — never in Clerk metadata. */}
+      <SignupConsentGate>
+        <SignUp path="/sign-up" signInUrl="/sign-in" fallbackRedirectUrl={pro ? "/onboarding?as=pro" : "/onboarding"} />
+      </SignupConsentGate>
     </div>
   );
 }
