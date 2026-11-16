@@ -11,10 +11,16 @@ import { DomainError } from "@/server/escrow";
 
 const area = z.enum(AREAS as unknown as [string, ...string[]], { message: "Choose your area." });
 
+// Required 18+/legal consent (A.2). Enforced server-side as well as via the form checkbox.
+const consent = z.literal("yes", {
+  message: "Please confirm you are 18 or over and accept the terms to continue.",
+});
+
 const ClientSchema = z.object({
   role: z.literal("CLIENT"),
   name: z.string().trim().min(2, "Enter your name.").max(80),
   area,
+  consent,
 });
 
 const ArtisanSchema = z.object({
@@ -33,6 +39,7 @@ const ArtisanSchema = z.object({
     .int()
     .min(RULES.minStartingPrice, `Minimum starting price is ₦${RULES.minStartingPrice.toLocaleString()}.`),
   yearsExperience: z.coerce.number().int().min(0).max(60),
+  consent,
 });
 
 const Schema = z.discriminatedUnion("role", [ClientSchema, ArtisanSchema]);
