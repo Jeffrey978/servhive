@@ -102,9 +102,16 @@ export async function declineQuoteAction(_: Prev, fd: FormData): Promise<ActionR
 
 export async function markJobCompleteAction(_: Prev, fd: FormData): Promise<ActionResult> {
   return act(async () => {
-    const { user } = await me();
-    const { jobId } = z.object({ jobId: id }).parse(formToObject(fd));
-    await markJobComplete(user, jobId);
+    const { user, provider } = await me();
+    const input = z
+      .object({
+        jobId: id,
+        // One or more downscaled images of the finished work (A.6). At least one is required.
+        photos: z.preprocess(toArray, z.array(imageDataUrl).min(1, "Add at least one photo of the finished work.").max(6)),
+      })
+      .parse(formToObject(fd));
+    const urls = await Promise.all(input.photos.map((p) => uploadPublicImage(p, `providers/${provider.id}/completions`)));
+    await markJobComplete(user, input.jobId, urls);
     refresh("/pro/jobs");
   }, `Marked complete. Payment releases within ${RULES.autoReleaseHours}h unless the client disputes.`);
 }

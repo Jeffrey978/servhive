@@ -7,7 +7,7 @@ import { loadPro } from "@/server/pro";
 import { markJobCompleteAction } from "@/server/pro-actions";
 import { EmptyState, PageHeader } from "@/components/ui/misc";
 import { StatusBadge } from "@/components/ui/badge";
-import { ConfirmAction } from "@/components/pro/form-bits";
+import { MarkCompleteForm } from "@/components/pro/mark-complete-form";
 import { NoProvider } from "@/components/pro/no-provider";
 
 export default async function ProJobsPage() {
@@ -62,15 +62,7 @@ export default async function ProJobsPage() {
                 <div className="flex flex-col gap-3 md:items-end">
                   <Amounts amount={j.amount} payout={j.payoutAmount} />
                   {j.status === "FUNDED" ? (
-                    <ConfirmAction
-                      action={markJobCompleteAction}
-                      fields={{ jobId: j.id }}
-                      label="Mark work complete"
-                      confirmLabel="Confirm complete"
-                      pendingLabel="Saving…"
-                      prompt="Only when the job is done."
-                      variant="primary"
-                    />
+                    <MarkCompleteForm action={markJobCompleteAction} jobId={j.id} />
                   ) : j.status === "AWAITING_RELEASE" ? (
                     <p className="text-sm text-muted">
                       Auto-releases in <span className="font-medium text-fg">{hours}h</span>

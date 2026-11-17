@@ -181,13 +181,21 @@ export async function declineQuote(artisan: User, quoteId: string) {
   return db.quoteRequest.update({ where: { id: q.id }, data: { status: "DECLINED" } });
 }
 
-/** Artisan marks work done → starts the 48h auto-release window. */
-export async function markJobComplete(artisan: User, jobId: string) {
+/**
+ * Artisan marks work done → starts the 48h auto-release window. At least one
+ * proof-of-work photo is required (A.6 / Payment Protection Terms §03.4), so the
+ * client has evidence before the money auto-releases.
+ */
+export async function markJobComplete(artisan: User, jobId: string, completionPhotos: string[]) {
   const provider = await providerOf(artisan);
   const job = await db.escrowJob.findFirst({ where: { id: jobId, providerId: provider.id } });
   if (!job) throw new DomainError("Job not found.");
   if (job.status !== "FUNDED") throw new DomainError("Only in-progress jobs can be marked complete.");
-  return db.escrowJob.update({ where: { id: job.id }, data: { status: "AWAITING_RELEASE", markedCompleteAt: new Date() } });
+  if (completionPhotos.length === 0) throw new DomainError("Add at least one photo of the finished work before marking it complete.");
+  return db.escrowJob.update({
+    where: { id: job.id },
+    data: { status: "AWAITING_RELEASE", markedCompleteAt: new Date(), completionPhotos },
+  });
 }
 
 export async function respondToReport(artisan: User, input: { reportId: string; response: string }) {

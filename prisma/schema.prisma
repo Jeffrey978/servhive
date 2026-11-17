@@ -248,6 +248,7 @@ model EscrowJob {
   scheduledFor     DateTime?
   status           JobStatus @default(FUNDED)
   markedCompleteAt DateTime?
+  completionPhotos String[] // proof-of-work photos the provider attaches on completion (A.6)
   releasedAt       DateTime?
   autoReleased     Boolean   @default(false)
   createdAt        DateTime  @default(now())
