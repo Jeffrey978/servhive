@@ -35,6 +35,22 @@ export function isBoosted(p: { boostedUntil: Date | null }) {
   return !!p.boostedUntil && p.boostedUntil.getTime() > Date.now();
 }
 
+/**
+ * A provider is publicly visible only while their membership is active (A.8):
+ * the free trial OR a paid subscription must still be in the future. Unpaid
+ * profiles are hidden from search until they pay — their account/data are kept.
+ * Shared by the directory, the home spotlight, category counts and stats so the
+ * rule can't drift between surfaces.
+ */
+export function membershipActiveWhere(now = new Date()): Prisma.ProviderWhereInput {
+  return { OR: [{ trialEndsAt: { gt: now } }, { subscriptionPaidUntil: { gt: now } }] };
+}
+
+/** Full "listed publicly" predicate: approved AND membership active. */
+export function publiclyVisibleWhere(now = new Date()): Prisma.ProviderWhereInput {
+  return { status: "APPROVED", ...membershipActiveWhere(now) };
+}
+
 export type DirectorySort = "featured" | "distance" | "rating" | "price" | "reviews";
 
 export type DirectoryFilters = {
@@ -49,26 +65,28 @@ export type DirectoryFilters = {
 };
 
 export async function listProviders(f: DirectoryFilters = {}): Promise<ProviderCardData[]> {
-  const where: Prisma.ProviderWhereInput = { status: "APPROVED" };
-  if (f.category && f.category !== "all") where.categoryId = f.category;
-  if (f.area) where.OR = [{ area: f.area }, { areasCovered: { has: f.area } }];
-  if (f.minRating) where.ratingAvg = { gte: f.minRating };
-  if (f.maxPrice) where.startingPrice = { lte: f.maxPrice };
+  // Everything composes through AND so the several OR-groups (membership, area,
+  // search) don't overwrite each other.
+  const and: Prisma.ProviderWhereInput[] = [membershipActiveWhere()];
+  if (f.area) and.push({ OR: [{ area: f.area }, { areasCovered: { has: f.area } }] });
   if (f.q?.trim()) {
     const q = f.q.trim();
-    where.AND = [
-      {
-        OR: [
-          { businessName: { contains: q, mode: "insensitive" } },
-          { ownerName: { contains: q, mode: "insensitive" } },
-          { subSpecialty: { contains: q, mode: "insensitive" } },
-          { bio: { contains: q, mode: "insensitive" } },
-          { category: { name: { contains: q, mode: "insensitive" } } },
-          { services: { some: { name: { contains: q, mode: "insensitive" } } } },
-        ],
-      },
-    ];
+    and.push({
+      OR: [
+        { businessName: { contains: q, mode: "insensitive" } },
+        { ownerName: { contains: q, mode: "insensitive" } },
+        { subSpecialty: { contains: q, mode: "insensitive" } },
+        { bio: { contains: q, mode: "insensitive" } },
+        { category: { name: { contains: q, mode: "insensitive" } } },
+        { services: { some: { name: { contains: q, mode: "insensitive" } } } },
+      ],
+    });
   }
+
+  const where: Prisma.ProviderWhereInput = { status: "APPROVED", AND: and };
+  if (f.category && f.category !== "all") where.categoryId = f.category;
+  if (f.minRating) where.ratingAvg = { gte: f.minRating };
+  if (f.maxPrice) where.startingPrice = { lte: f.maxPrice };
 
   const rows: ProviderCardData[] = await db.provider.findMany({ where, select: providerCardSelect, take: 200 });
 
@@ -95,9 +113,11 @@ export async function spotlightProviders(limit = 8) {
 }
 
 export async function listCategories() {
+  // Count only publicly-visible (approved + membership active) providers so the
+  // "N pros" figures match what a searcher actually finds.
   return db.category.findMany({
     orderBy: { sortOrder: "asc" },
-    include: { _count: { select: { providers: { where: { status: "APPROVED" } } } } },
+    include: { _count: { select: { providers: { where: publiclyVisibleWhere() } } } },
   });
 }
 
@@ -113,17 +133,26 @@ export async function getProviderBySlug(slug: string, opts: { includeUnapproved?
     },
   });
   if (!p) return null;
-  if (p.status !== "APPROVED" && !opts.includeUnapproved) return null;
+  // Not publicly visible unless approved AND membership active — except for
+  // owner/admin previews, which pass includeUnapproved.
+  if (!opts.includeUnapproved) {
+    const now = Date.now();
+    const active =
+      (!!p.trialEndsAt && p.trialEndsAt.getTime() > now) ||
+      (!!p.subscriptionPaidUntil && p.subscriptionPaidUntil.getTime() > now);
+    if (p.status !== "APPROVED" || !active) return null;
+  }
   return p;
 }
 
 export async function marketplaceStats() {
+  const visible = publiclyVisibleWhere();
   const [artisans, categories, released] = await Promise.all([
-    db.provider.count({ where: { status: "APPROVED" } }),
+    db.provider.count({ where: visible }),
     db.category.count(),
     db.escrowJob.count({ where: { status: "RELEASED" } }),
   ]);
-  const agg = await db.provider.aggregate({ where: { status: "APPROVED" }, _avg: { ratingAvg: true }, _sum: { reviewCount: true } });
+  const agg = await db.provider.aggregate({ where: visible, _avg: { ratingAvg: true }, _sum: { reviewCount: true } });
   return {
     artisans,
     categories,
