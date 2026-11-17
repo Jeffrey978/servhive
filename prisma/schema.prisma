@@ -67,6 +67,13 @@ enum ReportStatus {
   DISMISSED
 }
 
+enum ReminderKind {
+  AUTO_RELEASE_24H // client: ~24h before escrow auto-releases
+  AUTO_RELEASE_SOON // client: a few hours before escrow auto-releases
+  SUBSCRIPTION_7D // provider: subscription/trial ends in ~7 days
+  SUBSCRIPTION_3D // provider: subscription/trial ends in ~3 days
+}
+
 model User {
   id        String   @id @default(cuid())
   clerkId   String   @unique
@@ -334,4 +341,19 @@ model Message {
   createdAt      DateTime     @default(now())
 
   @@index([conversationId, createdAt])
+}
+
+/**
+ * De-dup log for scheduled reminders (A.6, A.8). One row per reminder actually
+ * sent. `subject` is the thing the reminder is about: the EscrowJob id for
+ * auto-release reminders, or `<providerId>:<period>` for subscription reminders
+ * (period = the coverage-end day, so next month's reminder has a new key).
+ */
+model SentReminder {
+  id        String       @id @default(cuid())
+  kind      ReminderKind
+  subject   String
+  sentAt    DateTime     @default(now())
+
+  @@unique([kind, subject])
 }
