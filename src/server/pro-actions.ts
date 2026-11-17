@@ -14,6 +14,7 @@ import {
   sendQuote,
 } from "@/server/escrow";
 import { sendMessage } from "@/server/messaging";
+import { uploadPublicImage, uploadPrivateDoc, deletePublicImage, isDataUrl } from "@/lib/blob";
 import { RESPONSE_TIMES } from "@/components/pro/constants";
 
 /**
@@ -168,7 +169,11 @@ export async function updateProfilePhotoAction(_: Prev, fd: FormData): Promise<A
   return act(async () => {
     const { provider } = await me();
     const { dataUrl } = z.object({ dataUrl: imageDataUrl }).parse(formToObject(fd));
-    await db.provider.update({ where: { id: provider.id }, data: { imageUrl: dataUrl } });
+    const url = await uploadPublicImage(dataUrl, `providers/${provider.id}/profile`);
+    const previous = provider.imageUrl;
+    await db.provider.update({ where: { id: provider.id }, data: { imageUrl: url } });
+    // Clean up the old Blob image (ignore legacy inline data URLs).
+    if (previous && !isDataUrl(previous)) await deletePublicImage(previous);
     refresh("/pro/profile", `/artisans/${provider.slug}`);
   }, "Photo updated.");
 }
@@ -227,8 +232,9 @@ export async function addWorkPhotoAction(_: Prev, fd: FormData): Promise<ActionR
       .parse(formToObject(fd));
     const count = await db.workPhoto.count({ where: { providerId: provider.id } });
     if (count >= 24) throw new DomainError("You can show up to 24 work photos. Remove one first.");
+    const url = await uploadPublicImage(input.dataUrl, `providers/${provider.id}/work`);
     await db.workPhoto.create({
-      data: { providerId: provider.id, url: input.dataUrl, caption: input.caption, area: input.area ?? null },
+      data: { providerId: provider.id, url, caption: input.caption, area: input.area ?? null },
     });
     refresh("/pro/profile", "/pro/verification", `/artisans/${provider.slug}`);
   }, "Photo added.");
@@ -238,8 +244,10 @@ export async function deleteWorkPhotoAction(_: Prev, fd: FormData): Promise<Acti
   return act(async () => {
     const { provider } = await me();
     const { photoId } = z.object({ photoId: id }).parse(formToObject(fd));
-    const res = await db.workPhoto.deleteMany({ where: { id: photoId, providerId: provider.id } });
-    if (res.count === 0) throw new DomainError("Photo not found.");
+    const photo = await db.workPhoto.findFirst({ where: { id: photoId, providerId: provider.id }, select: { url: true } });
+    if (!photo) throw new DomainError("Photo not found.");
+    await db.workPhoto.delete({ where: { id: photoId } });
+    if (!isDataUrl(photo.url)) await deletePublicImage(photo.url);
     refresh("/pro/profile", "/pro/verification", `/artisans/${provider.slug}`);
   }, "Photo removed.");
 }
@@ -265,10 +273,13 @@ export async function uploadDocumentAction(_: Prev, fd: FormData): Promise<Actio
       if (!provider.category.requiresLicence) throw new DomainError("Your trade doesn't need a licence.");
       if (!input.licenceNumber || input.licenceNumber.length < 3) throw new DomainError("Enter your licence number.");
     }
+    // ID / licence docs go to the PRIVATE store; we keep only the pathname, never
+    // a public URL (A.9 — these are never shown to customers or published).
+    const pathname = await uploadPrivateDoc(input.dataUrl, `providers/${provider.id}/docs/${input.kind.toLowerCase()}`);
     const data = {
       status: "SUBMITTED" as const,
       fileName: input.fileName,
-      fileUrl: input.dataUrl,
+      fileUrl: pathname,
       licenceNumber: input.kind === "TRADE_LICENCE" ? input.licenceNumber : null,
       rejectionReason: null,
       reviewedAt: null,

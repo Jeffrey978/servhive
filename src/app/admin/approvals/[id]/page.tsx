@@ -271,8 +271,8 @@ function DocSection({
       ) : (
         <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_14rem]">
           <div className="flex min-h-48 items-center justify-center overflow-hidden rounded-xl border border-border bg-surface-2 p-2">
-            {/* eslint-disable-next-line @next/next/no-img-element -- verification uploads are data URLs */}
-            <img src={doc.fileUrl} alt={`${title} uploaded by the artisan`} className="max-h-[28rem] w-auto max-w-full object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- private doc streamed via an admin-only route */}
+            <img src={`/admin/doc/${doc.id}`} alt={`${title} uploaded by the artisan`} className="max-h-[28rem] w-auto max-w-full object-contain" />
           </div>
           <div className="space-y-4 text-sm">
             <div className="flex items-center gap-2">

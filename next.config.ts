@@ -7,11 +7,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "img.clerk.com" },
+      // Public Vercel Blob store — work photos and profile photos (A.9).
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
   experimental: {
-    // Work photos / ID docs are downscaled client-side (≤ ~600KB each) and sent as data URLs
-    // until object storage is wired up.
+    // Uploads are downscaled client-side to small JPEGs, then the server action
+    // uploads them to Vercel Blob (public photos / private ID docs). The limit
+    // still covers the in-flight data URL during that hop.
     serverActions: { bodySizeLimit: "4mb" },
   },
   turbopack: {
