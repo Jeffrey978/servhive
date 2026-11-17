@@ -249,6 +249,32 @@ export async function settleDispute(_prev: ActionResult | null, fd: FormData): P
   }).then(withMessage);
 }
 
+// ── Payout account verification (A.7) ────────────────────────────────────────
+
+const VerifyPayoutSchema = z.object({
+  providerId: id,
+  decision: z.enum(["VERIFY", "UNVERIFY"]),
+});
+
+/**
+ * Admin confirms (or un-confirms) that the payout account name matches the
+ * provider's verified ID. There's no bank-resolution API wired in, so this is a
+ * manual check: the admin compares the account name to the ID/owner name on the
+ * evidence page and records the decision here.
+ */
+export async function verifyPayoutName(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
+  return run(async () => {
+    await assertRole("ADMIN");
+    const { providerId, decision } = VerifyPayoutSchema.parse(formToObject(fd));
+    const account = await db.payoutAccount.findUnique({ where: { providerId }, select: { id: true } });
+    if (!account) throw new DomainError("This artisan hasn't added a payout account yet.");
+    await db.payoutAccount.update({ where: { providerId }, data: { verified: decision === "VERIFY" } });
+    revalidatePath("/admin", "layout");
+    revalidatePath("/pro", "layout");
+    return { message: decision === "VERIFY" ? "Payout name marked as matching the ID." : "Payout verification removed." };
+  }).then(withMessage);
+}
+
 /** Lift `{ message }` returned from the body into the ActionResult's message. */
 function withMessage(res: ActionResult<{ message: string }>): ActionResult {
   return res.ok ? { ok: true, message: res.data?.message } : res;
