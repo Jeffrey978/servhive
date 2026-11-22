@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/lib/db";
 import { RULES } from "@/lib/constants";
+import { notifyArtisanJobFunded } from "@/server/notifications/artisan";
 import type { User } from "@/generated/prisma/client";
 
 /**
@@ -54,7 +55,7 @@ export async function cancelQuote(client: User, quoteId: string) {
 
 /** Client accepts a priced quote and funds escrow. */
 export async function acceptQuote(client: User, quoteId: string) {
-  return db.$transaction(async (tx) => {
+  const job = await db.$transaction(async (tx) => {
     const q = await tx.quoteRequest.findFirst({ where: { id: quoteId, clientId: client.id } });
     if (!q) throw new DomainError("Quote not found.");
     if (q.status !== "QUOTED" || !q.quoteAmount) throw new DomainError("This quote isn't ready to accept.");
@@ -74,6 +75,9 @@ export async function acceptQuote(client: User, quoteId: string) {
       },
     });
   });
+  // After the funding commits, tell the artisan (best-effort; never blocks the booking).
+  await notifyArtisanJobFunded(job.id);
+  return job;
 }
 
 /** Client books a listed fixed-price service directly into escrow. */
@@ -84,7 +88,7 @@ export async function bookService(
   const service = await db.service.findUnique({ where: { id: input.serviceId }, include: { provider: true } });
   if (!service || service.provider.status !== "APPROVED") throw new DomainError("This service isn't available.");
   if (service.provider.userId === client.id) throw new DomainError("You can't book yourself.");
-  return db.escrowJob.create({
+  const job = await db.escrowJob.create({
     data: {
       ref: jobRef(),
       clientId: client.id,
@@ -97,6 +101,8 @@ export async function bookService(
       scheduledFor: input.scheduledFor ?? null,
     },
   });
+  await notifyArtisanJobFunded(job.id);
+  return job;
 }
 
 /** Client confirms the work and releases payment to the artisan. */
