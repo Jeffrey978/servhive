@@ -229,7 +229,7 @@ export async function settleDispute(_prev: ActionResult | null, fd: FormData): P
 
       const outcome =
         input.decision === "RELEASE"
-          ? `Escrow released to the artisan (${formatNaira(r.job.payoutAmount)} after commission).`
+          ? `Escrow released to the artisan (${formatNaira(r.job.payoutAmount)}).`
           : `Escrow refunded to the client (${formatNaira(r.job.amount)}).`;
       const closed = await tx.report.updateMany({
         where: { id: input.reportId, status: { in: OPEN_REPORT } },

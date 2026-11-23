@@ -104,9 +104,14 @@ export const REPORT_REASONS = [
 
 // Business rules — single source of truth (legacy had contradictory values).
 export const RULES = {
-  commissionPct: 5,
+  // No commission (2026-11-23): artisans keep 100% of every job. Kept as a rule
+  // at 0 so the escrow split and old jobs' records still read correctly.
+  commissionPct: 0,
   monthlySubscription: 2000, // NGN
   freeTrialMonths: 1,
+  // Only the first N artisans to join get the free month; later sign-ups start
+  // on the paid membership straight away.
+  freeTrialSlots: 50,
   boostPricePerWeek: 1500, // NGN
   autoReleaseHours: 48,
   disputeWindowHours: 48,

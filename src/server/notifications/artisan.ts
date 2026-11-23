@@ -56,7 +56,7 @@ export async function notifyArtisanJobFunded(jobId: string) {
     `${job.client.name} has booked you for "${job.serviceName}", and the payment ${held}.`,
     "",
     `Job ref:    ${job.ref}`,
-    `Amount:     ${formatNaira(job.amount)} (you receive ${formatNaira(job.payoutAmount)} after the ${RULES.commissionPct}% fee)`,
+    `Amount:     ${formatNaira(job.amount)} (you receive ${formatNaira(job.payoutAmount)}: no commission)`,
     `Where:      ${job.address}, ${job.area}`,
     `When:       ${when}`,
     "",

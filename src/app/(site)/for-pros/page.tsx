@@ -15,20 +15,19 @@ import { formatNaira } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "For pros",
-  description: `Join Servhive as a verified artisan in ${CITY}. ${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"} free, then ${formatNaira(RULES.monthlySubscription)}/month. ${RULES.commissionPct}% only on completed jobs.`,
+  description: `Join Servhive as a verified artisan in ${CITY}. ${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"} free for the first ${RULES.freeTrialSlots} artisans, then ${formatNaira(RULES.monthlySubscription)}/month. No commission: you keep every naira.`,
 };
 
 const EXAMPLE = 50000;
-const fee = Math.round((EXAMPLE * RULES.commissionPct) / 100);
 
 const PRICING = [
-  { k: "Free trial", v: `${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"}`, note: "Full access from the day you're approved. No card needed." },
+  { k: "Free trial", v: `${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"}`, note: `For the first ${RULES.freeTrialSlots} artisans to join. Full access, no card needed.` },
   {
     k: "Membership",
     v: `${formatNaira(RULES.monthlySubscription)}/mo`,
-    note: "After the trial. Keeps your profile visible in search.",
+    note: `After the free month, or from the start once the first ${RULES.freeTrialSlots} spots are taken. Keeps your profile visible in search.`,
   },
-  { k: "Commission", v: `${RULES.commissionPct}%`, note: "Only on completed, released jobs. Nothing on quotes or cancellations." },
+  { k: "Your earnings", v: "100%", note: "No commission. Every naira of the quote is yours when the job is released." },
   {
     k: "Boost",
     v: `${formatNaira(RULES.boostPricePerWeek)}/wk`,
@@ -77,9 +76,9 @@ export default function ForProsPage() {
               as="ul"
               className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/20 pt-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/75"
             >
-              <li>{RULES.freeTrialMonths} {RULES.freeTrialMonths === 1 ? "month" : "months"} free</li>
+              <li>{RULES.freeTrialMonths} {RULES.freeTrialMonths === 1 ? "month" : "months"} free for the first {RULES.freeTrialSlots}</li>
               <li aria-hidden>·</li>
-              <li>{RULES.commissionPct}% on completed jobs only</li>
+              <li>No commission</li>
               <li aria-hidden>·</li>
               <li>Paid through escrow</li>
             </Reveal>
@@ -141,8 +140,7 @@ export default function ForProsPage() {
         </Reveal>
         <Reveal className="mt-8 grid gap-4 text-sm text-muted md:grid-cols-12" delay={0.1}>
           <p className="md:col-span-6 md:col-start-4">
-            Example: a {formatNaira(EXAMPLE)} job pays you {formatNaira(EXAMPLE - fee)} after the{" "}
-            {RULES.commissionPct}% commission. If membership lapses, your profile is hidden from search until it&rsquo;s
+            Example: a {formatNaira(EXAMPLE)} job pays you {formatNaira(EXAMPLE)}. There is no commission. If membership lapses, your profile is hidden from search until it&rsquo;s
             paid. Payments currently run in test mode.
           </p>
         </Reveal>

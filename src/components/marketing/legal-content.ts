@@ -32,7 +32,7 @@ export const LEGAL_SLUGS = ["terms", "provider", "protection", "privacy"] as con
 export type LegalSlug = (typeof LEGAL_SLUGS)[number];
 
 /** Set "Updated" to the day the page is published. */
-const UPDATED = "2026-11-16";
+const UPDATED = "2026-11-23";
 
 /** Shown at the top of every legal page during the pilot. Remove when the lawyer approves. */
 export const PILOT_NOTICE = "Pilot terms. These apply during the Servhive pilot and may change.";
@@ -152,7 +152,7 @@ export const LEGAL_DOCS: Record<LegalSlug, LegalDoc> = {
     slug: "provider",
     title: "Provider Agreement",
     short: "Provider",
-    summary: "What artisans agree to when they list on Servhive: review, fees, commission and boosts.",
+    summary: "What artisans agree to when they list on Servhive: review, fees and boosts.",
     updated: UPDATED,
     sections: [
       {
@@ -173,14 +173,14 @@ export const LEGAL_DOCS: Record<LegalSlug, LegalDoc> = {
         id: "membership",
         heading: `Membership and ${RULES.freeTrialMonths}-month free trial`,
         body: [
-          `Every new provider receives a ${RULES.freeTrialMonths}-month free trial. After that, a membership fee of ${formatNaira(RULES.monthlySubscription)} per month applies to all providers, paid before the month ends. If it is not paid, your profile is hidden from ${CITY} search until payment is made. We may change fees with at least [30] days' notice. [Confirm how VAT and other taxes apply.]`,
+          `The first ${RULES.freeTrialSlots} providers to join receive a ${RULES.freeTrialMonths}-month free trial. After the trial (or from joining, for providers after the first ${RULES.freeTrialSlots}), a membership fee of ${formatNaira(RULES.monthlySubscription)} per month applies to all providers, paid before the month ends. If it is not paid, your profile is hidden from ${CITY} search until payment is made. We may change fees with at least [30] days' notice. [Confirm how VAT and other taxes apply.]`,
         ],
       },
       {
         id: "commission",
-        heading: `Platform commission (${RULES.commissionPct}%)`,
+        heading: "No commission",
         body: [
-          `A ${RULES.commissionPct}% commission applies to jobs paid through the app. The customer pays no extra fee for payment protection. The ${RULES.commissionPct}% is taken from your payout when the job is released.`,
+          "Servhive does not take a commission on jobs paid through the app. The customer pays no extra fee for payment protection, and when a job is released you receive the full quoted price. [Lawyer to review: commission removed 2026-11-23.]",
         ],
       },
       {
@@ -294,7 +294,7 @@ export const LEGAL_DOCS: Record<LegalSlug, LegalDoc> = {
           "2. The provider replies with one fixed price, and the customer accepts it.",
           "3. The customer pays the quoted amount.",
           "4. The provider does the work and marks the job complete in the app, with photos.",
-          `5. The customer confirms, and the money is released to the provider, less the ${RULES.commissionPct}% commission.`,
+          "5. The customer confirms, and the money is released to the provider in full.",
         ],
       },
       {
@@ -329,7 +329,7 @@ export const LEGAL_DOCS: Record<LegalSlug, LegalDoc> = {
         id: "no-extra-fees",
         heading: "No extra customer fees",
         body: [
-          `Payment protection is included with every in-app booking at no extra charge to the customer. Servhive's ${RULES.commissionPct}% commission is taken from the provider's payout. [Decide who bears the payment processor's charges.]`,
+          "Payment protection is included with every in-app booking at no extra charge to the customer, and Servhive takes no commission from the provider's payout. [Decide who bears the payment processor's charges.]",
         ],
       },
       {

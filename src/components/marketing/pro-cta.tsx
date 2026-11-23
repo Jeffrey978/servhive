@@ -12,8 +12,8 @@ import { PHOTOS } from "./photos";
 /** Split photo + copy CTA for artisans. */
 export function ProCta() {
   const terms = [
-    { n: `${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"}`, l: "free to start" },
-    { n: `${RULES.commissionPct}%`, l: "only on completed jobs" },
+    { n: `${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"}`, l: `free for the first ${RULES.freeTrialSlots}` },
+    { n: "100%", l: "of every job is yours" },
     { n: formatNaira(RULES.monthlySubscription), l: "a month after the trial" },
   ];
   return (

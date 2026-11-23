@@ -70,17 +70,26 @@ export async function completeOnboarding(_prev: ActionResult | null, fd: FormDat
     const category = await db.category.findUnique({ where: { id: input.categoryId } });
     if (!category) throw new DomainError("Choose a valid trade.");
 
-    const trialEndsAt = new Date();
-    trialEndsAt.setMonth(trialEndsAt.getMonth() + RULES.freeTrialMonths);
+    const slug = await uniqueSlug(input.businessName);
 
-    await db.$transaction([
-      db.user.update({
+    // Count and create in one serializable transaction so two simultaneous
+    // sign-ups can't both take the last free-month slot.
+    await db.$transaction(async (tx) => {
+      // The free month goes to the first RULES.freeTrialSlots artisans only.
+      const trialsGranted = await tx.provider.count({ where: { trialEndsAt: { not: null } } });
+      let trialEndsAt: Date | null = null;
+      if (trialsGranted < RULES.freeTrialSlots) {
+        trialEndsAt = new Date();
+        trialEndsAt.setMonth(trialEndsAt.getMonth() + RULES.freeTrialMonths);
+      }
+
+      await tx.user.update({
         where: { id: user.id },
         data: { name: input.name, area: input.area, phone: input.phone, role: "ARTISAN", onboarded: true },
-      }),
-      db.provider.create({
+      });
+      await tx.provider.create({
         data: {
-          slug: await uniqueSlug(input.businessName),
+          slug,
           userId: user.id,
           businessName: input.businessName,
           ownerName: input.name,
@@ -93,12 +102,13 @@ export async function completeOnboarding(_prev: ActionResult | null, fd: FormDat
           yearsExperience: input.yearsExperience,
           // DRAFT until they upload ID + work photos and submit from /pro/verification.
           status: "DRAFT",
+          // null after the first 50: no free month, the paid membership applies from the start
           trialEndsAt,
           lat: null,
           lng: null,
         },
-      }),
-    ]);
+      });
+    }, { isolationLevel: "Serializable" });
   });
 
   if (!res.ok) return res;

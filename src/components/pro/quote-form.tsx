@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { RULES } from "@/lib/constants";
 import { formatNaira } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/field";
@@ -25,8 +24,7 @@ export function QuoteForm({
   const { state, pending, onSubmit } = useProAction(sendAction);
 
   const value = Math.max(0, Math.round(Number(amount) || 0));
-  const fee = Math.round((value * RULES.commissionPct) / 100);
-  const net = value - fee;
+  const net = value; // no commission: the artisan receives the full quote
 
   if (!open) {
     return (
@@ -85,10 +83,6 @@ export function QuoteForm({
         <div className="flex justify-between px-4 py-2.5">
           <dt className="text-muted">Client pays into escrow</dt>
           <dd className="tabular-nums">{formatNaira(value)}</dd>
-        </div>
-        <div className="flex justify-between px-4 py-2.5">
-          <dt className="text-muted">Servhive fee ({RULES.commissionPct}%)</dt>
-          <dd className="tabular-nums">−{formatNaira(fee)}</dd>
         </div>
         <div className="flex justify-between px-4 py-2.5 font-medium">
           <dt>You receive</dt>
