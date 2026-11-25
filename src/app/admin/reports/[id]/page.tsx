@@ -114,7 +114,7 @@ export default async function ReportPage({ params }: PageProps<"/admin/reports/[
                     label="Release to artisan"
                     confirmLabel={`Release ${formatNaira(job.payoutAmount)}`}
                     variant="primary"
-                    prompt={`${formatNaira(job.payoutAmount)} goes to ${r.provider.businessName} after the ${job.commissionPct}% commission. This can't be undone.`}
+                    prompt={`${formatNaira(job.payoutAmount)} goes to ${r.provider.businessName}${job.commissionPct ? ` after the ${job.commissionPct}% commission that applied to this job` : ""}. This can't be undone.`}
                     note={{ name: "note", label: "Decision note", placeholder: "Photos show the work was done as quoted.", required: true }}
                   />
                   <ConfirmAction

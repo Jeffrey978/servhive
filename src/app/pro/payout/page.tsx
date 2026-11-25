@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { RULES } from "@/lib/constants";
 import { loadPro, maskAccount } from "@/server/pro";
 import { savePayoutAction } from "@/server/pro-actions";
 import { Card, PageHeader } from "@/components/ui/misc";
@@ -19,7 +18,7 @@ export default async function ProPayoutPage() {
       <PageHeader
         eyebrow="Payout"
         title="Where we pay you"
-        description={`Released escrow payments go to this account, minus the ${RULES.commissionPct}% Servhive fee.`}
+        description="Released escrow payments go to this account in full. Servhive takes no commission."
       />
 
       {account ? (

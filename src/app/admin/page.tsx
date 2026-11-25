@@ -31,7 +31,7 @@ export default async function AdminOverviewPage() {
         <Kpi label="Open reports" value={d.openReports} hint="Need a decision" href="/admin/reports" />
         <Kpi label="Artisans live" value={d.live} hint="Verified and listed" href="/admin/artisans?status=APPROVED" />
         <Kpi label="Held in escrow" value={formatNaira(d.heldAmount)} hint={`${d.heldJobs} active ${d.heldJobs === 1 ? "job" : "jobs"}`} href="/admin/escrow" />
-        <Kpi label="Commission earned" value={formatNaira(d.commission)} hint="5% of released jobs" />
+        <Kpi label="Commission earned" value={formatNaira(d.commission)} hint="Older jobs only: no commission since 23 Nov 2026" />
         <Kpi label="Jobs this month" value={d.jobsThisMonth} hint="Funded into escrow" />
       </div>
 

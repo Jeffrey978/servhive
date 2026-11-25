@@ -16,8 +16,6 @@ export default async function ProBillingPage() {
   const receipts = await db.billingReceipt.findMany({ where: { providerId: provider.id }, orderBy: { createdAt: "desc" }, take: 100 });
   const b = billingState(provider);
   const boost = boostState(provider);
-  const example = 50_000;
-  const exampleFee = Math.round((example * RULES.commissionPct) / 100);
 
   return (
     <>
@@ -77,7 +75,7 @@ export default async function ProBillingPage() {
 
       <ProSection n="01" title="Receipts">
         {receipts.length === 0 ? (
-          <p className="text-sm text-muted">No payments yet. You&apos;re on the free trial.</p>
+          <p className="text-sm text-muted">{b.state === "trial" ? "No payments yet. You’re on the free trial." : "No payments yet."}</p>
         ) : (
           <div className="border-y border-border">
             <div className="hidden grid-cols-[8rem_1fr_7rem_6rem] gap-4 border-b border-border py-2.5 md:grid">
@@ -105,25 +103,11 @@ export default async function ProBillingPage() {
         )}
       </ProSection>
 
-      <ProSection n="02" title={`The ${RULES.commissionPct}% fee`}>
+      <ProSection n="02" title="No commission">
         <p className="max-w-xl text-[0.9375rem] leading-relaxed">
-          Servhive keeps {RULES.commissionPct}% of each job paid through escrow. It covers payment protection, dispute handling and
-          ID checks. Nothing is charged on quotes that aren&apos;t accepted.
+          Servhive takes no cut of your jobs. When a client releases a payment, you receive the full quoted price. Your
+          only costs are the monthly membership and any boosts you choose.
         </p>
-        <dl className="mt-6 max-w-sm divide-y divide-border border-y border-border text-sm">
-          <div className="flex justify-between py-2.5">
-            <dt className="text-muted">Client pays</dt>
-            <dd className="tabular-nums">{formatNaira(example)}</dd>
-          </div>
-          <div className="flex justify-between py-2.5">
-            <dt className="text-muted">Servhive fee ({RULES.commissionPct}%)</dt>
-            <dd className="tabular-nums">−{formatNaira(exampleFee)}</dd>
-          </div>
-          <div className="flex justify-between py-2.5 font-medium">
-            <dt>You receive</dt>
-            <dd className="tabular-nums">{formatNaira(example - exampleFee)}</dd>
-          </div>
-        </dl>
       </ProSection>
     </>
   );

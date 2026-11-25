@@ -52,7 +52,6 @@ const LIFECYCLE = [
 ] as const;
 
 const EXAMPLE = 50000;
-const commission = Math.round((EXAMPLE * RULES.commissionPct) / 100);
 
 const FAQ: FaqItem[] = [
   {
@@ -65,7 +64,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "Do I pay any fee on top of the quote?",
-    a: `No. You pay the quoted price. Our ${RULES.commissionPct}% commission comes out of the artisan's payout.`,
+    a: "No. You pay the quoted price, and the artisan receives all of it. Servhive takes no commission.",
   },
   {
     q: "What happens to my money during a dispute?",
@@ -154,15 +153,14 @@ export default function HowItWorksPage() {
         />
         <div className="mt-12 grid gap-10 md:mt-16 md:grid-cols-12">
           <p className="max-w-md text-lg leading-relaxed text-muted md:col-span-5">
-            Servhive earns a {RULES.commissionPct}% commission, taken from the artisan&rsquo;s payout when a job is
-            released. There is no booking fee and no card surcharge for clients.
+            There is no commission, no booking fee and no card surcharge. When a job is released, the artisan receives
+            the full quoted price.
           </p>
           <Reveal as="dl" stagger={0.08} className="border-t border-border md:col-span-6 md:col-start-7">
             {[
               { k: "Quoted price", v: formatNaira(EXAMPLE) },
               { k: "You pay", v: formatNaira(EXAMPLE) },
-              { k: `Commission (${RULES.commissionPct}%)`, v: `− ${formatNaira(commission)}` },
-              { k: "Artisan receives", v: formatNaira(EXAMPLE - commission), strong: true },
+              { k: "Artisan receives", v: formatNaira(EXAMPLE), strong: true },
             ].map((r) => (
               <div key={r.k} data-reveal-item className="flex items-baseline justify-between gap-4 border-b border-border py-5">
                 <dt className="text-muted">{r.k}</dt>

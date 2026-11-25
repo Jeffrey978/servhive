@@ -9,7 +9,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/field";
 import { FilterTabs, Kpi, Pager, Table, Td, Tr, withParams } from "@/components/admin/table";
 import { formatDate, formatNaira } from "@/lib/utils";
-import { RULES } from "@/lib/constants";
 
 export const metadata = { title: "Escrow ledger" };
 
@@ -37,7 +36,7 @@ export default async function EscrowLedgerPage({ searchParams }: PageProps<"/adm
       <PageHeader
         eyebrow="Payments · test mode"
         title="Escrow ledger"
-        description={`Every job funded through Servhive. Commission is ${RULES.commissionPct}% of the job amount, taken on release.`}
+        description="Every job funded through Servhive. No commission is taken on new jobs; jobs funded before 23 Nov 2026 show the 5% that applied then."
         actions={
           <a href={withParams("/admin/escrow/export", { q, status })} className={buttonVariants({ variant: "outline", size: "sm" })} download>
             Export CSV
