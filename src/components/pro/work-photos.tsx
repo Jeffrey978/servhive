@@ -58,7 +58,7 @@ export function WorkPhotos({
       ) : null}
 
       <form key={successKey} onSubmit={onSubmit} className="mt-8 grid gap-4 md:grid-cols-[14rem_1fr]">
-        <ImagePicker id="work-photo" label="Choose a photo" />
+        <ImagePicker id="work-photo" label="Add a photo" hint="Take a photo or choose one from your gallery." />
         <div className="space-y-4">
           <Field label="Caption" htmlFor="wp-caption">
             <Input id="wp-caption" name="caption" required minLength={3} maxLength={120} placeholder="Changed 20KVA alternator, Woji" />

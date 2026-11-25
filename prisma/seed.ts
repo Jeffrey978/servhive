@@ -119,6 +119,9 @@ async function main() {
       ratingAvg: p.rating,
       reviewCount: p.reviewCount,
       boostedUntil: p.boosted ? new Date(now + 30 * 86400_000) : null,
+      // Demo members are kept on an active paid subscription so the hide-unpaid
+      // rule (A.8) doesn't hide the seeded directory.
+      subscriptionPaidUntil: new Date(now + 365 * 86400_000),
       ...coords(p.area, i),
     };
     const provider = await db.provider.upsert({ where: { slug: s }, update: base, create: { slug: s, ...base } });

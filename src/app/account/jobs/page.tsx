@@ -108,6 +108,23 @@ export default async function JobsPage() {
                   {j.status === "REFUNDED" && "Refunded to you after review."}
                 </p>
 
+                {j.completionPhotos.length > 0 &&
+                (j.status === "AWAITING_RELEASE" || j.status === "DISPUTED" || j.status === "RELEASED") ? (
+                  <div className="mt-4">
+                    <p className="eyebrow mb-2">Photos of the finished work</p>
+                    <ul className="flex flex-wrap gap-2">
+                      {j.completionPhotos.map((url, i) => (
+                        <li key={i} className="size-20 overflow-hidden rounded-lg border border-border bg-surface-2">
+                          <a href={url} target="_blank" rel="noopener noreferrer">
+                            {/* eslint-disable-next-line @next/next/no-img-element -- quick thumbnail of a Blob image */}
+                            <img src={url} alt={`Finished work photo ${i + 1}`} loading="lazy" className="size-full object-cover" />
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
                 {open ? (
                   <div className="mt-4">
                     <EscrowJobActions

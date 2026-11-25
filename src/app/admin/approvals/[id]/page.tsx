@@ -10,6 +10,7 @@ import {
   rejectProvider,
   reviewDocument,
   suspendProvider,
+  verifyPayoutName,
 } from "@/server/admin-actions";
 import { Badge, StatusBadge } from "@/components/ui/badge";
 import { Card, PageHeader, Stars } from "@/components/ui/misc";
@@ -157,6 +158,19 @@ export default async function EvidencePage({ params }: PageProps<"/admin/approva
             )}
             {p.bio ? <p className="mt-4 max-w-prose text-sm whitespace-pre-line text-muted">{p.bio}</p> : null}
           </section>
+
+          <section>
+            <SectionTitle n="05" title="Payout name check" meta={p.payoutAccount ? undefined : "No account yet"} />
+            {!p.payoutAccount ? (
+              <p className="text-sm text-muted">The artisan hasn&apos;t added a payout account yet.</p>
+            ) : (
+              <PayoutNameCheck
+                providerId={p.id}
+                ownerName={p.ownerName}
+                account={p.payoutAccount}
+              />
+            )}
+          </section>
         </div>
 
         {/* Facts + decision */}
@@ -199,10 +213,7 @@ export default async function EvidencePage({ params }: PageProps<"/admin/approva
               {p.payoutAccount ? (
                 <span className="text-right">
                   <span className="block font-mono">{maskAccount(p.payoutAccount.accountNumber)}</span>
-                  <span className="block text-xs text-muted">
-                    {p.payoutAccount.bankName} · {p.payoutAccount.accountName}
-                  </span>
-                  {p.payoutAccount.verified ? <span className="text-xs text-success">Name verified</span> : null}
+                  <span className="block text-xs text-muted">{p.payoutAccount.bankName}</span>
                 </span>
               ) : (
                 <span className="text-muted">Not added</span>
@@ -260,8 +271,8 @@ function DocSection({
       ) : (
         <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_14rem]">
           <div className="flex min-h-48 items-center justify-center overflow-hidden rounded-xl border border-border bg-surface-2 p-2">
-            {/* eslint-disable-next-line @next/next/no-img-element -- verification uploads are data URLs */}
-            <img src={doc.fileUrl} alt={`${title} uploaded by the artisan`} className="max-h-[28rem] w-auto max-w-full object-contain" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- private doc streamed via an admin-only route */}
+            <img src={`/admin/doc/${doc.id}`} alt={`${title} uploaded by the artisan`} className="max-h-[28rem] w-auto max-w-full object-contain" />
           </div>
           <div className="space-y-4 text-sm">
             <div className="flex items-center gap-2">
@@ -408,6 +419,96 @@ function DecisionPanel({
           }}
         />
         {suspend}
+      </div>
+    </div>
+  );
+}
+
+/** Loose name comparison: case/space/punctuation-insensitive, word-order-insensitive. */
+function nameSimilarity(a: string, b: string) {
+  const norm = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[^a-z\s]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+  const wa = norm(a);
+  const wb = new Set(norm(b));
+  if (wa.length === 0) return 0;
+  const shared = wa.filter((w) => wb.has(w)).length;
+  return shared / Math.max(wa.length, wb.size || 1);
+}
+
+function PayoutNameCheck({
+  providerId,
+  ownerName,
+  account,
+}: {
+  providerId: string;
+  ownerName: string;
+  account: { bankName: string; accountNumber: string; accountName: string; verified: boolean };
+}) {
+  const sim = nameSimilarity(account.accountName, ownerName);
+  const hint =
+    sim >= 0.99
+      ? { tone: "success" as const, text: "Account name matches the owner name exactly." }
+      : sim >= 0.5
+        ? { tone: "accent" as const, text: "Partial match — check it against the ID document above." }
+        : { tone: "danger" as const, text: "Names look different — check carefully against the ID before verifying." };
+
+  return (
+    <div className="space-y-5">
+      <p className="max-w-prose text-sm text-muted">
+        Confirm the bank account name matches the name on the government ID (section 01). There&apos;s no automatic bank
+        check, so this is a manual comparison.
+      </p>
+      <dl className="grid max-w-md gap-px overflow-hidden rounded-xl border border-border bg-border text-sm">
+        <div className="flex justify-between gap-4 bg-surface px-4 py-3">
+          <dt className="text-muted">Name on account</dt>
+          <dd className="text-right font-medium">{account.accountName}</dd>
+        </div>
+        <div className="flex justify-between gap-4 bg-surface px-4 py-3">
+          <dt className="text-muted">Owner / ID name</dt>
+          <dd className="text-right">{ownerName}</dd>
+        </div>
+        <div className="flex justify-between gap-4 bg-surface px-4 py-3">
+          <dt className="text-muted">Bank</dt>
+          <dd className="text-right">
+            {account.bankName} · <span className="font-mono">{account.accountNumber}</span>
+          </dd>
+        </div>
+      </dl>
+      <p
+        className={cn(
+          "text-sm",
+          hint.tone === "success" ? "text-success" : hint.tone === "danger" ? "text-danger" : "text-fg",
+        )}
+      >
+        {hint.text}
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        {account.verified ? (
+          <>
+            <Badge tone="success">Name verified</Badge>
+            <ConfirmAction
+              action={verifyPayoutName}
+              fields={{ providerId, decision: "UNVERIFY" }}
+              label="Remove verification"
+              confirmLabel="Remove verification"
+              confirmVariant="danger"
+              variant="ghost"
+            />
+          </>
+        ) : (
+          <ConfirmAction
+            action={verifyPayoutName}
+            fields={{ providerId, decision: "VERIFY" }}
+            label="Mark name as matching"
+            confirmLabel="Yes, it matches the ID"
+            prompt="The account name matches the name on the government ID."
+            variant="primary"
+          />
+        )}
       </div>
     </div>
   );

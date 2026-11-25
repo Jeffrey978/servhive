@@ -113,12 +113,15 @@ export function ImagePicker({
   aspect = "aspect-[4/3]",
   round,
   id,
+  hint,
 }: {
   label?: string;
   initialUrl?: string | null;
   aspect?: string;
   round?: boolean;
   id: string;
+  /** Short helper under the picker, e.g. "Take a photo or choose from your gallery." */
+  hint?: string;
 }) {
   const [dataUrl, setDataUrl] = useState("");
   const [fileName, setFileName] = useState("");
@@ -173,7 +176,11 @@ export function ImagePicker({
       </label>
       <input type="hidden" name="dataUrl" value={dataUrl} />
       <input type="hidden" name="fileName" value={fileName} />
-      {error ? <p className="mt-1.5 text-sm text-danger">{error}</p> : null}
+      {error ? (
+        <p className="mt-1.5 text-sm text-danger">{error}</p>
+      ) : hint ? (
+        <p className="mt-1.5 text-sm text-muted">{hint}</p>
+      ) : null}
     </div>
   );
 }
