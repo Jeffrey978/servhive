@@ -2,8 +2,9 @@ import type { NextRequest } from "next/server";
 import { runReminderSweeps } from "@/server/reminders";
 
 /**
- * Scheduled reminder + auto-release sweep (A.6, A.8). Triggered by Vercel Cron
- * (see vercel.json). Secured by CRON_SECRET: Vercel Cron sends it as a Bearer
+ * Scheduled reminder + auto-release sweep (A.6, A.8). Triggered daily by Vercel
+ * Cron (vercel.json; Hobby allows daily only) and hourly by GitHub Actions
+ * (.github/workflows/reminders.yml). Secured by CRON_SECRET: both send it as a Bearer
  * token, so no human/browser can trigger it. Safe to run often — the sweep is
  * idempotent (SentReminder de-dups, auto-release is status-guarded).
  */
