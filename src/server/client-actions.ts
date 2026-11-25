@@ -99,7 +99,14 @@ export async function bookServiceAction(
   _prev: Result | null,
   fd: FormData,
 ): Promise<Result> {
-  const res = await run(async () => {
+  const res = await bookServiceCore(fd);
+  if (res.ok) redirect("/account/jobs");
+  return res;
+}
+
+/** bookServiceAction without the redirect: shared by the website and the mobile API. */
+export async function bookServiceCore(fd: FormData): Promise<Result> {
+  return run(async () => {
     const user = await assertRole("CLIENT");
     const input = BookSchema.parse(formToObject(fd));
     // Only fixed-price services can be booked straight into escrow.
@@ -111,9 +118,7 @@ export async function bookServiceAction(
       throw new DomainError("This service needs a quote first.");
     await bookService(user, input);
     revalidateAccount();
-  });
-  if (res.ok) redirect("/account/jobs");
-  return res;
+  }, "Booked. Your payment is held in escrow until the job is done.");
 }
 
 const ReportSchema = z.object({
@@ -179,16 +184,20 @@ export async function messageProviderAction(
   _prev: Result | null,
   fd: FormData,
 ): Promise<Result> {
-  let conversationId: string | null = null;
-  const res = await run(async () => {
+  const res = await messageProviderCore(fd);
+  if (res.ok && res.data?.conversationId) redirect(`/account/messages/${res.data.conversationId}`);
+  return res.ok ? { ok: true, message: res.message } : res;
+}
+
+/** messageProviderAction without the redirect: returns the thread id instead. */
+export async function messageProviderCore(fd: FormData): Promise<ActionResult<{ conversationId: string }>> {
+  return run(async () => {
     const user = await assertRole("CLIENT");
     const providerId = id.parse(fd.get("providerId"));
     const c = await startConversation(user, providerId);
-    conversationId = c.id;
     revalidatePath("/account/messages");
+    return { conversationId: c.id };
   });
-  if (res.ok && conversationId) redirect(`/account/messages/${conversationId}`);
-  return res;
 }
 
 // ── Messages ─────────────────────────────────────────────────────────────────
@@ -217,13 +226,18 @@ export async function acceptQuoteAction(
   _prev: Result | null,
   fd: FormData,
 ): Promise<Result> {
-  const res = await run(async () => {
+  const res = await acceptQuoteCore(fd);
+  if (res.ok) redirect("/account/jobs");
+  return res;
+}
+
+/** acceptQuoteAction without the redirect: shared by the website and the mobile API. */
+export async function acceptQuoteCore(fd: FormData): Promise<Result> {
+  return run(async () => {
     const user = await assertRole("CLIENT");
     await acceptQuote(user, id.parse(fd.get("quoteId")));
     revalidateAccount();
-  });
-  if (res.ok) redirect("/account/jobs");
-  return res;
+  }, "Quote accepted. Your payment is held in escrow until the job is done.");
 }
 
 export async function cancelQuoteAction(
