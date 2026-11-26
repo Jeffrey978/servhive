@@ -2,6 +2,8 @@ import "server-only";
 import { db } from "@/lib/db";
 import { RULES } from "@/lib/constants";
 import { notifyArtisanJobFunded } from "@/server/notifications/artisan";
+import { notifyUsers } from "@/server/notifications/push";
+import { formatNaira } from "@/lib/utils";
 import type { User } from "@/generated/prisma/client";
 
 /**
@@ -41,9 +43,11 @@ export async function requestQuote(
   const provider = await db.provider.findUnique({ where: { id: input.providerId } });
   if (!provider || provider.status !== "APPROVED") throw new DomainError("This artisan isn't taking requests right now.");
   if (provider.userId === client.id) throw new DomainError("You can't request a quote from yourself.");
-  return db.quoteRequest.create({
+  const q = await db.quoteRequest.create({
     data: { clientId: client.id, ...input, preferredDate: input.preferredDate ?? null },
   });
+  notifyUsers([provider.userId], { title: "New quote request", body: `${client.name}: ${input.title}`, data: { type: "request", id: q.id } });
+  return q;
 }
 
 export async function cancelQuote(client: User, quoteId: string) {
@@ -110,7 +114,14 @@ export async function releaseJob(client: User, jobId: string) {
   const job = await db.escrowJob.findFirst({ where: { id: jobId, clientId: client.id } });
   if (!job) throw new DomainError("Job not found.");
   if (job.status !== "FUNDED" && job.status !== "AWAITING_RELEASE") throw new DomainError("This payment can't be released.");
-  return db.escrowJob.update({ where: { id: job.id }, data: { status: "RELEASED", releasedAt: new Date() } });
+  const released = await db.escrowJob.update({ where: { id: job.id }, data: { status: "RELEASED", releasedAt: new Date() } });
+  const provider = await db.provider.findUnique({ where: { id: job.providerId }, select: { userId: true } });
+  notifyUsers([provider?.userId], {
+    title: "Payment released",
+    body: `${client.name} released ${formatNaira(job.payoutAmount)} for ${job.serviceName}.`,
+    data: { type: "pro-job", id: job.id },
+  });
+  return released;
 }
 
 /** Client disputes a job inside the dispute window; freezes escrow and opens a report. */
@@ -120,15 +131,25 @@ export async function disputeJob(client: User, input: { jobId: string; reason: s
     if (!job) throw new DomainError("Job not found.");
     if (job.status !== "FUNDED" && job.status !== "AWAITING_RELEASE") throw new DomainError("This job can't be disputed now.");
     await tx.escrowJob.update({ where: { id: job.id }, data: { status: "DISPUTED" } });
-    return tx.report.create({
+    const report = await tx.report.create({
       data: { reporterId: client.id, providerId: job.providerId, jobId: job.id, reason: input.reason, notes: input.notes },
     });
+    const provider = await tx.provider.findUnique({ where: { id: job.providerId }, select: { userId: true } });
+    notifyUsers([provider?.userId], {
+      title: "A client opened a dispute",
+      body: `${job.serviceName}: the payment is frozen while Servhive reviews it. Tell us your side.`,
+      data: { type: "complaints" },
+    });
+    return report;
   });
 }
 
 /** Report an artisan without a specific job (e.g. bypass attempt in chat). */
 export async function reportProvider(client: User, input: { providerId: string; reason: string; notes: string }) {
-  return db.report.create({ data: { reporterId: client.id, ...input } });
+  const report = await db.report.create({ data: { reporterId: client.id, ...input } });
+  const provider = await db.provider.findUnique({ where: { id: input.providerId }, select: { userId: true } });
+  notifyUsers([provider?.userId], { title: "A client filed a complaint", body: `${input.reason}. You can respond in the app.`, data: { type: "complaints" } });
+  return report;
 }
 
 /** One review per released job; recomputes the provider's rating. */
@@ -173,10 +194,16 @@ export async function sendQuote(
   if (!q) throw new DomainError("Request not found.");
   if (q.status !== "PENDING" && q.status !== "QUOTED") throw new DomainError("This request is closed.");
   if (!Number.isFinite(input.amount) || input.amount < 500) throw new DomainError("Enter a valid quote amount.");
-  return db.quoteRequest.update({
+  const updated = await db.quoteRequest.update({
     where: { id: q.id },
     data: { status: "QUOTED", quoteAmount: Math.round(input.amount), quoteDuration: input.duration, quoteNotes: input.notes ?? null },
   });
+  notifyUsers([q.clientId], {
+    title: `Quote from ${provider.businessName}`,
+    body: `${q.title}: ${formatNaira(Math.round(input.amount))}, ${input.duration}. Accept to fund escrow.`,
+    data: { type: "quote", id: q.id },
+  });
+  return updated;
 }
 
 export async function declineQuote(artisan: User, quoteId: string) {
@@ -184,7 +211,9 @@ export async function declineQuote(artisan: User, quoteId: string) {
   const q = await db.quoteRequest.findFirst({ where: { id: quoteId, providerId: provider.id } });
   if (!q) throw new DomainError("Request not found.");
   if (q.status !== "PENDING" && q.status !== "QUOTED") throw new DomainError("This request is closed.");
-  return db.quoteRequest.update({ where: { id: q.id }, data: { status: "DECLINED" } });
+  const declined = await db.quoteRequest.update({ where: { id: q.id }, data: { status: "DECLINED" } });
+  notifyUsers([q.clientId], { title: `${provider.businessName} can't take this job`, body: `${q.title}. Try another artisan.`, data: { type: "quote", id: q.id } });
+  return declined;
 }
 
 /**
@@ -198,10 +227,16 @@ export async function markJobComplete(artisan: User, jobId: string, completionPh
   if (!job) throw new DomainError("Job not found.");
   if (job.status !== "FUNDED") throw new DomainError("Only in-progress jobs can be marked complete.");
   if (completionPhotos.length === 0) throw new DomainError("Add at least one photo of the finished work before marking it complete.");
-  return db.escrowJob.update({
+  const done = await db.escrowJob.update({
     where: { id: job.id },
     data: { status: "AWAITING_RELEASE", markedCompleteAt: new Date(), completionPhotos },
   });
+  notifyUsers([job.clientId], {
+    title: `${provider.businessName} finished the job`,
+    body: `${job.serviceName}: check the work, then release ${formatNaira(job.amount)}. It releases automatically in ${RULES.autoReleaseHours}h unless you dispute.`,
+    data: { type: "job", id: job.id },
+  });
+  return done;
 }
 
 export async function respondToReport(artisan: User, input: { reportId: string; response: string }) {
@@ -220,10 +255,24 @@ export async function respondToReport(artisan: User, input: { reportId: string; 
  */
 export async function autoReleaseDueJobs() {
   const cutoff = new Date(Date.now() - RULES.autoReleaseHours * 3600_000);
-  await db.escrowJob.updateMany({
+  const due = await db.escrowJob.findMany({
     where: { status: "AWAITING_RELEASE", markedCompleteAt: { lte: cutoff } },
-    data: { status: "RELEASED", releasedAt: new Date(), autoReleased: true },
+    select: { id: true, serviceName: true, payoutAmount: true, provider: { select: { userId: true } } },
   });
+  for (const j of due) {
+    // Status-guarded per job, so two concurrent sweeps can't both release (or both notify).
+    const res = await db.escrowJob.updateMany({
+      where: { id: j.id, status: "AWAITING_RELEASE" },
+      data: { status: "RELEASED", releasedAt: new Date(), autoReleased: true },
+    });
+    if (res.count === 1) {
+      notifyUsers([j.provider.userId], {
+        title: "Payment released",
+        body: `${formatNaira(j.payoutAmount)} for ${j.serviceName} was released automatically.`,
+        data: { type: "pro-job", id: j.id },
+      });
+    }
+  }
 }
 
 /** Hours left before auto-release, or null if not in the window. */

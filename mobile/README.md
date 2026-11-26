@@ -45,12 +45,27 @@ npx expo-doctor       # dependency and config health
 npx expo export --platform android --platform ios --output-dir /tmp/servhive-export   # proves it bundles
 ```
 
+## Push notifications
+
+The website sends a push (through Expo's push service) for: a new message, a new quote request, a quote received or declined, a job funded, a job marked done, payment released (by the client or automatically), a dispute or complaint, the 24h/3h auto-release reminders, and membership reminders. Tapping one opens the right screen. Pushes are best-effort, like the emails: they never block a booking or payment.
+
+Messages use the same pushes to arrive instantly: when a message push comes in for the conversation you have open, the app refreshes it straight away instead of showing a banner. There is no constant polling. Only when push can't work on that phone (Expo Go, or notifications refused) does an open conversation fall back to refreshing every 10 seconds.
+
+Expo Go can't receive pushes, so push needs a real build of the app. One-time set-up:
+
+1. **Expo account** (free) at expo.dev, then in this folder: `npx eas-cli@latest login` and `npx eas-cli@latest init`. This writes the project id into `app.json`, which the app needs to get a push token.
+2. **Android:** create a Firebase project (free), add an Android app with package `com.servhive.app`, and upload its FCM V1 service-account key to Expo (`npx eas-cli@latest credentials`, Android → Push Notifications). Expo's guide: https://docs.expo.dev/push-notifications/fcm-credentials/
+3. **iPhone:** needs a paid Apple Developer account ($99/yr). The first `eas build` for iOS offers to create the push key for you; answer yes.
+4. **Build and install:** `npx eas-cli@latest build --profile preview --platform android` gives an APK link you can install directly on Android phones. For iPhone use `--profile development` (registered test devices) or TestFlight via `--profile production`.
+5. **Website:** apply the `20261126000000_push_tokens` database migration before (or as) this code goes live. Optional: if you switch on "enhanced push security" in the Expo dashboard, add `EXPO_ACCESS_TOKEN` to Vercel.
+
+The app's Account / More screen shows whether notifications are on for that phone, and why not if they're off.
+
 ## Building for the stores
 
-Use EAS (`npx eas-cli@latest build`), with no Xcode or Android Studio needed. You'll need an Expo account, an Apple Developer account ($99/yr) for iOS, and a Google Play developer account ($25 once) for Android.
+Use EAS (`npx eas-cli@latest build`), with no Xcode or Android Studio needed. Profiles are in `eas.json` (development, preview, production). You'll need an Expo account, an Apple Developer account ($99/yr) for iOS, and a Google Play developer account ($25 once) for Android.
 
 ## Known limits
 
 - Payments are in test mode, as on the website: membership, boosts and escrow funding are recorded but no money moves.
-- No push notifications yet (the website emails artisans when a job is funded; in-app push would need a development build).
-- Messages refresh every 8 seconds while a thread is open; there is no live socket.
+- Push needs a real build (not Expo Go) and the one-time set-up above.

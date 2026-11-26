@@ -1,15 +1,15 @@
-import { useAuth } from '@clerk/expo';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Card, T } from '@/components/ui';
 import { openSite } from '@/lib/links';
 import { space, useColors } from '@/theme';
+import { useSignOut } from '@/components/push-provider';
 
 /** Admins work on the website; the app is for clients and artisans. */
 export default function Admin() {
   const c = useColors();
-  const { signOut } = useAuth();
+  const signOut = useSignOut();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: c.bg }}>
       <View style={{ flex: 1, padding: space.xl, justifyContent: 'center', gap: space.lg }}>

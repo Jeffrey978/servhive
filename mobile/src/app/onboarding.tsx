@@ -1,4 +1,3 @@
-import { useAuth } from '@clerk/expo';
 import { useState } from 'react';
 
 import { Button, Card, Check, Field, Gap, Notice, QueryView, Row, Screen, Select, T } from '@/components/ui';
@@ -8,12 +7,13 @@ import { openLegal } from '@/lib/links';
 import { useSession } from '@/lib/session';
 import { useSubmit } from '@/lib/use-submit';
 import { space } from '@/theme';
+import { useSignOut } from '@/components/push-provider';
 
 /** First-time set-up: choose client or artisan, then the same fields as the website's /onboarding. */
 export default function Onboarding() {
   const meta = useMeta();
   const session = useSession();
-  const { signOut } = useAuth();
+  const signOut = useSignOut();
   const [role, setRole] = useState<'CLIENT' | 'ARTISAN' | null>(null);
 
   return (

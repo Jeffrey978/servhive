@@ -1,16 +1,17 @@
-import { useAuth } from '@clerk/expo';
 import { router } from 'expo-router';
 import { Alert, View } from 'react-native';
 
+import { NotificationsRow } from '@/components/notifications-row';
 import { MenuLink } from '@/components/shared';
 import { Avatar, Button, Card, Divider, Gap, Screen, T } from '@/components/ui';
 import { openLegal, openSite } from '@/lib/links';
 import { useSession } from '@/lib/session';
 import { space } from '@/theme';
+import { useSignOut } from '@/components/push-provider';
 
 /** Client account: saved artisans, reports, help and sign-out. */
 export default function ClientAccount() {
-  const { signOut } = useAuth();
+  const signOut = useSignOut();
   const me = useSession().me?.user;
 
   return (
@@ -26,6 +27,8 @@ export default function ClientAccount() {
       </Card>
 
       <Card style={{ paddingVertical: space.xs }}>
+        <NotificationsRow />
+        <Divider />
         <MenuLink icon="heart-outline" title="Saved artisans" onPress={() => router.push('/saved')} />
         <Divider />
         <MenuLink icon="flag-outline" title="Your reports" subtitle="Complaints you've filed and their outcome" onPress={() => router.push('/reports')} />

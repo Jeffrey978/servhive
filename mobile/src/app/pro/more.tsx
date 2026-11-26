@@ -1,16 +1,17 @@
-import { useAuth } from '@clerk/expo';
 import { router } from 'expo-router';
 import { Alert, View } from 'react-native';
 
+import { NotificationsRow } from '@/components/notifications-row';
 import { MenuLink } from '@/components/shared';
 import { Avatar, Button, Card, Divider, Screen, StatusBadge, T } from '@/components/ui';
 import { openLegal, openSite } from '@/lib/links';
 import { useSession } from '@/lib/session';
 import { space } from '@/theme';
+import { useSignOut } from '@/components/push-provider';
 
 /** Everything else for artisans: profile, photos, verification, payout, membership, complaints. */
 export default function ProMore() {
-  const { signOut } = useAuth();
+  const signOut = useSignOut();
   const me = useSession().me;
   const p = me?.provider;
   return (
@@ -30,6 +31,8 @@ export default function ProMore() {
       ) : null}
 
       <Card style={{ paddingVertical: space.xs }}>
+        <NotificationsRow />
+        <Divider />
         <MenuLink icon="person-outline" title="Profile & services" subtitle="What clients see" onPress={() => router.push('/manage/profile')} />
         <Divider />
         <MenuLink icon="images-outline" title="Work photos" onPress={() => router.push('/manage/photos')} />

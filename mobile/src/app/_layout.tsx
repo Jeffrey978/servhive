@@ -5,7 +5,7 @@ import {
   InstrumentSans_700Bold,
   useFonts,
 } from '@expo-google-fonts/instrument-sans';
-import { ClerkProvider, useAuth } from '@clerk/expo';
+import { ClerkProvider } from '@clerk/expo';
 import { tokenCache } from '@clerk/expo/token-cache';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { PushProvider, useSignOut } from '@/components/push-provider';
 import { ToastProvider } from '@/components/toast';
 import { Button, ErrorState, T } from '@/components/ui';
 import { SessionProvider, useSession } from '@/lib/session';
@@ -45,8 +46,10 @@ export default function RootLayout() {
           <ThemeProvider value={navTheme}>
             <ToastProvider>
               <SessionProvider>
-                <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-                <RootNavigator />
+                <PushProvider>
+                  <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+                  <RootNavigator />
+                </PushProvider>
               </SessionProvider>
             </ToastProvider>
           </ThemeProvider>
@@ -138,7 +141,7 @@ function RootNavigator() {
 
 function BootError() {
   const session = useSession();
-  const { signOut } = useAuth();
+  const signOut = useSignOut();
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: space.xl, gap: space.lg, backgroundColor: palettes.light.bg }}>
       <ErrorState error={session.error} onRetry={session.retry} />

@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { RULES } from "@/lib/constants";
 import { formatNaira } from "@/lib/utils";
 import { sendEmail } from "@/server/notifications/email";
+import { notifyUsers } from "@/server/notifications/push";
 
 /**
  * Transactional emails to the artisan about their escrow jobs. Best-effort: a
@@ -35,10 +36,17 @@ export async function notifyArtisanJobFunded(jobId: string) {
       address: true,
       scheduledFor: true,
       client: { select: { name: true } },
-      provider: { select: { businessName: true, user: { select: { email: true, name: true } } } },
+      provider: { select: { businessName: true, user: { select: { id: true, email: true, name: true } } } },
     },
   });
   if (!job) return;
+
+  // Push to the artisan's phone (if the app is installed), independent of email.
+  notifyUsers([job.provider.user?.id], {
+    title: "New job funded",
+    body: `${job.client.name} booked "${job.serviceName}". ${formatNaira(job.payoutAmount)} is held in escrow for you.`,
+    data: { type: "pro-job", id: jobId },
+  });
 
   const to = job.provider.user?.email;
   if (!to) return; // provider has no email on file — nothing to send

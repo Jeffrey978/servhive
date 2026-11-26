@@ -1,12 +1,13 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, Pressable, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ErrorState, Loading, Notice, T } from '@/components/ui';
 import { useApi } from '@/lib/api';
 import { ago } from '@/lib/format';
+import { setOpenThread, usePushState } from '@/lib/push';
 import { useSession } from '@/lib/session';
 import type { Thread } from '@/lib/types';
 import { useSubmit } from '@/lib/use-submit';
@@ -14,16 +15,26 @@ import { fonts, radius, space, useColors } from '@/theme';
 
 /**
  * One conversation (website: /account/messages/[id] and /pro/messages/[id]).
- * Refreshes every few seconds while open. Messages that look like an attempt
- * to take payment off Servhive are flagged, as on the website.
+ * New messages arrive by push: the push for this thread refreshes it at once
+ * (no banner, no polling). Only when push can't work on this phone (Expo Go,
+ * notifications off) does it fall back to refreshing every 10 seconds.
+ * Messages that look like an attempt to take payment off Servhive are flagged.
  */
 export default function ThreadScreen() {
   const c = useColors();
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const role = useSession().me?.user.role;
-  // Polls while open so replies arrive without pulling to refresh.
-  const q = useApi<Thread>(['thread', id], `/messages/${encodeURIComponent(id)}`, { refetchInterval: 8000 });
+  const live = usePushState().status === 'enabled';
+  const q = useApi<Thread>(['thread', id], `/messages/${encodeURIComponent(id)}`, { refetchInterval: live ? undefined : 10_000 });
+
+  // While this thread is on screen, its pushes refresh it instead of showing a banner.
+  useFocusEffect(
+    useCallback(() => {
+      setOpenThread(id);
+      return () => setOpenThread(null);
+    }, [id]),
+  );
   const send = useSubmit(role === 'ARTISAN' ? 'pro.sendMessage' : 'client.sendMessage');
   const [body, setBody] = useState('');
 
@@ -55,10 +66,15 @@ export default function ThreadScreen() {
             onRefresh={() => q.refetch()}
             refreshing={q.isRefetching}
             ListFooterComponent={
-              <View style={{ marginBottom: space.md }}>
+              <View style={{ marginBottom: space.md, gap: space.sm }}>
                 <Notice tone="accent" icon="shield-checkmark">
                   Keep payment on Servhive. Money paid outside the app isn't protected by escrow.
                 </Notice>
+                {!live ? (
+                  <T v="caption" style={{ textAlign: 'center' }}>
+                    Turn on notifications to get replies instantly. Until then this chat refreshes every few seconds.
+                  </T>
+                ) : null}
               </View>
             }
             renderItem={({ item: m }) => (

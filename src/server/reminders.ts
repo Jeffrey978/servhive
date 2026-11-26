@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { RULES } from "@/lib/constants";
 import { formatNaira } from "@/lib/utils";
 import { sendEmail } from "@/server/notifications/email";
+import { sendPushNow, type PushMessage } from "@/server/notifications/push";
 import { autoReleaseDueJobs } from "@/server/escrow";
 import type { ReminderKind } from "@/generated/prisma/client";
 
@@ -18,7 +19,15 @@ import type { ReminderKind } from "@/generated/prisma/client";
 const HOUR = 3_600_000;
 const DAY = 86_400_000;
 
-type Sweep = { kind: ReminderKind; subject: string; to: string | null; subjectLine: string; text: string };
+type Sweep = {
+  kind: ReminderKind;
+  subject: string;
+  to: string | null;
+  subjectLine: string;
+  text: string;
+  /** The same reminder as a push to the app, when the user has it installed. */
+  push?: { userId: string | null } & PushMessage;
+};
 
 /** Claim a reminder's send slot. Returns true if WE should send it (first claim wins). */
 async function claim(kind: ReminderKind, subject: string): Promise<boolean> {
@@ -32,16 +41,21 @@ async function claim(kind: ReminderKind, subject: string): Promise<boolean> {
 }
 
 async function dispatch(s: Sweep): Promise<"sent" | "skipped" | "failed"> {
-  if (!s.to) return "skipped";
+  const pushTo = s.push?.userId ?? null;
+  if (!s.to && !pushTo) return "skipped";
   if (!(await claim(s.kind, s.subject))) return "skipped";
+  // One claim covers both channels, so a reminder is never pushed twice.
+  const pushed = pushTo && s.push ? await sendPushNow([pushTo], s.push) : 0;
+  if (!s.to) return pushed ? "sent" : "skipped";
   const res = await sendEmail({ to: s.to, subject: s.subjectLine, text: s.text });
   if (res.ok) return "sent";
-  // Un-claim on a hard failure (not a "skipped"/unconfigured no-op) so a later run can retry.
-  if (!res.skipped) {
+  // Un-claim on a hard email failure (not a "skipped"/unconfigured no-op) so a later run
+  // can retry — unless the push already reached the phone.
+  if (!res.skipped && !pushed) {
     await db.sentReminder.deleteMany({ where: { kind: s.kind, subject: s.subject } }).catch(() => {});
     return "failed";
   }
-  return "skipped";
+  return pushed ? "sent" : "skipped";
 }
 
 // ── Auto-release reminders (client side) ─────────────────────────────────────
@@ -63,7 +77,7 @@ async function autoReleaseReminders() {
       serviceName: true,
       amount: true,
       markedCompleteAt: true,
-      client: { select: { email: true, name: true } },
+      client: { select: { id: true, email: true, name: true } },
       provider: { select: { businessName: true } },
     },
   });
@@ -91,6 +105,12 @@ async function autoReleaseReminders() {
         to: base.to,
         subjectLine: `Final reminder: ${formatNaira(base.amount)} releases to ${base.provider} soon`,
         text: autoReleaseBody(base, hoursLeft, true),
+        push: {
+          userId: j.client.id,
+          title: `${formatNaira(base.amount)} releases in about ${hoursLeft}h`,
+          body: `${base.provider} marked "${base.service}" done. Release it now or open a dispute before the money moves.`,
+          data: { type: "job", id: j.id },
+        },
       });
     } else if (msLeft <= 24 * HOUR) {
       sweeps.push({
@@ -99,6 +119,12 @@ async function autoReleaseReminders() {
         to: base.to,
         subjectLine: `Reminder: confirm your job with ${base.provider} within ~24h`,
         text: autoReleaseBody(base, hoursLeft, false),
+        push: {
+          userId: j.client.id,
+          title: `Confirm your job with ${base.provider}`,
+          body: `"${base.service}" releases ${formatNaira(base.amount)} automatically in about ${hoursLeft}h unless you dispute.`,
+          data: { type: "job", id: j.id },
+        },
       });
     }
   }
@@ -150,7 +176,7 @@ async function subscriptionReminders() {
       businessName: true,
       trialEndsAt: true,
       subscriptionPaidUntil: true,
-      user: { select: { email: true, name: true } },
+      user: { select: { id: true, email: true, name: true } },
     },
   });
 
@@ -171,6 +197,12 @@ async function subscriptionReminders() {
         to: common.to,
         subjectLine: `${daysLeft} day${daysLeft === 1 ? "" : "s"} left — pay to keep your Servhive profile live`,
         text: subscriptionBody(common.name, daysLeft, common.onTrial),
+        push: {
+          userId: p.user?.id ?? null,
+          title: `${daysLeft} day${daysLeft === 1 ? "" : "s"} left on your membership`,
+          body: `Pay ${formatNaira(RULES.monthlySubscription)} to keep your profile in search.`,
+          data: { type: "billing" },
+        },
       });
     } else if (daysLeft <= 7 && daysLeft > 3) {
       sweeps.push({
@@ -179,6 +211,12 @@ async function subscriptionReminders() {
         to: common.to,
         subjectLine: `Your Servhive membership renews in ${daysLeft} days`,
         text: subscriptionBody(common.name, daysLeft, common.onTrial),
+        push: {
+          userId: p.user?.id ?? null,
+          title: `Membership renews in ${daysLeft} days`,
+          body: `${formatNaira(RULES.monthlySubscription)} a month keeps your profile in search.`,
+          data: { type: "billing" },
+        },
       });
     }
   }
