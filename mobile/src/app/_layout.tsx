@@ -101,9 +101,14 @@ function RootNavigator() {
       }}>
       {/* Decides where to go (src/app/index.tsx). */}
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      {/* Where Google sign-in returns to; it just hands back to index. */}
+      <Stack.Screen name="sso-callback" options={{ headerShown: false }} />
 
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="welcome" options={{ headerShown: false }} />
+        <Stack.Screen name="sign-in" options={{ title: '' }} />
+        <Stack.Screen name="sign-up" options={{ title: '' }} />
+        <Stack.Screen name="forgot-password" options={{ title: '' }} />
       </Stack.Protected>
 
       <Stack.Protected guard={signedIn && !onboarded}>
