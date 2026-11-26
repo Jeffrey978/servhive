@@ -8,7 +8,7 @@ Admins use the website; signing in to the app as an admin shows a link to the ad
 
 1. Install **Expo Go** from the App Store or Play Store.
 2. In this folder, create `.env` from `.env.example` and set `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` (copy `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` from Vercel; it starts with `pk_`).
-3. `npm install` (first time only), then `npx expo start`.
+3. `npm install` (first time only), then `npm start` (same as `npx expo start --go`: Expo Go mode. The app includes expo-dev-client, so a plain `npx expo start` shows a QR code for a development build, which Expo Go reports as "no usable data").
 4. Scan the QR code with your phone's camera (iPhone) or Expo Go (Android). Phone and computer must be on the same Wi-Fi, or use `npx expo start --tunnel`.
 
 The app talks to `https://servhive.com` by default. The `/api/v1` endpoints must be deployed there (merge the API change first), or set `EXPO_PUBLIC_API_URL` to another deployment.

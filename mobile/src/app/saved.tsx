@@ -5,13 +5,14 @@ import { Button, Empty, Gap, QueryView, Screen } from '@/components/ui';
 import { useApi } from '@/lib/api';
 import type { ProviderCard } from '@/lib/types';
 import { space } from '@/theme';
+import { SkeletonRows } from '@/components/skeleton';
 
 /** Artisans the client saved (website: /account/saved). */
 export default function Saved() {
   const q = useApi<{ providers: ProviderCard[] }>(['client', 'saved'], '/client/saved');
   return (
     <Screen onRefresh={() => q.refetch()} refreshing={q.isRefetching}>
-      <QueryView query={q}>
+      <QueryView query={q} skeleton={<SkeletonRows />}>
         {(d) =>
           d.providers.length === 0 ? (
             <Empty

@@ -1,36 +1,18 @@
-import { useHostedAuth } from '@clerk/expo/hosted-auth';
 import { Image } from 'expo-image';
-import { useState } from 'react';
+import { router } from 'expo-router';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button, Gap, Notice, T } from '@/components/ui';
-import { errorMessage } from '@/lib/api';
-import { openLegal } from '@/lib/links';
+import { GoogleButton, LegalLine } from '@/components/auth';
+import { Button, Gap, T } from '@/components/ui';
 import { space, useColors } from '@/theme';
 
 /**
- * Signed-out home. Sign-in opens Servhive's own Clerk sign-in page in a secure
- * browser sheet, so the app offers exactly the sign-in methods the website does.
+ * Signed-out home. Sign-in and sign-up are the app's own screens (Clerk's
+ * in-app API), so nothing opens in a browser except Google's own consent page.
  */
 export default function Welcome() {
   const c = useColors();
-  const { startHostedAuth } = useHostedAuth();
-  const [busy, setBusy] = useState<'sign-in' | 'sign-up' | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  async function go(mode: 'sign-in' | 'sign-up') {
-    setError(null);
-    setBusy(mode);
-    try {
-      // Once a session is created, the root layout notices and routes onward.
-      await startHostedAuth({ mode });
-    } catch (e) {
-      setError(errorMessage(e));
-    } finally {
-      setBusy(null);
-    }
-  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: c.bg }} edges={['top', 'bottom']}>
@@ -61,20 +43,10 @@ export default function Welcome() {
         </View>
 
         <Gap size={space.md}>
-          {error ? <Notice tone="danger">{error}</Notice> : null}
-          <Button title="Create an account" onPress={() => go('sign-up')} loading={busy === 'sign-up'} disabled={!!busy} />
-          <Button title="Sign in" kind="secondary" onPress={() => go('sign-in')} loading={busy === 'sign-in'} disabled={!!busy} />
-          <T v="caption" style={{ textAlign: 'center' }}>
-            By continuing you agree to the{' '}
-            <T v="caption" color="accent" onPress={() => openLegal('terms')}>
-              Terms of Use
-            </T>{' '}
-            and{' '}
-            <T v="caption" color="accent" onPress={() => openLegal('privacy')}>
-              Privacy Policy
-            </T>
-            .
-          </T>
+          <Button title="Create an account" onPress={() => router.push('/sign-up')} />
+          <Button title="Sign in" kind="secondary" onPress={() => router.push('/sign-in')} />
+          <GoogleButton />
+          <LegalLine />
         </Gap>
       </View>
     </SafeAreaView>

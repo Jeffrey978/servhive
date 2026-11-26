@@ -12,6 +12,7 @@ import { SplitHeading } from "@/components/motion/split-heading";
 import { buttonVariants } from "@/components/ui/button";
 import { CITY, REGULATED_CATEGORIES, RULES } from "@/lib/constants";
 import { formatNaira } from "@/lib/utils";
+import { PRO_BENEFITS, PRO_PRICING } from "@/components/marketing/guides";
 
 export const metadata: Metadata = {
   title: "For pros",
@@ -20,20 +21,7 @@ export const metadata: Metadata = {
 
 const EXAMPLE = 50000;
 
-const PRICING = [
-  { k: "Free trial", v: `${RULES.freeTrialMonths} ${RULES.freeTrialMonths === 1 ? "month" : "months"}`, note: `For the first ${RULES.freeTrialSlots} artisans to join. Full access, no card needed.` },
-  {
-    k: "Membership",
-    v: `${formatNaira(RULES.monthlySubscription)}/mo`,
-    note: `After the free month, or from the start once the first ${RULES.freeTrialSlots} spots are taken. Keeps your profile visible in search.`,
-  },
-  { k: "Your earnings", v: "100%", note: "No commission. Every naira of the quote is yours when the job is released." },
-  {
-    k: "Boost",
-    v: `${formatNaira(RULES.boostPricePerWeek)}/wk`,
-    note: "Optional. Puts you at the top of your trade in search for a week.",
-  },
-];
+const PRICING = PRO_PRICING;
 
 export default function ForProsPage() {
   return (
@@ -98,19 +86,11 @@ export default function ForProsPage() {
           }
         />
         <Reveal as="ol" stagger={0.07} className="mt-12 border-b border-border md:mt-16">
-          <NumberedRow n={1} title="The money is there first">
-            Clients fund escrow before you start. When they release it, you&rsquo;re paid. No more chasing balances
-            after the job.
-          </NumberedRow>
-          <NumberedRow n={2} title="Requests, not window-shoppers">
-            Every request comes with the job, the area and the timing. You reply with one fixed quote.
-          </NumberedRow>
-          <NumberedRow n={3} title="A profile that sells for you">
-            Your work photos, services and prices, plus reviews that can only come from paid jobs.
-          </NumberedRow>
-          <NumberedRow n={4} title="Found where you work">
-            Clients search by neighbourhood, from GRA to Woji to Choba. Show up for the areas you cover.
-          </NumberedRow>
+          {PRO_BENEFITS.map((b, i) => (
+            <NumberedRow key={b.title} n={i + 1} title={b.title}>
+              {b.body}
+            </NumberedRow>
+          ))}
         </Reveal>
       </section>
 

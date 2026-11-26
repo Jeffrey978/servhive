@@ -4,14 +4,15 @@ import { Alert, View } from 'react-native';
 import { NotificationsRow } from '@/components/notifications-row';
 import { MenuLink } from '@/components/shared';
 import { Avatar, Button, Card, Divider, Gap, Screen, T } from '@/components/ui';
-import { openLegal, openSite } from '@/lib/links';
 import { useSession } from '@/lib/session';
 import { space } from '@/theme';
 import { useSignOut } from '@/components/push-provider';
+import { useInfoSheet } from '@/components/info-sheet';
 
 /** Client account: saved artisans, reports, help and sign-out. */
 export default function ClientAccount() {
   const signOut = useSignOut();
+  const info = useInfoSheet();
   const me = useSession().me?.user;
 
   return (
@@ -35,11 +36,11 @@ export default function ClientAccount() {
       </Card>
 
       <Card style={{ paddingVertical: space.xs }}>
-        <MenuLink icon="shield-checkmark-outline" title="How escrow protects you" onPress={() => openSite('/how-it-works')} />
+        <MenuLink icon="shield-checkmark-outline" title="How escrow protects you" onPress={() => info.open('guide:client')} />
         <Divider />
-        <MenuLink icon="document-text-outline" title="Payment Protection Terms" onPress={() => openLegal('protection')} />
+        <MenuLink icon="document-text-outline" title="Payment Protection Terms" onPress={() => info.open('legal:protection')} />
         <Divider />
-        <MenuLink icon="lock-closed-outline" title="Privacy Policy" onPress={() => openLegal('privacy')} />
+        <MenuLink icon="lock-closed-outline" title="Privacy Policy" onPress={() => info.open('legal:privacy')} />
       </Card>
 
       <Gap>

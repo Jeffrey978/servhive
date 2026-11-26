@@ -7,6 +7,7 @@ import { date } from '@/lib/format';
 import type { ProRequest } from '@/lib/types';
 import { useSubmit } from '@/lib/use-submit';
 import { space } from '@/theme';
+import { SkeletonForm } from '@/components/skeleton';
 
 /** Reply to a request with a fixed price (website: the quote form on /pro/requests). */
 export default function SendQuote() {
@@ -19,7 +20,7 @@ export default function SendQuote() {
 
   return (
     <Screen keyboard>
-      <QueryView query={q}>
+      <QueryView query={q} skeleton={<SkeletonForm />}>
         {(d) => {
           const r = d.open.find((x) => x.id === id);
           if (!r) return <Empty title="This request is closed" />;

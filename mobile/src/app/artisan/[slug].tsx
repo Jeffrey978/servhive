@@ -10,6 +10,7 @@ import { date, naira, priceLabel } from '@/lib/format';
 import type { ArtisanProfile } from '@/lib/types';
 import { useSubmit } from '@/lib/use-submit';
 import { radius, space, useColors } from '@/theme';
+import { SkeletonProfile } from '@/components/skeleton';
 
 /** An artisan's profile, with hire actions for clients (website: /artisans/[slug]). */
 export default function ArtisanScreen() {
@@ -19,7 +20,7 @@ export default function ArtisanScreen() {
     <>
       <Stack.Screen options={{ title: q.data?.provider.businessName ?? '' }} />
       <Screen onRefresh={() => q.refetch()} refreshing={q.isRefetching}>
-        <QueryView query={q}>{(d) => <Profile d={d} />}</QueryView>
+        <QueryView query={q} skeleton={<SkeletonProfile />}>{(d) => <Profile d={d} />}</QueryView>
       </Screen>
     </>
   );

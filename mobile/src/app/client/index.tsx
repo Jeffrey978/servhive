@@ -8,6 +8,7 @@ import { firstName, greeting, naira } from '@/lib/format';
 import { useSession } from '@/lib/session';
 import type { ClientOverview } from '@/lib/types';
 import { space } from '@/theme';
+import { SkeletonHome } from '@/components/skeleton';
 
 /** Client home: money held, what needs a decision, and a way into the directory. Mirrors /account. */
 export default function ClientHome() {
@@ -21,7 +22,7 @@ export default function ClientHome() {
         <T v="caption">{greeting()}</T>
         <T v="title">{firstName(session.me?.user.name ?? '')}</T>
       </Gap>
-      <QueryView query={q}>
+      <QueryView query={q} skeleton={<SkeletonHome />}>
         {(d) => (
           <Gap size={space.lg}>
             <EscrowStrip label="Held in escrow" amount={d.held} note={d.activeJobs ? `${d.activeJobs} active ${d.activeJobs === 1 ? 'job' : 'jobs'}` : 'Nothing held right now'} />

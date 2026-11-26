@@ -4,14 +4,15 @@ import { Alert, View } from 'react-native';
 import { NotificationsRow } from '@/components/notifications-row';
 import { MenuLink } from '@/components/shared';
 import { Avatar, Button, Card, Divider, Screen, StatusBadge, T } from '@/components/ui';
-import { openLegal, openSite } from '@/lib/links';
 import { useSession } from '@/lib/session';
 import { space } from '@/theme';
 import { useSignOut } from '@/components/push-provider';
+import { useInfoSheet } from '@/components/info-sheet';
 
 /** Everything else for artisans: profile, photos, verification, payout, membership, complaints. */
 export default function ProMore() {
   const signOut = useSignOut();
+  const info = useInfoSheet();
   const me = useSession().me;
   const p = me?.provider;
   return (
@@ -55,11 +56,11 @@ export default function ProMore() {
       </Card>
 
       <Card style={{ paddingVertical: space.xs }}>
-        <MenuLink icon="help-circle-outline" title="How Servhive works for pros" onPress={() => openSite('/for-pros')} />
+        <MenuLink icon="help-circle-outline" title="How Servhive works for pros" onPress={() => info.open('guide:pro')} />
         <Divider />
-        <MenuLink icon="document-text-outline" title="Provider Agreement" onPress={() => openLegal('provider')} />
+        <MenuLink icon="document-text-outline" title="Provider Agreement" onPress={() => info.open('legal:provider')} />
         <Divider />
-        <MenuLink icon="lock-closed-outline" title="Privacy Policy" onPress={() => openLegal('privacy')} />
+        <MenuLink icon="lock-closed-outline" title="Privacy Policy" onPress={() => info.open('legal:privacy')} />
       </Card>
 
       <Button

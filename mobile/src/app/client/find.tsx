@@ -8,6 +8,7 @@ import { Chips, Empty, Gap, QueryView, Screen, Select, T } from '@/components/ui
 import { useApi, useMeta } from '@/lib/api';
 import type { ProviderCard } from '@/lib/types';
 import { fonts, radius, space, useColors } from '@/theme';
+import { SkeletonRows } from '@/components/skeleton';
 
 const SORTS = [
   { value: 'featured', label: 'Featured' },
@@ -100,7 +101,7 @@ export default function Find() {
         ) : null}
       </Gap>
 
-      <QueryView query={list}>
+      <QueryView query={list} skeleton={<SkeletonRows />}>
         {(d) =>
           d.providers.length === 0 ? (
             <Empty icon="search-outline" title="No artisans match" body="Try another trade, area or search word." />

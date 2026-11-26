@@ -7,6 +7,7 @@ import { useApi, useMeta } from '@/lib/api';
 import type { PriceType, ProProfile, Service } from '@/lib/types';
 import { useSubmit } from '@/lib/use-submit';
 import { space } from '@/theme';
+import { SkeletonForm } from '@/components/skeleton';
 
 /** Add or edit one service (website: the service editor on /pro/profile). */
 export default function ManageService() {
@@ -15,7 +16,7 @@ export default function ManageService() {
   return (
     <Screen keyboard>
       <Stack.Screen options={{ title: id ? 'Edit service' : 'New service' }} />
-      <QueryView query={q}>{(d) => <Form key={id ?? 'new'} service={d.services.find((s) => s.id === id) ?? null} />}</QueryView>
+      <QueryView query={q} skeleton={<SkeletonForm />}>{(d) => <Form key={id ?? 'new'} service={d.services.find((s) => s.id === id) ?? null} />}</QueryView>
     </Screen>
   );
 }
