@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Alert, View } from 'react-native';
 
 import { EscrowStrip } from '@/components/shared';
@@ -16,9 +16,12 @@ type ClientQuote = Quote & { provider: { businessName: string; slug: string; ima
 export default function ClientJobs() {
   const params = useLocalSearchParams<{ tab?: string }>();
   const [tab, setTab] = useState<'jobs' | 'quotes'>(params.tab === 'quotes' ? 'quotes' : 'jobs');
-  useEffect(() => {
+  // Links from Home open a given tab via ?tab=…; follow it when it changes.
+  const [seenTab, setSeenTab] = useState(params.tab);
+  if (params.tab !== seenTab) {
+    setSeenTab(params.tab);
     if (params.tab === 'quotes' || params.tab === 'jobs') setTab(params.tab);
-  }, [params.tab]);
+  }
 
   const jobs = useApi<{ held: number; jobs: ClientJob[] }>(['client', 'jobs'], '/client/jobs');
   const quotes = useApi<{ quotes: ClientQuote[] }>(['client', 'quotes'], '/client/quotes');

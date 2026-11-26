@@ -145,6 +145,9 @@ export type Quote = {
   updatedAt: string;
 };
 
+/** A client's quote request, as the artisan sees it. */
+export type ProRequest = Quote & { client: { name: string } };
+
 export type ClientJob = {
   id: string;
   ref: string;

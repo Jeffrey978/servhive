@@ -29,7 +29,7 @@ export const useToast = () => useContext(Ctx);
 function Banner({ toast, onDone }: { toast: Toast; onDone: () => void }) {
   const c = useColors();
   const insets = useSafeAreaInsets();
-  const y = useRef(new Animated.Value(-120)).current;
+  const [y] = useState(() => new Animated.Value(-120));
   useEffect(() => {
     Animated.sequence([
       Animated.spring(y, { toValue: 0, useNativeDriver: true, bounciness: 4 }),

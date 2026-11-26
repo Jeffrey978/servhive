@@ -30,9 +30,12 @@ export default function Find() {
   const [sort, setSort] = useState<Sort>('featured');
   const [landmark, setLandmark] = useState('');
 
-  useEffect(() => {
+  // A trade tapped on Home arrives as ?category=…; follow it when it changes.
+  const [seenCategory, setSeenCategory] = useState(params.category);
+  if (params.category !== seenCategory) {
+    setSeenCategory(params.category);
     if (params.category) setCategory(params.category);
-  }, [params.category]);
+  }
 
   // Search after a short pause in typing.
   useEffect(() => {

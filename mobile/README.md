@@ -1,56 +1,56 @@
-# Welcome to your Expo app 👋
+# Servhive mobile app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The Servhive app for clients and artisans, built with Expo (SDK 58), Expo Router and React Native. It talks to the website through its JSON API (`/api/v1`, in the web app's `src/server/api/` and `src/app/api/v1/`), so every rule (roles, escrow, membership visibility, validation) lives in one place: the website.
 
-## Get started
+Admins use the website; signing in to the app as an admin shows a link to the admin console.
 
-1. Install dependencies
+## Run it on your phone
 
-   ```bash
-   npm install
-   ```
+1. Install **Expo Go** from the App Store or Play Store.
+2. In this folder, create `.env` from `.env.example` and set `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` (copy `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` from Vercel; it starts with `pk_`).
+3. `npm install` (first time only), then `npx expo start`.
+4. Scan the QR code with your phone's camera (iPhone) or Expo Go (Android). Phone and computer must be on the same Wi-Fi, or use `npx expo start --tunnel`.
 
-2. Start the app
+The app talks to `https://servhive.com` by default. The `/api/v1` endpoints must be deployed there (merge the API change first), or set `EXPO_PUBLIC_API_URL` to another deployment.
 
-   ```bash
-   npx expo start
-   ```
+## One-time Clerk set-up (Clerk dashboard)
 
-In the output, you'll find options to open the app in a
+- **Native applications → enable the Native API.** Without it, sign-in from the app is refused.
+- Before a store build, add the iOS bundle ID and Android package (`com.servhive.app`, set in `app.json`) on the same page.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Sign-in uses Clerk's hosted sign-in page in a secure browser sheet (`useHostedAuth`), so the app offers exactly the sign-in methods the website has, and works in Expo Go.
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## How it's built
 
-## Get a fresh project
+| Where | What |
+|---|---|
+| `src/app/_layout.tsx` | Providers (Clerk, React Query, toasts), fonts, splash, and the route guards: signed out → `welcome`, not set up → `onboarding`, client → `client/` tabs, artisan → `pro/` tabs, admin → `admin` |
+| `src/app/client/`, `src/app/pro/` | The two tab bars (native tabs) |
+| `src/app/*` (other) | Screens pushed over the tabs: profiles, threads, forms, the artisan's `manage/` screens |
+| `src/lib/api.ts` | Fetch with the Clerk token, React Query hooks, `useAction` for mutations |
+| `src/lib/use-submit.ts` | Run a website action from a form: its success text as a toast, its error under the form |
+| `src/lib/images.ts` | Pick/take a photo and shrink it to a data URL the website accepts (≤ ~1.9MB each; Vercel caps a request at ~4.5MB) |
+| `src/lib/types.ts` | The API's response shapes |
+| `src/components/ui.tsx` | The UI kit (text, buttons, fields, selects, cards, badges, states) |
+| `src/theme.ts` | Colours (light + dark), Instrument Sans, spacing |
 
-When you're ready, run:
+Every mutation goes through `POST /api/v1/actions/<name>`; the names are listed in the web app's `src/server/api/actions.ts` and map to the same server actions the website's forms use.
 
-```bash
-npm run reset-project
+## Checks
+
+```sh
+npx tsc --noEmit      # types
+npx expo lint         # lint
+npx expo-doctor       # dependency and config health
+npx expo export --platform android --platform ios --output-dir /tmp/servhive-export   # proves it bundles
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+## Building for the stores
 
-### Other setup steps
+Use EAS (`npx eas-cli@latest build`), with no Xcode or Android Studio needed. You'll need an Expo account, an Apple Developer account ($99/yr) for iOS, and a Google Play developer account ($25 once) for Android.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Known limits
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Payments are in test mode, as on the website: membership, boosts and escrow funding are recorded but no money moves.
+- No push notifications yet (the website emails artisans when a job is funded; in-app push would need a development build).
+- Messages refresh every 8 seconds while a thread is open; there is no live socket.

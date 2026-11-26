@@ -6,7 +6,6 @@ import { Button, Card, Field, Gap, Notice, Screen, Select, T } from '@/component
 import { useMeta } from '@/lib/api';
 import { naira } from '@/lib/format';
 import { useSubmit } from '@/lib/use-submit';
-import { space } from '@/theme';
 
 /** Book a fixed-price service straight into escrow (website: "Book" on a profile). */
 export default function BookService() {
