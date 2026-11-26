@@ -5,6 +5,7 @@ import { Badge, Button, Card, Field, Gap, Notice, QueryView, Screen, Section, Se
 import { useApi, useMeta } from '@/lib/api';
 import { useSubmit } from '@/lib/use-submit';
 import { space } from '@/theme';
+import { SkeletonForm } from '@/components/skeleton';
 
 type Payout = { account: null | { bankCode: string; bankName: string; accountNumberMasked: string; accountName: string; verified: boolean } };
 
@@ -20,7 +21,7 @@ export default function PayoutScreen() {
 
   return (
     <Screen keyboard onRefresh={() => q.refetch()} refreshing={q.isRefetching}>
-      <QueryView query={q}>
+      <QueryView query={q} skeleton={<SkeletonForm />}>
         {(d) => (
           <Gap size={space.lg}>
             {d.account && !editing ? (

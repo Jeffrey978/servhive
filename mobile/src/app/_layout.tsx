@@ -15,6 +15,8 @@ import { useEffect, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { InfoSheetProvider } from '@/components/info-sheet';
+import { LaunchOverlay } from '@/components/launch';
 import { PushProvider, useSignOut } from '@/components/push-provider';
 import { ToastProvider } from '@/components/toast';
 import { Button, ErrorState, T } from '@/components/ui';
@@ -47,8 +49,11 @@ export default function RootLayout() {
             <ToastProvider>
               <SessionProvider>
                 <PushProvider>
-                  <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-                  <RootNavigator />
+                  <InfoSheetProvider>
+                    <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+                    <RootNavigator />
+                    <Launch />
+                  </InfoSheetProvider>
                 </PushProvider>
               </SessionProvider>
             </ToastProvider>
@@ -59,16 +64,22 @@ export default function RootLayout() {
   );
 }
 
+/**
+ * The animated launch screen sits above everything until the session is known
+ * (and again for the moment after signing in), then fades into the app. It
+ * also hides the system splash, so there's never a blank frame.
+ */
+function Launch() {
+  const session = useSession();
+  return <LaunchOverlay done={session.status !== 'loading'} label={session.signingIn ? 'Signing you in…' : undefined} />;
+}
+
 function RootNavigator() {
   const session = useSession();
   const scheme = useColorScheme();
   const p = scheme === 'dark' ? palettes.dark : palettes.light;
 
-  useEffect(() => {
-    if (session.status !== 'loading') SplashScreen.hideAsync();
-  }, [session.status]);
-
-  if (session.status === 'loading') return null;
+  if (session.status === 'loading') return null; // the launch screen covers this
   if (session.status === 'error') return <BootError />;
 
   const user = session.me?.user;

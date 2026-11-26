@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { Button, Card, Check, Field, Gap, Notice, QueryView, Row, Screen, Select, T } from '@/components/ui';
 import { useMeta } from '@/lib/api';
 import { naira } from '@/lib/format';
-import { openLegal } from '@/lib/links';
 import { useSession } from '@/lib/session';
 import { useSubmit } from '@/lib/use-submit';
 import { space } from '@/theme';
 import { useSignOut } from '@/components/push-provider';
+import { useInfoSheet } from '@/components/info-sheet';
+import { SkeletonForm } from '@/components/skeleton';
 
 /** First-time set-up: choose client or artisan, then the same fields as the website's /onboarding. */
 export default function Onboarding() {
@@ -18,7 +19,7 @@ export default function Onboarding() {
 
   return (
     <Screen keyboard>
-      <QueryView query={meta}>
+      <QueryView query={meta} skeleton={<SkeletonForm />}>
         {(m) =>
           !role ? (
             <Gap size={space.lg}>
@@ -60,6 +61,7 @@ function Details({
   onBack: () => void;
 }) {
   const { submit, pending, error } = useSubmit('onboarding.complete');
+  const info = useInfoSheet();
   const [name, setName] = useState(defaultName);
   const [area, setArea] = useState('');
   const [businessName, setBusinessName] = useState('');
@@ -114,15 +116,15 @@ function Details({
       <Check checked={consent} onChange={setConsent}>
         <T v="small" color="muted">
           I am 18 or over and I accept the{' '}
-          <T v="small" color="accent" onPress={() => openLegal(artisan ? 'provider' : 'terms')}>
+          <T v="small" color="accent" onPress={() => info.open(artisan ? 'legal:provider' : 'legal:terms')}>
             {artisan ? 'Provider Agreement' : 'Terms of Use'}
           </T>
           , the{' '}
-          <T v="small" color="accent" onPress={() => openLegal('protection')}>
+          <T v="small" color="accent" onPress={() => info.open('legal:protection')}>
             Payment Protection Terms
           </T>{' '}
           and the{' '}
-          <T v="small" color="accent" onPress={() => openLegal('privacy')}>
+          <T v="small" color="accent" onPress={() => info.open('legal:privacy')}>
             Privacy Policy
           </T>
           .

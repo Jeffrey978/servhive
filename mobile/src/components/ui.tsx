@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { SkeletonCards } from '@/components/skeleton';
 import { errorMessage } from '@/lib/api';
 import { STATUS, type Tone } from '@/lib/format';
 import { fonts, radius, space, useColors, type Palette } from '@/theme';
@@ -597,15 +598,20 @@ export function Empty({ icon = 'leaf-outline', title, body, action }: { icon?: I
   );
 }
 
-/** Wraps a query's loading/error states so screens only handle data. */
+/**
+ * Wraps a query's loading/error states so screens only handle data. While
+ * loading it shows `skeleton` (placeholder shapes of the coming screen).
+ */
 export function QueryView<D>({
   query,
   children,
+  skeleton,
 }: {
   query: { data?: D; isPending: boolean; error: unknown; refetch: () => unknown };
   children: (data: D) => ReactNode;
+  skeleton?: ReactNode;
 }) {
-  if (query.isPending) return <Loading />;
+  if (query.isPending) return <>{skeleton ?? <SkeletonCards />}</>;
   if (query.error || query.data === undefined) return <ErrorState error={query.error} onRetry={() => query.refetch()} />;
   return <>{children(query.data)}</>;
 }

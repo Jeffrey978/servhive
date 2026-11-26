@@ -9,6 +9,7 @@ import { pickImage } from '@/lib/images';
 import type { ProProfile } from '@/lib/types';
 import { useSubmit } from '@/lib/use-submit';
 import { space } from '@/theme';
+import { SkeletonForm } from '@/components/skeleton';
 
 /** Edit the public listing and services (website: /pro/profile). Editing never changes approval status. */
 export default function ManageProfile() {
@@ -16,7 +17,7 @@ export default function ManageProfile() {
   return (
     <Screen keyboard onRefresh={() => q.refetch()} refreshing={q.isRefetching}>
       {/* Keyed on the saved profile: after a save or refresh the form restarts from the new values. */}
-      <QueryView query={q}>{(d) => <Editor key={JSON.stringify(d.profile)} d={d} />}</QueryView>
+      <QueryView query={q} skeleton={<SkeletonForm />}>{(d) => <Editor key={JSON.stringify(d.profile)} d={d} />}</QueryView>
     </Screen>
   );
 }

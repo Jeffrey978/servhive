@@ -11,12 +11,14 @@ import type { Me } from '@/lib/types';
  */
 export type Session = {
   status: 'loading' | 'signed-out' | 'error' | 'ready';
+  /** Signed in with Clerk, now loading the Servhive account (right after sign-in or on launch). */
+  signingIn: boolean;
   me: Me | null;
   error: unknown;
   retry: () => void;
 };
 
-const Ctx = createContext<Session>({ status: 'loading', me: null, error: null, retry: () => {} });
+const Ctx = createContext<Session>({ status: 'loading', signingIn: false, me: null, error: null, retry: () => {} });
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   const { isLoaded, isSignedIn } = useAuth();
@@ -25,7 +27,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   if (isLoaded && !isSignedIn) status = 'signed-out';
   else if (isLoaded && isSignedIn && me.data) status = 'ready';
   else if (isLoaded && isSignedIn && me.error) status = 'error';
-  return <Ctx.Provider value={{ status, me: me.data ?? null, error: me.error, retry: () => me.refetch() }}>{children}</Ctx.Provider>;
+  const signingIn = status === 'loading' && !!isSignedIn;
+  return <Ctx.Provider value={{ status, signingIn, me: me.data ?? null, error: me.error, retry: () => me.refetch() }}>{children}</Ctx.Provider>;
 }
 
 export const useSession = () => useContext(Ctx);

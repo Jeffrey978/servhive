@@ -6,8 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Gap, Notice, T } from '@/components/ui';
 import { errorMessage } from '@/lib/api';
-import { openLegal } from '@/lib/links';
 import { space, useColors } from '@/theme';
+import { useInfoSheet } from '@/components/info-sheet';
 
 /**
  * Signed-out home. Sign-in opens Servhive's own Clerk sign-in page in a secure
@@ -16,6 +16,7 @@ import { space, useColors } from '@/theme';
 export default function Welcome() {
   const c = useColors();
   const { startHostedAuth } = useHostedAuth();
+  const info = useInfoSheet();
   const [busy, setBusy] = useState<'sign-in' | 'sign-up' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,11 +67,11 @@ export default function Welcome() {
           <Button title="Sign in" kind="secondary" onPress={() => go('sign-in')} loading={busy === 'sign-in'} disabled={!!busy} />
           <T v="caption" style={{ textAlign: 'center' }}>
             By continuing you agree to the{' '}
-            <T v="caption" color="accent" onPress={() => openLegal('terms')}>
+            <T v="caption" color="accent" onPress={() => info.open('legal:terms')}>
               Terms of Use
             </T>{' '}
             and{' '}
-            <T v="caption" color="accent" onPress={() => openLegal('privacy')}>
+            <T v="caption" color="accent" onPress={() => info.open('legal:privacy')}>
               Privacy Policy
             </T>
             .

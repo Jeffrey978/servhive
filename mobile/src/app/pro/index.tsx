@@ -9,6 +9,7 @@ import { useSession } from '@/lib/session';
 import type { ProOverview } from '@/lib/types';
 import { useSubmit } from '@/lib/use-submit';
 import { space, useColors } from '@/theme';
+import { SkeletonHome } from '@/components/skeleton';
 
 /** Where each checklist item is fixed in the app (the website's links point at /pro pages). */
 const FIX: Record<string, string> = { id: '/manage/verification', licence: '/manage/verification', photos: '/manage/photos', payout: '/manage/payout' };
@@ -23,7 +24,7 @@ export default function ProHome() {
         <T v="caption">{greeting()}</T>
         <T v="title">{firstName(session.me?.user.name ?? '')}</T>
       </Gap>
-      <QueryView query={q}>{(d) => <Overview d={d} />}</QueryView>
+      <QueryView query={q} skeleton={<SkeletonHome />}>{(d) => <Overview d={d} />}</QueryView>
     </Screen>
   );
 }

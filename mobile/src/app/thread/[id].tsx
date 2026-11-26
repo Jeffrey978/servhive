@@ -4,7 +4,8 @@ import { useCallback, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, Pressable, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ErrorState, Loading, Notice, T } from '@/components/ui';
+import { SkeletonThread } from '@/components/skeleton';
+import { ErrorState, Notice, T } from '@/components/ui';
 import { useApi } from '@/lib/api';
 import { ago } from '@/lib/format';
 import { setOpenThread, usePushState } from '@/lib/push';
@@ -52,7 +53,7 @@ export default function ThreadScreen() {
       <Stack.Screen options={{ title: q.data?.counterpart.name ?? 'Messages' }} />
       <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.bg }} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
         {q.isPending ? (
-          <Loading />
+          <SkeletonThread />
         ) : q.error ? (
           <View style={{ padding: space.lg }}>
             <ErrorState error={q.error} onRetry={() => q.refetch()} />
