@@ -44,7 +44,8 @@
         "expo-image-picker",
         {
           "photosPermission": "Servhive uses your photos so you can add pictures of your work, your ID and finished jobs.",
-          "cameraPermission": "Servhive uses the camera so you can photograph your work, your ID and finished jobs."
+          "cameraPermission": "Servhive uses the camera so you can photograph your work, your ID and finished jobs.",
+          "microphonePermission": false
         }
       ],
       "expo-secure-store",
@@ -61,6 +62,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2b577ea8-2dba-481f-b3d4-6cba17f73ce6"
+      }
+    },
+    "owner": "jeffoz"
   }
 }
