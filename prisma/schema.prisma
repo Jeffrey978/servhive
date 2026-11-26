@@ -95,6 +95,7 @@ model User {
   savedProviders SavedProvider[]
   messages      Message[]
   conversations Conversation[] @relation("ClientConversations")
+  pushTokens    PushToken[]
 }
 
 model Category {
@@ -357,4 +358,21 @@ model SentReminder {
   sentAt    DateTime     @default(now())
 
   @@unique([kind, subject])
+}
+
+/**
+ * Expo push tokens for the mobile app, one row per device. A token moves to
+ * whoever signed in on that phone last; rows are deleted when Expo reports the
+ * device unregistered or the user signs out of the app.
+ */
+model PushToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform  String // "ios" | "android"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }

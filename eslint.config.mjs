@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Promo film studio (motion-studio): its own scripts, not app code.
+    "film/**",
+    "film-clients/**",
+    // React Native app: its own package, tsconfig and lint (mobile/).
+    "mobile/**",
   ]),
 ]);
 

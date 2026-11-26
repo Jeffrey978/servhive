@@ -58,7 +58,21 @@ export async function completeOnboarding(_prev: ActionResult | null, fd: FormDat
   if (!user) redirect("/sign-in");
   if (user.onboarded) redirect("/continue");
 
-  const res = await run(async () => {
+  const res = await completeOnboardingCore(fd);
+  if (!res.ok) return res;
+  redirect("/continue");
+}
+
+/**
+ * completeOnboarding without the redirects: shared by the website and the
+ * mobile API. Signed-out or already-onboarded callers get an error result.
+ */
+export async function completeOnboardingCore(fd: FormData): Promise<ActionResult<void>> {
+  const user = await getSessionUser();
+  if (!user) return { ok: false, error: "Sign in first." };
+  if (user.onboarded) return { ok: false, error: "Your account is already set up." };
+
+  return run(async () => {
     const input = Schema.parse(formToObject(fd));
 
     if (input.role === "CLIENT") {
@@ -109,8 +123,5 @@ export async function completeOnboarding(_prev: ActionResult | null, fd: FormDat
         },
       });
     }, { isolationLevel: "Serializable" });
-  });
-
-  if (!res.ok) return res;
-  redirect("/continue");
+  }, "You're all set.");
 }

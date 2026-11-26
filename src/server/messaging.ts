@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "@/lib/db";
 import { DomainError } from "@/server/escrow";
+import { notifyUsers } from "@/server/notifications/push";
 import type { User } from "@/generated/prisma/client";
 
 /**
@@ -44,11 +45,18 @@ export async function sendMessage(user: User, conversationId: string, body: stri
   const text = body.trim();
   if (!text) throw new DomainError("Message can't be empty.");
   if (text.length > 2000) throw new DomainError("Message is too long.");
-  await participant(user, conversationId);
+  const { c, side } = await participant(user, conversationId);
   const [msg] = await db.$transaction([
     db.message.create({ data: { conversationId, senderId: user.id, body: text } }),
     db.conversation.update({ where: { id: conversationId }, data: { updatedAt: new Date() } }),
   ]);
+  // Push to the other side's phone; if they have the thread open, the app refreshes it instantly.
+  notifyUsers([side === "client" ? c.provider.userId : c.clientId], {
+    title: side === "client" ? c.client.name : c.provider.businessName,
+    body: text,
+    data: { type: "message", conversationId },
+    channel: "messages",
+  });
   return { message: msg, flagged: looksLikeBypass(text) };
 }
 
